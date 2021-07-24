@@ -1,2 +1,2 @@
-./HinghwaDict/.idea/
-./HinghwaDict/*/__pycache__/
+.idea/
+__pycache__/
