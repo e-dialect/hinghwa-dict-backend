@@ -139,23 +139,18 @@ def app(request):
 
 @csrf_exempt
 def forget(request):
-    token = request.headers['token']
     try:
-        user_form = jwt.decode(token, '***REMOVED***', algorithms=['HS256'])
-        user = User.objects.get(id=user_form['id'])
         body = demjson.decode(request.body)
-        if user.username == body['username']:
-            if request.method == 'GET':
-                return JsonResponse({"email": user.email}, status=200)
-            elif request.method == 'PUT':
-                email = body['email']
-                if email in globalVar.email_check and globalVar.email_check[email] == body['code']:
-                    user.set_password(body['password'])
-                    globalVar.email_check.pop(email)
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
-        else:
-            return JsonResponse({}, status=401)
+        user = User.objects.get(username=body['username'])
+        if request.method == 'GET':
+            return JsonResponse({"email": user.email}, status=200)
+        elif request.method == 'PUT':
+            email = body['email']
+            if email in globalVar.email_check and globalVar.email_check[email] == body['code']:
+                user.set_password(body['password'])
+                globalVar.email_check.pop(email)
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=400)
