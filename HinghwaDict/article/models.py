@@ -13,10 +13,15 @@ class Article(models.Model):
     content = models.TextField(verbose_name="正文")
     cover = models.URLField(verbose_name="图片地址")
 
+    def __str__(self):
+        return self.title
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name="评论用户")
     content = models.TextField(max_length=500, verbose_name="内容")
     time = models.DateTimeField(auto_now_add=True, verbose_name="评论时间")
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, related_name="sons", verbose_name="父评论")
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name="sons", verbose_name="父评论")
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments", verbose_name="评论文章")
+
+    def __str__(self):
+        return self.id
