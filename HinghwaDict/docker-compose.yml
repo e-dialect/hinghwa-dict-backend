@@ -4,7 +4,14 @@ services:
         build: .
         image: sheeplin/hinghwadict-backend
         container_name: hinghwadict-backend
-        ports: 
-            - "80:8000"
+        # ports: 
+        #     - "80:8000"
+        labels: 
+            - "traefik.http.routers.hinghwadict-backend.rule=Host(`api.pxm.edialect.top`)"
+            - "traefik.http.services.hinghwadict-backend.loadbalancer.server.port=8000"
+        networks: 
+            - traefik-global-proxy
 
-
+networks:
+  traefik-global-proxy:
+    external: true
