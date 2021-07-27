@@ -11,3 +11,6 @@ class UserInfo(models.Model):
     avatar = models.URLField(default='http://118.25.147.215:8080/image/defaultUser.png', blank=True, verbose_name='头像')
     county = models.CharField(blank=True, max_length=100, verbose_name="县区")
     town = models.CharField(blank=True, max_length=100, verbose_name="乡镇")
+
+    def __str__(self):
+        return self.user.username
