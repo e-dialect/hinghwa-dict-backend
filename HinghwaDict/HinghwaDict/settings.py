@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'article',
     'user',
     'word',
-    'music'
+    'music',
+    'website'
 ]
 
 MIDDLEWARE = [
@@ -107,15 +108,15 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -126,3 +127,15 @@ STATICFILESDIRS = [
 	os.path.join(BASE_DIR, "static")
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
+
+
+LOGIN_REDIRECT_URL = '/home'
+LOGIN_URL = '/login'
+EMAIL_HOST = 'smtp.126.com'
+EMAIL_HOST_USER = 'edialect@126.com'
+EMAIL_HOST_PASSWORD = 'KIWVHMVWRTMCRCGL'  #
+EMAIL_PORT = 994
+EMAIL_USE_SSL = True
+EMAIL_USE_TLS = False
+DEFAULT_FROM_EMAIL = 'edialect@126.com'
+
