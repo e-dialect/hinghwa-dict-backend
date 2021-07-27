@@ -1,0 +1,3 @@
+demjson
+django
+jwt
