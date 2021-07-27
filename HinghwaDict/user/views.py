@@ -65,14 +65,16 @@ def manageInfo(request, id):
         user = User.objects.get(id=user_form['id'])
         if user.username == user_form['username']:
             if request.method == 'GET':
+                # 获取用户信息
                 info = user.user_info
-                return JsonResponse({'username': user.username, 'nickname': info.nickname,
+                return JsonResponse({"id": user.id, 'username': user.username, 'nickname': info.nickname,
                                      'email': user.email, 'telephone': info.telephone,
                                      'registration_time': user.date_joined, 'login_time': user.last_login,
                                      'birthday': info.birthday, 'avatar': info.avatar,
                                      'county': info.county, 'town': info.town,
                                      'is_admin': user.is_superuser}, status=200)
             elif request.method == 'PUT':
+                # 更新用户信息
                 info = demjson.decode(request.body)['user']
                 user_form = UserForm(info)
                 user_info_form = UserInfoForm(info)
@@ -143,8 +145,10 @@ def forget(request):
         body = demjson.decode(request.body)
         user = User.objects.get(username=body['username'])
         if request.method == 'GET':
+            # 返回用户邮箱
             return JsonResponse({"email": user.email}, status=200)
         elif request.method == 'PUT':
+            # 检查验证码并重置用户密码
             email = body['email']
             if email in globalVar.email_check and globalVar.email_check[email] == body['code']:
                 user.set_password(body['password'])
