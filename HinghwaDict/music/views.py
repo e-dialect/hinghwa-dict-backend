@@ -30,6 +30,9 @@ def searchMusic(request):
                     return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
+        elif request.method == 'PUT':
+            musics = []
+            # 批量返回
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=400)
 
