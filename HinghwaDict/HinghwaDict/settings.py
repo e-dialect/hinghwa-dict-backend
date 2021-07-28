@@ -121,8 +121,8 @@ USE_L10N = True
 USE_TZ = False
 
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [
+STATIC_URL = '/static'
+STATICFILESDIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
