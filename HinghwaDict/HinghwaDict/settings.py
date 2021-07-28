@@ -41,12 +41,14 @@ INSTALLED_APPS = [
     'user',
     'word',
     'music',
-    'website'
+    'website',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -119,18 +121,14 @@ USE_L10N = True
 USE_TZ = False
 
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.0/howto/static-files/
-
 STATIC_URL = '/static/'
-STATICFILESDIRS = [
-	os.path.join(BASE_DIR, "static")
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'mystatic'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
-
-LOGIN_REDIRECT_URL = '/home'
-LOGIN_URL = '/login'
+LOGIN_REDIRECT_URL = '/home/'
+LOGIN_URL = '/account/login/'
 EMAIL_HOST = 'smtp.126.com'
 EMAIL_HOST_USER = 'edialect@126.com'
 EMAIL_HOST_PASSWORD = 'KIWVHMVWRTMCRCGL'  #
@@ -138,4 +136,48 @@ EMAIL_PORT = 994
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = 'edialect@126.com'
+# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# 允许弹窗
+X_FRAME_OPTIONS = 'ALLOWALL'
+
+# 设置REDIS，不过现在用不上了……
+REDIS_HOST = 'localhost'
+REDIS_PORT = 6379
+REDIS_DB = 0
+
+# 媒体图片下载到media/下
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# 跨域访问设置
+CORS_ORIGIN_ALLOW_ALL = True
+
+APPEND_SLASH = False
+
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
+CORS_ORIGIN_WHITELIST = (
+    'http://118.25.147.215',
+    'http://118.25.147.215:8080',
+    'http://localhost:8000',
+    'http://127.0.0.1:8000'
+)
+CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'VIEW',)
+CORS_ALLOW_HEADERS = (
+    'XMLHttpRequest',
+    'X_FILENAME',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+    'Pragma',
+    'x-token',
+)
+IMAGE_DIR = os.path.join(BASE_DIR, 'media', 'images')
+SOUND_DIR = os.path.join(BASE_DIR, 'media', 'audios')
+VIDEO_DIR = os.path.join(BASE_DIR, 'media', 'videos')
