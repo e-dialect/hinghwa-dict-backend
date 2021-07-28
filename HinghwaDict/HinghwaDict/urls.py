@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from user import views as user
 from article import views as article
-
+from music import views as music
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('home/',TemplateView.as_view(template_name="home.html"),name='home')
@@ -28,5 +28,7 @@ urlpatterns = [
     path('login', user.login),
     path('articles/', include('article.urls', namespace='article')),
     path('articles', article.searchArticle),
+    path('musics/', include('music.urls', namespace='music')),
+    path('musics', music.searchMusic),
     path('website/', include('website.urls', namespace='website')),
 ]
