@@ -123,7 +123,7 @@ USE_TZ = False
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'mystatic'),
+    os.path.join(BASE_DIR, 'static'),
 ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
@@ -138,17 +138,14 @@ EMAIL_USE_TLS = False
 DEFAULT_FROM_EMAIL = 'edialect@126.com'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-# 允许弹窗
-X_FRAME_OPTIONS = 'ALLOWALL'
-
-# 设置REDIS，不过现在用不上了……
-REDIS_HOST = 'localhost'
-REDIS_PORT = 6379
-REDIS_DB = 0
 
 # 媒体图片下载到media/下
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+IMAGE_DIR = os.path.join(BASE_DIR, 'media', 'images')
+SOUND_DIR = os.path.join(BASE_DIR, 'media', 'audios')
+VIDEO_DIR = os.path.join(BASE_DIR, 'media', 'videos')
+
 
 # 跨域访问设置
 CORS_ORIGIN_ALLOW_ALL = True
@@ -158,10 +155,7 @@ APPEND_SLASH = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
-    'http://118.25.147.215',
-    'http://118.25.147.215:8080',
-    'http://localhost:8000',
-    'http://127.0.0.1:8000'
+    '*'
 )
 CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'VIEW',)
 CORS_ALLOW_HEADERS = (
@@ -178,6 +172,3 @@ CORS_ALLOW_HEADERS = (
     'Pragma',
     'x-token',
 )
-IMAGE_DIR = os.path.join(BASE_DIR, 'media', 'images')
-SOUND_DIR = os.path.join(BASE_DIR, 'media', 'audios')
-VIDEO_DIR = os.path.join(BASE_DIR, 'media', 'videos')
