@@ -28,7 +28,7 @@ urlpatterns = [
     path('login', user.login),
     path('articles/', include('article.urls', namespace='article')),
     path('articles', article.searchArticle),
-    path('musics/', include('music.urls', namespace='music')),
-    path('musics', music.searchMusic),
+    path('music/', include('music.urls', namespace='music')),
+    path('music', music.searchMusic),
     path('website/', include('website.urls', namespace='website')),
 ]
