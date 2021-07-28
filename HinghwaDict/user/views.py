@@ -61,26 +61,27 @@ def login(request):
 @csrf_exempt
 def manageInfo(request, id):
     try:
-        token = request.headers['token']
-        user_form = jwt.decode(token, 'dxw', algorithms=['HS256'])
-        user = User.objects.get(id=user_form['id'])
-        if user.username == user_form['username']:
-            if request.method == 'GET':
-                # 获取用户信息
-                info = user.user_info
-                return JsonResponse({"id": user.id, 'username': user.username, 'nickname': info.nickname,
-                                     'email': user.email, 'telephone': info.telephone,
-                                     'registration_time': user.date_joined, 'login_time': user.last_login,
-                                     'birthday': info.birthday, 'avatar': info.avatar,
-                                     'county': info.county, 'town': info.town,
-                                     'is_admin': user.is_superuser}, status=200)
-            elif request.method == 'PUT':
-                # 更新用户信息
-                info = demjson.decode(request.body)['user']
+        body = demjson.decode(request.body)
+        user = User.objects.get(id=id)
+        if request.method == 'GET':
+            # 获取用户信息
+            info = user.user_info
+            return JsonResponse({"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                                 'email': user.email, 'telephone': info.telephone,
+                                 'registration_time': user.date_joined, 'login_time': user.last_login,
+                                 'birthday': info.birthday, 'avatar': info.avatar,
+                                 'county': info.county, 'town': info.town,
+                                 'is_admin': user.is_superuser}, status=200)
+        elif request.method == 'PUT':
+            # 更新用户信息
+            token = request.headers['token']
+            user_form = jwt.decode(token, 'dxw', algorithms=['HS256'])
+            if id == user_form['id'] and user.username == user_form['username']:
+                info = body['user']
                 user_form = UserForm(info)
                 user_info_form = UserInfoForm(info)
                 if (("email" not in info) or (("code" in info) and email_check(info['email'], info['code']))) and \
-                    ~(("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
+                        ~(("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
                         and user_info_form.is_valid():
                     if 'username' in info:
                         user.username = info['username']
@@ -103,7 +104,6 @@ def manageInfo(request, id):
                             setattr(user.user_info, key, info[key])
                     user.save()
                     user.user_info.save()
-
                     payload = {'username': user.username, 'id': user.id,
                                'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S')}
                     return JsonResponse({"token": jwt.encode(payload, 'dxw', algorithm='HS256')},
@@ -113,9 +113,8 @@ def manageInfo(request, id):
                         return JsonResponse({}, status=409)
                     else:
                         return JsonResponse({}, status=400)
-
-        else:
-            return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=400)
 
