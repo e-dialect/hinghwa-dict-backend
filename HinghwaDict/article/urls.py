@@ -7,5 +7,5 @@ app_name = 'articles'
 urlpatterns = [
     path('<int:id>', manageArticle),
     path('<int:id>/like', like),
-    path('<int:id>/comment', comment),
+    path('<int:id>/comments', comment),
 ]
