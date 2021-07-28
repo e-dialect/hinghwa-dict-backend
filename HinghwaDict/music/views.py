@@ -32,7 +32,13 @@ def searchMusic(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'PUT':
             musics = []
-            # 批量返回
+            for id in body['music']:
+                music = Music.objects.get(id=id)
+                musics.append({"id": music.id, "source": music.source, "title": music.title,
+                               "artist": music.artist, "cover": music.cover,
+                               "likes": music.likes, "contributor": music.contributor.username,
+                               "visibility": music.visibility})
+            return JsonResponse({"music": musics}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=400)
 
@@ -43,7 +49,7 @@ def manageMusic(request, id):
     try:
         music = Music.objects.get(id=id)
         if request.method == 'GET':
-            return JsonResponse({"source": music.source, "title": music.title,
+            return JsonResponse({"id": music.id,"source": music.source, "title": music.title,
                                  "artist": music.artist, "cover": music.cover,
                                  "likes": music.likes, "contributor": music.contributor.username,
                                  "visibility": music.visibility}, status=200)
