@@ -3,15 +3,21 @@ import jwt
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment, User
+
 
 @csrf_exempt
 def searchArticle(request):
     body = demjson.decode(request.body)
     try:
         if request.method == 'GET':
-            pass  # 搜索符合条件的文章并返回id
+            # 搜索符合条件的文章并返回id TODO 正式版search
+            articles = list(Article.objects.all())
+            articles.sort(key=lambda article: article.publish_time, reverse=True)
+            articles = [article.id for article in articles]
+            return JsonResponse({"articles": articles})
         elif request.method == 'POST':
             # 创建新的文章
             token = request.headers['token']
@@ -68,14 +74,16 @@ def manageArticle(request, id):
                 for key in body:
                     if len(article_form[key].errors.data):
                         return JsonResponse({}, status=400)
-                if "title" in body:
-                    article.title = body['title']
-                if "content" in body:
-                    article.content = body['content']
-                if "description" in body:
-                    article.description = body['description']
-                if "cover" in body:
-                    article.cover = body['cover']
+                # if "title" in body:
+                #     article.title = body['title']
+                # if "content" in body:
+                #     article.content = body['content']
+                # if "description" in body:
+                #     article.description = body['description']
+                # if "cover" in body:
+                #     article.cover = body['cover']
+                for key in body:
+                    setattr(article, key, body[key])
                 article.update_time = timezone.now()
                 article.save()
                 return JsonResponse({}, status=200)

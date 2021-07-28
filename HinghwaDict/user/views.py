@@ -86,18 +86,21 @@ def manageInfo(request, id):
                         user.username = info['username']
                     if 'email' in info:
                         user.email = info['email']
-                    if 'nickname' in info:
-                        user.user_info.nickname = info['nickname']
-                    if 'telephone' in info:
-                        user.user_info.telephone = info['telephone']
-                    if 'birthday' in info:
-                        user.user_info.birthday = info['birthday']
-                    if 'avatar' in info:
-                        user.user_info.avatar = info['avatar']
-                    if 'county' in info:
-                        user.user_info.county = info['county']
-                    if 'town' in info:
-                        user.user_info.town = info['town']
+                    # if 'nickname' in info:
+                    #     user.user_info.nickname = info['nickname']
+                    # if 'telephone' in info:
+                    #     user.user_info.telephone = info['telephone']
+                    # if 'birthday' in info:
+                    #     user.user_info.birthday = info['birthday']
+                    # if 'avatar' in info:
+                    #     user.user_info.avatar = info['avatar']
+                    # if 'county' in info:
+                    #     user.user_info.county = info['county']
+                    # if 'town' in info:
+                    #     user.user_info.town = info['town']
+                    for key in info:
+                        if key != "username" and key != "email":
+                            setattr(user.user_info, key, info[key])
                     user.save()
                     user.user_info.save()
 

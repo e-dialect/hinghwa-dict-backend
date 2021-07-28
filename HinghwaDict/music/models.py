@@ -10,3 +10,6 @@ class Music(models.Model):
     likes = models.IntegerField(default=0, verbose_name="点赞数")
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="musics", verbose_name="贡献者")
     visibility = models.BooleanField(default=False, verbose_name="是否可见")
+
+    def __str__(self):
+        return self.title
