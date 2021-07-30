@@ -125,7 +125,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/account/login/'
@@ -141,10 +141,7 @@ DEFAULT_FROM_EMAIL = 'edialect@126.com'
 
 # 媒体图片下载到media/下
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
-IMAGE_DIR = os.path.join(BASE_DIR, 'media', 'images')
-SOUND_DIR = os.path.join(BASE_DIR, 'media', 'audios')
-VIDEO_DIR = os.path.join(BASE_DIR, 'media', 'videos')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
 # 跨域访问设置
@@ -155,7 +152,8 @@ APPEND_SLASH = False
 CORS_ALLOW_CREDENTIALS = True
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
-    '*'
+    'http://127.0.0.1:*',
+    'https://api.pxm.edialect.top:*',
 )
 CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'VIEW',)
 CORS_ALLOW_HEADERS = (

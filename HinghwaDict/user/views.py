@@ -49,7 +49,8 @@ def login(request):
             user.last_login = timezone.now()
             user.save()
             payload = {'username': username, 'id': user.id,
-                       'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S')}
+                       'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
+                       "value": random_str()}
             return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
                                 status=200)
         else:
@@ -105,7 +106,8 @@ def manageInfo(request, id):
                     user.save()
                     user.user_info.save()
                     payload = {'username': user.username, 'id': user.id,
-                               'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S')}
+                               'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
+                               "value": random_str()}
                     return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
                                         status=200)
                 else:
