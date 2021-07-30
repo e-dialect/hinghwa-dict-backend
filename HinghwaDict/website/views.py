@@ -6,7 +6,7 @@ import jwt
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -156,7 +156,7 @@ def files(request):
                     for i in file.chunks():
                         f.write(i)
                 payload = {"id": user_form['id'], "type": type, "time": time}
-                url = 'https://api.pxm.edialect.top/files/' + jwt.encode(payload, "dxw", algorithm="HS256")
+                url = 'http://api.pxm.edialect.top/files/' + jwt.encode(payload, "dxw", algorithm="HS256")
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
@@ -177,5 +177,20 @@ def files(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+@csrf_exempt
+def openUrl(request, token):
+    info = jwt.decode(token, "dxw", algorithms=["HS256"])
+    filename = info['time'] + suffix[info['type']]
+    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
+    try:
+        if os.path.exists(path):
+            with open(path.encode('utf-8'), 'rb') as f:
+                response = HttpResponse(f.read(), content_type="application/octet-stream")
+                response['Content-Disposition'] = 'attachment; filename={0}'.format(path)
+                return response
+        else:
+            return JsonResponse({}, status=500)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
 if Website.objects.count() == 0:
     Website.objects.create()
