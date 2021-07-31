@@ -34,9 +34,16 @@ def searchMusic(request):
             musics = []
             for id in body['music']:
                 music = Music.objects.get(id=id)
+                user = music.contributor
                 musics.append({"id": music.id, "source": music.source, "title": music.title,
                                "artist": music.artist, "cover": music.cover,
-                               "likes": music.likes, "contributor": music.contributor.username,
+                               "likes": music.likes,
+                               "contributor": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                                               'email': user.email, 'telephone': user.user_info.telephone,
+                                               'registration_time': user.date_joined, 'login_time': user.last_login,
+                                               'birthday': user.user_info.birthday, 'avatar': user.user_info.avatar,
+                                               'county': user.user_info.county, 'town': user.user_info.town,
+                                               'is_admin': user.is_superuser},
                                "visibility": music.visibility})
             return JsonResponse({"music": musics}, status=200)
     except Exception as e:

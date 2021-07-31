@@ -29,7 +29,7 @@ class Pronunciation(models.Model):
 
 class Character(models.Model):
     shengmu = models.CharField(max_length=30, verbose_name="声母")
-    IPA = models.CharField(max_length=30, verbose_name="IPA")
+    ipa = models.CharField(max_length=30, verbose_name="ipa", default='')
     pinyin = models.CharField(max_length=30, verbose_name="拼音")
     yunmu = models.CharField(max_length=30, verbose_name="韵母")
     shengdiao = models.CharField(max_length=10, verbose_name="声调")
