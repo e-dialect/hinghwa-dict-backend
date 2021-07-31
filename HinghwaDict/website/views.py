@@ -20,9 +20,25 @@ class globalVar():
 
 def email_check(email, code):
     email = str(email)
-    return (email in globalVar.email_code) and \
-           globalVar.email_code[email][0] == code and \
-           globalVar.email_code[email][1] < timezone.now()
+    if (email in globalVar.email_code) and \
+            globalVar.email_code[email][0] == code and \
+            globalVar.email_code[email][1] < timezone.now():
+        globalVar.email_code.pop(email)
+        return 1
+    else:
+        return 0
+
+
+def token_check(token, key, id=0):
+    try:
+        info = jwt.decode(token, key, algorithms=['HS256'])
+        user = User.objects.get(id=info['id'])
+        if user.username == info['username'] and (id == 0 or id == info['id'] or user.is_superuser):
+            return user
+        else:
+            return 0
+    except:
+        return 0
 
 
 def random_str(n=6):
