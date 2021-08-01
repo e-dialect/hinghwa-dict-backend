@@ -1,12 +1,13 @@
 import demjson
 import jwt
 from django.contrib.auth import authenticate
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from website.views import globalVar, random_str, email_check, token_check
+from website.views import random_str, email_check, token_check
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -24,6 +25,11 @@ def register(request):
                 user.set_password(user_form.cleaned_data['password'])
                 user.save()
                 user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
+                if 'avatar' in body:
+                    user_info.avatar = body['avatar']
+                if 'nickname' in body:
+                    user_info.nickname = body['nickname']
+                user_info.save()
                 return JsonResponse({"id": user.id}, status=200)
             else:
                 return JsonResponse({}, status=401)
@@ -66,12 +72,23 @@ def manageInfo(request, id):
         if request.method == 'GET':
             # 获取用户信息
             info = user.user_info
-            return JsonResponse({"id": user.id, 'username': user.username, 'nickname': info.nickname,
-                                 'email': user.email, 'telephone': info.telephone,
-                                 'registration_time': user.date_joined, 'login_time': user.last_login,
-                                 'birthday': info.birthday, 'avatar': info.avatar,
-                                 'county': info.county, 'town': info.town,
-                                 'is_admin': user.is_superuser}, status=200)
+            publish_articles = [article.id for article in user.articles.all()]
+            publish_comment = [comment.id for comment in user.comments.all()]
+            like_articles = [article.id for article in user.like_articles.all()]
+            return JsonResponse({"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                                          'email': user.email, 'telephone': info.telephone,
+                                          'registration_time': user.date_joined, 'login_time': user.last_login,
+                                          'birthday': info.birthday, 'avatar': info.avatar,
+                                          'county': info.county, 'town': info.town,
+                                          'is_admin': user.is_superuser},
+                                 "publish_articles": publish_articles, 'publish_comments': publish_comment,
+                                 'like_articles': like_articles,
+                                 'contribution': {
+                                     'pronunciation': user.contribute_pronunciation.filter(visibility=True).count(),
+                                     'pronunciation_uploaded': user.contribute_pronunciation.count(),
+                                     'word': user.contribute_words.filter(visibility=True).count(),
+                                     'listened': user.contribute_words.aggregate(Sum('views'))
+                                 }}, status=200)
         elif request.method == 'PUT':
             # 更新用户信息
             token = request.headers['token']
@@ -103,7 +120,24 @@ def manageInfo(request, id):
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=400)
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def pronunciation(request, id):
+    try:
+        user = User.objects.get(id=id)
+        if request.method == 'GET':
+            pronunciations = []
+            for item in user.contribute_pronunciation.all():
+                pronunciations.append({'word': {'id': item.word.id, 'word': item.word.word},
+                                       'url': item.source, 'ipa': item.ipa, 'pinyin': item.pinyin,
+                                       'county': item.county, 'town': item.town, 'visibility': item.visibility})
+            return JsonResponse({'pronunciation': pronunciations}, status=200)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
