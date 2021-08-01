@@ -147,39 +147,36 @@ def carousal(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-suffix = {"video": ".mp4",
-          "audio": ".mp3",
-          "image": ".png"}
+
 
 
 @csrf_exempt
 def files(request):
     try:
         token = request.headers['token']
-        user_form = jwt.decode(token, '***REMOVED***', algorithms=['HS256'])
-        user = User.objects.get(id=user_form['id'])
-        if user.username == user_form['username']:
+        user = token_check(token, '***REMOVED***')
+        if user:
             if request.method == "POST":
                 file = request.FILES.get("file")
-                type = request.POST['type']
+                type, suffix = str(file.content_type).split('/')
                 time = timezone.now().__format__("%Y_%m_%d_%H_%M_%S")
-                filename = time + suffix[type]
-                folder = os.path.join(settings.MEDIA_ROOT, type, str(user_form['id']))
+                filename = time + '.' + suffix
+                folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))
                 if not os.path.exists(folder):
                     os.mkdir(folder)
-                path = os.path.join(folder,filename)
+                path = os.path.join(folder, filename)
                 with open(path, 'wb') as f:
                     for i in file.chunks():
                         f.write(i)
-                payload = {"id": user_form['id'], "type": type, "time": time}
+                payload = {"id": user.id, "type": type, "filename": filename}
                 url = 'http://api.pxm.edialect.top/files/' + jwt.encode(payload, "***REMOVED***", algorithm="HS256")
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
                 info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
-                if info['id'] == user_form['id'] or user.is_superuser:
-                    filename = info['time'] + suffix[info['type']]
-                    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']),filename)
+                if user.id == info['id']:
+                    filename = info['filename']
+                    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
                     if os.path.exists(path):
                         os.remove(path)
                         return JsonResponse({}, status=200)
@@ -195,10 +192,10 @@ def files(request):
 
 @csrf_exempt
 def openUrl(request, token):
-    info = jwt.decode(token, "***REMOVED***", algorithms=["HS256"])
-    filename = info['time'] + suffix[info['type']]
-    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
     try:
+        info = jwt.decode(token, "***REMOVED***", algorithms=["HS256"])
+        filename = info['filename']
+        path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
         if os.path.exists(path):
             with open(path.encode('utf-8'), 'rb') as f:
                 response = HttpResponse(f.read(), content_type="application/octet-stream")
