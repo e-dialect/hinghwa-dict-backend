@@ -46,6 +46,7 @@ def register(request):
 @require_POST
 def login(request):
     try:
+        print(request.body)
         body = demjson.decode(request.body)
         username = body['username']
         password = body['password']
@@ -87,7 +88,8 @@ def manageInfo(request, id):
                                      'pronunciation': user.contribute_pronunciation.filter(visibility=True).count(),
                                      'pronunciation_uploaded': user.contribute_pronunciation.count(),
                                      'word': user.contribute_words.filter(visibility=True).count(),
-                                     'listened': user.contribute_words.aggregate(Sum('views'))
+                                     'word_uploaded': user.contribute_words.count(),
+                                     'listened': user.contribute_pronunciation.aggregate(Sum('views'))
                                  }}, status=200)
         elif request.method == 'PUT':
             # 更新用户信息
@@ -131,7 +133,7 @@ def pronunciation(request, id):
             pronunciations = []
             for item in user.contribute_pronunciation.all():
                 pronunciations.append({'word': {'id': item.word.id, 'word': item.word.word},
-                                       'url': item.source, 'ipa': item.ipa, 'pinyin': item.pinyin,
+                                       'source': item.source, 'ipa': item.ipa, 'pinyin': item.pinyin,
                                        'county': item.county, 'town': item.town, 'visibility': item.visibility})
             return JsonResponse({'pronunciation': pronunciations}, status=200)
         else:
