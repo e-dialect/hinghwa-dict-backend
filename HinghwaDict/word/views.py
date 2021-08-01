@@ -189,6 +189,7 @@ def searchPronunciations(request):
                 pronunciation_form = PronunciationForm(body)
                 if pronunciation_form.is_valid():
                     pronunciation = pronunciation_form.save(commit=False)
+                    pronunciation.word = Word.objects.get(id=body['word'])
                     pronunciation.contributor = user
                     pronunciation.save()
                     return JsonResponse({'id': pronunciation.id}, status=200)
@@ -219,6 +220,8 @@ def managePronunciation(request, id):
         body = demjson.decode(request.body)
         pronunciation = Pronunciation.objects.get(id=id)
         if request.method == 'GET':
+            pronunciation.views += 1
+            pronunciation.save()
             return JsonResponse({"id": pronunciation.id, 'word': pronunciation.word, 'source': pronunciation.source,
                                  'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
                                  'contributor': pronunciation.contributor.id, 'county': pronunciation.county,
