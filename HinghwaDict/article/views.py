@@ -49,7 +49,7 @@ def searchArticle(request):
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=400)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -63,16 +63,24 @@ def manageArticle(request, id):
             user = token_check(token, '***REMOVED***')
             me = {'liked': article.like_users.filter(id=user.id).exists(),
                   'is_author': user == article.author} if user else {'liked': False, 'is_author': False}
-            article = {"id": article.id, "author": article.author.username,
+            user = article.author
+            article = {"id": article.id, "author": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                                                    'email': user.email, 'telephone': user.user_info.telephone,
+                                                    'registration_time': user.date_joined,
+                                                    'login_time': user.last_login,
+                                                    'birthday': user.user_info.birthday,
+                                                    'avatar': user.user_info.avatar,
+                                                    'county': user.user_info.county, 'town': user.user_info.town,
+                                                    'is_admin': user.is_superuser},
                        "likes": article.like_users.count(), "views": article.views,
                        "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                        "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                        "title": article.title, "description": article.description, "content": article.content,
-                       "cover": article.cover, "like_users": [x.id for x in article.like_users.all()],
-                       'me': me}
-            return JsonResponse({"article": article}, status=200)
+                       "cover": article.cover, "like_users": [x.id for x in article.like_users.all()]}
+            return JsonResponse({"article": article, 'me': me}, status=200)
         elif request.method == 'PUT':
             if token_check(token, '***REMOVED***', article.author.id):
+                body = body['article']
                 article_form = ArticleForm(body)
                 for key in body:
                     if len(article_form[key].errors.data):
@@ -93,7 +101,7 @@ def manageArticle(request, id):
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=400)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -118,7 +126,7 @@ def like(request, id):
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=400)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -147,7 +155,7 @@ def comment(request, id):
                     else:
                         comment.parent_id = 0
                     comment.save()
-                    return JsonResponse({}, status=200)
+                    return JsonResponse({'id': comment.id}, status=200)
                 else:
                     return JsonResponse({}, status=400)
             else:
@@ -164,4 +172,4 @@ def comment(request, id):
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=400)
+        return JsonResponse({"msg": str(e)}, status=500)

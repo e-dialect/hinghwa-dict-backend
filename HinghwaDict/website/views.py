@@ -56,12 +56,11 @@ def email(request):
         body = demjson.decode(request.body)
         email = body['email'].replace(' ', '')
         if check(email):
-            return JsonResponse(status=400)
+            return JsonResponse({}, status=400)
         else:
-            try:
-                code = random_str()
-                subject = '[兴化语记]验证码'
-                msg = '''<!DOCTYPE html>
+            code = random_str()
+            subject = '[兴化语记]验证码'
+            msg = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -73,14 +72,12 @@ def email(request):
     <p>{1}</p>
 </body>
 </html>'''.format(code, timezone.now().date())
-                send_mail(subject, 'aaa', from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email, ],
-                          html_message=msg)
-                globalVar.email_code[email] = (code, timezone.now())
-                return JsonResponse({}, status=200)
-            except:
-                return JsonResponse({}, status=500)
+            send_mail(subject, 'aaa', from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email, ],
+                      html_message=msg)
+            globalVar.email_code[email] = (code, timezone.now())
+            return JsonResponse({}, status=200)
     except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=400)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -91,10 +88,13 @@ def announcements(request):
         if request.method == 'GET':
             return JsonResponse({"announcements": item.announcements}, status=200)
         elif request.method == "PUT":
-            item.announcements = body["announcements"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.announcements = body["announcements"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -107,10 +107,13 @@ def hot_articles(request):
         if request.method == 'GET':
             return JsonResponse({"hot_articles": item.hot_articles}, status=200)
         elif request.method == "PUT":
-            item.hot_articles = body["hot_articles"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.hot_articles = body["hot_articles"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -123,10 +126,13 @@ def word_of_the_day(request):
         if request.method == 'GET':
             return JsonResponse({"word_of_the_day": item.word_of_the_day}, status=200)
         elif request.method == "PUT":
-            item.word_of_the_day = body["word_of_the_day"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.word_of_the_day = body["word_of_the_day"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -139,10 +145,13 @@ def carousal(request):
         if request.method == 'GET':
             return JsonResponse({"carousal": item.carousal}, status=200)
         elif request.method == "PUT":
-            item.carousal = body["carousal"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.carousal = body["carousal"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -181,7 +190,7 @@ def files(request):
                         os.remove(path)
                         return JsonResponse({}, status=200)
                     else:
-                        return JsonResponse({}, status=500)
+                        return JsonResponse({"msg": "文件不存在"}, status=500)
                 else:
                     return JsonResponse({}, status=401)
         else:
@@ -205,5 +214,7 @@ def openUrl(request, token):
             return JsonResponse({}, status=500)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
 if Website.objects.count() == 0:
     Website.objects.create()

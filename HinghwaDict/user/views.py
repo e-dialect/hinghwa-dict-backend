@@ -62,7 +62,7 @@ def login(request):
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=400)
+        return JsonResponse({'msg': str(e)}, status=500)
 
 
 @csrf_exempt
@@ -206,4 +206,4 @@ def forget(request):
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=400)
+        return JsonResponse({'msg': str(e)}, status=500)
