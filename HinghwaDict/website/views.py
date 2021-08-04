@@ -20,9 +20,25 @@ class globalVar():
 
 def email_check(email, code):
     email = str(email)
-    return (email in globalVar.email_code) and \
-           globalVar.email_code[email][0] == code and \
-           globalVar.email_code[email][1] < timezone.now()
+    if (email in globalVar.email_code) and \
+            globalVar.email_code[email][0] == code and \
+            globalVar.email_code[email][1] < timezone.now():
+        globalVar.email_code.pop(email)
+        return 1
+    else:
+        return 0
+
+
+def token_check(token, key, id=0):
+    try:
+        info = jwt.decode(token, key, algorithms=['HS256'])
+        user = User.objects.get(id=info['id'])
+        if user.username == info['username'] and (id == 0 or id == info['id'] or user.is_superuser):
+            return user
+        else:
+            return 0
+    except:
+        return 0
 
 
 def random_str(n=6):
@@ -40,12 +56,11 @@ def email(request):
         body = demjson.decode(request.body)
         email = body['email'].replace(' ', '')
         if check(email):
-            return JsonResponse(status=400)
+            return JsonResponse({}, status=400)
         else:
-            try:
-                code = random_str()
-                subject = '[兴化语记]验证码'
-                msg = '''<!DOCTYPE html>
+            code = random_str()
+            subject = '[兴化语记]验证码'
+            msg = '''<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -57,14 +72,12 @@ def email(request):
     <p>{1}</p>
 </body>
 </html>'''.format(code, timezone.now().date())
-                send_mail(subject, 'aaa', from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email, ],
-                          html_message=msg)
-                globalVar.email_code[email] = (code, timezone.now())
-                return JsonResponse({}, status=200)
-            except:
-                return JsonResponse({}, status=500)
+            send_mail(subject, 'aaa', from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email, ],
+                      html_message=msg)
+            globalVar.email_code[email] = (code, timezone.now())
+            return JsonResponse({}, status=200)
     except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=400)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -75,10 +88,13 @@ def announcements(request):
         if request.method == 'GET':
             return JsonResponse({"announcements": item.announcements}, status=200)
         elif request.method == "PUT":
-            item.announcements = body["announcements"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.announcements = body["announcements"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -91,10 +107,13 @@ def hot_articles(request):
         if request.method == 'GET':
             return JsonResponse({"hot_articles": item.hot_articles}, status=200)
         elif request.method == "PUT":
-            item.hot_articles = body["hot_articles"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.hot_articles = body["hot_articles"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -107,10 +126,13 @@ def word_of_the_day(request):
         if request.method == 'GET':
             return JsonResponse({"word_of_the_day": item.word_of_the_day}, status=200)
         elif request.method == "PUT":
-            item.word_of_the_day = body["word_of_the_day"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.word_of_the_day = body["word_of_the_day"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -123,52 +145,52 @@ def carousal(request):
         if request.method == 'GET':
             return JsonResponse({"carousal": item.carousal}, status=200)
         elif request.method == "PUT":
-            item.carousal = body["carousal"]
-            item.save()
-            return JsonResponse({}, status=200)
-
+            token = request.headers['token']
+            if token_check(token, '***REMOVED***', -1):
+                item.carousal = body["carousal"]
+                item.save()
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-suffix = {"video": ".mp4",
-          "audio": ".mp3",
-          "image": ".png"}
+
 
 
 @csrf_exempt
 def files(request):
     try:
         token = request.headers['token']
-        user_form = jwt.decode(token, '***REMOVED***', algorithms=['HS256'])
-        user = User.objects.get(id=user_form['id'])
-        if user.username == user_form['username']:
+        user = token_check(token, '***REMOVED***')
+        if user:
             if request.method == "POST":
                 file = request.FILES.get("file")
-                type = request.POST['type']
+                type, suffix = str(file.content_type).split('/')
                 time = timezone.now().__format__("%Y_%m_%d_%H_%M_%S")
-                filename = time + suffix[type]
-                folder = os.path.join(settings.MEDIA_ROOT, type, str(user_form['id']))
+                filename = time + '.' + suffix
+                folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))
                 if not os.path.exists(folder):
                     os.mkdir(folder)
-                path = os.path.join(folder,filename)
+                path = os.path.join(folder, filename)
                 with open(path, 'wb') as f:
                     for i in file.chunks():
                         f.write(i)
-                payload = {"id": user_form['id'], "type": type, "time": time}
+                payload = {"id": user.id, "type": type, "filename": filename}
                 url = 'http://api.pxm.edialect.top/files/' + jwt.encode(payload, "***REMOVED***", algorithm="HS256")
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
                 info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
-                if info['id'] == user_form['id'] or user.is_superuser:
-                    filename = info['time'] + suffix[info['type']]
-                    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']),filename)
+                if user.id == info['id']:
+                    filename = info['filename']
+                    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
                     if os.path.exists(path):
                         os.remove(path)
                         return JsonResponse({}, status=200)
                     else:
-                        return JsonResponse({}, status=500)
+                        return JsonResponse({"msg": "文件不存在"}, status=500)
                 else:
                     return JsonResponse({}, status=401)
         else:
@@ -179,10 +201,10 @@ def files(request):
 
 @csrf_exempt
 def openUrl(request, token):
-    info = jwt.decode(token, "***REMOVED***", algorithms=["HS256"])
-    filename = info['time'] + suffix[info['type']]
-    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
     try:
+        info = jwt.decode(token, "***REMOVED***", algorithms=["HS256"])
+        filename = info['filename']
+        path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
         if os.path.exists(path):
             with open(path.encode('utf-8'), 'rb') as f:
                 response = HttpResponse(f.read(), content_type="application/octet-stream")
@@ -192,5 +214,7 @@ def openUrl(request, token):
             return JsonResponse({}, status=500)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
 if Website.objects.count() == 0:
     Website.objects.create()
