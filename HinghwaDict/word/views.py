@@ -20,6 +20,7 @@ def searchWords(request):
             token = request.headers['token']
             user = token_check(token, 'dxw')
             if user:
+                body = body['word']
                 word_form = WordForm(body)
                 if word_form.is_valid():
                     word = word_form.save(commit=False)
@@ -60,14 +61,24 @@ def manageWord(request, id):
             related_articles = [article.id for article in word.related_articles.all()]
             word.views = word.views + 1
             word.save()
-            return JsonResponse({"id": word.id, 'word': word.word, 'definition': word.definition,
-                                 "contributor": word.contributor.id, "annotation": word.annotation,
-                                 "mandarin": word.mandarin,
-                                 "related_words": related_words, "related_articles": related_articles,
-                                 "views": word.views}, status=200)
+            user = word.contributor
+            return JsonResponse({"word": {"id": word.id, 'word': word.word, 'definition': word.definition,
+                                          "contributor": {"id": user.id, 'username': user.username,
+                                                          'nickname': user.user_info.nickname,
+                                                          'email': user.email, 'telephone': user.user_info.telephone,
+                                                          'registration_time': user.date_joined,
+                                                          'login_time': user.last_login,
+                                                          'birthday': user.user_info.birthday,
+                                                          'avatar': user.user_info.avatar,
+                                                          'county': user.user_info.county, 'town': user.user_info.town,
+                                                          'is_admin': user.is_superuser}, "annotation": word.annotation,
+                                          "mandarin": word.mandarin,
+                                          "related_words": related_words, "related_articles": related_articles,
+                                          "views": word.views}}, status=200)
         elif request.method == 'PUT':
             token = request.headers['token']
             if token_check(token, 'dxw', word.contributor.id):
+                body = body['word']
                 word_form = WordForm(body)
                 for key in body:
                     if len(word_form[key].errors.data):
@@ -114,6 +125,7 @@ def searchCharacters(request):
             token = request.headers['token']
             user = token_check(token, 'dxw')
             if user:
+                body = body['character']
                 character_form = WordForm(body)
                 if character_form.is_valid():
                     character = character_form.save(commit=False)
@@ -144,13 +156,15 @@ def manageCharacter(request, id):
         body = demjson.decode(request.body)
         character = Character.objects.get(id=id)
         if request.method == 'GET':
-            return JsonResponse({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                 'pinyin': character.pinyin, 'yunmu': character.yunmu, 'shengdiao': character.shengdiao,
-                                 'character': character.character, 'county': character.county,
-                                 'town': character.county}, status=200)
+            return JsonResponse({'character': {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                               'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                               'shengdiao': character.shengdiao,
+                                               'character': character.character, 'county': character.county,
+                                               'town': character.county}}, status=200)
         elif request.method == 'PUT':
             token = request.headers['token']
             if token_check(token, 'dxw', -1):
+                body = body['character']
                 character_form = CharacterForm(body)
                 for key in body:
                     if len(character_form[key].errors.data):
@@ -179,13 +193,14 @@ def searchPronunciations(request):
     body = demjson.decode(request.body)
     try:
         if request.method == 'GET':
-            all = Pronunciation.objects.all()
-            pronunciations = [pronunciation.id for pronunciation in all]
-            return JsonResponse({"pronunciations": pronunciations}, status=200)
+            # 有的话就返回，没有就生成一个返回
+            pronunciations = Pronunciation.objects.get(id=1)
+            return JsonResponse({"contributor": pronunciations.contributor, "url": pronunciations.source}, status=200)
         elif request.method == 'POST':
             token = request.headers['token']
             user = token_check(token, 'dxw')
             if user:
+                body = body['pronunciation']
                 pronunciation_form = PronunciationForm(body)
                 if pronunciation_form.is_valid():
                     pronunciation = pronunciation_form.save(commit=False)
@@ -222,13 +237,22 @@ def managePronunciation(request, id):
         if request.method == 'GET':
             pronunciation.views += 1
             pronunciation.save()
-            return JsonResponse({"id": pronunciation.id, 'word': pronunciation.word, 'source': pronunciation.source,
-                                 'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
-                                 'contributor': pronunciation.contributor.id, 'county': pronunciation.county,
-                                 'town': pronunciation.county, 'visibility': pronunciation.visibility}, status=200)
+            user = pronunciation.contributor
+            return JsonResponse(
+                {"pronunciation": {"id": pronunciation.id, 'word': pronunciation.word, 'source': pronunciation.source,
+                                   'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
+                                   'contributor': {"id": user.id, 'username': user.username,
+                                                   'nickname': user.user_infoinfo.nickname,
+                                                   'email': user.email, 'telephone': user.user_info.telephone,
+                                                   'registration_time': user.date_joined, 'login_time': user.last_login,
+                                                   'birthday': user.user_info.birthday, 'avatar': user.user_info.avatar,
+                                                   'county': user.user_info.county, 'town': user.user_info.town,
+                                                   'is_admin': user.is_superuser}, 'county': pronunciation.county,
+                                   'town': pronunciation.county, 'visibility': pronunciation.visibility}}, status=200)
         elif request.method == 'PUT':
             token = request.headers['token']
             if token_check(token, 'dxw', pronunciation.contributor.id):
+                body = body['pronunciation']
                 pronunciation_form = PronunciationForm(body)
                 for key in body:
                     if len(pronunciation_form[key].errors.data):
