@@ -46,7 +46,6 @@ def register(request):
 @require_POST
 def login(request):
     try:
-        print(request.body)
         body = demjson.decode(request.body)
         username = body['username']
         password = body['password']
