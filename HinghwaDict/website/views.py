@@ -22,7 +22,7 @@ def email_check(email, code):
     email = str(email)
     if (email in globalVar.email_code) and \
             globalVar.email_code[email][0] == code and \
-            globalVar.email_code[email][1] < timezone.now():
+            (timezone.now() - globalVar.email_code[email][1]).seconds < 600:
         globalVar.email_code.pop(email)
         return 1
     else:
