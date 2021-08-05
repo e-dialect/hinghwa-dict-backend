@@ -11,10 +11,13 @@ services:
             - "traefik.http.services.hinghwadict-backend.loadbalancer.server.port=8000"
             - "traefik.http.routers.hinghwadict-backend.entrypoints=websecure"
             - "traefik.http.routers.hinghwadict-backend.tls=true"
+            - "traefik.http.routers.hinghwadict-backend.middlewares=hinghwadict-backend-compress"
+            - "traefik.http.middlewares.hinghwadict-backend-compress.compress=true"
         networks: 
             - traefik-global-proxy
         volumes:
-           - ./db.sqlite3:/usr/src/HinghwaDict-backend/db.sqlite3
+           - ../../data/db.sqlite3:/usr/src/HinghwaDict-backend/db.sqlite3
+           - ../../data/media:/usr/src/HinghwaDict-backend/media
 
 networks:
   traefik-global-proxy:
