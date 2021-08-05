@@ -13,7 +13,7 @@ class Word(models.Model):
     related_words = models.ManyToManyField('self', related_name="related_words", verbose_name="相关词汇")
     related_articles = models.ManyToManyField(Article, related_name="related_words", verbose_name="相关帖子")
     views = models.IntegerField(default=0, verbose_name="访问量")
-
+    visibility = models.BooleanField(default=False, verbose_name='是否审核')
 
 class Pronunciation(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="pronunciation", verbose_name="词语")
@@ -25,11 +25,11 @@ class Pronunciation(models.Model):
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contribute_pronunciation",
                                     verbose_name="贡献者")
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
-
+    views = models.IntegerField(default=0, verbose_name="访问量")
 
 class Character(models.Model):
     shengmu = models.CharField(max_length=30, verbose_name="声母")
-    IPA = models.CharField(max_length=30, verbose_name="IPA")
+    ipa = models.CharField(max_length=30, verbose_name="ipa", default='')
     pinyin = models.CharField(max_length=30, verbose_name="拼音")
     yunmu = models.CharField(max_length=30, verbose_name="韵母")
     shengdiao = models.CharField(max_length=10, verbose_name="声调")
