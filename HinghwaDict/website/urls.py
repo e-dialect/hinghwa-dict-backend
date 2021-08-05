@@ -6,7 +6,9 @@ app_name = 'website'
 
 urlpatterns = [
     path('email', email),
-    # path('/<int:id>/password',),
-    # path('/app',),
-    # path('/forget',),
+    path('files', files),
+    path('announcements', announcements),
+    path('hot_articles', hot_articles),
+    path('word_of_the_day', word_of_the_day),
+    path('carousal', carousal),
 ]
