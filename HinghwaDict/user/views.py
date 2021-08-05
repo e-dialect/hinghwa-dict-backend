@@ -1,12 +1,13 @@
 import demjson
 import jwt
 from django.contrib.auth import authenticate
+from django.db.models import Sum
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from website.views import globalVar, random_str, email_check
+from website.views import random_str, email_check, token_check
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -24,7 +25,11 @@ def register(request):
                 user.set_password(user_form.cleaned_data['password'])
                 user.save()
                 user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
-                globalVar.email_code.pop(user_form.cleaned_data['email'])
+                if 'avatar' in body:
+                    user_info.avatar = body['avatar']
+                if 'nickname' in body:
+                    user_info.nickname = body['nickname']
+                user_info.save()
                 return JsonResponse({"id": user.id}, status=200)
             else:
                 return JsonResponse({}, status=401)
@@ -41,6 +46,7 @@ def register(request):
 @require_POST
 def login(request):
     try:
+        print(request.body)
         body = demjson.decode(request.body)
         username = body['username']
         password = body['password']
@@ -49,13 +55,14 @@ def login(request):
             user.last_login = timezone.now()
             user.save()
             payload = {'username': username, 'id': user.id,
-                       'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S')}
+                       'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
+                       "value": random_str()}
             return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
                                 status=200)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=400)
+        return JsonResponse({'msg': str(e)}, status=500)
 
 
 @csrf_exempt
@@ -66,46 +73,43 @@ def manageInfo(request, id):
         if request.method == 'GET':
             # 获取用户信息
             info = user.user_info
-            return JsonResponse({"id": user.id, 'username': user.username, 'nickname': info.nickname,
-                                 'email': user.email, 'telephone': info.telephone,
-                                 'registration_time': user.date_joined, 'login_time': user.last_login,
-                                 'birthday': info.birthday, 'avatar': info.avatar,
-                                 'county': info.county, 'town': info.town,
-                                 'is_admin': user.is_superuser}, status=200)
+            publish_articles = [article.id for article in user.articles.all()]
+            publish_comment = [comment.id for comment in user.comments.all()]
+            like_articles = [article.id for article in user.like_articles.all()]
+            return JsonResponse({"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                                          'email': user.email, 'telephone': info.telephone,
+                                          'registration_time': user.date_joined, 'login_time': user.last_login,
+                                          'birthday': info.birthday, 'avatar': info.avatar,
+                                          'county': info.county, 'town': info.town,
+                                          'is_admin': user.is_superuser},
+                                 "publish_articles": publish_articles, 'publish_comments': publish_comment,
+                                 'like_articles': like_articles,
+                                 'contribution': {
+                                     'pronunciation': user.contribute_pronunciation.filter(visibility=True).count(),
+                                     'pronunciation_uploaded': user.contribute_pronunciation.count(),
+                                     'word': user.contribute_words.filter(visibility=True).count(),
+                                     'word_uploaded': user.contribute_words.count(),
+                                     'listened': user.contribute_pronunciation.aggregate(Sum('views'))
+                                 }}, status=200)
         elif request.method == 'PUT':
             # 更新用户信息
             token = request.headers['token']
-            user_form = jwt.decode(token, '***REMOVED***', algorithms=['HS256'])
-            if id == user_form['id'] and user.username == user_form['username']:
+            if token_check(token, '***REMOVED***', id):
                 info = body['user']
                 user_form = UserForm(info)
                 user_info_form = UserInfoForm(info)
-                if (("email" not in info) or (("code" in info) and email_check(info['email'], info['code']))) and \
-                        ~(("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
+                if ~(("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
                         and user_info_form.is_valid():
                     if 'username' in info:
                         user.username = info['username']
-                    if 'email' in info:
-                        user.email = info['email']
-                    # if 'nickname' in info:
-                    #     user.user_info.nickname = info['nickname']
-                    # if 'telephone' in info:
-                    #     user.user_info.telephone = info['telephone']
-                    # if 'birthday' in info:
-                    #     user.user_info.birthday = info['birthday']
-                    # if 'avatar' in info:
-                    #     user.user_info.avatar = info['avatar']
-                    # if 'county' in info:
-                    #     user.user_info.county = info['county']
-                    # if 'town' in info:
-                    #     user.user_info.town = info['town']
                     for key in info:
                         if key != "username" and key != "email" and key != "code":
                             setattr(user.user_info, key, info[key])
                     user.save()
                     user.user_info.save()
                     payload = {'username': user.username, 'id': user.id,
-                               'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S')}
+                               'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
+                               "value": random_str()}
                     return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
                                         status=200)
                 else:
@@ -115,25 +119,67 @@ def manageInfo(request, id):
                         return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=400)
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def pronunciation(request, id):
+    try:
+        user = User.objects.get(id=id)
+        if request.method == 'GET':
+            pronunciations = []
+            for item in user.contribute_pronunciation.all():
+                pronunciations.append({'word': {'id': item.word.id, 'word': item.word.word},
+                                       'source': item.source, 'ipa': item.ipa, 'pinyin': item.pinyin,
+                                       'county': item.county, 'town': item.town, 'visibility': item.visibility})
+            return JsonResponse({'pronunciation': pronunciations}, status=200)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
 def updatePassword(request, id):
-    if request.method == 'PUT':
-        token = request.headers['token']
-        user_form = jwt.decode(token, '***REMOVED***', algorithms=['HS256'])
-        user = User.objects.get(id=user_form['id'])
-        body = demjson.decode(request.body)
-        if user and user.username == user_form['username'] and id == user_form['id']:
-            if user.check_password(body['oldpassword']):
-                user.set_password(body['newpassword'])
+    try:
+        if request.method == 'PUT':
+            token = request.headers['token']
+            user = User.objects.get(id=id)
+            body = demjson.decode(request.body)
+            if token_check(token, '***REMOVED***', id):
+                if user.check_password(body['oldpassword']):
+                    user.set_password(body['newpassword'])
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def updateEmail(request,id):
+    try:
+        if request.method == 'PUT':
+            body = demjson.decode(request.body)
+            token = request.headers['token']
+            user = User.objects.get(id=id)
+            if token_check(token,'***REMOVED***',id) and email_check(body['email'],body['code']):
+                user.email = body['email']
+                user.save()
                 return JsonResponse({}, status=200)
             else:
                 return JsonResponse({}, status=401)
-    else:
-        return JsonResponse({}, status=400)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -152,11 +198,12 @@ def forget(request):
         elif request.method == 'PUT':
             # 检查验证码并重置用户密码
             email = body['email']
-            if email in globalVar.email_code and globalVar.email_code[email] == body['code']:
+            if email_check(email,body['code']):
                 user.set_password(body['password'])
-                globalVar.email_code.pop(email)
                 return JsonResponse({}, status=200)
             else:
                 return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=400)
+        return JsonResponse({'msg': str(e)}, status=500)
