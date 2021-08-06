@@ -47,7 +47,8 @@ def searchArticle(request):
                                  "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                  "title": article.title, "description": article.description, "content": article.content,
                                  "cover": article.cover},
-                     'author': {'username': article.author.username, 'avatar': article.author.user_info.avatar}})
+                     'author': {'id': article.author.id, 'username': article.author.username,
+                                'avatar': article.author.user_info.avatar}})
             return JsonResponse({"articles": articles}, status=200)
         else:
             return JsonResponse({}, status=405)

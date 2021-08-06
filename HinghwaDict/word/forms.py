@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Word, Pronunciation,Character
+from .models import Word, Pronunciation, Character
 
 
 class WordForm(forms.ModelForm):
@@ -20,6 +20,6 @@ class PronunciationForm(forms.ModelForm):
 class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = ('pinyin','IPA','character'
-                  'shengmu','yunmu','shengdiao',
-                  'county','town')
+        fields = ('pinyin', 'ipa', 'character',
+                  'shengmu', 'yunmu', 'shengdiao',
+                  'county', 'town')
