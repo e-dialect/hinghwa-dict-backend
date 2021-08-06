@@ -191,15 +191,16 @@ def app(request):
 @csrf_exempt
 def forget(request):
     try:
-        body = demjson.decode(request.body)
-        user = User.objects.get(username=body['username'])
         if request.method == 'GET':
             # 返回用户邮箱
+            user = User.objects.get(username=request.GET['username'])
             return JsonResponse({"email": user.email}, status=200)
         elif request.method == 'PUT':
             # 检查验证码并重置用户密码
+            body = demjson.decode(request.body)
+            user = User.objects.get(username=body['username'])
             email = body['email']
-            if email_check(email,body['code']):
+            if email_check(email, body['code']):
                 user.set_password(body['password'])
                 user.save()
                 return JsonResponse({}, status=200)
