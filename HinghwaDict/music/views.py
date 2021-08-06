@@ -37,7 +37,7 @@ def searchMusic(request):
                 musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
                                          "artist": music.artist, "cover": music.cover, "likes": music.likes,
                                          "contributor": music.contributor.id, "visibility": music.visibility},
-                               'contributor': {'username': music.contributor.username,
+                               'contributor': {'id': music.contributor.id, 'username': music.contributor.username,
                                                'avatar': music.contributor.user_info.avatar}})
             return JsonResponse({"music": musics}, status=200)
     except Exception as e:
