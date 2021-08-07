@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from .models import Website
+
+
+class WebsiteAdmin(admin.ModelAdmin):
+    list_display = ['announcements', 'hot_articles', 'word_of_the_day', 'carousal']
+
+
+admin.site.register(Website, WebsiteAdmin)

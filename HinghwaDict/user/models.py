@@ -14,3 +14,10 @@ class UserInfo(models.Model):
 
     def __str__(self):
         return self.user.username
+
+    def ID(self):
+        return self.user.id
+
+    class Meta:
+        verbose_name_plural = '用户信息'
+        verbose_name = '用户信息'

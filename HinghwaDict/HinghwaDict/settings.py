@@ -23,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '***REMOVED***'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
@@ -120,15 +120,13 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
 
 LOGIN_REDIRECT_URL = '/home/'
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/login'
 EMAIL_HOST = 'smtp.126.com'
 EMAIL_HOST_USER = 'edialect@126.com'
 EMAIL_HOST_PASSWORD = 'KIWVHMVWRTMCRCGL'  #
