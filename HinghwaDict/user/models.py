@@ -19,5 +19,5 @@ class UserInfo(models.Model):
         return self.user.id
 
     class Meta:
-        verbose_name_plural = '用户信息'
-        verbose_name = '用户信息'
+        verbose_name_plural = '用户详细信息'
+        verbose_name = '用户详细信息'
