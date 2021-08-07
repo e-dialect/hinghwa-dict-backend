@@ -127,13 +127,13 @@ STATIC_URL = '/static/'
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/login'
-EMAIL_HOST = 'smtp.126.com'
-EMAIL_HOST_USER = 'edialect@126.com'
-EMAIL_HOST_PASSWORD = 'KIWVHMVWRTMCRCGL'  #
-EMAIL_PORT = 994
+EMAIL_HOST = '***REMOVED***'
+EMAIL_HOST_USER = '***REMOVED***'
+EMAIL_HOST_PASSWORD = '***REMOVED***'
+EMAIL_PORT = ***REMOVED***
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'edialect@126.com'
+DEFAULT_FROM_EMAIL = '***REMOVED***'
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
