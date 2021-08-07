@@ -15,6 +15,13 @@ class Word(models.Model):
     views = models.IntegerField(default=0, verbose_name="访问量")
     visibility = models.BooleanField(default=False, verbose_name='是否审核')
 
+    def __str__(self):
+        return self.word
+
+    class Meta:
+        verbose_name_plural = '词语'
+        verbose_name = '词语'
+
 class Pronunciation(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="pronunciation", verbose_name="词语")
     source = models.URLField(verbose_name="来源")
@@ -27,6 +34,11 @@ class Pronunciation(models.Model):
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
     views = models.IntegerField(default=0, verbose_name="访问量")
 
+    class Meta:
+        verbose_name_plural = '语音'
+        verbose_name = '语音'
+
+
 class Character(models.Model):
     shengmu = models.CharField(max_length=30, verbose_name="声母")
     ipa = models.CharField(max_length=30, verbose_name="ipa", default='')
@@ -36,3 +48,7 @@ class Character(models.Model):
     character = models.CharField(max_length=10, verbose_name="汉字")
     county = models.CharField(max_length=100, verbose_name="县区")
     town = models.CharField(max_length=100, verbose_name="乡镇")
+
+    class Meta:
+        verbose_name_plural = '单字'
+        verbose_name = '单字'

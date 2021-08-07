@@ -16,6 +16,13 @@ class Article(models.Model):
     def __str__(self):
         return self.title
 
+    def like(self):
+        return self.like_users.count()
+
+    class Meta:
+        verbose_name_plural = '文章'
+        verbose_name = '文章'
+
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name="评论用户")
     content = models.TextField(max_length=500, verbose_name="内容")
@@ -24,4 +31,8 @@ class Comment(models.Model):
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments", verbose_name="评论文章")
 
     def __str__(self):
-        return self.id
+        return str(self.id)
+
+    class Meta:
+        verbose_name_plural = '评论'
+        verbose_name = '评论'
