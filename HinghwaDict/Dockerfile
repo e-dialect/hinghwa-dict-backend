@@ -4,7 +4,7 @@ WORKDIR /usr/src/HinghwaDict-backend
 
 COPY requirements.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install -ihttps://mirrors.aliyun.com/pypi/simple/ -r requirements.txt
 
 COPY . .
 
