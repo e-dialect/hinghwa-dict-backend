@@ -20,6 +20,7 @@ from article import views as article
 from music import views as music
 from user import views as user
 from website import views as website
+from word import views as word
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,4 +35,11 @@ urlpatterns = [
     path('music', music.searchMusic),
     path('website/', include('website.urls', namespace='website')),
     path('files/<token>', website.openUrl),
+
+    path('words', include([path('', word.searchWords),
+                           path('/<id>', word.manageWord)])),
+    path('characters', include([path('', word.searchCharacters),
+                                path('/<id>', word.manageCharacter)])),
+    path('pronunciation', include([path('', word.searchPronunciations),
+                                   path('/<id>', word.managePronunciation)])),
 ]
