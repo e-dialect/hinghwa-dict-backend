@@ -1,3 +1,4 @@
-demjson
 django
-jwt
+demjson
+pyjwt
+django-cors-headers
