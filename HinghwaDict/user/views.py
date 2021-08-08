@@ -46,7 +46,6 @@ def register(request):
 @require_POST
 def login(request):
     try:
-        print(request.body)
         body = demjson.decode(request.body)
         username = body['username']
         password = body['password']
@@ -68,7 +67,6 @@ def login(request):
 @csrf_exempt
 def manageInfo(request, id):
     try:
-        body = demjson.decode(request.body)
         user = User.objects.get(id=id)
         if request.method == 'GET':
             # 获取用户信息
@@ -76,6 +74,7 @@ def manageInfo(request, id):
             publish_articles = [article.id for article in user.articles.all()]
             publish_comment = [comment.id for comment in user.comments.all()]
             like_articles = [article.id for article in user.like_articles.all()]
+            contribute_listened = user.contribute_pronunciation.aggregate(Sum('views'))['views__sum']
             return JsonResponse({"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
                                           'email': user.email, 'telephone': info.telephone,
                                           'registration_time': user.date_joined, 'login_time': user.last_login,
@@ -89,10 +88,11 @@ def manageInfo(request, id):
                                      'pronunciation_uploaded': user.contribute_pronunciation.count(),
                                      'word': user.contribute_words.filter(visibility=True).count(),
                                      'word_uploaded': user.contribute_words.count(),
-                                     'listened': user.contribute_pronunciation.aggregate(Sum('views'))
+                                     'listened':contribute_listened if contribute_listened else 0
                                  }}, status=200)
         elif request.method == 'PUT':
             # 更新用户信息
+            body = demjson.decode(request.body)
             token = request.headers['token']
             if token_check(token, 'dxw', id):
                 info = body['user']
@@ -103,7 +103,7 @@ def manageInfo(request, id):
                     if 'username' in info:
                         user.username = info['username']
                     for key in info:
-                        if key != "username" and key != "email" and key != "code":
+                        if key != "username":
                             setattr(user.user_info, key, info[key])
                     user.save()
                     user.user_info.save()
@@ -152,6 +152,7 @@ def updatePassword(request, id):
             if token_check(token, 'dxw', id):
                 if user.check_password(body['oldpassword']):
                     user.set_password(body['newpassword'])
+                    user.save()
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
@@ -190,16 +191,18 @@ def app(request):
 @csrf_exempt
 def forget(request):
     try:
-        body = demjson.decode(request.body)
-        user = User.objects.get(username=body['username'])
         if request.method == 'GET':
             # 返回用户邮箱
+            user = User.objects.get(username=request.GET['username'])
             return JsonResponse({"email": user.email}, status=200)
         elif request.method == 'PUT':
             # 检查验证码并重置用户密码
+            body = demjson.decode(request.body)
+            user = User.objects.get(username=body['username'])
             email = body['email']
-            if email_check(email,body['code']):
+            if email_check(email, body['code']):
                 user.set_password(body['password'])
+                user.save()
                 return JsonResponse({}, status=200)
             else:
                 return JsonResponse({}, status=401)

@@ -13,3 +13,7 @@ class Music(models.Model):
 
     def __str__(self):
         return self.title
+
+    class Meta:
+        verbose_name_plural = '音乐'
+        verbose_name = '音乐'

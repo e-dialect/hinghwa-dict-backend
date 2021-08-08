@@ -22,7 +22,7 @@ def email_check(email, code):
     email = str(email)
     if (email in globalVar.email_code) and \
             globalVar.email_code[email][0] == code and \
-            globalVar.email_code[email][1] < timezone.now():
+            (timezone.now() - globalVar.email_code[email][1]).seconds < 600:
         globalVar.email_code.pop(email)
         return 1
     else:
@@ -82,17 +82,20 @@ def email(request):
 
 @csrf_exempt
 def announcements(request):
-    body = demjson.decode(request.body)
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"announcements": item.announcements}, status=200)
+            return JsonResponse({"announcements": eval(item.announcements)}, status=200)
         elif request.method == "PUT":
+            body = demjson.decode(request.body)
             token = request.headers['token']
             if token_check(token, 'dxw', -1):
-                item.announcements = body["announcements"]
-                item.save()
-                return JsonResponse({}, status=200)
+                if isinstance(body['announcements'],list):
+                    item.announcements = body["announcements"]
+                    item.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
     except Exception as e:
@@ -101,17 +104,20 @@ def announcements(request):
 
 @csrf_exempt
 def hot_articles(request):
-    body = demjson.decode(request.body)
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"hot_articles": item.hot_articles}, status=200)
+            return JsonResponse({"hot_articles": eval(item.hot_articles)}, status=200)
         elif request.method == "PUT":
+            body = demjson.decode(request.body)
             token = request.headers['token']
             if token_check(token, 'dxw', -1):
-                item.hot_articles = body["hot_articles"]
-                item.save()
-                return JsonResponse({}, status=200)
+                if isinstance(body['hot_articles'], list):
+                    item.hot_articles = body["hot_articles"]
+                    item.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
     except Exception as e:
@@ -120,17 +126,20 @@ def hot_articles(request):
 
 @csrf_exempt
 def word_of_the_day(request):
-    body = demjson.decode(request.body)
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"word_of_the_day": item.word_of_the_day}, status=200)
+            return JsonResponse({"word_of_the_day": eval(item.word_of_the_day)}, status=200)
         elif request.method == "PUT":
+            body = demjson.decode(request.body)
             token = request.headers['token']
             if token_check(token, 'dxw', -1):
-                item.word_of_the_day = body["word_of_the_day"]
-                item.save()
-                return JsonResponse({}, status=200)
+                if isinstance(body['word_of_the_day'], int):
+                    item.word_of_the_day = body["word_of_the_day"]
+                    item.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
     except Exception as e:
@@ -139,17 +148,20 @@ def word_of_the_day(request):
 
 @csrf_exempt
 def carousal(request):
-    body = demjson.decode(request.body)
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"carousal": item.carousal}, status=200)
+            return JsonResponse({"carousal": eval(item.carousal)}, status=200)
         elif request.method == "PUT":
+            body = demjson.decode(request.body)
             token = request.headers['token']
             if token_check(token, 'dxw', -1):
-                item.carousal = body["carousal"]
-                item.save()
-                return JsonResponse({}, status=200)
+                if isinstance(body['carousal'], list) and isinstance(body['carousal'][0],dict):
+                    item.carousal = body["carousal"]
+                    item.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
     except Exception as e:
@@ -170,8 +182,12 @@ def files(request):
                 type, suffix = str(file.content_type).split('/')
                 time = timezone.now().__format__("%Y_%m_%d_%H_%M_%S")
                 filename = time + '.' + suffix
-                folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))
-                if not os.path.exists(folder):
+                type_folder = os.path.join(settings.MEDIA_ROOT, type)
+                folder = os.path.join(type_folder, str(user.id))
+                if not os.path.exists(type_folder):
+                    os.mkdir(type_folder)
+                    os.mkdir(folder)
+                elif not os.path.exists(folder):
                     os.mkdir(folder)
                 path = os.path.join(folder, filename)
                 with open(path, 'wb') as f:
@@ -208,7 +224,7 @@ def openUrl(request, token):
         if os.path.exists(path):
             with open(path.encode('utf-8'), 'rb') as f:
                 response = HttpResponse(f.read(), content_type="application/octet-stream")
-                response['Content-Disposition'] = 'attachment; filename={0}'.format(path)
+                response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
                 return response
         else:
             return JsonResponse({}, status=500)

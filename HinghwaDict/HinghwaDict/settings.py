@@ -121,14 +121,14 @@ USE_L10N = True
 USE_TZ = False
 
 
-STATIC_URL = '/static'
-STATICFILESDIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
-STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+STATIC_URL = '/static/'
+# STATICFILES_DIRS = [
+#     os.path.join(BASE_DIR, 'static'),
+# ]
+# STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 LOGIN_REDIRECT_URL = '/home/'
-LOGIN_URL = '/account/login/'
+LOGIN_URL = '/login'
 EMAIL_HOST = 'smtp.126.com'
 EMAIL_HOST_USER = 'edialect@126.com'
 EMAIL_HOST_PASSWORD = 'KIWVHMVWRTMCRCGL'  #
