@@ -10,5 +10,5 @@ urlpatterns = [
     path('announcements', announcements),
     path('hot_articles', hot_articles),
     path('word_of_the_day', word_of_the_day),
-    path('carousal', carousal),
+    path('carousel', carousel),
 ]
