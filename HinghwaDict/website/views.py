@@ -11,6 +11,8 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
+from article.models import Article
+from word.models import Word
 from .models import Website
 
 
@@ -85,7 +87,20 @@ def announcements(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"announcements": eval(item.announcements)}, status=200)
+            articles = eval(item.announcements)
+            announcements = []
+            for id in articles:
+                article = Article.objects.get(id=id)
+                announcements.append({
+                    'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
+                                "views": article.views,
+                                "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
+                                "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
+                                "title": article.title, "description": article.description, "content": article.content,
+                                "cover": article.cover},
+                    'author': {'id': article.author.id, 'username': article.author.username,
+                               'avatar': article.author.user_info.avatar}})
+            return JsonResponse({"announcements": announcements}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -107,7 +122,20 @@ def hot_articles(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"hot_articles": eval(item.hot_articles)}, status=200)
+            articles = eval(item.hot_articles)
+            hot_articles = []
+            for id in articles:
+                article = Article.objects.get(id=id)
+                hot_articles.append({
+                    'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
+                                "views": article.views,
+                                "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
+                                "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
+                                "title": article.title, "description": article.description, "content": article.content,
+                                "cover": article.cover},
+                    'author': {'id': article.author.id, 'username': article.author.username,
+                               'avatar': article.author.user_info.avatar}})
+            return JsonResponse({"hot_articles": hot_articles}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -129,7 +157,10 @@ def word_of_the_day(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"word_of_the_day": eval(item.word_of_the_day)}, status=200)
+            word = Word.objects.get(id=item.word_of_the_day)
+            return JsonResponse({"word_of_the_day": {"id": word.id, 'word': word.word, 'definition': word.definition,
+                                                     "contributor": word.contributor.id, "annotation": word.annotation,
+                                                     "mandarin": eval(word.mandarin), "views": word.views}}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -147,17 +178,17 @@ def word_of_the_day(request):
 
 
 @csrf_exempt
-def carousal(request):
+def carousel(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"carousal": eval(item.carousal)}, status=200)
+            return JsonResponse({"carousel": eval(item.carousel)}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
             if token_check(token, 'dxw', -1):
-                if isinstance(body['carousal'], list) and isinstance(body['carousal'][0],dict):
-                    item.carousal = body["carousal"]
+                if isinstance(body['carousel'], list) and isinstance(body['carousel'][0], dict):
+                    item.carousel = body["carousel"]
                     item.save()
                     return JsonResponse({}, status=200)
                 else:
