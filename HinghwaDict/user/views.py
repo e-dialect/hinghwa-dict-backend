@@ -56,8 +56,8 @@ def login(request):
             payload = {'username': username, 'id': user.id,
                        'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
                        "value": random_str()}
-            return JsonResponse({"token": jwt.encode(payload, 'dxw', algorithm='HS256')},
-                                status=200)
+            return JsonResponse({"token": jwt.encode(payload, 'dxw', algorithm='HS256'),
+                                 'id': user.id}, status=200)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:

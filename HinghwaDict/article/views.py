@@ -47,7 +47,7 @@ def searchArticle(request):
                                  "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                  "title": article.title, "description": article.description, "content": article.content,
                                  "cover": article.cover},
-                     'author': {'id': article.author.id, 'username': article.author.username,
+                     'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                 'avatar': article.author.user_info.avatar}})
             return JsonResponse({"articles": articles}, status=200)
         else:
@@ -140,7 +140,7 @@ def comment(request, id):
         article = Article.objects.get(id=id)
         if request.method == 'GET':
             comments = [{"id": comment.id,
-                         "user": {"id": comment.user.id, "username": comment.user.username,
+                         "user": {"id": comment.user.id, "nickname": comment.user.user_info.nickname,
                                   "avatar": comment.user.user_info.avatar},
                          "content": comment.content,
                          "time": comment.time.__format__('%Y-%m-%d %H:%M:%S'),
