@@ -51,7 +51,7 @@ def searchWords(request):
                                        "mandarin": eval(word.mandarin), "views": word.views},
                               'contributor': {
                                   'id': word.contributor.id,
-                                  'username': word.contributor.username,
+                                  'nickname': word.contributor.user_info.nickname,
                                   'avatar': word.contributor.user_info.avatar}})
             return JsonResponse({"words": words}, status=200)
         else:
@@ -236,7 +236,7 @@ def searchPronunciations(request):
                                        'county': pronunciation.county, 'town': pronunciation.town,
                                        'visibility': pronunciation.visibility},
                      'contributor': {
-                         'id': pronunciation.contributor.id, 'username': pronunciation.contributor.username,
+                         'id': pronunciation.contributor.id, 'nickname': pronunciation.contributor.user_info.nickname,
                          'avatar': pronunciation.contributor.user_info.avatar}})
             return JsonResponse({"pronunciation": pronunciations}, status=200)
         else:

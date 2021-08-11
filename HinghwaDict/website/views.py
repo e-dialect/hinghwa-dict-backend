@@ -98,7 +98,7 @@ def announcements(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'username': article.author.username,
+                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                'avatar': article.author.user_info.avatar}})
             return JsonResponse({"announcements": announcements}, status=200)
         elif request.method == "PUT":
@@ -133,7 +133,7 @@ def hot_articles(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'username': article.author.username,
+                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                'avatar': article.author.user_info.avatar}})
             return JsonResponse({"hot_articles": hot_articles}, status=200)
         elif request.method == "PUT":
