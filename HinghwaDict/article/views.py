@@ -19,10 +19,16 @@ def searchArticle(request):
                 result = []
                 key = request.GET['search']
                 for article in articles:
-                    score = evaluate([(article.title, 5), (article.description, 3), (article.content, 1)], key)
+                    score = evaluate([(article.author.username, 10), (article.author.user_info.nickname, 9),
+                                      (article.title, 5), (article.description, 3), (article.content, 1)], key)
                     result.append((article.id, score))
                 result.sort(key=lambda a: a[1], reverse=True)
-                articles = [Article.objects.get(id=a[0]) for a in result]
+                articles = []
+                for id, score in result:
+                    if score > 0:
+                        articles.append(Article.objects.get(id=id))
+                    else:
+                        break
 
             end = min(20, len(articles))
             articles = [article.id for article in articles[:end]]

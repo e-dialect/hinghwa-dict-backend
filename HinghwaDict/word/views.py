@@ -126,8 +126,14 @@ def manageWord(request, id):
 def searchCharacters(request):
     try:
         if request.method == 'GET':
-            all = Character.objects.all()
-            characters = [character.id for character in all]
+            characters = Character.objects.all()
+            if 'shengmu' in request.GET:
+                characters = characters.filter(shengmu=request.GET['shengmu'])
+            if 'yunmu' in request.GET:
+                characters = characters.filter(yunmu=request.GET['yunmu'])
+            if 'shengdiao' in request.GET:
+                characters = characters.filter(shengdiao=request.GET['shengdiao'])
+            characters = [character.id for character in characters]
             return JsonResponse({"characters": characters}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
