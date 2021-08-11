@@ -3,11 +3,12 @@ from django.db import models
 
 
 class Article(models.Model):
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles', verbose_name='作者')
-    views = models.IntegerField(default=0, verbose_name='阅读量')
-    like_users = models.ManyToManyField(User, related_name="like_articles", verbose_name="点赞用户")
+    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles', verbose_name='作者',
+                               editable=False)
+    views = models.IntegerField(default=0, verbose_name='阅读量', editable=False)
+    like_users = models.ManyToManyField(User, related_name="like_articles", verbose_name="点赞用户", editable=False)
     publish_time = models.DateTimeField(auto_now_add=True, verbose_name="发布时间")
-    update_time = models.DateTimeField(verbose_name="最近更新时间")
+    update_time = models.DateTimeField(verbose_name="最近更新时间",editable=False)
     title = models.CharField(max_length=100, verbose_name="标题")
     description = models.TextField(verbose_name="简介", max_length=200)
     content = models.TextField(verbose_name="正文")
