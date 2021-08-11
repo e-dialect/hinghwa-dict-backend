@@ -1,3 +1,4 @@
+import math
 import os
 import random
 
@@ -41,6 +42,32 @@ def token_check(token, key, id=0):
             return 0
     except:
         return 0
+
+
+def compare(item, key):
+    total = 0
+    j = 0
+    m = len(key)
+    for character in item:
+        if character == key[j]:
+            if j == m - 1:
+                j = 0
+                total += 1
+            else:
+                j += 1
+        elif j:
+            total += math.exp(j - m)
+            j = 1 if character == key[0] else 0
+    return total
+
+
+def evaluate(standard, key):
+    total = 0
+    key = str(key)
+    for item, score in standard:
+        item = str(item)
+        total += (compare(item, key) + compare(item[::-1], key[::-1])) * score
+    return total
 
 
 def random_str(n=6):
