@@ -1,3 +1,4 @@
+import math
 import os
 import random
 
@@ -41,6 +42,32 @@ def token_check(token, key, id=0):
             return 0
     except:
         return 0
+
+
+def compare(item, key):
+    total = 0
+    j = 0
+    m = len(key)
+    for character in item:
+        if character == key[j]:
+            if j == m - 1:
+                j = 0
+                total += 1
+            else:
+                j += 1
+        elif j:
+            total += math.exp(j - m)
+            j = 1 if character == key[0] else 0
+    return total
+
+
+def evaluate(standard, key):
+    total = 0
+    key = str(key)
+    for item, score in standard:
+        item = str(item)
+        total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(len(item))
+    return total
 
 
 def random_str(n=6):
@@ -98,7 +125,7 @@ def announcements(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'username': article.author.username,
+                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                'avatar': article.author.user_info.avatar}})
             return JsonResponse({"announcements": announcements}, status=200)
         elif request.method == "PUT":
@@ -133,7 +160,7 @@ def hot_articles(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'username': article.author.username,
+                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                'avatar': article.author.user_info.avatar}})
             return JsonResponse({"hot_articles": hot_articles}, status=200)
         elif request.method == "PUT":

@@ -1,11 +1,15 @@
+import os
+
 import demjson
+import xlrd
+from django.conf import settings
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from article.models import Article
 from website.views import token_check
 from .forms import WordForm, CharacterForm, PronunciationForm
-from .models import Word, Character, Pronunciation
+from .models import Word, Character, Pronunciation, User
 
 
 @csrf_exempt
@@ -51,7 +55,7 @@ def searchWords(request):
                                        "mandarin": eval(word.mandarin), "views": word.views},
                               'contributor': {
                                   'id': word.contributor.id,
-                                  'username': word.contributor.username,
+                                  'nickname': word.contributor.user_info.nickname,
                                   'avatar': word.contributor.user_info.avatar}})
             return JsonResponse({"words": words}, status=200)
         else:
@@ -74,8 +78,8 @@ def manageWord(request, id):
                                           "contributor": {"id": user.id, 'username': user.username,
                                                           'nickname': user.user_info.nickname,
                                                           'email': user.email, 'telephone': user.user_info.telephone,
-                                                          'registration_time': user.date_joined,
-                                                          'login_time': user.last_login,
+                                                          'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                                          'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
                                                           'birthday': user.user_info.birthday,
                                                           'avatar': user.user_info.avatar,
                                                           'county': user.user_info.county, 'town': user.user_info.town,
@@ -126,8 +130,14 @@ def manageWord(request, id):
 def searchCharacters(request):
     try:
         if request.method == 'GET':
-            all = Character.objects.all()
-            characters = [character.id for character in all]
+            characters = Character.objects.all()
+            if 'shengmu' in request.GET:
+                characters = characters.filter(shengmu=request.GET['shengmu'])
+            if 'yunmu' in request.GET:
+                characters = characters.filter(yunmu=request.GET['yunmu'])
+            if 'shengdiao' in request.GET:
+                characters = characters.filter(shengdiao=request.GET['shengdiao'])
+            characters = [character.id for character in characters]
             return JsonResponse({"characters": characters}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
@@ -236,7 +246,7 @@ def searchPronunciations(request):
                                        'county': pronunciation.county, 'town': pronunciation.town,
                                        'visibility': pronunciation.visibility},
                      'contributor': {
-                         'id': pronunciation.contributor.id, 'username': pronunciation.contributor.username,
+                         'id': pronunciation.contributor.id, 'nickname': pronunciation.contributor.user_info.nickname,
                          'avatar': pronunciation.contributor.user_info.avatar}})
             return JsonResponse({"pronunciation": pronunciations}, status=200)
         else:
@@ -260,7 +270,9 @@ def managePronunciation(request, id):
                                    'contributor': {"id": user.id, 'username': user.username,
                                                    'nickname': user.user_info.nickname,
                                                    'email': user.email, 'telephone': user.user_info.telephone,
-                                                   'registration_time': user.date_joined, 'login_time': user.last_login,
+                                                   'registration_time': user.date_joined.__format__(
+                                                       '%Y-%m-%d %H:%M:%S'),
+                                                   'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
                                                    'birthday': user.user_info.birthday, 'avatar': user.user_info.avatar,
                                                    'county': user.user_info.county, 'town': user.user_info.town,
                                                    'is_admin': user.is_superuser}, 'county': pronunciation.county,
@@ -294,3 +306,54 @@ def managePronunciation(request, id):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+def load_character():
+    sheet = xlrd.open_workbook(os.path.join(settings.BASE_DIR, 'material', '单字字音表.xlsx')).sheet_by_index(0)
+    line = sheet.nrows
+    col = sheet.ncols
+    title = sheet.row(0)
+    for line in range(1, line):
+        info = sheet.row(line)
+        dic = {}
+        for i in range(col):
+            dic[title[i].value] = info[i].value
+        character_form = CharacterForm(dic)
+        if character_form.is_valid():
+            character = character_form.save(commit=True)
+            if character.id % 100 == 0:
+                print('load character {}'.format(character.id))
+        else:
+            raise Exception
+
+
+def load_word():
+    sheet = open(os.path.join('material', '莆仙方言简明词汇-纯享版.csv'))
+    lines = sheet.readlines()
+    title = ['word', 'definition']
+    col = 2
+    for line in lines:
+        info = line.split(',', 1)
+        dic = {}
+        for i in range(col):
+            dic[title[i]] = info[i] if info[i] else '【待更新】'
+        word_form = WordForm(dic)
+        if word_form.is_valid():
+            word = word_form.save(commit=False)
+            word.contributor = User.objects.get(username='root')
+            word.save()
+            if word.id % 100 == 0:
+                print('load character {}'.format(word.id))
+        else:
+            raise Exception
+
+
+character_loaded = True
+if not character_loaded:
+    load_character()
+    character_loaded = True
+
+word_loaded = True
+if not word_loaded:
+    load_word()
+    word_loaded = True

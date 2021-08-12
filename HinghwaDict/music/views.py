@@ -37,7 +37,8 @@ def searchMusic(request):
                 musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
                                          "artist": music.artist, "cover": music.cover, "likes": music.likes,
                                          "contributor": music.contributor.id, "visibility": music.visibility},
-                               'contributor': {'id': music.contributor.id, 'username': music.contributor.username,
+                               'contributor': {'id': music.contributor.id,
+                                               'nickname': music.contributor.user_info.nickname,
                                                'avatar': music.contributor.user_info.avatar}})
             return JsonResponse({"music": musics}, status=200)
     except Exception as e:
@@ -55,8 +56,8 @@ def manageMusic(request, id):
                                            "contributor": {"id": user.id, 'username': user.username,
                                                            'nickname': music.contributor.user_info.nickname,
                                                            'email': user.email, 'telephone': user.user_info.telephone,
-                                                           'registration_time': user.date_joined,
-                                                           'login_time': user.last_login,
+                                                           'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                                           'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
                                                            'birthday': user.user_info.birthday,
                                                            'avatar': user.user_info.avatar,
                                                            'county': user.user_info.county, 'town': user.user_info.town,

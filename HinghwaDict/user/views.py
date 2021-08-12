@@ -12,32 +12,49 @@ from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
 
-@require_POST
 @csrf_exempt
 def register(request):
     try:
-        body = demjson.decode(request.body)
-        user_form = UserForm(body)
-        code = body['code']
-        if user_form.is_valid():
-            if email_check(user_form.cleaned_data['email'], code):
-                user = user_form.save(commit=False)
-                user.set_password(user_form.cleaned_data['password'])
-                user.save()
-                user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
-                if 'avatar' in body:
-                    user_info.avatar = body['avatar']
-                if 'nickname' in body:
-                    user_info.nickname = body['nickname']
-                user_info.save()
-                return JsonResponse({"id": user.id}, status=200)
+        if request.method == 'GET':
+            result = User.objects.all()
+            if 'email' in request.GET:
+                result = result.filter(email=request.GET['email'])
+            if 'username' in request.GET:
+                result = result.filter(username=request.GET['username'])
+            users = []
+            for user in result:
+                info = user.user_info
+                users.append({"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                              'email': user.email, 'telephone': info.telephone,
+                              'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
+                              'birthday': info.birthday, 'avatar': info.avatar,
+                              'county': info.county, 'town': info.town,
+                              'is_admin': user.is_superuser})
+            return JsonResponse({"users": users}, status=200)
+        elif request.method == 'POST':
+            body = demjson.decode(request.body)
+            user_form = UserForm(body)
+            code = body['code']
+            if user_form.is_valid():
+                if email_check(user_form.cleaned_data['email'], code):
+                    user = user_form.save(commit=False)
+                    user.set_password(user_form.cleaned_data['password'])
+                    user.save()
+                    user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
+                    if 'avatar' in body:
+                        user_info.avatar = body['avatar']
+                    if 'nickname' in body:
+                        user_info.nickname = body['nickname']
+                    user_info.save()
+                    return JsonResponse({"id": user.id}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
             else:
-                return JsonResponse({}, status=401)
-        else:
-            if user_form['username'].errors:
-                return JsonResponse({}, status=409)
-            else:
-                return JsonResponse({}, status=400)
+                if user_form['username'].errors:
+                    return JsonResponse({}, status=409)
+                else:
+                    return JsonResponse({}, status=400)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
 
@@ -56,8 +73,8 @@ def login(request):
             payload = {'username': username, 'id': user.id,
                        'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
                        "value": random_str()}
-            return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
-                                status=200)
+            return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256'),
+                                 'id': user.id}, status=200)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
@@ -77,7 +94,8 @@ def manageInfo(request, id):
             contribute_listened = user.contribute_pronunciation.aggregate(Sum('views'))['views__sum']
             return JsonResponse({"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
                                           'email': user.email, 'telephone': info.telephone,
-                                          'registration_time': user.date_joined, 'login_time': user.last_login,
+                                          'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                          'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
                                           'birthday': info.birthday, 'avatar': info.avatar,
                                           'county': info.county, 'town': info.town,
                                           'is_admin': user.is_superuser},
@@ -98,7 +116,7 @@ def manageInfo(request, id):
                 info = body['user']
                 user_form = UserForm(info)
                 user_info_form = UserInfoForm(info)
-                if ~(("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
+                if not (("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
                         and user_info_form.is_valid():
                     if 'username' in info:
                         user.username = info['username']
@@ -113,7 +131,7 @@ def manageInfo(request, id):
                     return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
                                         status=200)
                 else:
-                    if ~user_form.is_valid() and ('username' in info) and info['username'] != user.username:
+                    if (not user_form.is_valid()) and ('username' in info) and info['username'] != user.username:
                         return JsonResponse({}, status=409)
                     else:
                         return JsonResponse({}, status=400)
