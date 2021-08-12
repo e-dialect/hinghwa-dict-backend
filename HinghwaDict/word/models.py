@@ -9,11 +9,11 @@ class Word(models.Model):
     definition = models.TextField(verbose_name="注释")
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contribute_words", verbose_name="贡献者",
                                     editable=False)
-    annotation = models.TextField(verbose_name="附注")
-    mandarin = models.TextField(verbose_name="对应普通话词语")
+    annotation = models.TextField(verbose_name="附注", blank=True)
+    mandarin = models.TextField(verbose_name="对应普通话词语", blank=True)
     related_words = models.ManyToManyField('self', related_name="related_words", verbose_name="相关词汇", blank=True)
     related_articles = models.ManyToManyField(Article, related_name="related_words", verbose_name="相关帖子", blank=True)
-    views = models.IntegerField(default=0, verbose_name="访问量",editable=False)
+    views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
     visibility = models.BooleanField(default=False, verbose_name='是否审核')
 
     def __str__(self):
