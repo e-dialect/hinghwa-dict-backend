@@ -2,3 +2,4 @@ django
 demjson
 pyjwt
 django-cors-headers
+xlrd
