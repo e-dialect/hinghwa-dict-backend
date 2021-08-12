@@ -116,7 +116,7 @@ def manageInfo(request, id):
                 info = body['user']
                 user_form = UserForm(info)
                 user_info_form = UserInfoForm(info)
-                if ~(("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
+                if not (("username" in info) and len(user_form['username'].errors.data) and info['username'] != user.username) \
                         and user_info_form.is_valid():
                     if 'username' in info:
                         user.username = info['username']
@@ -131,7 +131,7 @@ def manageInfo(request, id):
                     return JsonResponse({"token": jwt.encode(payload, 'dxw', algorithm='HS256')},
                                         status=200)
                 else:
-                    if ~user_form.is_valid() and ('username' in info) and info['username'] != user.username:
+                    if (not user_form.is_valid()) and ('username' in info) and info['username'] != user.username:
                         return JsonResponse({}, status=409)
                     else:
                         return JsonResponse({}, status=400)
