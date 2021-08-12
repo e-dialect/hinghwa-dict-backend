@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
+from website.views import evaluate
 from website.views import token_check
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
@@ -13,9 +14,24 @@ def searchArticle(request):
     try:
         if request.method == 'GET':
             # 搜索符合条件的文章并返回id TODO 正式版search
-            articles = list(Article.objects.all())
-            articles.sort(key=lambda article: article.publish_time, reverse=True)
-            articles = [article.id for article in articles]
+            articles = Article.objects.all()
+            if 'search' in request.GET:
+                result = []
+                key = request.GET['search']
+                for article in articles:
+                    score = evaluate([(article.author.username, 10), (article.author.user_info.nickname, 9),
+                                      (article.title, 5), (article.description, 3), (article.content, 1)], key)
+                    result.append((article.id, score))
+                result.sort(key=lambda a: a[1], reverse=True)
+                articles = []
+                for id, score in result:
+                    if score > 0:
+                        articles.append(Article.objects.get(id=id))
+                    else:
+                        break
+
+            end = min(20, len(articles))
+            articles = [article.id for article in articles[:end]]
             return JsonResponse({"articles": articles})
         elif request.method == 'POST':
             body = demjson.decode(request.body)
@@ -47,7 +63,7 @@ def searchArticle(request):
                                  "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                  "title": article.title, "description": article.description, "content": article.content,
                                  "cover": article.cover},
-                     'author': {'id': article.author.id, 'username': article.author.username,
+                     'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                 'avatar': article.author.user_info.avatar}})
             return JsonResponse({"articles": articles}, status=200)
         else:
@@ -71,8 +87,8 @@ def manageArticle(request, id):
             article = {"id": article.id,
                        "author": {"id": user.id, 'username': user.username, 'nickname': user.user_info.nickname,
                                   'email': user.email, 'telephone': user.user_info.telephone,
-                                  'registration_time': user.date_joined,
-                                  'login_time': user.last_login,
+                                  'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                  'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
                                   'birthday': user.user_info.birthday,
                                   'avatar': user.user_info.avatar,
                                   'county': user.user_info.county, 'town': user.user_info.town,
@@ -140,7 +156,7 @@ def comment(request, id):
         article = Article.objects.get(id=id)
         if request.method == 'GET':
             comments = [{"id": comment.id,
-                         "user": {"id": comment.user.id, "username": comment.user.username,
+                         "user": {"id": comment.user.id, "nickname": comment.user.user_info.nickname,
                                   "avatar": comment.user.user_info.avatar},
                          "content": comment.content,
                          "time": comment.time.__format__('%Y-%m-%d %H:%M:%S'),
