@@ -7,6 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from article.models import Article
+from website.views import evaluate
 from website.views import token_check
 from .forms import WordForm, CharacterForm, PronunciationForm
 from .models import Word, Character, Pronunciation, User
@@ -16,8 +17,26 @@ from .models import Word, Character, Pronunciation, User
 def searchWords(request):
     try:
         if request.method == 'GET':
-            all = Word.objects.all()
-            words = [word.id for word in all]
+            words = Word.objects.all()
+            if 'contributor' in request.GET:
+                words = words.filter(contributor=request.GET['contributor'])
+            if 'search' in request.GET:
+                result = []
+                key = request.GET['search']
+                for word in words:
+                    score = evaluate(
+                        [(word.word, 3), (word.definition, 2), (word.mandarin, 1.5), (word.annotation, 1)], key)
+                    result.append((word.id, score))
+                result.sort(key=lambda a: a[1], reverse=True)
+                words = []
+                for id, score in result:
+                    if score > 0:
+                        words.append(Word.objects.get(id=id))
+                    else:
+                        break
+
+            end = min(20, len(words))
+            words = [word.id for word in words[:end]]
             return JsonResponse({"words": words}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)

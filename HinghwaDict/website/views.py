@@ -66,7 +66,7 @@ def evaluate(standard, key):
     key = str(key)
     for item, score in standard:
         item = str(item)
-        total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(len(item))
+        total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(3 + len(item))
     return total
 
 
