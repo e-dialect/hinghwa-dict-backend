@@ -58,6 +58,8 @@ def compare(item, key):
         elif j:
             total += math.exp(j - m)
             j = 1 if character == key[0] else 0
+    if j:
+        total += math.exp(j - m)
     return total
 
 
@@ -66,7 +68,8 @@ def evaluate(standard, key):
     key = str(key)
     for item, score in standard:
         item = str(item)
-        total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(3 + len(item))
+        if len(item) > 0:
+            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(3 + len(item))
     return total
 
 
