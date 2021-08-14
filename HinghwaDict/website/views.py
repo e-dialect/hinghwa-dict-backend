@@ -256,17 +256,20 @@ def files(request):
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
-                info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
-                if user.id == info['id']:
-                    filename = info['filename']
-                    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
-                    if os.path.exists(path):
-                        os.remove(path)
-                        return JsonResponse({}, status=200)
+                try:
+                    info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
+                    if user.id == info['id']:
+                        filename = info['filename']
+                        path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
+                        if os.path.exists(path):
+                            os.remove(path)
+                            return JsonResponse({}, status=200)
+                        else:
+                            return JsonResponse({"msg": "文件不存在"}, status=500)
                     else:
-                        return JsonResponse({"msg": "文件不存在"}, status=500)
-                else:
-                    return JsonResponse({}, status=401)
+                        return JsonResponse({}, status=401)
+                except Exception as e:
+                    return JsonResponse({},status=404)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
