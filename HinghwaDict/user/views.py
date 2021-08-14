@@ -27,7 +27,8 @@ def register(request):
                 users.append({"id": user.id, 'username': user.username, 'nickname': info.nickname,
                               'email': user.email, 'telephone': info.telephone,
                               'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
+                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
+                              if user.last_login else '',
                               'birthday': info.birthday, 'avatar': info.avatar,
                               'county': info.county, 'town': info.town,
                               'is_admin': user.is_superuser})
@@ -97,7 +98,8 @@ def manageInfo(request, id):
                 return JsonResponse({"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
                                               'email': user.email, 'telephone': info.telephone,
                                               'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
+                                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
+                                              if user.last_login else '',
                                               'birthday': info.birthday, 'avatar': info.avatar,
                                               'county': info.county, 'town': info.town,
                                               'is_admin': user.is_superuser},

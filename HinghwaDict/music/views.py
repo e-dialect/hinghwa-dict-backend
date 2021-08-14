@@ -62,7 +62,7 @@ def manageMusic(request, id):
                                                                'registration_time': user.date_joined.__format__(
                                                                    '%Y-%m-%d %H:%M:%S'),
                                                                'login_time': user.last_login.__format__(
-                                                                   '%Y-%m-%d %H:%M:%S'),
+                                                                   '%Y-%m-%d %H:%M:%S') if user.last_login else '',
                                                                'birthday': user.user_info.birthday,
                                                                'avatar': user.user_info.avatar,
                                                                'county': user.user_info.county,
