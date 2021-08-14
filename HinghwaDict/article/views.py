@@ -75,53 +75,57 @@ def searchArticle(request):
 @csrf_exempt
 def manageArticle(request, id):
     try:
-        article = Article.objects.get(id=id)
-        token = request.headers['token']
-        if request.method == 'GET':
-            article.views += 1
-            article.save()
-            user = token_check(token, 'dxw')
-            me = {'liked': article.like_users.filter(id=user.id).exists(),
-                  'is_author': user == article.author} if user else {'liked': False, 'is_author': False}
-            user = article.author
-            article = {"id": article.id,
-                       "author": {"id": user.id, 'username': user.username, 'nickname': user.user_info.nickname,
-                                  'email': user.email, 'telephone': user.user_info.telephone,
-                                  'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                                  'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
-                                  'birthday': user.user_info.birthday,
-                                  'avatar': user.user_info.avatar,
-                                  'county': user.user_info.county, 'town': user.user_info.town,
-                                  'is_admin': user.is_superuser},
-                       "likes": article.like_users.count(), "views": article.views,
-                       "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
-                       "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
-                       "title": article.title, "description": article.description, "content": article.content,
-                       "cover": article.cover, "like_users": [x.id for x in article.like_users.all()]}
-            return JsonResponse({"article": article, 'me': me}, status=200)
-        elif request.method == 'PUT':
-            if token_check(token, 'dxw', article.author.id):
-                body = demjson.decode(request.body)
-                body = body['article']
-                article_form = ArticleForm(body)
-                for key in body:
-                    if len(article_form[key].errors.data):
-                        return JsonResponse({}, status=400)
-                for key in body:
-                    setattr(article, key, body[key])
-                article.update_time = timezone.now()
+        article = Article.objects.filter(id=id)
+        if article.exists():
+            article = article[0]
+            token = request.headers['token']
+            if request.method == 'GET':
+                article.views += 1
                 article.save()
-                return JsonResponse({}, status=200)
+                user = token_check(token, 'dxw')
+                me = {'liked': article.like_users.filter(id=user.id).exists(),
+                      'is_author': user == article.author} if user else {'liked': False, 'is_author': False}
+                user = article.author
+                article = {"id": article.id,
+                           "author": {"id": user.id, 'username': user.username, 'nickname': user.user_info.nickname,
+                                      'email': user.email, 'telephone': user.user_info.telephone,
+                                      'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                      'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
+                                      'birthday': user.user_info.birthday,
+                                      'avatar': user.user_info.avatar,
+                                      'county': user.user_info.county, 'town': user.user_info.town,
+                                      'is_admin': user.is_superuser},
+                           "likes": article.like_users.count(), "views": article.views,
+                           "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
+                           "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
+                           "title": article.title, "description": article.description, "content": article.content,
+                           "cover": article.cover, "like_users": [x.id for x in article.like_users.all()]}
+                return JsonResponse({"article": article, 'me': me}, status=200)
+            elif request.method == 'PUT':
+                if token_check(token, 'dxw', article.author.id):
+                    body = demjson.decode(request.body)
+                    body = body['article']
+                    article_form = ArticleForm(body)
+                    for key in body:
+                        if len(article_form[key].errors.data):
+                            return JsonResponse({}, status=400)
+                    for key in body:
+                        setattr(article, key, body[key])
+                    article.update_time = timezone.now()
+                    article.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            elif request.method == 'DELETE':
+                if token_check(token, 'dxw', article.author.id):
+                    article.delete()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
             else:
-                return JsonResponse({}, status=401)
-        elif request.method == 'DELETE':
-            if token_check(token, 'dxw', article.author.id):
-                article.delete()
-                return JsonResponse({}, status=200)
-            else:
-                return JsonResponse({}, status=401)
+                return JsonResponse({}, status=405)
         else:
-            return JsonResponse({}, status=405)
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -129,23 +133,27 @@ def manageArticle(request, id):
 @csrf_exempt
 def like(request, id):
     try:
-        article = Article.objects.get(id=id)
-        token = request.headers['token']
-        user = token_check(token, 'dxw')
-        if user:
-            if request.method == 'POST':
-                article.like_users.add(user)
-                return JsonResponse({}, status=200)
-            elif request.method == 'DELETE':
-                if len(article.like_users.filter(id=user.id)):
-                    article.like_users.remove(user)
+        article = Article.objects.filter(id=id)
+        if article.exists():
+            article = article[0]
+            token = request.headers['token']
+            user = token_check(token, 'dxw')
+            if user:
+                if request.method == 'POST':
+                    article.like_users.add(user)
+                    return JsonResponse({}, status=200)
+                elif request.method == 'DELETE':
+                    if len(article.like_users.filter(id=user.id)):
+                        article.like_users.remove(user)
+                    else:
+                        return JsonResponse({}, status=400)
+                    return JsonResponse({}, status=200)
                 else:
-                    return JsonResponse({}, status=400)
-                return JsonResponse({}, status=200)
+                    return JsonResponse({}, status=405)
             else:
-                return JsonResponse({}, status=405)
+                return JsonResponse({}, status=401)
         else:
-            return JsonResponse({}, status=401)
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -153,44 +161,49 @@ def like(request, id):
 @csrf_exempt
 def comment(request, id):
     try:
-        article = Article.objects.get(id=id)
-        if request.method == 'GET':
-            comments = [{"id": comment.id,
-                         "user": {"id": comment.user.id, "nickname": comment.user.user_info.nickname,
-                                  "avatar": comment.user.user_info.avatar},
-                         "content": comment.content,
-                         "time": comment.time.__format__('%Y-%m-%d %H:%M:%S'),
-                         "parent": comment.parent_id if comment.parent else 0} for comment in article.comments.all()]
-            return JsonResponse({"comments": comments}, status=200)
-        elif request.method == 'POST':
-            token = request.headers['token']
-            user = token_check(token, 'dxw')
-            if user:
-                body = demjson.decode(request.body)
-                comment_form = CommentForm(body)
-                if comment_form.is_valid():
-                    comment = comment_form.save(commit=False)
-                    comment.user = user
-                    comment.article = article
-                    if 'parent' in body:
-                        comment.parent = Comment.objects.get(id=body['parent'])
-                    comment.save()
-                    return JsonResponse({'id': comment.id}, status=200)
+        article = Article.objects.filter(id=id)
+        if article.exists():
+            article = article[0]
+            if request.method == 'GET':
+                comments = [{"id": comment.id,
+                             "user": {"id": comment.user.id, "nickname": comment.user.user_info.nickname,
+                                      "avatar": comment.user.user_info.avatar},
+                             "content": comment.content,
+                             "time": comment.time.__format__('%Y-%m-%d %H:%M:%S'),
+                             "parent": comment.parent_id if comment.parent else 0} for comment in
+                            article.comments.all()]
+                return JsonResponse({"comments": comments}, status=200)
+            elif request.method == 'POST':
+                token = request.headers['token']
+                user = token_check(token, 'dxw')
+                if user:
+                    body = demjson.decode(request.body)
+                    comment_form = CommentForm(body)
+                    if comment_form.is_valid():
+                        comment = comment_form.save(commit=False)
+                        comment.user = user
+                        comment.article = article
+                        if 'parent' in body:
+                            comment.parent = Comment.objects.get(id=body['parent'])
+                        comment.save()
+                        return JsonResponse({'id': comment.id}, status=200)
+                    else:
+                        return JsonResponse({}, status=400)
                 else:
-                    return JsonResponse({}, status=400)
+                    return JsonResponse({}, status=401)
+            elif request.method == 'DELETE':
+                body = demjson.decode(request.body)
+                token = request.headers['token']
+                comment = Comment.objects.get(id=body['id'])
+                if token_check(token, 'dxw', comment.user.id):
+                    # 应该超级管理员也能删除吧
+                    comment.delete()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
             else:
-                return JsonResponse({}, status=401)
-        elif request.method == 'DELETE':
-            body = demjson.decode(request.body)
-            token = request.headers['token']
-            comment = Comment.objects.get(id=body['id'])
-            if token_check(token, 'dxw', comment.user.id):
-                # 应该超级管理员也能删除吧
-                comment.delete()
-                return JsonResponse({}, status=200)
-            else:
-                return JsonResponse({}, status=401)
+                return JsonResponse({}, status=405)
         else:
-            return JsonResponse({}, status=405)
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
