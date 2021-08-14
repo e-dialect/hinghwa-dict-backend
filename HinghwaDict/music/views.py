@@ -48,44 +48,52 @@ def searchMusic(request):
 @csrf_exempt
 def manageMusic(request, id):
     try:
-        music = Music.objects.get(id=id)
-        if request.method == 'GET':
-            user = music.contributor
-            return JsonResponse({"music": {"id": music.id, "source": music.source, "title": music.title,
-                                           "artist": music.artist, "cover": music.cover, "likes": music.likes,
-                                           "contributor": {"id": user.id, 'username': user.username,
-                                                           'nickname': music.contributor.user_info.nickname,
-                                                           'email': user.email, 'telephone': user.user_info.telephone,
-                                                           'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                                                           'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S'),
-                                                           'birthday': user.user_info.birthday,
-                                                           'avatar': user.user_info.avatar,
-                                                           'county': user.user_info.county, 'town': user.user_info.town,
-                                                           'is_admin': user.is_superuser},
-                                           "visibility": music.visibility}}, status=200)
-        elif request.method == 'PUT':
-            body = demjson.decode(request.body)
-            token = request.headers['token']
-            user = token_check(token, '***REMOVED***', music.contributor.id)
-            if user:
-                body = body['music']
-                music_form = MusicForm(body)
-                for key in body:
-                    if len(music_form[key].errors.data):
-                        return JsonResponse({}, status=400)
-                for key in body:
-                    setattr(music, key, body[key])
-                music.save()
-                return JsonResponse({}, status=200)
-            else:
-                return JsonResponse({}, status=401)
-        elif request.method == 'DELETE':
-            token = request.headers['token']
-            user = token_check(token, '***REMOVED***', music.contributor.id)
-            if user:
-                music.delete()
-                return JsonResponse({}, status=200)
-            else:
-                return JsonResponse({}, status=401)
+        music = Music.objects.filter(id=id)
+        if music.exists():
+            music = music[0]
+            if request.method == 'GET':
+                user = music.contributor
+                return JsonResponse({"music": {"id": music.id, "source": music.source, "title": music.title,
+                                               "artist": music.artist, "cover": music.cover, "likes": music.likes,
+                                               "contributor": {"id": user.id, 'username': user.username,
+                                                               'nickname': music.contributor.user_info.nickname,
+                                                               'email': user.email,
+                                                               'telephone': user.user_info.telephone,
+                                                               'registration_time': user.date_joined.__format__(
+                                                                   '%Y-%m-%d %H:%M:%S'),
+                                                               'login_time': user.last_login.__format__(
+                                                                   '%Y-%m-%d %H:%M:%S'),
+                                                               'birthday': user.user_info.birthday,
+                                                               'avatar': user.user_info.avatar,
+                                                               'county': user.user_info.county,
+                                                               'town': user.user_info.town,
+                                                               'is_admin': user.is_superuser},
+                                               "visibility": music.visibility}}, status=200)
+            elif request.method == 'PUT':
+                body = demjson.decode(request.body)
+                token = request.headers['token']
+                user = token_check(token, '***REMOVED***', music.contributor.id)
+                if user:
+                    body = body['music']
+                    music_form = MusicForm(body)
+                    for key in body:
+                        if len(music_form[key].errors.data):
+                            return JsonResponse({}, status=400)
+                    for key in body:
+                        setattr(music, key, body[key])
+                    music.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            elif request.method == 'DELETE':
+                token = request.headers['token']
+                user = token_check(token, '***REMOVED***', music.contributor.id)
+                if user:
+                    music.delete()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
