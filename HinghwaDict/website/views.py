@@ -58,6 +58,8 @@ def compare(item, key):
         elif j:
             total += math.exp(j - m)
             j = 1 if character == key[0] else 0
+    if j:
+        total += math.exp(j - m)
     return total
 
 
@@ -66,7 +68,8 @@ def evaluate(standard, key):
     key = str(key)
     for item, score in standard:
         item = str(item)
-        total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(len(item))
+        if len(item) > 0:
+            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(3 + len(item))
     return total
 
 
@@ -256,17 +259,20 @@ def files(request):
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
-                info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
-                if user.id == info['id']:
-                    filename = info['filename']
-                    path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
-                    if os.path.exists(path):
-                        os.remove(path)
-                        return JsonResponse({}, status=200)
+                try:
+                    info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
+                    if user.id == info['id']:
+                        filename = info['filename']
+                        path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
+                        if os.path.exists(path):
+                            os.remove(path)
+                            return JsonResponse({}, status=200)
+                        else:
+                            return JsonResponse({"msg": "文件不存在"}, status=500)
                     else:
-                        return JsonResponse({"msg": "文件不存在"}, status=500)
-                else:
-                    return JsonResponse({}, status=401)
+                        return JsonResponse({}, status=401)
+                except Exception as e:
+                    return JsonResponse({},status=404)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:

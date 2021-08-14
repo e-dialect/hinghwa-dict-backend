@@ -37,9 +37,11 @@ urlpatterns = [
     path('files/<token>', website.openUrl),
 
     path('words', include([path('', word.searchWords),
-                           path('/<id>', word.manageWord)])),
+                           path('/<int:id>', word.manageWord),
+                           path('/add', word.load_word)])),
     path('characters', include([path('', word.searchCharacters),
-                                path('/<id>', word.manageCharacter)])),
+                                path('/<int:id>', word.manageCharacter),
+                                path('/add', word.load_character)])),
     path('pronunciation', include([path('', word.searchPronunciations),
-                                   path('/<id>', word.managePronunciation)])),
+                                   path('/<int:id>', word.managePronunciation)])),
 ]
