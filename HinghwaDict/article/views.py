@@ -30,8 +30,7 @@ def searchArticle(request):
                     else:
                         break
 
-            end = min(20, len(articles))
-            articles = [article.id for article in articles[:end]]
+            articles = [article.id for article in articles]
             return JsonResponse({"articles": articles})
         elif request.method == 'POST':
             body = demjson.decode(request.body)
