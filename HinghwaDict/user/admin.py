@@ -8,6 +8,7 @@ class UserInfoAdmin(admin.ModelAdmin):
     list_display = ['ID', 'user', 'nickname', 'telephone']
     search_fields = ['user', 'nickname', 'telephone', 'email', 'user__email']
     ordering = ['user__id']
+    list_per_page = 50
 
 
 admin.site.register(UserInfo, UserInfoAdmin)
