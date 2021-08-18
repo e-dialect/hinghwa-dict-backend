@@ -170,3 +170,5 @@ CORS_ALLOW_HEADERS = (
     'Pragma',
     'x-token',
 )
+
+OUTER_IMAGE_AUTHORIZATION = '2rvBB2jYlMOEFbWFYD4YHCa9sQ6umjNO'

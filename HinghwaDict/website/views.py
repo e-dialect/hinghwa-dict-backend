@@ -1,9 +1,11 @@
+import json
 import math
 import os
 import random
 
 import demjson
 import jwt
+import requests
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -14,7 +16,7 @@ from django.views.decorators.http import require_POST
 
 from article.models import Article
 from word.models import Word
-from .models import Website
+from .models import Website, File
 
 
 class globalVar():
@@ -74,7 +76,7 @@ def evaluate(standard, key):
 
 
 def random_str(n=6):
-    _str = '1234567890abcdefghijklmnopqrstuvwxyz'
+    _str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
     return ''.join(random.choice(_str) for i in range(n))
 
 
@@ -229,7 +231,27 @@ def carousel(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+def upload_image(path):
+    headers = {'Authorization': settings.OUTER_IMAGE_AUTHORIZATION}
+    files = {'smfile': open(path, 'rb')}
+    url = 'https://sm.ms/api/v2/upload'
+    response = requests.post(url, files=files, headers=headers)
+    dic = demjson.decode(response.content)
+    if response.status_code == 200:
+        if dic['success']:
+            return dic['data']['url'], dic['data']['delete']
+        else:
+            return 0, dic['message']
+    else:
+        return 0, dic['message']
 
+
+def delete_outer_image(url):
+    headers = {'Authorization': settings.OUTER_IMAGE_AUTHORIZATION}
+    response = requests.get(url, headers=headers)
+    if response.status_code == 200:
+        return 1
+    return 0
 
 
 @csrf_exempt
@@ -241,8 +263,8 @@ def files(request):
             if request.method == "POST":
                 file = request.FILES.get("file")
                 type, suffix = str(file.content_type).split('/')
-                time = timezone.now().__format__("%Y_%m_%d_%H_%M_%S")
-                filename = time + '.' + suffix
+                time = timezone.now().__format__("%Y_%m_%d")
+                filename = time + '_' + random_str(15) + '.' + suffix
                 type_folder = os.path.join(settings.MEDIA_ROOT, type)
                 folder = os.path.join(type_folder, str(user.id))
                 if not os.path.exists(type_folder):
@@ -254,18 +276,40 @@ def files(request):
                 with open(path, 'wb') as f:
                     for i in file.chunks():
                         f.write(i)
-                payload = {"id": user.id, "type": type, "filename": filename}
-                url = 'http://api.pxm.edialect.top/files/' + jwt.encode(payload, "***REMOVED***", algorithm="HS256")
+                url = 'http://api.pxm.edialect.top/files/' + \
+                      timezone.now().__format__("%Y/%m/%d/") + filename.split('_')[-1]
+                if type == 'image':
+                    outer_url, delete_url = upload_image(path)
+                    if outer_url:
+                        new_filename = time + '_' + outer_url.split('/')[-1]
+                        new_path = os.path.join(folder, new_filename)
+                        os.rename(path, new_path)
+                        url = 'http://api.pxm.edialect.top/files/' + \
+                              timezone.now().__format__("%Y/%m/%d/") + new_filename.split('_')[-1]
+                        File.objects.create(owner=user, type=type, local_url=url,
+                                            outer_url=outer_url, delete_url=delete_url)
+                        url = outer_url
+                    else:
+                        os.remove(path)
+                        return JsonResponse({'msg': delete_url}, status=404)
+                else:
+                    File.objects.create(owner=user, type=type, local_url=url)
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
                 try:
-                    info = jwt.decode(body['url'].split('/')[-1], "***REMOVED***", algorithms=["HS256"])
-                    if user.id == info['id']:
-                        filename = info['filename']
-                        path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
+                    file = File.objects.filter(local_url=body['url']) | File.objects.filter(outer_url=body['url'])
+                    if not file.exists():
+                        raise Exception
+                    file = file[0]
+                    if user == file.owner:
+                        filename = '_'.join(body['url'].split('/')[-4:])
+                        path = os.path.join(settings.MEDIA_ROOT, file.type, str(file.owner.id), filename)
                         if os.path.exists(path):
                             os.remove(path)
+                            if file.outer_url:
+                                delete_outer_image(file.delete_url)
+                            file.delete()
                             return JsonResponse({}, status=200)
                         else:
                             return JsonResponse({"msg": "文件不存在"}, status=500)
@@ -280,11 +324,12 @@ def files(request):
 
 
 @csrf_exempt
-def openUrl(request, token):
+def openUrl(request, Y, M, D, filename):
     try:
-        info = jwt.decode(token, "***REMOVED***", algorithms=["HS256"])
-        filename = info['filename']
-        path = os.path.join(settings.MEDIA_ROOT, info['type'], str(info['id']), filename)
+        url = 'http://api.pxm.edialect.top' + request.path
+        file = File.objects.get(local_url=url)
+        filename = '{}_{}_{}_{}'.format(Y, M, D, filename)
+        path = os.path.join(settings.MEDIA_ROOT, file.type, str(file.owner.id), filename)
         if os.path.exists(path):
             with open(path.encode('utf-8'), 'rb') as f:
                 response = HttpResponse(f.read(), content_type="application/octet-stream")
