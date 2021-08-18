@@ -35,8 +35,7 @@ def searchWords(request):
                     else:
                         break
 
-            end = min(20, len(words))
-            words = [word.id for word in words[:end]]
+            words = [word.id for word in words]
             return JsonResponse({"words": words}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
