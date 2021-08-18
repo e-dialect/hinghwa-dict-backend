@@ -11,6 +11,6 @@ class MusicAdmin(admin.ModelAdmin):
     search_fields = ['title', 'artist', 'contributor']
     ordering = ['id', '-likes']
     list_per_page = 50
-    
+
 
 admin.site.register(Music, MusicAdmin)
