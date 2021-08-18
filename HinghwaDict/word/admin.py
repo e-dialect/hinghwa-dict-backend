@@ -10,6 +10,7 @@ class WordAdmin(admin.ModelAdmin):
     list_filter = ['contributor', 'visibility']
     search_fields = ['word', 'definition', 'contributor']
     ordering = ['id', '-views']
+    list_per_page = 50
 
 
 class CharacterAdmin(admin.ModelAdmin):
@@ -17,6 +18,7 @@ class CharacterAdmin(admin.ModelAdmin):
     list_filter = ['county']
     search_fields = ['pinyin', 'shengmu', 'yunmu', 'shengdiao']
     ordering = ['id']
+    list_per_page = 50
 
 
 class PronunciationAdmin(admin.ModelAdmin):
@@ -24,6 +26,7 @@ class PronunciationAdmin(admin.ModelAdmin):
     list_filter = ['contributor', 'visibility', 'county']
     search_fields = ['word', 'contributor', 'pinyin']
     ordering = ['id', '-views']
+    list_per_page = 50
 
 
 admin.site.register(Word, WordAdmin)

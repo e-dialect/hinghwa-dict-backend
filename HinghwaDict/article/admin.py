@@ -17,6 +17,7 @@ class CommentAdmin(admin.ModelAdmin):
     search_fields = ['user', 'content', 'article']
     date_hierarchy = 'time'
     ordering = ['id', '-time']
+    list_per_page = 50
 
 
 admin.site.register(Article, ArticleAdmin)

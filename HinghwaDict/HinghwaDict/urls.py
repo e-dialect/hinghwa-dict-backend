@@ -34,7 +34,7 @@ urlpatterns = [
     path('music/', include('music.urls', namespace='music')),
     path('music', music.searchMusic),
     path('website/', include('website.urls', namespace='website')),
-    path('files/<token>', website.openUrl),
+    path('files/<Y>/<M>/<D>/<filename>', website.openUrl),
 
     path('words', include([path('', word.searchWords),
                            path('/<int:id>', word.manageWord),
