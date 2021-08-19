@@ -3,3 +3,4 @@ demjson
 pyjwt
 django-cors-headers
 xlrd
+腾讯cos:pip install -U cos-python-sdk-v5
