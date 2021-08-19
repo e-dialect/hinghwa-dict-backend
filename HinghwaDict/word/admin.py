@@ -6,7 +6,7 @@ from .models import Word, Character, Pronunciation
 # Register your models here.
 
 class WordAdmin(admin.ModelAdmin):
-    list_display = ['word', 'contributor', 'views', 'visibility']
+    list_display = ['id', 'word', 'contributor', 'views', 'visibility']
     list_filter = ['contributor', 'visibility']
     search_fields = ['word', 'definition', 'contributor']
     ordering = ['id', '-views']
