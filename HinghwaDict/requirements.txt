@@ -3,3 +3,4 @@ demjson
 pyjwt
 django-cors-headers
 xlrd
+cos-python-sdk-v5

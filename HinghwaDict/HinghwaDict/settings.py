@@ -173,5 +173,8 @@ CORS_ALLOW_HEADERS = (
     'x-token',
     'token'
 )
-
-OUTER_IMAGE_AUTHORIZATION = '2rvBB2jYlMOEFbWFYD4YHCa9sQ6umjNO'
+# parameter of Tencent cos
+COS_SECRET_ID = '***REMOVED***'  # 替换为用户的 secretId
+COS_SECRET_KEY = '***REMOVED***'  # 替换为用户的 secretKey
+COS_BUCKET = '***REMOVED***' # BucketName-APPID
+COS_REGION = '***REMOVED***'
