@@ -1,11 +1,9 @@
-import json
 import math
 import os
 import random
 
 import demjson
 import jwt
-import requests
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -13,10 +11,12 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from qcloud_cos import CosConfig
+from qcloud_cos import CosS3Client
 
 from article.models import Article
 from word.models import Word
-from .models import Website, File
+from .models import Website
 
 
 class globalVar():
@@ -231,27 +231,21 @@ def carousel(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-def upload_image(path):
-    headers = {'Authorization': settings.OUTER_IMAGE_AUTHORIZATION}
-    files = {'smfile': open(path, 'rb')}
-    url = 'https://sm.ms/api/v2/upload'
-    response = requests.post(url, files=files, headers=headers)
-    dic = demjson.decode(response.content)
-    if response.status_code == 200:
-        if dic['success']:
-            return dic['data']['url'], dic['data']['delete']
-        else:
-            return 0, dic['message']
-    else:
-        return 0, dic['message']
+def upload_file(path, key):
+    config = CosConfig(Region=settings.COS_REGION, SecretId=settings.COS_SECRET_ID, SecretKey=settings.COS_SECRET_KEY)
+    client = CosS3Client(config)
+    response = client.upload_file(
+        Bucket='HinghwaDict-1259415432',
+        LocalFilePath=path,
+        Key=key
+    )
+    return "https://{0}.cos.{1}.myqcloud.com/{2}".format(settings.COS_BUCKET, settings.COS_REGION, key)
 
 
-def delete_outer_image(url):
-    headers = {'Authorization': settings.OUTER_IMAGE_AUTHORIZATION}
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        return 1
-    return 0
+def delete_file(key):
+    config = CosConfig(Region=settings.COS_REGION, SecretId=settings.COS_SECRET_ID, SecretKey=settings.COS_SECRET_KEY)
+    client = CosS3Client(config)
+    response = client.delete_object(Bucket=settings.COS_BUCKET, Key=key)
 
 
 @csrf_exempt
@@ -276,40 +270,23 @@ def files(request):
                 with open(path, 'wb') as f:
                     for i in file.chunks():
                         f.write(i)
-                url = 'http://api.pxm.edialect.top/files/' + \
-                      timezone.now().__format__("%Y/%m/%d/") + filename.split('_')[-1]
-                if type == 'image':
-                    outer_url, delete_url = upload_image(path)
-                    if outer_url:
-                        new_filename = time + '_' + outer_url.split('/')[-1]
-                        new_path = os.path.join(folder, new_filename)
-                        os.rename(path, new_path)
-                        url = 'http://api.pxm.edialect.top/files/' + \
-                              timezone.now().__format__("%Y/%m/%d/") + new_filename.split('_')[-1]
-                        File.objects.create(owner=user, type=type, local_url=url,
-                                            outer_url=outer_url, delete_url=delete_url)
-                        url = outer_url
-                    else:
-                        os.remove(path)
-                        return JsonResponse({'msg': delete_url}, status=404)
-                else:
-                    File.objects.create(owner=user, type=type, local_url=url)
+                key = 'files/{}/{}/'.format(type, user.id) + timezone.now().__format__("%Y/%m/%d/") + \
+                      filename.split('_')[-1]
+                url = upload_file(path, key)
                 return JsonResponse({"url": url}, status=200)
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
                 try:
-                    file = File.objects.filter(local_url=body['url']) | File.objects.filter(outer_url=body['url'])
-                    if not file.exists():
-                        raise Exception
-                    file = file[0]
-                    if user == file.owner:
-                        filename = '_'.join(body['url'].split('/')[-4:])
-                        path = os.path.join(settings.MEDIA_ROOT, file.type, str(file.owner.id), filename)
+                    suffix = body['url'].split('/', 3)[-1]
+                    type = suffix.split('/', 2)[0]
+                    id = suffix.split('/', 2)[1]
+                    if user.id == id or user.is_superuser():
+                        filename = suffix.split('/', 2)[2]
+                        filename = '_'.join(filename.split('/'))
+                        path = os.path.join(settings.MEDIA_ROOT, type, id, filename)
                         if os.path.exists(path):
                             os.remove(path)
-                            if file.outer_url:
-                                delete_outer_image(file.delete_url)
-                            file.delete()
+                            delete_file(suffix)
                             return JsonResponse({}, status=200)
                         else:
                             return JsonResponse({"msg": "文件不存在"}, status=500)
@@ -324,16 +301,14 @@ def files(request):
 
 
 @csrf_exempt
-def openUrl(request, Y, M, D, filename):
+def openUrl(request, type, id, Y, M, D, X):
     try:
-        url = 'http://api.pxm.edialect.top' + request.path
-        file = File.objects.get(local_url=url)
-        filename = '{}_{}_{}_{}'.format(Y, M, D, filename)
-        path = os.path.join(settings.MEDIA_ROOT, file.type, str(file.owner.id), filename)
+        filename = '{}_{}_{}_{}'.format(Y, M, D, X)
+        path = os.path.join(settings.MEDIA_ROOT, type, id, filename)
         if os.path.exists(path):
             with open(path.encode('utf-8'), 'rb') as f:
                 response = HttpResponse(f.read(), content_type="application/octet-stream")
-                response['Content-Disposition'] = 'attachment; filename={0}'.format(filename)
+                response['Content-Disposition'] = 'attachment; filename={}'.format(X)
                 return response
         else:
             return JsonResponse({}, status=500)
