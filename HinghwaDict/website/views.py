@@ -119,7 +119,7 @@ def announcements(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            articles = eval(item.announcements)
+            articles = eval(item.announcements) if item.announcements else []
             announcements = []
             for id in articles:
                 article = Article.objects.get(id=id)
@@ -154,7 +154,7 @@ def hot_articles(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            articles = eval(item.hot_articles)
+            articles = eval(item.hot_articles) if item.hot_articles else []
             hot_articles = []
             for id in articles:
                 article = Article.objects.get(id=id)
@@ -192,7 +192,8 @@ def word_of_the_day(request):
             word = Word.objects.get(id=item.word_of_the_day)
             return JsonResponse({"word_of_the_day": {"id": word.id, 'word': word.word, 'definition': word.definition,
                                                      "contributor": word.contributor.id, "annotation": word.annotation,
-                                                     "mandarin": eval(word.mandarin), "views": word.views}}, status=200)
+                                                     "mandarin": eval(word.mandarin) if word.mandarin else [],
+                                                     "views": word.views}}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -214,7 +215,7 @@ def carousel(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
-            return JsonResponse({"carousel": eval(item.carousel)}, status=200)
+            return JsonResponse({"carousel": eval(item.carousel) if item.carousel else []}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
