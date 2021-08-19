@@ -11,13 +11,3 @@ class Website(models.Model):
     class Meta:
         verbose_name_plural = '网页内容'
         verbose_name = '网页内容'
-
-
-class File(models.Model):
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='所有者')
-    name = models.TextField(max_length=100, verbose_name='文件名')
-    type = models.CharField(max_length=50, verbose_name='文件类型')
-    upload_time = models.TimeField(auto_now_add=True, verbose_name='上传时间')
-    local_url = models.URLField(verbose_name='本地访问路径')
-    outer_url = models.URLField(blank=True, verbose_name='外网访问路径')
-    delete_url = models.URLField(blank=True, verbose_name='删除路径')
