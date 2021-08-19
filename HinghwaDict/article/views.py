@@ -14,7 +14,7 @@ def searchArticle(request):
     try:
         if request.method == 'GET':
             # 搜索符合条件的文章并返回id TODO 正式版search
-            articles = Article.objects.all()
+            articles = list(Article.objects.all())
             if 'search' in request.GET:
                 result = []
                 key = request.GET['search']
@@ -29,7 +29,8 @@ def searchArticle(request):
                         articles.append(Article.objects.get(id=id))
                     else:
                         break
-
+            else:
+                articles.sort(key=lambda a: a.update_time, reverse=True)
             articles = [article.id for article in articles]
             return JsonResponse({"articles": articles})
         elif request.method == 'POST':
