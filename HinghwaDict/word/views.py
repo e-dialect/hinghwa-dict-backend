@@ -70,7 +70,7 @@ def searchWords(request):
                 word = Word.objects.get(id=id)
                 words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                        "contributor": word.contributor.id, "annotation": word.annotation,
-                                       "mandarin": eval(word.mandarin), "views": word.views},
+                                       "mandarin": eval(word.mandarin) if word.mandarin else [], "views": word.views},
                               'contributor': {
                                   'id': word.contributor.id,
                                   'nickname': word.contributor.user_info.nickname,
@@ -109,7 +109,7 @@ def manageWord(request, id):
                                                               'town': user.user_info.town,
                                                               'is_admin': user.is_superuser},
                                               "annotation": word.annotation,
-                                              "mandarin": eval(word.mandarin),
+                                              "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "related_words": related_words, "related_articles": related_articles,
                                               "views": word.views}}, status=200)
             elif request.method == 'PUT':

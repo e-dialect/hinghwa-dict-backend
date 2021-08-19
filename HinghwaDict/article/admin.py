@@ -9,6 +9,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ['author', 'publish_time']
     date_hierarchy = 'publish_time'
     ordering = ('id', 'author__id', '-publish_time', '-views', '-update_time', 'like_users')
+    list_per_page = 50
 
 
 class CommentAdmin(admin.ModelAdmin):
