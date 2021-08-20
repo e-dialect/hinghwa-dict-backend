@@ -8,7 +8,7 @@ from .models import Word, Character, Pronunciation
 class WordAdmin(admin.ModelAdmin):
     list_display = ['id', 'word', 'contributor', 'views', 'visibility']
     list_filter = ['contributor', 'visibility']
-    search_fields = ['word', 'definition', 'contributor']
+    search_fields = ['word', 'definition', 'contributor__username']
     ordering = ['id', '-views']
     list_per_page = 50
 
@@ -24,7 +24,7 @@ class CharacterAdmin(admin.ModelAdmin):
 class PronunciationAdmin(admin.ModelAdmin):
     list_display = ['id', 'word', 'pinyin', 'contributor', 'county', 'views', 'visibility']
     list_filter = ['contributor', 'visibility', 'county']
-    search_fields = ['word', 'contributor', 'pinyin']
+    search_fields = ['word__word', 'contributor__username', 'pinyin']
     ordering = ['id', '-views']
     list_per_page = 50
 

@@ -8,7 +8,7 @@ from .models import Music
 class MusicAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'artist', 'contributor', 'likes', 'visibility']
     list_filter = ['contributor', 'title', 'visibility']
-    search_fields = ['title', 'artist', 'contributor']
+    search_fields = ['title', 'artist', 'contributor__username']
     ordering = ['id', '-likes']
     list_per_page = 50
 
