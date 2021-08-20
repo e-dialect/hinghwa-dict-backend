@@ -54,8 +54,8 @@ def searchArticle(request):
             # 批量返回文章内容
             body = demjson.decode(request.body)
             articles = []
-            for id in body['articles']:
-                article = Article.objects.get(id=id)
+            result = Article.objects.filter(id__in=body['articles'])
+            for article in result:
                 articles.append(
                     {'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                  "views": article.views,

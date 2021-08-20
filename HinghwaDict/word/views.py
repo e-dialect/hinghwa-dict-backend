@@ -66,8 +66,8 @@ def searchWords(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             words = []
-            for id in body['words']:
-                word = Word.objects.get(id=id)
+            result = Word.objects.filter(id__in=body['words'])
+            for word in result:
                 words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                        "contributor": word.contributor.id, "annotation": word.annotation,
                                        "mandarin": eval(word.mandarin) if word.mandarin else [], "views": word.views},
@@ -183,9 +183,9 @@ def searchCharacters(request):
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
-            characters = []
-            for id in body['characters']:
-                character = Character.objects.get(id=id)
+            result = Character.objects.filter(id__in=body['characters'])
+            characters=[]
+            for character in result:
                 characters.append(
                     {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
                      'pinyin': character.pinyin, 'yunmu': character.yunmu, 'shengdiao': character.shengdiao,
@@ -268,8 +268,8 @@ def searchPronunciations(request):
         elif request.method == "PUT":
             pronunciations = []
             body = demjson.decode(request.body)
-            for id in body['pronunciation']:
-                pronunciation = Pronunciation.objects.get(id=id)
+            result = Pronunciation.objects.filter(id__in=body['pronunciation'])
+            for pronunciation in result:
                 pronunciations.append(
                     {'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
                                        'source': pronunciation.source,
