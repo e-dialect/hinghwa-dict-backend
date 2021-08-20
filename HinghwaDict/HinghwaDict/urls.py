@@ -41,7 +41,8 @@ urlpatterns = [
                            path('/add', word.load_word)])),
     path('characters', include([path('', word.searchCharacters),
                                 path('/<int:id>', word.manageCharacter),
-                                path('/add', word.load_character)])),
+                                path('/add', word.load_character),
+                                path('/words', word.searchEach)])),
     path('pronunciation', include([path('', word.searchPronunciations),
                                    path('/<int:id>', word.managePronunciation)])),
 ]
