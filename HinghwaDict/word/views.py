@@ -17,7 +17,7 @@ from .models import Word, Character, Pronunciation, User
 def searchWords(request):
     try:
         if request.method == 'GET':
-            words = Word.objects.all()
+            words = Word.objects.filter(visibility=True)
             if 'contributor' in request.GET:
                 words = words.filter(contributor=request.GET['contributor'])
             if 'search' in request.GET:
@@ -169,7 +169,7 @@ def searchCharacters(request):
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***')
+            user = token_check(token, '***REMOVED***', -1)
             if user:
                 body = body['character']
                 character_form = CharacterForm(body)
@@ -195,6 +195,28 @@ def searchCharacters(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def searchEach(request):
+    try:
+        if request.method == 'GET':
+            search = request.GET['search']
+            result = Character.objects.filter(character__in=search)
+            dic = {}
+            for character in search:
+                dic[character] = []
+            for character in result:
+                dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                                 'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                                 'shengdiao': character.shengdiao, 'character': character.character,
+                                                 'county': character.county, 'town': character.town})
+            ans = []
+            for character in search:
+                ans.append({'label': character, 'characters': dic[character]})
+            return JsonResponse({'characters': ans}, status=200)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
 
 
 @csrf_exempt
