@@ -32,8 +32,8 @@ def searchMusic(request):
         elif request.method == 'PUT':
             body = demjson.decode(request.body)
             musics = []
-            for id in body['music']:
-                music = Music.objects.get(id=id)
+            result = Music.objects.filter(id__in=body['music'])
+            for music in result:
                 musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
                                          "artist": music.artist, "cover": music.cover, "likes": music.likes,
                                          "contributor": music.contributor.id, "visibility": music.visibility},

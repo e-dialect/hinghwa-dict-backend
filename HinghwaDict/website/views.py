@@ -120,9 +120,9 @@ def announcements(request):
         item = Website.objects.get(id=1)
         if request.method == 'GET':
             articles = eval(item.announcements) if item.announcements else []
+            articles = Article.objects.filter(id__in=articles)
             announcements = []
-            for id in articles:
-                article = Article.objects.get(id=id)
+            for article in articles:
                 announcements.append({
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
@@ -155,9 +155,9 @@ def hot_articles(request):
         item = Website.objects.get(id=1)
         if request.method == 'GET':
             articles = eval(item.hot_articles) if item.hot_articles else []
+            articles = Article.objects.filter(id__in=articles)
             hot_articles = []
-            for id in articles:
-                article = Article.objects.get(id=id)
+            for article in articles:
                 hot_articles.append({
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
