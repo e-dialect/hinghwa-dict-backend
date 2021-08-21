@@ -7,7 +7,7 @@ class WordForm(forms.ModelForm):
     class Meta:
         model = Word
         fields = ('word', 'definition',
-                  'annotation', 'mandarin')
+                  'annotation', 'mandarin', 'visibility')
 
 
 class PronunciationForm(forms.ModelForm):
