@@ -319,3 +319,25 @@ def openUrl(request, type, id, Y, M, D, X):
 
 if Website.objects.count() == 0:
     Website.objects.create()
+
+from apscheduler.schedulers.background import BackgroundScheduler
+from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
+
+try:
+    scheduler = BackgroundScheduler()
+    scheduler.add_jobstore(DjangoJobStore(), 'default')
+
+
+    @register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0, replace_existing=True)
+    def random_word_of_the_day():
+        all = Word.objects.all()
+        item = Website.objects.get(id=1)
+        item.word_of_the_day = random.choice(all).id
+        item.save()
+        print('update word of the day at 0:00')
+
+
+    register_events(scheduler)
+    scheduler.start()
+except Exception as e:
+    print(str(e))
