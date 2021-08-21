@@ -4,3 +4,5 @@ pyjwt
 django-cors-headers
 xlrd
 cos-python-sdk-v5
+apscheduler
+django_apscheduler
