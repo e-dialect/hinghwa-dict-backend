@@ -184,7 +184,7 @@ def comment(request, id):
                         comment = comment_form.save(commit=False)
                         comment.user = user
                         comment.article = article
-                        if 'parent' in body:
+                        if body['parent'] != 0:
                             comment.parent = Comment.objects.get(id=body['parent'])
                         comment.save()
                         return JsonResponse({'id': comment.id}, status=200)
