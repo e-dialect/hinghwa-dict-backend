@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'word',
     'music',
     'website',
+    'django_apscheduler',
     'corsheaders',
 ]
 
