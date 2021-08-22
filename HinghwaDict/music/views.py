@@ -11,8 +11,14 @@ from .models import Music
 def searchMusic(request):
     try:
         if request.method == 'GET':
-            # TODO 正式版search
-            musics = [music.id for music in Music.objects.all()]
+            musics = Music.objects.filter(visibility=True)
+            if 'artist' in request.GET:
+                musics = musics.filter(artist=request.GET['artist'])
+            if 'contributor' in request.GET:
+                musics = musics.filter(contributor__username=request.GET['contributor'])
+            musics = list(musics)
+            musics.sort(key=lambda item: item.title)
+            musics = [music.id for music in musics]
             return JsonResponse({"music": musics}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
@@ -31,16 +37,25 @@ def searchMusic(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'PUT':
             body = demjson.decode(request.body)
-            musics = []
+            musics = [0] * len(body['music'])
             result = Music.objects.filter(id__in=body['music'])
+            a = {}
+            num = 0
+            for i in body['music']:
+                a[i] = num
+                num += 1
             for music in result:
-                musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
-                                         "artist": music.artist, "cover": music.cover, "likes": music.likes,
-                                         "contributor": music.contributor.id, "visibility": music.visibility},
-                               'contributor': {'id': music.contributor.id,
-                                               'nickname': music.contributor.user_info.nickname,
-                                               'avatar': music.contributor.user_info.avatar}})
-            return JsonResponse({"music": musics}, status=200)
+                musics[a[music.id]] = {'music': {"id": music.id, "source": music.source, "title": music.title,
+                                                 "artist": music.artist, "cover": music.cover, "likes": music.likes,
+                                                 "contributor": music.contributor.id, "visibility": music.visibility},
+                                       'contributor': {'id': music.contributor.id,
+                                                       'nickname': music.contributor.user_info.nickname,
+                                                       'avatar': music.contributor.user_info.avatar}}
+            result = []
+            for item in musics:
+                if item:
+                    result.append(item)
+            return JsonResponse({"music": result}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
