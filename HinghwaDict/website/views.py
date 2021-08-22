@@ -127,7 +127,7 @@ def announcements(request):
             a = {}
             num = 0
             for i in articles:
-                a[i] = num
+                a[i.id] = num
                 num += 1
             for article in articles:
                 announcements[a[article.id]] = {
@@ -171,7 +171,7 @@ def hot_articles(request):
             a = {}
             num = 0
             for i in articles:
-                a[i] = num
+                a[i.id] = num
                 num += 1
             for article in articles:
                 hot_articles[a[article.id]] = {
