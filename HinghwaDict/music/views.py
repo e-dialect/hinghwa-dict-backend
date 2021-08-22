@@ -11,8 +11,14 @@ from .models import Music
 def searchMusic(request):
     try:
         if request.method == 'GET':
-            # TODO 正式版search
-            musics = [music.id for music in Music.objects.all()]
+            musics = Music.objects.filter(visibility=True)
+            if 'artist' in request.GET:
+                musics = musics.filter(artist=request.GET['artist'])
+            if 'contributor' in request.GET:
+                musics = musics.filter(contributor__username=request.GET['contributor'])
+            musics = list(musics)
+            musics.sort(key=lambda item: item.title)
+            musics = [music.id for music in musics]
             return JsonResponse({"music": musics}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
