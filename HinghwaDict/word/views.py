@@ -286,10 +286,35 @@ def manageCharacter(request, id):
 def searchPronunciations(request):
     try:
         if request.method == 'GET':
-            # 有的话就返回，没有就生成一个返回
-            ipa = request.GET['ipa']
-            pronunciations = Pronunciation.objects.get(id=1)
-            return JsonResponse({"contributor": pronunciations.contributor, "url": pronunciations.source}, status=200)
+            pronunciations = Pronunciation.objects.filter(visibility=True)
+            if 'word' in request.GET:
+                pronunciations = pronunciations.filter(word__id=request.GET['word'])
+            if 'contributor' in request.GET:
+                pronunciations = pronunciations.filter(contributor__id=request.GET['contributor'])
+            if 'word' in request.GET:
+                pronunciations = pronunciations.filter(word__id=request.GET['word'])
+            pronunciations = list(pronunciations)
+            total = len(pronunciations)
+            if 'pageSize' in request.GET:
+                pageSize = int(request.GET['pageSize'])
+                page = int(request.GET['page'])
+                r = min(len(pronunciations), page * pageSize)
+                l = min(len(pronunciations) - 1, page * (pageSize - 1))
+                pronunciations = pronunciations[l:r]
+            pronunciations.sort(key=lambda item: item.id)
+            result = []
+            for pronunciation in pronunciations:
+                result.append({'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
+                                                 'source': pronunciation.source,
+                                                 'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
+                                                 'contributor': pronunciation.contributor.id,
+                                                 'county': pronunciation.county, 'town': pronunciation.town,
+                                                 'visibility': pronunciation.visibility},
+                               'contributor': {
+                                   'id': pronunciation.contributor.id,
+                                   'nickname': pronunciation.contributor.user_info.nickname,
+                                   'avatar': pronunciation.contributor.user_info.avatar}})
+            return JsonResponse({"pronunciation": result, 'total': total}, status=200)
         elif request.method == 'POST':
             token = request.headers['token']
             user = token_check(token, '***REMOVED***')
@@ -307,31 +332,6 @@ def searchPronunciations(request):
                     return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
-        elif request.method == "PUT":
-            body = demjson.decode(request.body)
-            result = Pronunciation.objects.filter(id__in=body['pronunciation'])
-            pronunciations = [0] * len(body['pronunciation'])
-            a = {}
-            num = 0
-            for i in body['pronunciation']:
-                a[i] = num
-                num += 1
-            for pronunciation in result:
-                pronunciations[a[pronunciation.id]] = {
-                    'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
-                                      'source': pronunciation.source,
-                                      'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
-                                      'contributor': pronunciation.contributor.id,
-                                      'county': pronunciation.county, 'town': pronunciation.town,
-                                      'visibility': pronunciation.visibility},
-                    'contributor': {
-                        'id': pronunciation.contributor.id, 'nickname': pronunciation.contributor.user_info.nickname,
-                        'avatar': pronunciation.contributor.user_info.avatar}}
-            result = []
-            for item in pronunciations:
-                if item:
-                    result.append(item)
-            return JsonResponse({"pronunciation": result}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
