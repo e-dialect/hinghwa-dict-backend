@@ -53,19 +53,28 @@ def searchArticle(request):
         elif request.method == 'PUT':
             # 批量返回文章内容
             body = demjson.decode(request.body)
-            articles = []
+            articles = [0] * len(body['articles'])
             result = Article.objects.filter(id__in=body['articles'])
+            a = {}
+            num = 0
+            for i in body['articles']:
+                a[i] = num
+                num += 1
             for article in result:
-                articles.append(
-                    {'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
-                                 "views": article.views,
-                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
-                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
-                                 "title": article.title, "description": article.description, "content": article.content,
-                                 "cover": article.cover},
-                     'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                                'avatar': article.author.user_info.avatar}})
-            return JsonResponse({"articles": articles}, status=200)
+                articles[a[article.id]] = {
+                    'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
+                                "views": article.views,
+                                "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
+                                "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
+                                "title": article.title, "description": article.description, "content": article.content,
+                                "cover": article.cover},
+                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
+                               'avatar': article.author.user_info.avatar}}
+            result = []
+            for item in articles:
+                if item:
+                    result.append(item)
+            return JsonResponse({"articles": result}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
