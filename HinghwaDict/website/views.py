@@ -330,19 +330,18 @@ try:
         print('update word of the day at 0:00')
 
 
+    def register(fun, id, replace_existing):
+        scheduler = BackgroundScheduler()
+        scheduler.add_jobstore(DjangoJobStore(), 'default')
+        register_job(scheduler, 'cron', id=id, hour=0, replace_existing=replace_existing) \
+            (fun)
+        register_events(scheduler)
+        scheduler.start()
+
+
     try:
-        scheduler = BackgroundScheduler()
-        scheduler.add_jobstore(DjangoJobStore(), 'default')
-        register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0) \
-            (random_word_of_the_day)
-        register_events(scheduler)
-        scheduler.start()
+        register(random_word_of_the_day, 'random_word_of_the_day', False)
     except Exception:
-        scheduler = BackgroundScheduler()
-        scheduler.add_jobstore(DjangoJobStore(), 'default')
-        register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0, replace_existing=True) \
-            (random_word_of_the_day)
-        register_events(scheduler)
-        scheduler.start()
+        register(random_word_of_the_day, 'random_word_of_the_day', True)
 except Exception as e:
     print(str(e))
