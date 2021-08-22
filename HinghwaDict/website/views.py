@@ -4,6 +4,7 @@ import random
 
 import demjson
 import jwt
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -11,6 +12,7 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
@@ -319,16 +321,7 @@ def openUrl(request, type, id, Y, M, D, X):
 
 if Website.objects.count() == 0:
     Website.objects.create()
-
-from apscheduler.schedulers.background import BackgroundScheduler
-from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
-
 try:
-    scheduler = BackgroundScheduler()
-    scheduler.add_jobstore(DjangoJobStore(), 'default')
-
-
-    @register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0, replace_existing=True)
     def random_word_of_the_day():
         all = Word.objects.all()
         item = Website.objects.get(id=1)
@@ -337,7 +330,19 @@ try:
         print('update word of the day at 0:00')
 
 
-    register_events(scheduler)
-    scheduler.start()
+    try:
+        scheduler = BackgroundScheduler()
+        scheduler.add_jobstore(DjangoJobStore(), 'default')
+        register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0) \
+            (random_word_of_the_day)
+        register_events(scheduler)
+        scheduler.start()
+    except Exception:
+        scheduler = BackgroundScheduler()
+        scheduler.add_jobstore(DjangoJobStore(), 'default')
+        register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0, replace_existing=True) \
+            (random_word_of_the_day)
+        register_events(scheduler)
+        scheduler.start()
 except Exception as e:
     print(str(e))
