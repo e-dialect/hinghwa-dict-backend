@@ -4,6 +4,7 @@ import random
 
 import demjson
 import jwt
+from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -11,6 +12,7 @@ from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
@@ -121,9 +123,14 @@ def announcements(request):
         if request.method == 'GET':
             articles = eval(item.announcements) if item.announcements else []
             articles = Article.objects.filter(id__in=articles)
-            announcements = []
+            announcements = [0] * len(articles)
+            a = {}
+            num = 0
+            for i in articles:
+                a[i] = num
+                num += 1
             for article in articles:
-                announcements.append({
+                announcements[a[article.id]] = {
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
@@ -131,8 +138,12 @@ def announcements(request):
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
                     'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}})
-            return JsonResponse({"announcements": announcements}, status=200)
+                               'avatar': article.author.user_info.avatar}}
+            result = []
+            for item in announcements:
+                if item:
+                    result.append(item)
+            return JsonResponse({"announcements": result}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -156,9 +167,14 @@ def hot_articles(request):
         if request.method == 'GET':
             articles = eval(item.hot_articles) if item.hot_articles else []
             articles = Article.objects.filter(id__in=articles)
-            hot_articles = []
+            hot_articles = [0] * len(articles)
+            a = {}
+            num = 0
+            for i in articles:
+                a[i] = num
+                num += 1
             for article in articles:
-                hot_articles.append({
+                hot_articles[a[article.id]] = {
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
@@ -166,8 +182,12 @@ def hot_articles(request):
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
                     'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}})
-            return JsonResponse({"hot_articles": hot_articles}, status=200)
+                               'avatar': article.author.user_info.avatar}}
+            result = []
+            for item in hot_articles:
+                if item:
+                    result.append(item)
+            return JsonResponse({"hot_articles": result}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -319,16 +339,7 @@ def openUrl(request, type, id, Y, M, D, X):
 
 if Website.objects.count() == 0:
     Website.objects.create()
-
-from apscheduler.schedulers.background import BackgroundScheduler
-from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
-
 try:
-    scheduler = BackgroundScheduler()
-    scheduler.add_jobstore(DjangoJobStore(), 'default')
-
-
-    @register_job(scheduler, 'cron', id='random_word_of_the_day', hour=0, replace_existing=True)
     def random_word_of_the_day():
         all = Word.objects.all()
         item = Website.objects.get(id=1)
@@ -337,7 +348,18 @@ try:
         print('update word of the day at 0:00')
 
 
-    register_events(scheduler)
-    scheduler.start()
+    def register(fun, id, replace_existing):
+        scheduler = BackgroundScheduler()
+        scheduler.add_jobstore(DjangoJobStore(), 'default')
+        register_job(scheduler, 'cron', id=id, hour=0, replace_existing=replace_existing) \
+            (fun)
+        register_events(scheduler)
+        scheduler.start()
+
+
+    try:
+        register(random_word_of_the_day, 'random_word_of_the_day', False)
+    except Exception:
+        register(random_word_of_the_day, 'random_word_of_the_day', True)
 except Exception as e:
     print(str(e))
