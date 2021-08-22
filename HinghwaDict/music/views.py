@@ -31,16 +31,25 @@ def searchMusic(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'PUT':
             body = demjson.decode(request.body)
-            musics = []
+            musics = [0] * len(body['music'])
             result = Music.objects.filter(id__in=body['music'])
+            a = {}
+            num = 0
+            for i in body['music']:
+                a[i] = num
+                num += 1
             for music in result:
-                musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
-                                         "artist": music.artist, "cover": music.cover, "likes": music.likes,
-                                         "contributor": music.contributor.id, "visibility": music.visibility},
-                               'contributor': {'id': music.contributor.id,
-                                               'nickname': music.contributor.user_info.nickname,
-                                               'avatar': music.contributor.user_info.avatar}})
-            return JsonResponse({"music": musics}, status=200)
+                musics[a[music.id]] = {'music': {"id": music.id, "source": music.source, "title": music.title,
+                                                 "artist": music.artist, "cover": music.cover, "likes": music.likes,
+                                                 "contributor": music.contributor.id, "visibility": music.visibility},
+                                       'contributor': {'id': music.contributor.id,
+                                                       'nickname': music.contributor.user_info.nickname,
+                                                       'avatar': music.contributor.user_info.avatar}}
+            result = []
+            for item in musics:
+                if item:
+                    result.append(item)
+            return JsonResponse({"music": result}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 

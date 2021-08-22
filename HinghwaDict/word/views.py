@@ -65,17 +65,27 @@ def searchWords(request):
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
-            words = []
+            words = [0] * len(body['words'])
             result = Word.objects.filter(id__in=body['words'])
+            a = {}
+            num = 0
+            for i in body['words']:
+                a[i] = num
+                num += 1
             for word in result:
-                words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
-                                       "contributor": word.contributor.id, "annotation": word.annotation,
-                                       "mandarin": eval(word.mandarin) if word.mandarin else [], "views": word.views},
-                              'contributor': {
-                                  'id': word.contributor.id,
-                                  'nickname': word.contributor.user_info.nickname,
-                                  'avatar': word.contributor.user_info.avatar}})
-            return JsonResponse({"words": words}, status=200)
+                words[a[word.id]] = {'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
+                                              "contributor": word.contributor.id, "annotation": word.annotation,
+                                              "mandarin": eval(word.mandarin) if word.mandarin else [],
+                                              "views": word.views},
+                                     'contributor': {
+                                         'id': word.contributor.id,
+                                         'nickname': word.contributor.user_info.nickname,
+                                         'avatar': word.contributor.user_info.avatar}}
+            result = []
+            for item in words:
+                if item:
+                    result.append(item)
+            return JsonResponse({"words": result}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
@@ -184,13 +194,23 @@ def searchCharacters(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             result = Character.objects.filter(id__in=body['characters'])
-            characters=[]
+            characters = [0] * len(body['characters'])
+            a = {}
+            num = 0
+            for i in body['articles']:
+                a[i] = num
+                num += 1
             for character in result:
-                characters.append(
-                    {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                     'pinyin': character.pinyin, 'yunmu': character.yunmu, 'shengdiao': character.shengdiao,
-                     'character': character.character, 'county': character.county, 'town': character.town})
-            return JsonResponse({"characters": characters}, status=200)
+                characters[a[character.id]] = {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                               'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                               'shengdiao': character.shengdiao,
+                                               'character': character.character, 'county': character.county,
+                                               'town': character.town}
+            result = []
+            for item in characters:
+                if item:
+                    result.append(item)
+            return JsonResponse({"characters": result}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
@@ -288,21 +308,30 @@ def searchPronunciations(request):
             else:
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
-            pronunciations = []
             body = demjson.decode(request.body)
             result = Pronunciation.objects.filter(id__in=body['pronunciation'])
+            pronunciations = [0] * len(body['pronunciation'])
+            a = {}
+            num = 0
+            for i in body['pronunciation']:
+                a[i] = num
+                num += 1
             for pronunciation in result:
-                pronunciations.append(
-                    {'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
-                                       'source': pronunciation.source,
-                                       'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
-                                       'contributor': pronunciation.contributor.id,
-                                       'county': pronunciation.county, 'town': pronunciation.town,
-                                       'visibility': pronunciation.visibility},
-                     'contributor': {
-                         'id': pronunciation.contributor.id, 'nickname': pronunciation.contributor.user_info.nickname,
-                         'avatar': pronunciation.contributor.user_info.avatar}})
-            return JsonResponse({"pronunciation": pronunciations}, status=200)
+                pronunciations[a[pronunciation.id]] = {
+                    'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
+                                      'source': pronunciation.source,
+                                      'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
+                                      'contributor': pronunciation.contributor.id,
+                                      'county': pronunciation.county, 'town': pronunciation.town,
+                                      'visibility': pronunciation.visibility},
+                    'contributor': {
+                        'id': pronunciation.contributor.id, 'nickname': pronunciation.contributor.user_info.nickname,
+                        'avatar': pronunciation.contributor.user_info.avatar}}
+            result = []
+            for item in pronunciations:
+                if item:
+                    result.append(item)
+            return JsonResponse({"pronunciation": result}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
