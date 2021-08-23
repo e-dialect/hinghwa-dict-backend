@@ -217,3 +217,31 @@ def comment(request, id):
             return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def searchComment(request):
+    try:
+        if request.method == 'PUT':
+            body = demjson.decode(request.body)
+            comments = [0] * len(body['comments'])
+            result = Comment.objects.filter(id__in=body['comments'])
+            a = {}
+            num = 0
+            for i in body['comments']:
+                a[i] = num
+                num += 1
+            for comment in result:
+                comments[a[comment.id]] = {'id': comment.id, 'user': comment.user.id, 'content': comment.content,
+                                           'time': comment.time.__format__('%Y-%m-%d %H:%M:%S'),
+                                           'parent': comment.parent_id if comment.parent else 0,
+                                           'article': comment.article.id}
+            result = []
+            for item in comments:
+                if item:
+                    result.append(item)
+            return JsonResponse({'comments': result}, status=200)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg':str(e)},status=500)
