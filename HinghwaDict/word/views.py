@@ -304,8 +304,8 @@ def searchPronunciations(request):
                 pronunciations = pronunciations[l:r]
             result = []
             for pronunciation in pronunciations:
-                result.append({'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
-                                                 'source': pronunciation.source,
+                result.append({'pronunciation': {"id": pronunciation.id, 'word_id': pronunciation.word.id,
+                                                 'word_word': pronunciation.word.word, 'source': pronunciation.source,
                                                  'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
                                                  'contributor': pronunciation.contributor.id,
                                                  'county': pronunciation.county, 'town': pronunciation.town,
@@ -349,8 +349,8 @@ def managePronunciation(request, id):
                 pronunciation.save()
                 user = pronunciation.contributor
                 return JsonResponse(
-                    {"pronunciation": {"id": pronunciation.id, 'word': pronunciation.word.id,
-                                       'source': pronunciation.source,
+                    {"pronunciation": {"id": pronunciation.id, 'word_id': pronunciation.word.id,
+                                       'word_word': pronunciation.word.word, 'source': pronunciation.source,
                                        'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
                                        'contributor': {"id": user.id, 'username': user.username,
                                                        'nickname': user.user_info.nickname,
