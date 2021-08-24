@@ -294,14 +294,14 @@ def searchPronunciations(request):
             if 'word' in request.GET:
                 pronunciations = pronunciations.filter(word__id=request.GET['word'])
             pronunciations = list(pronunciations)
+            pronunciations.sort(key=lambda item: item.id)
             total = len(pronunciations)
             if 'pageSize' in request.GET:
                 pageSize = int(request.GET['pageSize'])
                 page = int(request.GET['page'])
                 r = min(len(pronunciations), page * pageSize)
-                l = min(len(pronunciations) - 1, page * (pageSize - 1))
+                l = min(len(pronunciations) + 1, (page - 1) * pageSize)
                 pronunciations = pronunciations[l:r]
-            pronunciations.sort(key=lambda item: item.id)
             result = []
             for pronunciation in pronunciations:
                 result.append({'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
