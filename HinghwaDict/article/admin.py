@@ -8,7 +8,7 @@ class ArticleAdmin(admin.ModelAdmin):
     search_fields = ['author__username', 'title', 'description']
     list_filter = ['author', 'publish_time']
     date_hierarchy = 'publish_time'
-    ordering = ('id', 'author__id', '-publish_time', '-views', '-update_time', 'like_users')
+    ordering = ('id', 'author__id', '-publish_time', '-views', '-update_time')
     list_per_page = 50
 
 

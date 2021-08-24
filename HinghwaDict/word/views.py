@@ -197,7 +197,7 @@ def searchCharacters(request):
             characters = [0] * len(body['characters'])
             a = {}
             num = 0
-            for i in body['articles']:
+            for i in body['characters']:
                 a[i] = num
                 num += 1
             for character in result:
@@ -294,18 +294,18 @@ def searchPronunciations(request):
             if 'word' in request.GET:
                 pronunciations = pronunciations.filter(word__id=request.GET['word'])
             pronunciations = list(pronunciations)
+            pronunciations.sort(key=lambda item: item.id)
             total = len(pronunciations)
             if 'pageSize' in request.GET:
                 pageSize = int(request.GET['pageSize'])
                 page = int(request.GET['page'])
                 r = min(len(pronunciations), page * pageSize)
-                l = min(len(pronunciations) - 1, page * (pageSize - 1))
+                l = min(len(pronunciations) + 1, (page - 1) * pageSize)
                 pronunciations = pronunciations[l:r]
-            pronunciations.sort(key=lambda item: item.id)
             result = []
             for pronunciation in pronunciations:
-                result.append({'pronunciation': {"id": pronunciation.id, 'word': pronunciation.word.id,
-                                                 'source': pronunciation.source,
+                result.append({'pronunciation': {"id": pronunciation.id, 'word_id': pronunciation.word.id,
+                                                 'word_word': pronunciation.word.word, 'source': pronunciation.source,
                                                  'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
                                                  'contributor': pronunciation.contributor.id,
                                                  'county': pronunciation.county, 'town': pronunciation.town,
@@ -349,8 +349,8 @@ def managePronunciation(request, id):
                 pronunciation.save()
                 user = pronunciation.contributor
                 return JsonResponse(
-                    {"pronunciation": {"id": pronunciation.id, 'word': pronunciation.word.id,
-                                       'source': pronunciation.source,
+                    {"pronunciation": {"id": pronunciation.id, 'word_id': pronunciation.word.id,
+                                       'word_word': pronunciation.word.word, 'source': pronunciation.source,
                                        'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
                                        'contributor': {"id": user.id, 'username': user.username,
                                                        'nickname': user.user_info.nickname,
