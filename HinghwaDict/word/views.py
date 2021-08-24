@@ -197,7 +197,7 @@ def searchCharacters(request):
             characters = [0] * len(body['characters'])
             a = {}
             num = 0
-            for i in body['articles']:
+            for i in body['characters']:
                 a[i] = num
                 num += 1
             for character in result:
