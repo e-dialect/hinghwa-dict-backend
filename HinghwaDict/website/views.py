@@ -77,8 +77,11 @@ def evaluate(standard, key):
     return total
 
 
-def random_str(n=6):
-    _str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+def random_str(n=6, digit_only=False):
+    if not digit_only:
+        _str = '1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+    else:
+        _str = '1234567890'
     return ''.join(random.choice(_str) for i in range(n))
 
 
@@ -94,7 +97,7 @@ def email(request):
         if check(email):
             return JsonResponse({}, status=400)
         else:
-            code = random_str()
+            code = random_str(digit_only=True)
             subject = '[兴化语记]验证码'
             msg = '''<!DOCTYPE html>
 <html lang="en">
