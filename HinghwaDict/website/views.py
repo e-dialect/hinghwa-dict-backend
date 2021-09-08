@@ -281,6 +281,8 @@ def files(request):
             if request.method == "POST":
                 file = request.FILES.get("file")
                 type, suffix = str(file.content_type).split('/')
+                if type == 'audio':
+                    suffix = 'mp3'
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
                 type_folder = os.path.join(settings.MEDIA_ROOT, type)
