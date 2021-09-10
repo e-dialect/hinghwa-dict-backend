@@ -182,9 +182,12 @@ def updatePassword(request, id):
                 body = demjson.decode(request.body)
                 if token_check(token, '***REMOVED***', id):
                     if user.check_password(body['oldpassword']):
-                        user.set_password(body['newpassword'])
-                        user.save()
-                        return JsonResponse({}, status=200)
+                        if body['password']:
+                            user.set_password(body['newpassword'])
+                            user.save()
+                            return JsonResponse({}, status=200)
+                        else:
+                            return JsonResponse({}, status=400)
                     else:
                         return JsonResponse({}, status=401)
                 else:
@@ -239,17 +242,20 @@ def forget(request):
             # 检查验证码并重置用户密码
             body = demjson.decode(request.body)
             user = User.objects.filter(username=body['username'])
-            if user.exists():
-                user = user[0]
-                email = body['email']
-                if email_check(email, body['code']):
-                    user.set_password(body['password'])
-                    user.save()
-                    return JsonResponse({}, status=200)
+            if body['password']:
+                if user.exists():
+                    user = user[0]
+                    email = body['email']
+                    if user.email == email and email_check(email, body['code']):
+                        user.set_password(body['password'])
+                        user.save()
+                        return JsonResponse({}, status=200)
+                    else:
+                        return JsonResponse({}, status=401)
                 else:
-                    return JsonResponse({}, status=401)
+                    return JsonResponse({}, status=404)
             else:
-                return JsonResponse({}, status=404)
+                return JsonResponse({}, status=400)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
