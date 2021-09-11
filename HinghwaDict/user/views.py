@@ -182,7 +182,7 @@ def updatePassword(request, id):
                 body = demjson.decode(request.body)
                 if token_check(token, '***REMOVED***', id):
                     if user.check_password(body['oldpassword']):
-                        if body['password']:
+                        if body['newpassword']:
                             user.set_password(body['newpassword'])
                             user.save()
                             return JsonResponse({}, status=200)
