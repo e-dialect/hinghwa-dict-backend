@@ -13,7 +13,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
-from pydub import AudioSegment as audio
+# from pydub import AudioSegment as audio
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
@@ -282,8 +282,8 @@ def files(request):
             if request.method == "POST":
                 file = request.FILES.get("file")
                 type, suffix = str(file.content_type).split('/')
-                if type == 'audio':
-                    suffix = 'mp3'
+                if type == 'audio' and suffix != 'mp3':
+                    raise Exception("只允许上传mp3格式音频")
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
                 type_folder = os.path.join(settings.MEDIA_ROOT, type)
@@ -293,16 +293,10 @@ def files(request):
                     os.mkdir(folder)
                 elif not os.path.exists(folder):
                     os.mkdir(folder)
-                if type != 'audio':
-                    path = os.path.join(folder, filename)
-                    with open(path, 'wb') as f:
-                        for i in file.chunks():
-                            f.write(i)
-                else:
-                    music = audio.from_file(file)
-                    path = os.path.join(folder, filename)
-                    music.set_frame_rate(44100)
-                    music.export(path, format='mp3')
+                path = os.path.join(folder, filename)
+                with open(path, 'wb') as f:
+                    for i in file.chunks():
+                        f.write(i)
                 key = 'files/{}/{}/'.format(type, user.id) + timezone.now().__format__("%Y/%m/%d/") + \
                       filename.split('_')[-1]
                 url = upload_file(path, key)
