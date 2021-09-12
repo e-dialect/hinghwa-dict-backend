@@ -283,7 +283,7 @@ def files(request):
                 file = request.FILES.get("file")
                 type, suffix = str(file.content_type).split('/')
                 if type == 'audio' and suffix != 'mp3':
-                    raise Exception("只允许上传mp3格式音频")
+                    return JsonResponse({'msg': "can only upload audio files in mp3 format"}, status=400)
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
                 type_folder = os.path.join(settings.MEDIA_ROOT, type)
