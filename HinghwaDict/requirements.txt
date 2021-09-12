@@ -8,5 +8,4 @@ apscheduler
 django_apscheduler
 ffmpeg
 pydub
-pyaudio
 ffprobe
