@@ -281,7 +281,8 @@ def files(request):
         if user:
             if request.method == "POST":
                 file = request.FILES.get("file")
-                type, suffix = str(file.content_type).split('/')
+                type = str(file.content_type).split('/')[0]
+                suffix = file._name.rsplit('.')[-1]
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
                 type_folder = os.path.join(settings.MEDIA_ROOT, type)
@@ -291,10 +292,16 @@ def files(request):
                     os.mkdir(folder)
                 elif not os.path.exists(folder):
                     os.mkdir(folder)
+                # if type != 'audio':
                 path = os.path.join(folder, filename)
                 with open(path, 'wb') as f:
                     for i in file.chunks():
                         f.write(i)
+                # else:
+                #     music = audio.from_file(file)
+                #     path = os.path.join(folder, filename)
+                #     music.set_frame_rate(44100)
+                #     music.export(path, format='mp3')
                 key = 'files/{}/{}/'.format(type, user.id) + timezone.now().__format__("%Y/%m/%d/") + \
                       filename.split('_')[-1]
                 url = upload_file(path, key)
