@@ -112,31 +112,3 @@ def manageMusic(request, id):
             return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
-
-
-@csrf_exempt
-def like(request, id):
-    try:
-        music = Music.objects.filter(id=id)
-        if music.exists() and music[0].visibility:
-            music = music[0]
-            token = request.headers['token']
-            user = token_check(token, 'dxw')
-            if user:
-                if request.method == 'POST':
-                    music.like_users.add(user)
-                    return JsonResponse({}, status=200)
-                elif request.method == 'DELETE':
-                    if len(music.like_users.filter(id=user.id)):
-                        music.like_users.remove(user)
-                    else:
-                        return JsonResponse({}, status=400)
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=405)
-            else:
-                return JsonResponse({}, status=401)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
