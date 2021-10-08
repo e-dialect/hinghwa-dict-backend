@@ -9,7 +9,7 @@ class Music(models.Model):
     cover = models.URLField(verbose_name="音乐封面地址")
     likes = models.IntegerField(default=0, verbose_name="点赞数", editable=False)
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="musics", verbose_name="贡献者",
-                                    editable=False)
+                                    editable=True)
     visibility = models.BooleanField(default=False, verbose_name="是否可见")
 
     def __str__(self):
