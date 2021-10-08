@@ -7,12 +7,11 @@ from .models import Music
 # Register your models here.
 
 class MusicAdmin(admin.ModelAdmin):
-    list_display = ['id', 'title', 'artist', 'contributor', 'like', 'visibility']
+    list_display = ['id', 'title', 'artist', 'contributor', 'likes', 'visibility']
     list_filter = ['contributor', 'title', 'visibility']
     search_fields = ['title', 'artist', 'contributor__username']
     list_editable = ['visibility']
-    ordering = ['id']
-    filter_horizontal = ['like_users']
+    ordering = ['id', '-likes']
     list_per_page = 50
 
     def pass_visibility(self, request, queryset):
