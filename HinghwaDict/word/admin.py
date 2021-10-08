@@ -10,6 +10,7 @@ class WordAdmin(admin.ModelAdmin):
     list_filter = ['contributor', 'visibility']
     search_fields = ['word', 'definition', 'contributor__username']
     ordering = ['id', '-views']
+    list_editable = ['visibility']
     list_per_page = 50
 
 
