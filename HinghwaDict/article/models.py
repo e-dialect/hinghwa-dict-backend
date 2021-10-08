@@ -13,6 +13,7 @@ class Article(models.Model):
     description = models.TextField(verbose_name="简介", max_length=300,blank=True)
     content = models.TextField(verbose_name="正文")
     cover = models.URLField(verbose_name="图片地址")
+    visibility = models.BooleanField(default=False, verbose_name="是否审核")
 
     def __str__(self):
         return self.title
