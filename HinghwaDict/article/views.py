@@ -62,7 +62,7 @@ def searchArticle(request):
                 num += 1
             for article in result:
                 articles[a[article.id]] = {
-                    'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
+                    'article': {"id": article.id, "likes": article.like(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
@@ -106,7 +106,7 @@ def manageArticle(request, id):
                                           'avatar': user.user_info.avatar,
                                           'county': user.user_info.county, 'town': user.user_info.town,
                                           'is_admin': user.is_superuser},
-                               "likes": article.like_users.count(), "views": article.views,
+                               "likes": article.like(), "views": article.views,
                                "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                "title": article.title, "description": article.description, "content": article.content,
