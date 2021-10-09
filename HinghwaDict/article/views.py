@@ -14,7 +14,7 @@ def searchArticle(request):
     try:
         if request.method == 'GET':
             # 搜索符合条件的文章并返回id TODO 正式版search
-            articles = list(Article.objects.all())
+            articles = list(Article.objects.filter(visibility=True))
             if 'search' in request.GET:
                 result = []
                 key = request.GET['search']
@@ -54,7 +54,7 @@ def searchArticle(request):
             # 批量返回文章内容
             body = demjson.decode(request.body)
             articles = [0] * len(body['articles'])
-            result = Article.objects.filter(id__in=body['articles'])
+            result = Article.objects.filter(id__in=body['articles']).filter(visibility=True)
             a = {}
             num = 0
             for i in body['articles']:
@@ -67,7 +67,7 @@ def searchArticle(request):
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
-                                "cover": article.cover},
+                                "cover": article.cover, 'visibility': article.visibility},
                     'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
                                'avatar': article.author.user_info.avatar}}
             result = []
@@ -89,28 +89,32 @@ def manageArticle(request, id):
             article = article[0]
             token = request.headers['token']
             if request.method == 'GET':
-                article.views += 1
-                article.save()
                 user = token_check(token, 'dxw')
-                me = {'liked': article.like_users.filter(id=user.id).exists(),
-                      'is_author': user == article.author} if user else {'liked': False, 'is_author': False}
-                user = article.author
-                article = {"id": article.id,
-                           "author": {"id": user.id, 'username': user.username, 'nickname': user.user_info.nickname,
-                                      'email': user.email, 'telephone': user.user_info.telephone,
-                                      'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                                      'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
-                                      if user.last_login else '',
-                                      'birthday': user.user_info.birthday,
-                                      'avatar': user.user_info.avatar,
-                                      'county': user.user_info.county, 'town': user.user_info.town,
-                                      'is_admin': user.is_superuser},
-                           "likes": article.like_users.count(), "views": article.views,
-                           "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
-                           "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
-                           "title": article.title, "description": article.description, "content": article.content,
-                           "cover": article.cover, "like_users": [x.id for x in article.like_users.all()]}
-                return JsonResponse({"article": article, 'me': me}, status=200)
+                if article.visibility or user.is_superuser or user == article.author:
+                    article.views += 1
+                    article.save()
+                    me = {'liked': article.like_users.filter(id=user.id).exists(),
+                          'is_author': user == article.author} if user else {'liked': False, 'is_author': False}
+                    user = article.author
+                    article = {"id": article.id,
+                               "author": {"id": user.id, 'username': user.username, 'nickname': user.user_info.nickname,
+                                          'email': user.email, 'telephone': user.user_info.telephone,
+                                          'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                          'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
+                                          if user.last_login else '',
+                                          'birthday': user.user_info.birthday,
+                                          'avatar': user.user_info.avatar,
+                                          'county': user.user_info.county, 'town': user.user_info.town,
+                                          'is_admin': user.is_superuser},
+                               "likes": article.like_users.count(), "views": article.views,
+                               "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
+                               "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
+                               "title": article.title, "description": article.description, "content": article.content,
+                               "cover": article.cover, 'visibility': article.visibility,
+                               "like_users": [x.id for x in article.like_users.all()]}
+                    return JsonResponse({"article": article, 'me': me}, status=200)
+                else:
+                    return JsonResponse({}, status=404)
             elif request.method == 'PUT':
                 if token_check(token, 'dxw', article.author.id):
                     body = demjson.decode(request.body)
@@ -144,7 +148,7 @@ def manageArticle(request, id):
 def like(request, id):
     try:
         article = Article.objects.filter(id=id)
-        if article.exists():
+        if article.exists() and article[0].visibility:
             article = article[0]
             token = request.headers['token']
             user = token_check(token, 'dxw')
@@ -172,7 +176,7 @@ def like(request, id):
 def comment(request, id):
     try:
         article = Article.objects.filter(id=id)
-        if article.exists():
+        if article.exists() and article[0].visibility:
             article = article[0]
             if request.method == 'GET':
                 comments = [{"id": comment.id,
