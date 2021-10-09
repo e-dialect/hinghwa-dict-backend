@@ -6,4 +6,5 @@ app_name = 'users'
 
 urlpatterns = [
     path('<int:id>', manageMusic),
+    path('<int:id>/like', like),
 ]
