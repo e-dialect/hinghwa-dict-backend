@@ -46,7 +46,8 @@ def searchMusic(request):
                 num += 1
             for music in result:
                 musics[a[music.id]] = {'music': {"id": music.id, "source": music.source, "title": music.title,
-                                                 "artist": music.artist, "cover": music.cover, "likes": music.likes,
+                                                 "artist": music.artist, "cover": music.cover,
+                                                 "likes": music.like_users.count(),
                                                  "contributor": music.contributor.id, "visibility": music.visibility},
                                        'contributor': {'id': music.contributor.id,
                                                        'nickname': music.contributor.user_info.nickname,
@@ -69,7 +70,8 @@ def manageMusic(request, id):
             if request.method == 'GET':
                 user = music.contributor
                 return JsonResponse({"music": {"id": music.id, "source": music.source, "title": music.title,
-                                               "artist": music.artist, "cover": music.cover, "likes": music.likes,
+                                               "artist": music.artist, "cover": music.cover,
+                                               "likes": music.like_users.count(),
                                                "contributor": {"id": user.id, 'username': user.username,
                                                                'nickname': music.contributor.user_info.nickname,
                                                                'email': user.email,
