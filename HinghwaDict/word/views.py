@@ -468,7 +468,7 @@ def record(request):
 @csrf_exempt
 def upload_standard(request):
     '''
-    通过excel上传word的standard_ipa，standard_pinyin，分为三列，为别为id,ipa,pinyin，有表头
+    通过excel上传word的standard_pinyin，standard_ipa，分为三列，为别为id,pinyin,ipa，有表头
     :return: 返回名为conflict的csv，展示与数据库冲突的word字段，为5列，id,init_ipa,init_pinyin,ipa,pinyin
     '''
     try:
@@ -500,13 +500,13 @@ def upload_standard(request):
                     while j < len(words) and words[j].id < infos[i][0]:
                         j += 1
                     if j < len(words) and words[j].id == infos[i][0]:
-                        if conflict(words[j].standard_ipa, infos[i][1][0].value) or \
-                                conflict(words[j].standard_pinyin, infos[i][1][1].value):
+                        if conflict(words[j].standard_ipa, infos[i][1][1].value) or \
+                                conflict(words[j].standard_pinyin, infos[i][1][0].value):
                             conflicts.append(
                                 [words[j].id, words[j].standard_ipa, words[j].standard_pinyin,
-                                 infos[i][1][0].value, infos[i][1][1].value])
-                        words[j].standard_ipa = infos[i][1][0].value
-                        words[j].standard_pinyin = infos[i][1][1].value
+                                 infos[i][1][1].value, infos[i][1][0].value])
+                        words[j].standard_ipa = infos[i][1][1].value
+                        words[j].standard_pinyin = infos[i][1][0].value
                         words[j].save()
                         j += 1
                         if j % 100 == 0:
@@ -514,7 +514,7 @@ def upload_standard(request):
 
                 response = HttpResponse(content_type='text/csv', status=200)
                 response["Content-Disposition"] = "attachment; filename=conflict.csv"
-                title = ['word', 'init_ipa', 'init_pinyin', 'ipa', 'pinyin']
+                title = ['单词ID', '原IPA', '原拼音', '现IPA', '现拼音']
                 file = csv.writer(response)
                 file.writerow(title)
                 file.writerows(conflicts)
