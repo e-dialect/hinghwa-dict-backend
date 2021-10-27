@@ -9,7 +9,7 @@ from .models import Word, Character, Pronunciation
 
 
 class WordAdmin(admin.ModelAdmin):
-    list_display = ['id', 'word', 'contributor', 'views', 'visibility']
+    list_display = ['id', 'word', 'contributor', 'views', 'visibility', 'standard_ipa', 'standard_pinyin']
     list_filter = ['contributor', 'visibility']
     search_fields = ['word', 'definition', 'contributor__username']
     ordering = ['id', '-views']
