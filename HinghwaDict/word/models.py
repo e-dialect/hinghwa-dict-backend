@@ -15,6 +15,8 @@ class Word(models.Model):
     related_articles = models.ManyToManyField(Article, related_name="related_words", verbose_name="相关帖子", blank=True)
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
     visibility = models.BooleanField(default=False, verbose_name='是否审核')
+    standard_ipa = models.CharField(max_length=30, verbose_name='标准IPA', blank=True)
+    standard_pinyin = models.CharField(max_length=30, verbose_name='标准拼音', blank=True)
 
     def __str__(self):
         return self.word

@@ -1,8 +1,9 @@
+import csv
 import os
 
 import demjson
 import xlrd
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
@@ -451,3 +452,70 @@ def load_word(request):
         return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def record(request):
+    words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
+              'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
+             for word in Word.objects.all() if word.standard_ipa and word.standard_pinyin]
+    return JsonResponse({'records': words}, status=200)
+
+
+@csrf_exempt
+def upload_standard(request):
+    '''
+    通过excel上传word的standard_ipa，standard_pinyin，分为三列，为别为id,ipa,pinyin，有表头
+    :return: 返回名为conflict的csv，展示与数据库冲突的word字段，为5列，id,init_ipa,init_pinyin,ipa,pinyin
+    '''
+    try:
+        token = request.headers['token']
+        user = token_check(token, 'dxw', -1)
+        if user:
+            file = request.FILES.get("file")
+
+            sheet = xlrd.open_workbook(file_contents=file.read()).sheet_by_index(0)  # 错误
+            line = sheet.nrows
+            col = sheet.ncols
+            ids = [int(x.value) for x in sheet.col(0)[1:]]
+            words = sorted(list(Word.objects.filter(id__in=ids)), key=lambda w: w.id)
+
+            # 将输入excel的词条按id从小到大排序
+            infos = []
+            for i in range(1, line):
+                info = sheet.row(i)
+                infos.append([int(info[0].value), info[1:]])
+            infos.sort(key=lambda a: a[0])
+
+            def conflict(x, y):
+                return x and y and x != y
+
+            conflicts = []
+            j = 0
+            for i in range(line):
+                while j < len(words) and words[j].id < infos[i][0]:
+                    j += 1
+                if j < len(words) and words[j].id == infos[i][0]:
+                    if conflict(words[j].standard_ipa, infos[i][1][0].value) or \
+                            conflict(words[j].standard_pinyin, infos[i][1][1].value):
+                        conflicts.append(
+                            [words[j].id, words[j].standard_ipa, words[j].standard_pinyin,
+                             infos[i][1][0].value, infos[i][1][1].value])
+                    words[j].standard_ipa = infos[i][1][0].value
+                    words[j].standard_pinyin = infos[i][1][1].value
+                    words[j].save()
+                    j += 1
+                    if j % 100 == 0:
+                        print(j)
+
+            response = HttpResponse(content_type='text/csv', status=200)
+            response["Content-Disposition"] = "attachment; filename=conflict.csv"
+            title = ['word', 'init_ipa', 'init_pinyin', 'ipa', 'pinyin']
+            file = csv.writer(response)
+            file.writerow(title)
+            file.writerows(conflicts)
+            return response
+        else:
+            return JsonResponse({}, status=401)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
