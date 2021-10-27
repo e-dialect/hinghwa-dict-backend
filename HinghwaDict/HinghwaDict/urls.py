@@ -38,11 +38,13 @@ urlpatterns = [
 
     path('words', include([path('', word.searchWords),
                            path('/<int:id>', word.manageWord),
-                           path('/add', word.load_word)])),
+                           path('/add', word.load_word),
+                           path('/upload_standard', word.upload_standard)])),
     path('characters', include([path('', word.searchCharacters),
                                 path('/<int:id>', word.manageCharacter),
                                 path('/add', word.load_character),
                                 path('/words', word.searchEach)])),
     path('pronunciation', include([path('', word.searchPronunciations),
                                    path('/<int:id>', word.managePronunciation)])),
+    path('record', word.record)
 ]
