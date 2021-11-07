@@ -1,4 +1,3 @@
-import csv
 import os
 
 import demjson
@@ -76,6 +75,8 @@ def searchWords(request):
             for word in result:
                 words[a[word.id]] = {'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                               "contributor": word.contributor.id, "annotation": word.annotation,
+                                              "standard_ipa": word.standard_ipa,
+                                              "standard_pinyin": word.standard_pinyin,
                                               "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "views": word.views},
                                      'contributor': {
@@ -120,6 +121,8 @@ def manageWord(request, id):
                                                               'town': user.user_info.town,
                                                               'is_admin': user.is_superuser},
                                               "annotation": word.annotation,
+                                              "standard_ipa": word.standard_ipa,
+                                              "standard_pinyin": word.standard_pinyin,
                                               "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "related_words": related_words, "related_articles": related_articles,
                                               "views": word.views}}, status=200)
@@ -512,7 +515,7 @@ def upload_standard(request):
                         if j % 100 == 0:
                             print(j)
 
-                response = HttpResponse(content_type='text/csv', status=200)
+                response = HttpResponse(content_type='text/csv', status=200, encoding='ANSI')
                 response["Content-Disposition"] = "attachment; filename=conflict.csv"
                 title = ['单词ID', '原IPA', '原拼音', '现IPA', '现拼音']
                 file = csv.writer(response)
