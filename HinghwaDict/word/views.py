@@ -5,7 +5,7 @@ import xlrd
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
+import csv
 from article.models import Article
 from website.views import evaluate
 from website.views import token_check
@@ -481,12 +481,11 @@ def record(request):
         words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
                   'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
                  for word in Word.objects.all() if word.standard_ipa and word.standard_pinyin]
-        if 'pageSize' in request.GET:
-            pageSize = int(request.GET['pageSize'])
-            page = int(request.GET['page'])
-            r = min(len(words), page * pageSize)
-            l = min(len(words) + 1, (page - 1) * pageSize)
-            words = words[l:r]
+        pageSize = int(request.GET['pageSize']) if 'pageSize' in request.GET else 15
+        page = int(request.GET['page']) if 'page' in request.GET else 15
+        r = min(len(words), page * pageSize)
+        l = min(len(words) + 1, (page - 1) * pageSize)
+        words = words[l:r]
         return JsonResponse({'records': words}, status=200)
     else:
         return JsonResponse({}, status=405)
