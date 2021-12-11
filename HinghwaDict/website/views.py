@@ -407,15 +407,20 @@ def searchDailyExpression(request):
             page = int(request.GET['page'])
             r = min(len(words), page * pageSize)
             l = min(len(words) + 1, (page - 1) * pageSize)
-            words = words[l:r]
             results = []
-            for word in words:
+            for word in words[l:r]:
                 results.append({
                     'key': word.id, 'english': word.english,
                     'mandarin': word.mandarin, 'character': word.character,
                     'pinyin': word.pinyin
                 })
-            return JsonResponse({'results': results}, status=200)
+            return JsonResponse({
+                "results": results,
+                "total": {
+                    "page": (len(words) - 1) // pageSize + 1,
+                    "item": len(words)
+                }
+            }, status=200)
         elif request.method == 'POST':
             token = request.headers['token']
             user = token_check(token, '***REMOVED***', -1)
