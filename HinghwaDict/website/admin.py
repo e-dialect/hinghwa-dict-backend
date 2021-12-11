@@ -11,7 +11,7 @@ class DailyExpressionAdmin(admin.ModelAdmin):
     list_display = ['id', 'english', 'mandarin', 'character', 'pinyin']
     list_per_page = 50
     search_fields = ['id', 'english', 'mandarin', 'character', 'pinyin']
-    ordering = ('id')
+    ordering = ('id',)
 
 admin.site.register(Website, WebsiteAdmin)
 admin.site.register(DailyExpression, DailyExpressionAdmin)
