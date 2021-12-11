@@ -19,7 +19,8 @@ from qcloud_cos import CosS3Client
 
 from article.models import Article
 from word.models import Word
-from .models import Website
+from .forms import DailyExpressionForm
+from .models import Website, DailyExpression
 
 
 class globalVar():
@@ -38,8 +39,20 @@ def email_check(email, code):
 
 
 def token_check(token, key, id=0):
+    '''
+    id=-1表示要求管理员权限
+    id=x表示用户id需要为x
+    id=0表示任意用户都允许通过，
+    :param token:
+    :param key:
+    :param id:
+    :return:
+    '''
     try:
         info = jwt.decode(token, key, algorithms=['HS256'])
+        if (timezone.now() -
+            timezone.datetime.strptime(info['login_time'], '%Y-%m-%d %H:%M:%S')).seconds > 600:
+            return 0
         user = User.objects.get(id=info['id'])
         if user.username == info['username'] and (id == 0 or id == info['id'] or user.is_superuser):
             return user
@@ -70,9 +83,9 @@ def compare(item, key):
 
 def evaluate(standard, key):
     total = 0
-    key = str(key)
+    key = str(key).lower()
     for item, score in standard:
-        item = str(item)
+        item = str(item).lower()
         if len(item) > 0:
             total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(3 + len(item))
     return total
@@ -374,3 +387,90 @@ try:
         register(random_word_of_the_day, 'random_word_of_the_day', True)
 except Exception as e:
     print(str(e))
+from django.db.models import Q
+
+
+@csrf_exempt
+def searchDailyExpression(request):
+    try:
+        if request.method == 'GET':
+            if 'keyword' in request.GET:
+                key = request.GET['keyword']
+                words = DailyExpression.objects.filter(
+                    Q(english__icontains=key) |
+                    Q(character__icontains=key) |
+                    Q(pinyin__icontains=key) |
+                    Q(mandarin__icontains=key))
+            else:
+                words = DailyExpression.objects.all()
+            pageSize = int(request.GET['pageSize'])
+            page = int(request.GET['page'])
+            r = min(len(words), page * pageSize)
+            l = min(len(words) + 1, (page - 1) * pageSize)
+            words = words[l:r]
+            results = []
+            for word in words:
+                results.append({
+                    'key': word.id, 'english': word.english,
+                    'mandarin': word.mandarin, 'character': word.character,
+                    'pinyin': word.pinyin
+                })
+            return JsonResponse({'results': results}, status=200)
+        elif request.method == 'POST':
+            token = request.headers['token']
+            user = token_check(token, '***REMOVED***', -1)
+            if user:
+                body = demjson.decode(request.body)
+                word_form = DailyExpressionForm(body)
+                if word_form.is_valid():
+                    word = word_form.save(commit=False)
+                    word.save()
+                    return JsonResponse({
+                        'result': {
+                            'key': word.id, 'english': word.english,
+                            'mandarin': word.mandarin, 'character': word.character,
+                            'pinyin': word.pinyin
+                        }
+                    }, status=200)
+                else:
+                    return JsonResponse({}, status=400)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as msg:
+        return JsonResponse({'msg': str(msg)}, status=500)
+
+
+@csrf_exempt
+def manageDailyExpression(request, id):
+    try:
+        token = request.headers['token']
+        user = token_check(token, '***REMOVED***', -1)
+        if user:
+            word = DailyExpression.objects.filter(id=id)
+            if word.exists():
+                word = word[0]
+                if request.method == 'PUT':
+                    body = demjson.decode(request.body)
+                    for property in body['daily_expression']:
+                        setattr(word, property, body['daily_expression'][property])
+                    word.save()
+                    return JsonResponse({
+                        'daily_expression': {
+                            'key': word.id, 'english': word.english,
+                            'mandarin': word.mandarin, 'character': word.character,
+                            'pinyin': word.pinyin
+                        }
+                    }, status=200)
+                elif request.method == 'DELETE':
+                    word.delete()
+                    return JsonResponse({}, status=204)
+                else:
+                    return JsonResponse({}, status=405)
+            else:
+                return JsonResponse({}, status=404)
+        else:
+            return JsonResponse({}, status=401)
+    except Exception as msg:
+        return JsonResponse({'msg': str(msg)}, status=500)
