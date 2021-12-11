@@ -136,7 +136,7 @@ def manageInfo(request, id):
                         return JsonResponse({"token": jwt.encode(payload, 'dxw', algorithm='HS256')},
                                             status=200)
                     else:
-                        if (not user_form.is_valid()) and ('username' in info) and info['username'] != user.username:
+                        if (not user_form.is_valid()) and 'username' in user_form.errors:
                             return JsonResponse({}, status=409)
                         else:
                             return JsonResponse({}, status=400)

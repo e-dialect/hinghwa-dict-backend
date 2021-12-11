@@ -11,3 +11,17 @@ class Website(models.Model):
     class Meta:
         verbose_name_plural = '网页内容'
         verbose_name = '网页内容'
+
+
+class DailyExpression(models.Model):
+    english = models.CharField(max_length=255, verbose_name='英文表达')
+    mandarin = models.CharField(max_length=255, verbose_name='普通话表达')
+    character = models.CharField(max_length=255, verbose_name='方言表达')
+    pinyin = models.CharField(max_length=255, verbose_name='方言拼音')
+
+    def __str__(self):
+        return self.mandarin
+
+    class Meta:
+        verbose_name_plural = '日常用语'
+        verbose_name = '日常用语'
