@@ -1,3 +1,4 @@
+import csv
 import os
 
 import demjson
@@ -5,7 +6,7 @@ import xlrd
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-import csv
+
 from article.models import Article
 from website.views import evaluate
 from website.views import token_check
@@ -290,13 +291,14 @@ def manageCharacter(request, id):
 def searchPronunciations(request):
     try:
         if request.method == 'GET':
-            pronunciations = Pronunciation.objects.filter(visibility=True)
+            if ('token' in request.headers) and token_check(request.headers['token'], '***REMOVED***', -1):
+                pronunciations = Pronunciation.objects.all()
+            else:
+                pronunciations = Pronunciation.objects.filter(visibility=True)
             if 'word' in request.GET:
                 pronunciations = pronunciations.filter(word__id=request.GET['word'])
             if 'contributor' in request.GET:
                 pronunciations = pronunciations.filter(contributor__id=request.GET['contributor'])
-            if 'word' in request.GET:
-                pronunciations = pronunciations.filter(word__id=request.GET['word'])
             pronunciations = list(pronunciations)
             pronunciations.sort(key=lambda item: item.id)
             total = len(pronunciations)
@@ -485,8 +487,14 @@ def record(request):
         page = int(request.GET['page']) if 'page' in request.GET else 15
         r = min(len(words), page * pageSize)
         l = min(len(words) + 1, (page - 1) * pageSize)
-        words = words[l:r]
-        return JsonResponse({'records': words}, status=200)
+        words = words
+        return JsonResponse({
+            'records': words[l:r],
+            "total": {
+                "item": len(words),
+                "page": (len(words) - 1) // pageSize + 1
+            }
+        }, status=200)
     else:
         return JsonResponse({}, status=405)
 
