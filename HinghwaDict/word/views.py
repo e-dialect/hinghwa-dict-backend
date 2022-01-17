@@ -559,3 +559,31 @@ def upload_standard(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def managePronunciationVisibility(request, id):
+    '''
+    管理员管理发音的visibility字段
+    :param request:
+    :return:
+    '''
+    try:
+        if request.method == 'PUT':
+            token = request.headers['token']
+            user = token_check(token, 'dxw', -1)
+            if user:
+                pro = Pronunciation.objects.filter(id=id)
+                if pro.exists():
+                    pro = pro[0]
+                    pro.visibility ^= True
+                    pro.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=404)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
