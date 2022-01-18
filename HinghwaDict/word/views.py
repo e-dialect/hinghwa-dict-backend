@@ -1,3 +1,4 @@
+import csv
 import os
 
 import demjson
@@ -5,7 +6,7 @@ import xlrd
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-import csv
+
 from article.models import Article
 from website.views import evaluate
 from website.views import token_check
@@ -290,13 +291,14 @@ def manageCharacter(request, id):
 def searchPronunciations(request):
     try:
         if request.method == 'GET':
-            pronunciations = Pronunciation.objects.filter(visibility=True)
+            if ('token' in request.headers) and token_check(request.headers['token'], 'dxw', -1):
+                pronunciations = Pronunciation.objects.all()
+            else:
+                pronunciations = Pronunciation.objects.filter(visibility=True)
             if 'word' in request.GET:
                 pronunciations = pronunciations.filter(word__id=request.GET['word'])
             if 'contributor' in request.GET:
                 pronunciations = pronunciations.filter(contributor__id=request.GET['contributor'])
-            if 'word' in request.GET:
-                pronunciations = pronunciations.filter(word__id=request.GET['word'])
             pronunciations = list(pronunciations)
             pronunciations.sort(key=lambda item: item.id)
             total = len(pronunciations)
@@ -485,8 +487,14 @@ def record(request):
         page = int(request.GET['page']) if 'page' in request.GET else 15
         r = min(len(words), page * pageSize)
         l = min(len(words) + 1, (page - 1) * pageSize)
-        words = words[l:r]
-        return JsonResponse({'records': words}, status=200)
+        words = words
+        return JsonResponse({
+            'records': words[l:r],
+            "total": {
+                "item": len(words),
+                "page": (len(words) - 1) // pageSize + 1
+            }
+        }, status=200)
     else:
         return JsonResponse({}, status=405)
 
@@ -545,6 +553,34 @@ def upload_standard(request):
                 file.writerow(title)
                 file.writerows(conflicts)
                 return response
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def managePronunciationVisibility(request, id):
+    '''
+    管理员管理发音的visibility字段
+    :param request:
+    :return:
+    '''
+    try:
+        if request.method == 'PUT':
+            token = request.headers['token']
+            user = token_check(token, 'dxw', -1)
+            if user:
+                pro = Pronunciation.objects.filter(id=id)
+                if pro.exists():
+                    pro = pro[0]
+                    pro.visibility ^= True
+                    pro.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=404)
             else:
                 return JsonResponse({}, status=401)
         else:
