@@ -51,7 +51,7 @@ def token_check(token, key, id=0):
     try:
         info = jwt.decode(token, key, algorithms=['HS256'])
         if (timezone.now() -
-            timezone.datetime.strptime(info['login_time'], '%Y-%m-%d %H:%M:%S')).seconds > 600:
+            timezone.datetime.strptime(info['login_time'], '%Y-%m-%d %H:%M:%S')).seconds > 6000:
             return 0
         user = User.objects.get(id=info['id'])
         if user.username == info['username'] and (id == 0 or id == info['id'] or user.is_superuser):
