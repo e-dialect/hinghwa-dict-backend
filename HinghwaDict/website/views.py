@@ -1,6 +1,7 @@
 import math
 import os
 import random
+import urllib.request
 
 import demjson
 import jwt
@@ -267,6 +268,24 @@ def carousel(request):
                 return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+def download_file(url, local_path, filename):
+    try:
+        if not os.path.exists(local_path):
+            os.makedirs(local_path)
+        path = os.path.join(local_path, filename)
+        fd = open(path, 'w')
+        fd.close()
+        urllib.request.urlretrieve(url, filename=path)
+        key = 'files/download/' + timezone.now().__format__("%Y/%m/%d/") + \
+              filename.split('_')[-1]
+        url = upload_file(path, key)
+        return url
+    except Exception as e:
+        print("Error occurred when downloading file, error message:")
+        print(e)
+        return None
 
 
 def upload_file(path, key):

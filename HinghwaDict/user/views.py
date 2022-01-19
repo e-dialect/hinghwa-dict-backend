@@ -1,5 +1,8 @@
+import os.path
+
 import demjson
 import jwt
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.db.models import Sum
 from django.http import JsonResponse
@@ -7,7 +10,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from website.views import random_str, email_check, token_check
+from website.views import random_str, email_check, token_check, download_file
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -44,7 +47,14 @@ def register(request):
                     user.save()
                     user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
                     if 'avatar' in body:
-                        user_info.avatar = body['avatar']
+                        # 下载连接中图片
+                        suffix = body['avatar'].split('.')[-1]
+                        time = timezone.now().__format__("%Y_%m_%d")
+                        filename = time + '_' + random_str(15) + '.' + suffix
+                        path = os.path.join(settings.MEDIA_ROOT, 'download')
+                        url = download_file(body['avatar'], path, filename)
+                        if url is not None:
+                            user_info.avatar = url
                     if 'nickname' in body:
                         user_info.nickname = body['nickname']
                     user_info.save()
@@ -201,7 +211,7 @@ def updatePassword(request, id):
 
 
 @csrf_exempt
-def updateEmail(request,id):
+def updateEmail(request, id):
     try:
         user = User.objects.filter(id=id)
         if user.exists():
