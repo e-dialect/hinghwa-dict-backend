@@ -11,4 +11,5 @@ urlpatterns = [
     path('<int:id>/email', updateEmail),
     path('app', app),
     path('forget', forget),
+    path('wechat', wxlogin),
 ]

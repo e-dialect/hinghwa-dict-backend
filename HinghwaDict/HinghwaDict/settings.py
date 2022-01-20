@@ -176,3 +176,10 @@ COS_SECRET_ID = 'AKID0pQlpeFZcQyGI4YmjOnvnOilX2GCsIRI'  # 替换为用户的 sec
 COS_SECRET_KEY = 'dy2pPjlW0D9oCJ9i0B6k6B03pKYU9XeU'  # 替换为用户的 secretKey
 COS_BUCKET = 'HinghwaDict-1259415432' # BucketName-APPID
 COS_REGION = 'ap-shanghai'
+
+# parameter of wechat login
+APP_ID = 'wxcfb772ecd3bd408e'
+APP_SECRECT = '88b0c5644575c13f4f43dc2cfa179fc4'
+
+# parameter of jwt
+JWT_KEY = 'dxw'
