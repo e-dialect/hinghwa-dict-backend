@@ -100,7 +100,7 @@ class OpenId:
         self.app_secret = settings.APP_SECRECT
         self.jscode = jscode
 
-    def get_openid(self):
+    def get_openid(self) -> str:
         url = f'{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}&grant_type=authorization_code'
         res = requests.get(url)
         try:
@@ -109,7 +109,7 @@ class OpenId:
         except KeyError:
             return 'fail'
         else:
-            return openid, session_key
+            return openid
 
 
 @csrf_exempt
@@ -117,7 +117,7 @@ def wxlogin(request):
     try:
         body = demjson.decode(request.body)
         jscode = body['jscode']
-        openid, session_key = OpenId(jscode).get_openid()
+        openid = OpenId(jscode).get_openid().strip()
         user_info = UserInfo.objects.filter(wechat__contains=openid)
         if user_info.exists():
             user = user_info[0].user
@@ -265,6 +265,63 @@ def updateEmail(request, id):
                     user.email = body['email']
                     user.save()
                     return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def updateWechat(request, id):
+    try:
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            if request.method == 'PUT':
+                token = request.headers['token']
+                body = demjson.decode(request.body)
+                if token_check(token, settings.JWT_KEY, id):
+                    jscode = body['jscode']
+                    openid = OpenId(jscode).get_openid().strip()
+                    if not UserInfo.objects.filter(wechat=openid).exists():
+                        user.user_info.wechat = openid
+                        user.user_info.save()
+                        return JsonResponse({}, status=200)
+                    else:
+                        return JsonResponse({}, status=409)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+# TODO 先暂时假定QQ操作完全同微信
+@csrf_exempt
+def updateQQ(request, id):
+    try:
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            if request.method == 'PUT':
+                token = request.headers['token']
+                body = demjson.decode(request.body)
+                if token_check(token, settings.JWT_KEY, id):
+                    jscode = body['jscode']
+                    openid = OpenId(jscode).get_openid().strip()
+                    if not UserInfo.objects.filter(qq=openid).exists():
+                        user.user_info.qq = openid
+                        user.user_info.save()
+                        return JsonResponse({}, status=200)
+                    else:
+                        return JsonResponse({}, status=409)
                 else:
                     return JsonResponse({}, status=401)
             else:
