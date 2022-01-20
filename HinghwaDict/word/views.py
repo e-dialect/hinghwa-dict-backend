@@ -74,6 +74,17 @@ def searchWords(request):
                 a[i] = num
                 num += 1
             for word in result:
+                pronunciations = word.pronunciation.filter(ipa__icontains=word.standard_ipa.strip())\
+                    .filter(visibility=True)
+                if pronunciations.exists():
+                    pronunciation = pronunciations[0].source
+                else:
+                    pronunciations = Pronunciation.objects.filter(ipa__icontains=word.standard_ipa.strip())\
+                        .filter(visibility=True)
+                    if pronunciations.exists():
+                        pronunciation = pronunciations[0].source
+                    else:
+                        pronunciation = 'null'
                 words[a[word.id]] = {'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                               "contributor": word.contributor.id, "annotation": word.annotation,
                                               "standard_ipa": word.standard_ipa,
@@ -83,7 +94,11 @@ def searchWords(request):
                                      'contributor': {
                                          'id': word.contributor.id,
                                          'nickname': word.contributor.user_info.nickname,
-                                         'avatar': word.contributor.user_info.avatar}}
+                                         'avatar': word.contributor.user_info.avatar},
+                                     'pronunciation': {
+                                         'url': pronunciation,
+                                         'tts': 'null'
+                                     }}
             result = []
             for item in words:
                 if item:

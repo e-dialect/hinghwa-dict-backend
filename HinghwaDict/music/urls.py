@@ -5,6 +5,7 @@ from .views import *
 app_name = 'users'
 
 urlpatterns = [
-    path('<int:id>', manageMusic),
-    path('<int:id>/like', like),
+    path('', searchMusic),
+    path('/<int:id>', manageMusic),
+    path('/<int:id>/like', like),
 ]
