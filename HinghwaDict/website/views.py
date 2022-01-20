@@ -39,11 +39,25 @@ def email_check(email, code):
         return 0
 
 
+token_dict = {}
+
+
+def token_register(token):
+    token_dict[token] = timezone.now()
+    if len(token_dict) > 1e4:
+        now = timezone.now()
+        ls = token_dict.items()
+        for key, value in ls:
+            if (now - value).seconds > 6000:
+                token_dict.pop(key)
+
+
 def token_check(token, key, id=0):
     '''
     id=-1表示要求管理员权限
     id=x表示用户id需要为x
     id=0表示任意用户都允许通过，
+    成功满足要求的验证则自动刷新时长，100分钟未操作则自动超时
     :param token:
     :param key:
     :param id:
@@ -51,11 +65,12 @@ def token_check(token, key, id=0):
     '''
     try:
         info = jwt.decode(token, key, algorithms=['HS256'])
-        if (timezone.now() -
-            timezone.datetime.strptime(info['login_time'], '%Y-%m-%d %H:%M:%S')).seconds > 6000:
+        if (token in token_dict) and (timezone.now() - token_dict[token]).seconds > 6000:
+            token_dict.pop(token)
             return 0
         user = User.objects.get(id=info['id'])
         if user.username == info['username'] and (id == 0 or id == info['id'] or user.is_superuser):
+            token_dict[token] = timezone.now()
             return user
         else:
             return 0
