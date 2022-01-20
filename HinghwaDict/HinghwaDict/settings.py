@@ -179,3 +179,10 @@ COS_SECRET_ID = '***REMOVED***'  # 替换为用户的 secretId
 COS_SECRET_KEY = '***REMOVED***'  # 替换为用户的 secretKey
 COS_BUCKET = '***REMOVED***' # BucketName-APPID
 COS_REGION = '***REMOVED***'
+
+# parameter of wechat login
+APP_ID = '***REMOVED***'
+APP_SECRECT = '***REMOVED***'
+
+# parameter of jwt
+JWT_KEY = '***REMOVED***'

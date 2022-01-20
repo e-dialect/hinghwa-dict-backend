@@ -1,5 +1,9 @@
+import os.path
+
 import demjson
 import jwt
+import requests
+from django.conf import settings
 from django.contrib.auth import authenticate
 from django.db.models import Sum
 from django.http import JsonResponse
@@ -7,7 +11,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
-from website.views import random_str, email_check, token_check
+from website.views import random_str, email_check, token_check, download_file, token_register
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -44,7 +48,14 @@ def register(request):
                     user.save()
                     user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
                     if 'avatar' in body:
-                        user_info.avatar = body['avatar']
+                        # 下载连接中图片
+                        suffix = body['avatar'].split('.')[-1]
+                        time = timezone.now().__format__("%Y_%m_%d")
+                        filename = time + '_' + random_str(15) + '.' + suffix
+                        path = os.path.join(settings.MEDIA_ROOT, 'download')
+                        url = download_file(body['avatar'], path, filename)
+                        if url is not None:
+                            user_info.avatar = url
                     if 'nickname' in body:
                         user_info.nickname = body['nickname']
                     user_info.save()
@@ -72,12 +83,53 @@ def login(request):
             user.last_login = timezone.now()
             user.save()
             payload = {'username': username, 'id': user.id,
-                       'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
                        "value": random_str()}
-            return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256'),
-                                 'id': user.id}, status=200)
+            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256').decode()
+            token_register(token)
+            return JsonResponse({"token": token,'id': user.id}, status=200)
         else:
             return JsonResponse({}, status=401)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+class OpenId:
+    def __init__(self, jscode):
+        self.url = 'https://api.weixin.qq.com/sns/jscode2session'
+        self.app_id = settings.APP_ID
+        self.app_secret = settings.APP_SECRECT
+        self.jscode = jscode
+
+    def get_openid(self) -> str:
+        url = f'{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}&grant_type=authorization_code'
+        res = requests.get(url)
+        try:
+            openid = res.json()['openid']
+            session_key = res.json()['session_key']
+        except KeyError:
+            return 'fail'
+        else:
+            return openid
+
+
+@csrf_exempt
+def wxlogin(request):
+    try:
+        body = demjson.decode(request.body)
+        jscode = body['jscode']
+        openid = OpenId(jscode).get_openid().strip()
+        user_info = UserInfo.objects.filter(wechat__contains=openid)
+        if user_info.exists():
+            user = user_info[0].user
+            user.last_login = timezone.now()
+            user.save()
+            payload = {'username': user.username, 'id': user.id,
+                       "value": random_str()}
+            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256').decode()
+            token_register(token)
+            return JsonResponse({"token": token, 'id': user.id}, status=200)
+        else:
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
 
@@ -116,7 +168,7 @@ def manageInfo(request, id):
                 # 更新用户信息
                 body = demjson.decode(request.body)
                 token = request.headers['token']
-                if token_check(token, '***REMOVED***', id):
+                if token_check(token, settings.JWT_KEY, id):
                     info = body['user']
                     user_form = UserForm(info)
                     user_info_form = UserInfoForm(info)
@@ -131,10 +183,10 @@ def manageInfo(request, id):
                         user.save()
                         user.user_info.save()
                         payload = {'username': user.username, 'id': user.id,
-                                   'login_time': timezone.now().__format__('%Y-%m-%d %H:%M:%S'),
                                    "value": random_str()}
-                        return JsonResponse({"token": jwt.encode(payload, '***REMOVED***', algorithm='HS256')},
-                                            status=200)
+                        token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256').decode()
+                        token_register(token)
+                        return JsonResponse({"token": token}, status=200)
                     else:
                         if (not user_form.is_valid()) and 'username' in user_form.errors:
                             return JsonResponse({}, status=409)
@@ -180,7 +232,7 @@ def updatePassword(request, id):
             if request.method == 'PUT':
                 token = request.headers['token']
                 body = demjson.decode(request.body)
-                if token_check(token, '***REMOVED***', id):
+                if token_check(token, settings.JWT_KEY, id):
                     if user.check_password(body['oldpassword']):
                         if body['newpassword']:
                             user.set_password(body['newpassword'])
@@ -201,7 +253,7 @@ def updatePassword(request, id):
 
 
 @csrf_exempt
-def updateEmail(request,id):
+def updateEmail(request, id):
     try:
         user = User.objects.filter(id=id)
         if user.exists():
@@ -209,10 +261,67 @@ def updateEmail(request,id):
             if request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
-                if token_check(token, '***REMOVED***', id) and email_check(body['email'], body['code']):
+                if token_check(token, settings.JWT_KEY, id) and email_check(body['email'], body['code']):
                     user.email = body['email']
                     user.save()
                     return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def updateWechat(request, id):
+    try:
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            if request.method == 'PUT':
+                token = request.headers['token']
+                body = demjson.decode(request.body)
+                if token_check(token, settings.JWT_KEY, id):
+                    jscode = body['jscode']
+                    openid = OpenId(jscode).get_openid().strip()
+                    if not UserInfo.objects.filter(wechat=openid).exists():
+                        user.user_info.wechat = openid
+                        user.user_info.save()
+                        return JsonResponse({}, status=200)
+                    else:
+                        return JsonResponse({}, status=409)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+# TODO 先暂时假定QQ操作完全同微信
+@csrf_exempt
+def updateQQ(request, id):
+    try:
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            if request.method == 'PUT':
+                token = request.headers['token']
+                body = demjson.decode(request.body)
+                if token_check(token, settings.JWT_KEY, id):
+                    jscode = body['jscode']
+                    openid = OpenId(jscode).get_openid().strip()
+                    if not UserInfo.objects.filter(qq=openid).exists():
+                        user.user_info.qq = openid
+                        user.user_info.save()
+                        return JsonResponse({}, status=200)
+                    else:
+                        return JsonResponse({}, status=409)
                 else:
                     return JsonResponse({}, status=401)
             else:
