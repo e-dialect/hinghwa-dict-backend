@@ -84,9 +84,12 @@ def login(request):
             user.save()
             payload = {'username': username, 'id': user.id,
                        "value": random_str()}
-            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256').decode()
+            # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
+            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
+            if isinstance(token, bytes):
+                token = token.decode()
             token_register(token)
-            return JsonResponse({"token": token,'id': user.id}, status=200)
+            return JsonResponse({"token": token, 'id': user.id}, status=200)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
@@ -125,7 +128,9 @@ def wxlogin(request):
             user.save()
             payload = {'username': user.username, 'id': user.id,
                        "value": random_str()}
-            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256').decode()
+            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
+            if isinstance(token, bytes):
+                token = token.decode()
             token_register(token)
             return JsonResponse({"token": token, 'id': user.id}, status=200)
         else:
@@ -184,7 +189,9 @@ def manageInfo(request, id):
                         user.user_info.save()
                         payload = {'username': user.username, 'id': user.id,
                                    "value": random_str()}
-                        token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256').decode()
+                        token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
+                        if isinstance(token, bytes):
+                            token = token.decode()
                         token_register(token)
                         return JsonResponse({"token": token}, status=200)
                     else:
