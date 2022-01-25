@@ -127,7 +127,7 @@ STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
 # ]
-# STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
+STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/login'
@@ -156,6 +156,8 @@ CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:*',
     'https://api.pxm.edialect.top:*',
+    'https://pxm.edialect.top:*',
+    'https://localhost:*'
 )
 CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'VIEW',)
 CORS_ALLOW_HEADERS = (
@@ -171,6 +173,7 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     'Pragma',
     'x-token',
+    'token'
 )
 # parameter of Tencent cos
 COS_SECRET_ID = '***REMOVED***'  # 替换为用户的 secretId
