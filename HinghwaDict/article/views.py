@@ -54,7 +54,16 @@ def searchArticle(request):
             # 批量返回文章内容
             body = demjson.decode(request.body)
             articles = [0] * len(body['articles'])
-            result = Article.objects.filter(id__in=body['articles']).filter(visibility=True)
+            result = Article.objects.filter(id__in=body['articles'])
+            user = 0
+            if 'token' in request.headers:
+                token = request.headers['token']
+                user = token_check(token, 'dxw')
+                if user:
+                    if not user.is_superuser:
+                        result = result.filter(visibility=True) | (result & user.articles.all())
+            if not user:
+                result = result.filter(visibility=True)
             a = {}
             num = 0
             for i in body['articles']:

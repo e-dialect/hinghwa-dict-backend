@@ -6,11 +6,12 @@ class Article(models.Model):
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='articles', verbose_name='作者',
                                editable=False)
     views = models.IntegerField(default=0, verbose_name='阅读量', editable=False)
-    like_users = models.ManyToManyField(User, related_name="like_articles", verbose_name="点赞用户", editable=True)
+    like_users = models.ManyToManyField(User, related_name="like_articles", verbose_name="点赞用户",
+                                        editable=True, blank=True)
     publish_time = models.DateTimeField(auto_now_add=True, verbose_name="发布时间")
     update_time = models.DateTimeField(verbose_name="最近更新时间", editable=False)
     title = models.CharField(max_length=100, verbose_name="标题")
-    description = models.TextField(verbose_name="简介", max_length=300,blank=True)
+    description = models.TextField(verbose_name="简介", max_length=300, blank=True)
     content = models.TextField(verbose_name="正文")
     cover = models.URLField(verbose_name="图片地址")
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
