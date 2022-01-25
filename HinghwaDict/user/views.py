@@ -86,8 +86,10 @@ def login(request):
                        "value": random_str()}
             # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
             token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
-            if isinstance(token, bytes):
-                token = token.decode()
+            try:
+                token = token.decode('utf-8')
+            except Exception as e:
+                pass
             token_register(token)
             return JsonResponse({"token": token, 'id': user.id}, status=200)
         else:
@@ -129,8 +131,10 @@ def wxlogin(request):
             payload = {'username': user.username, 'id': user.id,
                        "value": random_str()}
             token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
-            if isinstance(token, bytes):
-                token = token.decode()
+            try:
+                token = token.decode('utf-8')
+            except Exception as e:
+                pass
             token_register(token)
             return JsonResponse({"token": token, 'id': user.id}, status=200)
         else:
@@ -190,8 +194,10 @@ def manageInfo(request, id):
                         payload = {'username': user.username, 'id': user.id,
                                    "value": random_str()}
                         token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
-                        if isinstance(token, bytes):
-                            token = token.decode()
+                        try:
+                            token = token.decode('utf-8')
+                        except Exception as e:
+                            pass
                         token_register(token)
                         return JsonResponse({"token": token}, status=200)
                     else:
