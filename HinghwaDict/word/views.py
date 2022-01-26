@@ -317,6 +317,8 @@ def searchPronunciations(request):
             pronunciations = list(pronunciations)
             pronunciations.sort(key=lambda item: item.id)
             total = len(pronunciations)
+            if ('order' in request.GET) and request.GET['order'] == '1':
+                pronunciations.reverse()
             if 'pageSize' in request.GET:
                 pageSize = int(request.GET['pageSize'])
                 page = int(request.GET['page'])
