@@ -317,6 +317,8 @@ def searchPronunciations(request):
             pronunciations = list(pronunciations)
             pronunciations.sort(key=lambda item: item.id)
             total = len(pronunciations)
+            if ('order' in request.GET) and request.GET['order'] == '1':
+                pronunciations.reverse()
             if 'pageSize' in request.GET:
                 pageSize = int(request.GET['pageSize'])
                 page = int(request.GET['page'])
@@ -364,7 +366,8 @@ def combinePronunciation(request, ipa):
     try:
         if request.method == 'GET':
             ipa = str(ipa).strip()
-            ans = [(len(p.ipa), p.contributor.username, p.source) for p in Pronunciation.objects.filter(ipa__icontains=ipa)]
+            ans = [(len(p.ipa), p.contributor.username, p.source) for p in
+                   Pronunciation.objects.filter(ipa=ipa).filter(visibility=True)]
             ans.sort(key=lambda x: x[0])
             if len(ans):
                 ans = ans[0]
