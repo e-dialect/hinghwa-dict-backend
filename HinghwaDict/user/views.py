@@ -161,6 +161,7 @@ def manageInfo(request, id):
                                               'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
                                               'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
                                               if user.last_login else '',
+                                              'wechat': True if len(info.wechat) else False,
                                               'birthday': info.birthday, 'avatar': info.avatar,
                                               'county': info.county, 'town': info.town,
                                               'is_admin': user.is_superuser},
@@ -294,9 +295,9 @@ def updateWechat(request, id):
         user = User.objects.filter(id=id)
         if user.exists():
             user = user[0]
+            token = request.headers['token']
+            body = demjson.decode(request.body)
             if request.method == 'PUT':
-                token = request.headers['token']
-                body = demjson.decode(request.body)
                 if token_check(token, settings.JWT_KEY, id):
                     jscode = body['jscode']
                     openid = OpenId(jscode).get_openid().strip()
@@ -306,6 +307,13 @@ def updateWechat(request, id):
                         return JsonResponse({}, status=200)
                     else:
                         return JsonResponse({}, status=409)
+                else:
+                    return JsonResponse({}, status=401)
+            elif request.method == 'DELETE':
+                if token_check(token, settings.JWT_KEY, id) and len(user.user_info.wechat):
+                    user.user_info.wechat = ''
+                    user.user_info.save()
+                    return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
             else:
