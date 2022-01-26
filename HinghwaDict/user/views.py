@@ -294,9 +294,9 @@ def updateWechat(request, id):
         user = User.objects.filter(id=id)
         if user.exists():
             user = user[0]
+            token = request.headers['token']
+            body = demjson.decode(request.body)
             if request.method == 'PUT':
-                token = request.headers['token']
-                body = demjson.decode(request.body)
                 if token_check(token, settings.JWT_KEY, id):
                     jscode = body['jscode']
                     openid = OpenId(jscode).get_openid().strip()
@@ -306,6 +306,13 @@ def updateWechat(request, id):
                         return JsonResponse({}, status=200)
                     else:
                         return JsonResponse({}, status=409)
+                else:
+                    return JsonResponse({}, status=401)
+            elif request.method == 'DELETE':
+                if token_check(token, settings.JWT_KEY, id) and len(user.user_info.wechat):
+                    user.user_info.wechat = ''
+                    user.user_info.save()
+                    return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
             else:
