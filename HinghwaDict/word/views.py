@@ -364,7 +364,7 @@ def combinePronunciation(request, ipa):
     try:
         if request.method == 'GET':
             ipa = str(ipa).strip()
-            ans = [(len(p.ipa), p.contributor.username, p.source) for p in Pronunciation.objects.filter(ipa__icontains=ipa)]
+            ans = [(len(p.ipa), p.contributor.username, p.source) for p in Pronunciation.objects.filter(ipa=ipa)]
             ans.sort(key=lambda x: x[0])
             if len(ans):
                 ans = ans[0]
