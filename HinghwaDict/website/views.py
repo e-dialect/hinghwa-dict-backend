@@ -97,13 +97,17 @@ def compare(item, key):
     return total
 
 
+def ReLu(x: float):
+    return x if x < 50 else (x - 50) * 0.01 + 50
+
+
 def evaluate(standard, key):
     total = 0
     key = str(key).lower()
     for item, score in standard:
         item = str(item).lower()
         if len(item) > 0:
-            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(3 + len(item))
+            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(1 + ReLu(len(item)))
     return total
 
 

@@ -19,8 +19,10 @@ def searchArticle(request):
                 result = []
                 key = request.GET['search']
                 for article in articles:
-                    score = evaluate([(article.author.username, 10), (article.author.user_info.nickname, 9),
-                                      (article.title, 5), (article.description, 3), (article.content, 1)], key)
+                    if article.id == 148:
+                        t = 1
+                    score = evaluate([(article.author.username, 2), (article.author.user_info.nickname, 2),
+                                      (article.title, 10), (article.description, 8), (article.content, 5)], key)
                     result.append((article.id, score))
                 result.sort(key=lambda a: a[1], reverse=True)
                 articles = []
