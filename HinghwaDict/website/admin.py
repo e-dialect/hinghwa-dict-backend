@@ -1,5 +1,6 @@
 from django.contrib import admin
-
+from django_apscheduler.apps import DjangoApschedulerConfig
+from notifications.admin import NotificationAdmin
 from .models import Website, DailyExpression
 
 
@@ -13,5 +14,13 @@ class DailyExpressionAdmin(admin.ModelAdmin):
     search_fields = ['id', 'english', 'mandarin', 'character', 'pinyin']
     ordering = ('id',)
 
+
 admin.site.register(Website, WebsiteAdmin)
 admin.site.register(DailyExpression, DailyExpressionAdmin)
+
+DjangoApschedulerConfig.verbose_name = '定时任务'
+DjangoApschedulerConfig.verbose_name_plural = '定时任务'
+# 好像没用
+# Config.verbose_name = '站内通信'
+# Config.verbose_name_plural = '站内通信'
+NotificationAdmin.search_fields = ['recipient__username', 'actor__username']

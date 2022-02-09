@@ -4,6 +4,7 @@ import random
 import urllib.request
 
 import demjson
+import django.db.models
 import jwt
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
@@ -15,6 +16,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
 # from pydub import AudioSegment as audio
+from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
@@ -517,3 +519,38 @@ def manageDailyExpression(request, id):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
+
+
+from notifications.models import Notification
+
+
+def send_notification(sender, recipient, content, target=None, action_object=None, title=None):
+    if title is None:
+        title = f'【通知】{sender.username} 回复了你'
+    if not isinstance(recipient, django.db.models.QuerySet):
+        recipient = [recipient]
+    notify.send(
+        sender,
+        recipient=recipient,
+        verb=content,
+        description=title,
+        target=target,
+        action_object=action_object,
+    )
+    return len(recipient)
+
+
+@csrf_exempt
+def test(request):
+    body = demjson.decode(request.body)
+    # notify.send(
+    #     User.objects.get(id=body['actor']),
+    #     recipient=User.objects.filter(is_superuser=True),
+    #     verb='one more try',
+    #     description='为啥有这个字段',
+    #     target=Article.objects.get(id=2),
+    #     action_object=Comment.objects.get(id=8),
+    # )
+    user = User.objects.get(id=1)
+    a = Notification.objects.filter(actor_object_id=1)
+    return JsonResponse({}, status=200)

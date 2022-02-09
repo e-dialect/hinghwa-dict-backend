@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'website',
     'django_apscheduler',
     'corsheaders',
+    'notifications',
 ]
 
 MIDDLEWARE = [
