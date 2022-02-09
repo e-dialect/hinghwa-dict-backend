@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 
 from article.models import Article
 from website.views import evaluate
-from website.views import token_check
+from website.views import token_check, send_notification
 from .forms import WordForm, CharacterForm, PronunciationForm
 from .models import Word, Character, Pronunciation, User
 
@@ -595,6 +595,13 @@ def managePronunciationVisibility(request, id):
                 if pro.exists():
                     pro = pro[0]
                     pro.visibility ^= True
+                    if pro.visibility:
+                        content = f"恭喜您的语音(id ={id}) 已通过审核"
+                    else:
+                        body = demjson.decode(request.body) if len(request.body) else {}
+                        msg = body['msg'] if 'msg' in body else '管理员审核不通过'
+                        content = f'您的语音(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
+                    send_notification(user, pro.contributor, content=content, target=pro)
                     pro.save()
                     return JsonResponse({}, status=200)
                 else:
