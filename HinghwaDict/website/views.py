@@ -523,7 +523,14 @@ def manageDailyExpression(request, id):
 from notifications.models import Notification
 
 
-def send_notification(sender, recipients, content, target=None, action_object=None, title=None):
+def sendNotification(sender, recipients, content, target=None, action_object=None, title=None):
+    if recipients is None:
+        transfer = User.objects.get(id=2)
+        result = sendNotification(sender, [transfer], content, target, action_object, title)
+        recipients = User.objects.filter(is_superuser=True)
+        target = Notification.objects.get(id=result[0])
+        sendNotification(transfer, recipients, content, target, action_object, title)
+        return result
     if title is None:
         title = f'【通知】{sender.username} 回复了你'
     try:
@@ -541,6 +548,19 @@ def send_notification(sender, recipients, content, target=None, action_object=No
     return [note.id for note in result[0][1]]
 
 
+def readNotification(notification):
+    if isinstance(notification.target, Notification):
+        notification.target.unread = False
+        notification.target.save()
+        Notification.objects.filter(
+            Q(target_content_type=notification.target_content_type) &
+            Q(target_object_id=notification.target_object_id)
+        ).mark_all_as_read()
+    else:
+        notification.unread = False
+        notification.save()
+
+
 @csrf_exempt
 def Notifications(request):
     try:
@@ -549,9 +569,12 @@ def Notifications(request):
         if request.method == 'POST':
             body = demjson.decode(request.body)
             if user:
-                recipients = User.objects.filter(id__in=body['recipients'])
+                if len(body['recipients']) == 1 and body['recipients'][0] == -1:
+                    recipients = None
+                else:
+                    recipients = User.objects.filter(id__in=body['recipients'])
                 title = body['title'] if 'title' in body else None
-                notifications = send_notification(user, recipients, body['content'], title=title)
+                notifications = sendNotification(user, recipients, body['content'], title=title)
                 return JsonResponse({'notifications': notifications}, status=200)
             else:
                 return JsonResponse({}, status=401)
@@ -573,8 +596,7 @@ def manageNotification(request, id):
                 user2 = token_check(token, settings.JWT_KEY, notification.recipient_id)
                 if user1 or user2:
                     if user2 and user2.id == notification.recipient_id:
-                        notification.unread = True
-                        notification.save()
+                        readNotification(notification)
                     return JsonResponse({
                         'from': notification.actor_object_id,
                         'to': notification.recipient_id,
@@ -604,8 +626,7 @@ def manageNotificationUnread(request):
                 if 'notifications' in body:
                     notifications = notifications.filter(id__in=body['notifications'])
                 for notification in notifications:
-                    notification.unread = True
-                    notification.save()
+                    readNotification(notification)
                 return JsonResponse({}, status=200)
             else:
                 return JsonResponse({}, status=405)
