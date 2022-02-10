@@ -15,6 +15,7 @@ class WordAdmin(admin.ModelAdmin):
     ordering = ['id', '-views']
     list_editable = ['visibility']
     list_per_page = 50
+    filter_horizontal = ['related_words', 'related_articles']
 
     def pass_visibility(self, request, queryset):
         for article in queryset:
@@ -59,7 +60,9 @@ class PronunciationAdmin(admin.ModelAdmin):
     search_fields = ['word__word', 'contributor__username', 'pinyin']
     ordering = ['id', '-views']
     list_editable = ['visibility']
+    raw_id_fields = ['word']
     list_per_page = 50
+
     def pass_visibility(self, request, queryset):
         for article in queryset:
             article.visibility = True
