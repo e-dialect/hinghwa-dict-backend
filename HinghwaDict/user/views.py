@@ -183,16 +183,16 @@ def manageInfo(request, id):
                             'from': note.actor_object_id,
                             'to': note.recipient_id,
                             'time': note.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
-                            'title': note.description,
-                        } for note in Notification.objects.filter(actor_object_id=id)]
-                        received = Notification.objects.filter(recipient_id=id)
+                            'title': note.verb,
+                        } for note in Notification.objects.filter(actor_object_id=id).order_by('-id')]
+                        received = Notification.objects.filter(recipient_id=id).order_by('-id')
                         unread = received.filter(unread=True)
                         received = [{
                             'id': note.id,
                             'from': note.actor_object_id,
                             'to': note.recipient_id,
                             'time': note.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
-                            'title': note.description,
+                            'title': note.verb,
                             'unread': note.unread
                         } for note in received]
                         response.update({'notification': {

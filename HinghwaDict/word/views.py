@@ -432,7 +432,7 @@ def managePronunciation(request, id):
                         body = demjson.decode(request.body)
                         message = body["message"] if "message" in body else "管理员操作"
                         content = f'您的语音(id = {pronunciation.id}) 已被删除，理由是：\n\t{message}'
-                        send_notification(user, pronunciation.contributor, content, target=pronunciation)
+                        send_notification(user, [pronunciation.contributor], content, target=pronunciation)
                     pronunciation.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -607,7 +607,7 @@ def managePronunciationVisibility(request, id):
                         body = demjson.decode(request.body) if len(request.body) else {}
                         msg = body['message'] if 'message' in body else '管理员审核不通过'
                         content = f'您的语音(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
-                    send_notification(user, pro.contributor, content=content, target=pro)
+                    send_notification(user, [pro.contributor], content=content, target=pro)
                     pro.save()
                     return JsonResponse({}, status=200)
                 else:
