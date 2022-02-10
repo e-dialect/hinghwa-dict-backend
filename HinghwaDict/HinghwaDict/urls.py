@@ -44,4 +44,7 @@ urlpatterns = [
                                    path('/<int:id>', word.managePronunciation),
                                    path('/<str:ipa>', word.combinePronunciation),
                                    path('/<int:id>/visibility', word.managePronunciationVisibility)])),
+    path('record', word.record),
+    # path('notifications/', include('notifications.urls')),
+    # path('test/', website.test)
 ]
