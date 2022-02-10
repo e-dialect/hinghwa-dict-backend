@@ -25,6 +25,6 @@ DjangoApschedulerConfig.verbose_name_plural = '定时任务'
 # Config.verbose_name = '站内通信'
 # Config.verbose_name_plural = '站内通信'
 NotificationAdmin.search_fields = ['recipient__username', 'actor__username']
-NotificationAdmin.list_display = list_display = ('recipient', 'actor', 'level',
+NotificationAdmin.list_display = list_display = ('id', 'recipient', 'actor', 'level',
                                                  'verb', 'timestamp', 'unread', 'public')
 NotificationAdmin.date_hierarchy = 'timestamp'
