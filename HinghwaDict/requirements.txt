@@ -6,4 +6,4 @@ xlrd
 cos-python-sdk-v5
 apscheduler
 django_apscheduler
-django-notifications-hq
+django-notifications-hq==1.6.0
