@@ -16,8 +16,6 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from article import views as article
-from music import views as music
 from user import views as user
 from website import views as website
 from word import views as word
@@ -46,5 +44,5 @@ urlpatterns = [
                                    path('/<int:id>', word.managePronunciation),
                                    path('/<str:ipa>', word.combinePronunciation),
                                    path('/<int:id>/visibility', word.managePronunciationVisibility)])),
-    path('record', word.record)
+    path('record', word.record),
 ]

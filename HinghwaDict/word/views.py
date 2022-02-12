@@ -9,7 +9,7 @@ from django.views.decorators.http import require_POST
 
 from article.models import Article
 from website.views import evaluate
-from website.views import token_check
+from website.views import token_check, sendNotification
 from .forms import WordForm, CharacterForm, PronunciationForm
 from .models import Word, Character, Pronunciation, User
 
@@ -426,7 +426,13 @@ def managePronunciation(request, id):
                     return JsonResponse({}, status=401)
             elif request.method == 'DELETE':
                 token = request.headers['token']
-                if token_check(token, 'dxw'):
+                user = token_check(token, 'dxw', pronunciation.contributor.id)
+                if user:
+                    if user != pronunciation.contributor:
+                        body = demjson.decode(request.body)
+                        message = body["message"] if "message" in body else "管理员操作"
+                        content = f'您的语音(id = {pronunciation.id}) 已被删除，理由是：\n\t{message}'
+                        sendNotification(user, [pronunciation.contributor], content, target=pronunciation)
                     pronunciation.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -595,6 +601,13 @@ def managePronunciationVisibility(request, id):
                 if pro.exists():
                     pro = pro[0]
                     pro.visibility ^= True
+                    if pro.visibility:
+                        content = f"恭喜您的语音(id ={id}) 已通过审核"
+                    else:
+                        body = demjson.decode(request.body) if len(request.body) else {}
+                        msg = body['message'] if 'message' in body else '管理员审核不通过'
+                        content = f'您的语音(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
+                    sendNotification(user, [pro.contributor], content=content, target=pro)
                     pro.save()
                     return JsonResponse({}, status=200)
                 else:

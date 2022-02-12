@@ -15,6 +15,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
 # from pydub import AudioSegment as audio
+from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
@@ -184,8 +185,8 @@ def announcements(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
-            if token_check(token, 'dxw', -1):
-                if isinstance(body['announcements'],list):
+            if token_check(token, settings.JWT_KEY, -1):
+                if isinstance(body['announcements'], list):
                     item.announcements = body["announcements"]
                     item.save()
                     return JsonResponse({}, status=200)
@@ -228,7 +229,7 @@ def hot_articles(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
-            if token_check(token, 'dxw', -1):
+            if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body['hot_articles'], list):
                     item.hot_articles = body["hot_articles"]
                     item.save()
@@ -254,7 +255,7 @@ def word_of_the_day(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
-            if token_check(token, 'dxw', -1):
+            if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body['word_of_the_day'], int):
                     item.word_of_the_day = body["word_of_the_day"]
                     item.save()
@@ -276,7 +277,7 @@ def carousel(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
-            if token_check(token, 'dxw', -1):
+            if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body['carousel'], list) and isinstance(body['carousel'][0], dict):
                     item.carousel = body["carousel"]
                     item.save()
@@ -328,7 +329,7 @@ def delete_file(key):
 def files(request):
     try:
         token = request.headers['token']
-        user = token_check(token, 'dxw')
+        user = token_check(token, settings.JWT_KEY)
         if user:
             if request.method == "POST":
                 file = request.FILES.get("file")
@@ -461,7 +462,7 @@ def searchDailyExpression(request):
             }, status=200)
         elif request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.JWT_KEY, -1)
             if user:
                 body = demjson.decode(request.body)
                 word_form = DailyExpressionForm(body)
@@ -489,7 +490,7 @@ def searchDailyExpression(request):
 def manageDailyExpression(request, id):
     try:
         token = request.headers['token']
-        user = token_check(token, 'dxw', -1)
+        user = token_check(token, settings.JWT_KEY, -1)
         if user:
             word = DailyExpression.objects.filter(id=id)
             if word.exists():
@@ -517,3 +518,135 @@ def manageDailyExpression(request, id):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
+
+
+from notifications.models import Notification
+
+
+def sendNotification(sender, recipients, content, target=None, action_object=None, title=None):
+    if recipients is None:
+        transfer = User.objects.get(id=2)
+        result = sendNotification(sender, [transfer], content, target, action_object, title)
+        recipients = User.objects.filter(is_superuser=True)
+        target = Notification.objects.get(id=result[0])
+        sendNotification(transfer, recipients, content, target, action_object, title)
+        return result
+    if title is None:
+        title = f'【通知】{sender.username} 回复了你'
+    try:
+        len(recipients)
+    except Exception as e:
+        recipients = [recipients]
+    result = notify.send(
+        sender,
+        recipient=recipients,
+        verb=title,
+        description=content,
+        target=target,
+        action_object=action_object,
+    )
+    return [note.id for note in result[0][1]]
+
+
+def readNotification(notification):
+    if isinstance(notification.target, Notification):
+        notification.target.unread = False
+        notification.target.save()
+        Notification.objects.filter(
+            Q(target_content_type=notification.target_content_type) &
+            Q(target_object_id=notification.target_object_id)
+        ).mark_all_as_read()
+    else:
+        notification.unread = False
+        notification.save()
+
+
+@csrf_exempt
+def Notifications(request):
+    try:
+        token = request.headers['token']
+        user = token_check(token, settings.JWT_KEY)
+        if request.method == 'POST':
+            body = demjson.decode(request.body)
+            if user:
+                if len(body['recipients']) == 1 and body['recipients'][0] == -1:
+                    recipients = None
+                else:
+                    recipients = User.objects.filter(id__in=body['recipients'])
+                title = body['title'] if 'title' in body else None
+                notifications = sendNotification(user, recipients, body['content'], title=title)
+                return JsonResponse({'notifications': notifications}, status=200)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as msg:
+        return JsonResponse({'msg': str(msg)}, status=500)
+
+
+@csrf_exempt
+def manageNotification(request, id):
+    try:
+        notification = Notification.objects.filter(id=id)
+        if notification.exists():
+            notification = notification[0]
+            if request.method == 'GET':
+                token = request.headers['token']
+                user1 = token_check(token, settings.JWT_KEY, notification.actor_object_id)
+                user2 = token_check(token, settings.JWT_KEY, notification.recipient_id)
+                if user1 or user2:
+                    if user2 and user2.id == notification.recipient_id:
+                        readNotification(notification)
+                    return JsonResponse({
+                        'from': notification.actor_object_id,
+                        'to': notification.recipient_id,
+                        'time': notification.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
+                        'title': notification.verb,
+                        'content': notification.description,
+                        'public': notification.public}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
+    except Exception as msg:
+        return JsonResponse({'msg': str(msg)}, status=500)
+
+
+@csrf_exempt
+def manageNotificationUnread(request):
+    try:
+        token = request.headers['token']
+        user = token_check(token, settings.JWT_KEY)
+        if user:
+            if request.method == 'PUT':
+                body = demjson.decode(request.body) if len(request.body) else {}
+                notifications = Notification.objects.filter(recipient_id=user.id)
+                if 'notifications' in body:
+                    notifications = notifications.filter(id__in=body['notifications'])
+                for notification in notifications:
+                    readNotification(notification)
+                return JsonResponse({}, status=200)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=401)
+    except Exception as msg:
+        return JsonResponse({'msg': str(msg)}, status=500)
+
+
+@csrf_exempt
+def test(request):
+    body = demjson.decode(request.body)
+    # notify.send(
+    #     User.objects.get(id=body['actor']),
+    #     recipient=User.objects.filter(is_superuser=True),
+    #     verb='one more try',
+    #     description='为啥有这个字段',
+    #     target=Article.objects.get(id=2),
+    #     action_object=Comment.objects.get(id=8),
+    # )
+    user = User.objects.get(id=1)
+    a = Notification.objects.filter(actor_object_id=1)
+    return JsonResponse({}, status=200)
