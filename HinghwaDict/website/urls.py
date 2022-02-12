@@ -12,5 +12,8 @@ urlpatterns = [
     path('word_of_the_day', word_of_the_day),
     path('carousel', carousel),
     path('daily-expression/<int:id>', manageDailyExpression),
-    path('daily-expression', searchDailyExpression)
+    path('daily-expression', searchDailyExpression),
+    path('notifications', Notifications),
+    path('notifications/<int:id>', manageNotification),
+    path('notifications/unread', manageNotificationUnread),
 ]

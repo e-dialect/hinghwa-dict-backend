@@ -10,6 +10,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from notifications.models import Notification
 
 from website.views import random_str, email_check, token_check, download_file, token_register
 from .forms import UserForm, UserInfoForm
@@ -156,24 +157,56 @@ def manageInfo(request, id):
                 publish_comment = [comment.id for comment in user.comments.all()]
                 like_articles = [article.id for article in user.like_articles.all()]
                 contribute_listened = user.contribute_pronunciation.aggregate(Sum('views'))['views__sum']
-                return JsonResponse({"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
-                                              'email': user.email, 'telephone': info.telephone,
-                                              'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
-                                              if user.last_login else '',
-                                              'wechat': True if len(info.wechat) else False,
-                                              'birthday': info.birthday, 'avatar': info.avatar,
-                                              'county': info.county, 'town': info.town,
-                                              'is_admin': user.is_superuser},
-                                     "publish_articles": publish_articles, 'publish_comments': publish_comment,
-                                     'like_articles': like_articles,
-                                     'contribution': {
-                                         'pronunciation': user.contribute_pronunciation.filter(visibility=True).count(),
-                                         'pronunciation_uploaded': user.contribute_pronunciation.count(),
-                                         'word': user.contribute_words.filter(visibility=True).count(),
-                                         'word_uploaded': user.contribute_words.count(),
-                                         'listened': contribute_listened if contribute_listened else 0
-                                     }}, status=200)
+                response = {"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
+                                     'email': user.email, 'telephone': info.telephone,
+                                     'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
+                                     'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
+                                     if user.last_login else '',
+                                     'wechat': True if len(info.wechat) else False,
+                                     'birthday': info.birthday, 'avatar': info.avatar,
+                                     'county': info.county, 'town': info.town,
+                                     'is_admin': user.is_superuser},
+                            "publish_articles": publish_articles, 'publish_comments': publish_comment,
+                            'like_articles': like_articles,
+                            'contribution': {
+                                'pronunciation': user.contribute_pronunciation.filter(visibility=True).count(),
+                                'pronunciation_uploaded': user.contribute_pronunciation.count(),
+                                'word': user.contribute_words.filter(visibility=True).count(),
+                                'word_uploaded': user.contribute_words.count(),
+                                'listened': contribute_listened if contribute_listened else 0
+                            }}
+                if 'token' in request.headers:
+                    token = request.headers['token']
+                    if token_check(token, settings.JWT_KEY, id):
+                        sent = [{
+                            'id': note.id,
+                            'from': note.actor_object_id,
+                            'to': note.recipient_id,
+                            'time': note.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
+                            'title': note.verb,
+                        } for note in Notification.objects.filter(actor_object_id=id).order_by('-id')]
+                        received = Notification.objects.filter(recipient_id=id).order_by('-id')
+                        unread = received.filter(unread=True)
+                        received = [{
+                            'id': note.id,
+                            'from': note.actor_object_id,
+                            'to': note.recipient_id,
+                            'time': note.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
+                            'title': note.verb,
+                            'unread': note.unread
+                        } for note in received]
+                        response.update({'notification': {
+                            'statistics': {
+                                'total': len(sent) + len(received),
+                                'sent': len(sent),
+                                'received': len(received),
+                                'unread': unread.count()
+                            },
+                            'sent': sent,
+                            'received': received
+                        }})
+
+                return JsonResponse(response, status=200)
             elif request.method == 'PUT':
                 # 更新用户信息
                 body = demjson.decode(request.body)

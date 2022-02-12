@@ -13,6 +13,7 @@ class ArticleAdmin(admin.ModelAdmin):
     list_editable = ['visibility', ]
     list_per_page = 50
     filter_horizontal = ['like_users']
+
     def pass_visibility(self, request, queryset):
         for article in queryset:
             article.visibility = True
