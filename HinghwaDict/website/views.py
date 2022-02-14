@@ -6,7 +6,6 @@ import urllib.request
 import demjson
 import jwt
 from apscheduler.schedulers.background import BackgroundScheduler
-from article.models import Article
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -19,8 +18,9 @@ from django_apscheduler.jobstores import DjangoJobStore, register_job, register_
 from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
-from word.models import Word
 
+from article.models import Article
+from word.models import Word
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 
