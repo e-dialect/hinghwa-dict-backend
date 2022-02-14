@@ -18,7 +18,7 @@ services:
         volumes:
            - ../../data/db.sqlite3:/usr/src/HinghwaDict-backend/db.sqlite3
            - ../../data/media:/usr/src/HinghwaDict-backend/media
-
+           - ../../data/logs:/usr/src/HinghwaDict-backend/logs
 networks:
   traefik-global-proxy:
     external: true
