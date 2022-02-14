@@ -6,6 +6,7 @@ import urllib.request
 import demjson
 import jwt
 from apscheduler.schedulers.background import BackgroundScheduler
+from article.models import Article
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -18,9 +19,8 @@ from django_apscheduler.jobstores import DjangoJobStore, register_job, register_
 from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
-
-from article.models import Article
 from word.models import Word
+
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 
@@ -400,8 +400,6 @@ def openUrl(request, type, id, Y, M, D, X):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-if Website.objects.count() == 0:
-    Website.objects.create()
 try:
     def random_word_of_the_day():
         all = Word.objects.all()
