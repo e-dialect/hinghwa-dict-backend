@@ -1,9 +1,9 @@
-django
+django==3.0.6
 demjson
 pyjwt
 django-cors-headers
 xlrd
 cos-python-sdk-v5
-apscheduler
+apscheduler==3.7.0
 django_apscheduler
 django-notifications-hq==1.6.0
