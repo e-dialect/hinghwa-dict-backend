@@ -74,12 +74,12 @@ def searchWords(request):
                 a[i] = num
                 num += 1
             for word in result:
-                pronunciations = word.pronunciation.filter(ipa__icontains=word.standard_ipa.strip())\
+                pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip())\
                     .filter(visibility=True)
                 if pronunciations.exists():
                     pronunciation = pronunciations[0].source
                 else:
-                    pronunciations = Pronunciation.objects.filter(ipa__icontains=word.standard_ipa.strip())\
+                    pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip())\
                         .filter(visibility=True)
                     if pronunciations.exists():
                         pronunciation = pronunciations[0].source
