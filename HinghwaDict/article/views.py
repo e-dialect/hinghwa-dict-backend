@@ -185,7 +185,9 @@ def like(request, id):
 def comment(request, id):
     try:
         article = Article.objects.filter(id=id)
-        if article.exists() and article[0].visibility:
+        token = request.headers['token']
+        user = token_check(token, '***REMOVED***')
+        if article.exists() and (article[0].visibility or user.is_superuser or user == article[0].author):
             article = article[0]
             if request.method == 'GET':
                 comments = [{"id": comment.id,

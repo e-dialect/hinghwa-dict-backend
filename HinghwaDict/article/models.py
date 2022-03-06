@@ -26,12 +26,23 @@ class Article(models.Model):
         verbose_name_plural = '文章'
         verbose_name = '文章'
 
+    def clean(self):
+        self.title = self.title.strip()
+        self.description = self.description.strip()
+        self.content = self.content.strip()
+        return super(Article, self).clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super(Article, self).save(*args, **kwargs)
+
 
 class Comment(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='comments', verbose_name="评论用户")
     content = models.TextField(max_length=500, verbose_name="内容")
     time = models.DateTimeField(auto_now_add=True, verbose_name="评论时间")
-    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name="sons", verbose_name="父评论")
+    parent = models.ForeignKey('self', on_delete=models.CASCADE, blank=True, null=True, related_name="sons",
+                               verbose_name="父评论")
     article = models.ForeignKey(Article, on_delete=models.CASCADE, related_name="comments", verbose_name="评论文章")
 
     def __str__(self):
@@ -40,3 +51,11 @@ class Comment(models.Model):
     class Meta:
         verbose_name_plural = '评论'
         verbose_name = '评论'
+
+    def clean(self):
+        self.content = self.content.strip()
+        return super(Comment, self).clean()
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        return super(Comment, self).save(*args, **kwargs)

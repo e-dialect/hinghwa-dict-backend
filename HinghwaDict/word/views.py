@@ -256,6 +256,57 @@ def searchEach(request):
 
 
 @csrf_exempt
+def searchEachV2(request):
+    try:
+        if request.method == 'GET':
+            search = request.GET['search']
+            result = Character.objects.filter(character__in=search)
+            dic = {}
+            for character in search:
+                dic[character] = []
+            for character in result:
+                word = Word.objects.filter(standard_ipa=character.ipa) & \
+                       Word.objects.filter(word=character.character)
+                if word.exists():
+                    word = word[0]
+                    pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
+                        .filter(visibility=True)
+                    if pronunciations.exists():
+                        source = pronunciations[0].source
+                    else:
+                        pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
+                            .filter(visibility=True)
+                        if pronunciations.exists():
+                            source = pronunciations[0].source
+                        else:
+                            source = 'null'
+                    word = word.id
+                else:
+                    word = 'null'
+                    source = 'null'
+                dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                                 'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                                 'shengdiao': character.shengdiao, 'character': character.character,
+                                                 'county': character.county, 'town': character.town,
+                                                 'word': word, 'source': source})
+            ans = []
+            for character in search:
+                new_dic = {}
+                for item in dic[character]:
+                    if (item['county'], item['town']) not in new_dic:
+                        new_dic[(item['county'], item['town'])] = [item]
+                    else:
+                        new_dic[(item['county'], item['town'])].append(item)
+                result = []
+                for (county, town), value in new_dic.items():
+                    result.append({'county': county, 'town': town, 'characters': value})
+                ans.append({'label': character, 'characters': result})
+            return JsonResponse({'characters': ans}, status=200)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
 def manageCharacter(request, id):
     try:
         character = Character.objects.filter(id=id)

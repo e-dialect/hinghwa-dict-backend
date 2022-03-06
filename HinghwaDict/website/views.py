@@ -20,7 +20,7 @@ from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
 
 from article.models import Article
-from word.models import Word
+from word.models import Word, Character, Pronunciation
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 
@@ -635,18 +635,3 @@ def manageNotificationUnread(request):
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
 
-
-@csrf_exempt
-def test(request):
-    body = demjson.decode(request.body)
-    # notify.send(
-    #     User.objects.get(id=body['actor']),
-    #     recipient=User.objects.filter(is_superuser=True),
-    #     verb='one more try',
-    #     description='为啥有这个字段',
-    #     target=Article.objects.get(id=2),
-    #     action_object=Comment.objects.get(id=8),
-    # )
-    user = User.objects.get(id=1)
-    a = Notification.objects.filter(actor_object_id=1)
-    return JsonResponse({}, status=200)
