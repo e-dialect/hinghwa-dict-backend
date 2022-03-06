@@ -8,8 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from article.models import Article
-from website.views import evaluate
-from website.views import token_check, sendNotification
+from website.views import evaluate, token_check, sendNotification, simpleUserInfo
 from .forms import WordForm, CharacterForm, PronunciationForm
 from .models import Word, Character, Pronunciation, User
 
@@ -74,12 +73,12 @@ def searchWords(request):
                 a[i] = num
                 num += 1
             for word in result:
-                pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip())\
+                pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
                     .filter(visibility=True)
                 if pronunciations.exists():
                     pronunciation = pronunciations[0].source
                 else:
-                    pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip())\
+                    pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
                         .filter(visibility=True)
                     if pronunciations.exists():
                         pronunciation = pronunciations[0].source
@@ -91,10 +90,7 @@ def searchWords(request):
                                               "standard_pinyin": word.standard_pinyin,
                                               "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "views": word.views},
-                                     'contributor': {
-                                         'id': word.contributor.id,
-                                         'nickname': word.contributor.user_info.nickname,
-                                         'avatar': word.contributor.user_info.avatar},
+                                     'contributor': simpleUserInfo(word.contributor),
                                      'pronunciation': {
                                          'url': pronunciation,
                                          'tts': 'null'
@@ -333,10 +329,7 @@ def searchPronunciations(request):
                                                  'contributor': pronunciation.contributor.id,
                                                  'county': pronunciation.county, 'town': pronunciation.town,
                                                  'visibility': pronunciation.visibility},
-                               'contributor': {
-                                   'id': pronunciation.contributor.id,
-                                   'nickname': pronunciation.contributor.user_info.nickname,
-                                   'avatar': pronunciation.contributor.user_info.avatar}})
+                               'contributor': simpleUserInfo(pronunciation.contributor)})
             return JsonResponse({"pronunciation": result, 'total': total}, status=200)
         elif request.method == 'POST':
             token = request.headers['token']
