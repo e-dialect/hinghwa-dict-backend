@@ -8,8 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from article.models import Article
-from website.views import evaluate
-from website.views import token_check, sendNotification
+from website.views import evaluate, token_check, sendNotification, simpleUserInfo
 from .forms import WordForm, CharacterForm, PronunciationForm
 from .models import Word, Character, Pronunciation, User
 
@@ -74,12 +73,12 @@ def searchWords(request):
                 a[i] = num
                 num += 1
             for word in result:
-                pronunciations = word.pronunciation.filter(ipa__icontains=word.standard_ipa.strip())\
+                pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
                     .filter(visibility=True)
                 if pronunciations.exists():
                     pronunciation = pronunciations[0].source
                 else:
-                    pronunciations = Pronunciation.objects.filter(ipa__icontains=word.standard_ipa.strip())\
+                    pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
                         .filter(visibility=True)
                     if pronunciations.exists():
                         pronunciation = pronunciations[0].source
@@ -91,10 +90,7 @@ def searchWords(request):
                                               "standard_pinyin": word.standard_pinyin,
                                               "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "views": word.views},
-                                     'contributor': {
-                                         'id': word.contributor.id,
-                                         'nickname': word.contributor.user_info.nickname,
-                                         'avatar': word.contributor.user_info.avatar},
+                                     'contributor': simpleUserInfo(word.contributor),
                                      'pronunciation': {
                                          'url': pronunciation,
                                          'tts': 'null'
@@ -260,6 +256,57 @@ def searchEach(request):
 
 
 @csrf_exempt
+def searchEachV2(request):
+    try:
+        if request.method == 'GET':
+            search = request.GET['search']
+            result = Character.objects.filter(character__in=search)
+            dic = {}
+            for character in search:
+                dic[character] = []
+            for character in result:
+                word = Word.objects.filter(standard_ipa=character.ipa) & \
+                       Word.objects.filter(word=character.character)
+                if word.exists():
+                    word = word[0]
+                    pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
+                        .filter(visibility=True)
+                    if pronunciations.exists():
+                        source = pronunciations[0].source
+                    else:
+                        pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
+                            .filter(visibility=True)
+                        if pronunciations.exists():
+                            source = pronunciations[0].source
+                        else:
+                            source = 'null'
+                    word = word.id
+                else:
+                    word = 'null'
+                    source = 'null'
+                dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                                 'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                                 'shengdiao': character.shengdiao, 'character': character.character,
+                                                 'county': character.county, 'town': character.town,
+                                                 'word': word, 'source': source})
+            ans = []
+            for character in search:
+                new_dic = {}
+                for item in dic[character]:
+                    if (item['county'], item['town']) not in new_dic:
+                        new_dic[(item['county'], item['town'])] = [item]
+                    else:
+                        new_dic[(item['county'], item['town'])].append(item)
+                result = []
+                for (county, town), value in new_dic.items():
+                    result.append({'county': county, 'town': town, 'characters': value})
+                ans.append({'label': character, 'characters': result})
+            return JsonResponse({'characters': ans}, status=200)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
 def manageCharacter(request, id):
     try:
         character = Character.objects.filter(id=id)
@@ -333,10 +380,7 @@ def searchPronunciations(request):
                                                  'contributor': pronunciation.contributor.id,
                                                  'county': pronunciation.county, 'town': pronunciation.town,
                                                  'visibility': pronunciation.visibility},
-                               'contributor': {
-                                   'id': pronunciation.contributor.id,
-                                   'nickname': pronunciation.contributor.user_info.nickname,
-                                   'avatar': pronunciation.contributor.user_info.avatar}})
+                               'contributor': simpleUserInfo(pronunciation.contributor)})
             return JsonResponse({"pronunciation": result, 'total': total}, status=200)
         elif request.method == 'POST':
             token = request.headers['token']

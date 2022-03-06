@@ -6,7 +6,6 @@ import urllib.request
 import demjson
 import jwt
 from apscheduler.schedulers.background import BackgroundScheduler
-from article.models import Article
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.mail import send_mail
@@ -19,10 +18,15 @@ from django_apscheduler.jobstores import DjangoJobStore, register_job, register_
 from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
-from word.models import Word
 
+from article.models import Article
+from word.models import Word, Character, Pronunciation
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
+
+
+def simpleUserInfo(user: User):
+    return {'nickname': user.user_info.nickname, 'avatar': user.user_info.avatar, 'id': user.id}
 
 
 class globalVar():
@@ -175,8 +179,7 @@ def announcements(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}}
+                    'author': simpleUserInfo(article.author)}
             result = []
             for item in announcements:
                 if item:
@@ -219,8 +222,7 @@ def hot_articles(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}}
+                    'author': simpleUserInfo(article.author)}
             result = []
             for item in hot_articles:
                 if item:
@@ -377,7 +379,7 @@ def files(request):
                     else:
                         return JsonResponse({}, status=401)
                 except Exception as e:
-                    return JsonResponse({},status=404)
+                    return JsonResponse({}, status=404)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
@@ -596,8 +598,8 @@ def manageNotification(request, id):
                     if user2 and user2.id == notification.recipient_id:
                         readNotification(notification)
                     return JsonResponse({
-                        'from': notification.actor_object_id,
-                        'to': notification.recipient_id,
+                        'from': simpleUserInfo(User.objects.get(id=notification.actor_object_id)),
+                        'to': simpleUserInfo(User.objects.get(id=notification.recipient_id)),
                         'time': notification.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
                         'title': notification.verb,
                         'content': notification.description,
@@ -633,18 +635,3 @@ def manageNotificationUnread(request):
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
 
-
-@csrf_exempt
-def test(request):
-    body = demjson.decode(request.body)
-    # notify.send(
-    #     User.objects.get(id=body['actor']),
-    #     recipient=User.objects.filter(is_superuser=True),
-    #     verb='one more try',
-    #     description='为啥有这个字段',
-    #     target=Article.objects.get(id=2),
-    #     action_object=Comment.objects.get(id=8),
-    # )
-    user = User.objects.get(id=1)
-    a = Notification.objects.filter(actor_object_id=1)
-    return JsonResponse({}, status=200)
