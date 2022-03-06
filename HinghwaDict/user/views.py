@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from notifications.models import Notification
 
-from website.views import random_str, email_check, token_check, download_file, token_register
+from website.views import random_str, email_check, token_check, download_file, token_register, simpleUserInfo
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -180,8 +180,8 @@ def manageInfo(request, id):
                     if token_check(token, settings.JWT_KEY, id):
                         sent = [{
                             'id': note.id,
-                            'from': note.actor_object_id,
-                            'to': note.recipient_id,
+                            'from': simpleUserInfo(User.objects.get(id=note.actor_object_id)),
+                            'to': simpleUserInfo(User.objects.get(id=note.recipient_id)),
                             'time': note.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
                             'title': note.verb,
                         } for note in Notification.objects.filter(actor_object_id=id).order_by('-id')]
@@ -189,8 +189,8 @@ def manageInfo(request, id):
                         unread = received.filter(unread=True)
                         received = [{
                             'id': note.id,
-                            'from': note.actor_object_id,
-                            'to': note.recipient_id,
+                            'from': simpleUserInfo(User.objects.get(id=note.actor_object_id)),
+                            'to': simpleUserInfo(User.objects.get(id=note.recipient_id)),
                             'time': note.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
                             'title': note.verb,
                             'unread': note.unread
