@@ -3,8 +3,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from website.views import evaluate
-from website.views import token_check
+from website.views import evaluate, token_check, simpleUserInfo
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
@@ -79,8 +78,7 @@ def searchArticle(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover, 'visibility': article.visibility},
-                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}}
+                    'author': simpleUserInfo(article.author)}
             result = []
             for item in articles:
                 if item:
@@ -191,8 +189,7 @@ def comment(request, id):
             article = article[0]
             if request.method == 'GET':
                 comments = [{"id": comment.id,
-                             "user": {"id": comment.user.id, "nickname": comment.user.user_info.nickname,
-                                      "avatar": comment.user.user_info.avatar},
+                             "user": simpleUserInfo(comment.user),
                              "content": comment.content,
                              "time": comment.time.__format__('%Y-%m-%d %H:%M:%S'),
                              "parent": comment.parent_id if comment.parent else 0} for comment in
@@ -259,4 +256,4 @@ def searchComment(request):
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
-        return JsonResponse({'msg':str(e)},status=500)
+        return JsonResponse({'msg': str(e)}, status=500)

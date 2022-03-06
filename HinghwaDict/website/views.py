@@ -25,6 +25,10 @@ from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 
 
+def simpleUserInfo(user: User):
+    return {'nickname': user.user_info.nickname, 'avatar': user.user_info.avatar, 'id': user.id}
+
+
 class globalVar():
     email_code = {}
 
@@ -175,8 +179,7 @@ def announcements(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}}
+                    'author': simpleUserInfo(article.author)}
             result = []
             for item in announcements:
                 if item:
@@ -219,8 +222,7 @@ def hot_articles(request):
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover},
-                    'author': {'id': article.author.id, 'nickname': article.author.user_info.nickname,
-                               'avatar': article.author.user_info.avatar}}
+                    'author': simpleUserInfo(article.author)}
             result = []
             for item in hot_articles:
                 if item:
@@ -377,7 +379,7 @@ def files(request):
                     else:
                         return JsonResponse({}, status=401)
                 except Exception as e:
-                    return JsonResponse({},status=404)
+                    return JsonResponse({}, status=404)
         else:
             return JsonResponse({}, status=401)
     except Exception as e:
@@ -596,8 +598,8 @@ def manageNotification(request, id):
                     if user2 and user2.id == notification.recipient_id:
                         readNotification(notification)
                     return JsonResponse({
-                        'from': notification.actor_object_id,
-                        'to': notification.recipient_id,
+                        'from': simpleUserInfo(User.objects.get(id=notification.actor_object_id)),
+                        'to': simpleUserInfo(User.objects.get(id=notification.recipient_id)),
                         'time': notification.timestamp.__format__('%Y-%m-%d %H:%M:%S'),
                         'title': notification.verb,
                         'content': notification.description,

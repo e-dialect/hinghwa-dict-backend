@@ -2,10 +2,9 @@ import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from website.views import token_check
+from website.views import token_check,simpleUserInfo
 from .forms import MusicForm
 from .models import Music
-
 
 @csrf_exempt
 def searchMusic(request):
@@ -49,9 +48,7 @@ def searchMusic(request):
                                                  "artist": music.artist, "cover": music.cover,
                                                  "likes": music.like(),
                                                  "contributor": music.contributor.id, "visibility": music.visibility},
-                                       'contributor': {'id': music.contributor.id,
-                                                       'nickname': music.contributor.user_info.nickname,
-                                                       'avatar': music.contributor.user_info.avatar}}
+                                       'contributor': simpleUserInfo(music.contributor)}
             result = []
             for item in musics:
                 if item:
