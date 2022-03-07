@@ -13,6 +13,7 @@ class MusicAdmin(admin.ModelAdmin):
     list_editable = ['visibility']
     ordering = ['id']
     filter_horizontal = ['like_users']
+    raw_id_fields = ("contributor",)
     list_per_page = 50
 
     def pass_visibility(self, request, queryset):
