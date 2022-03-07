@@ -265,7 +265,7 @@ def searchEachV2(request):
             for character in search:
                 dic[character] = []
             for character in result:
-                word = Word.objects.filter(standard_ipa=character.ipa) & \
+                word = Word.objects.filter(standard_pinyin=character.pinyin) & \
                        Word.objects.filter(word=character.character)
                 if word.exists():
                     word = word[0]
