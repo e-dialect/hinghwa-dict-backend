@@ -496,10 +496,10 @@ def load_character(request):
         body = demjson.decode(request.body)
         file = body['file']
         sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
-        line = sheet.nrows
+        lines = sheet.nrows
         col = sheet.ncols
         title = sheet.row(0)
-        for line in range(1, line):
+        for line in range(1, lines):
             info = sheet.row(line)
             dic = {}
             for i in range(col):
@@ -511,7 +511,7 @@ def load_character(request):
                     print('load character {}'.format(character.id))
             else:
                 raise Exception('add fail in {}'.format(dic))
-            return JsonResponse({}, status=200)
+        return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
