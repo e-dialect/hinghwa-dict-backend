@@ -2,9 +2,10 @@ import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from website.views import token_check,simpleUserInfo
+from website.views import token_check, simpleUserInfo, filterInOrder
 from .forms import MusicForm
 from .models import Music
+
 
 @csrf_exempt
 def searchMusic(request):
@@ -36,24 +37,16 @@ def searchMusic(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'PUT':
             body = demjson.decode(request.body)
-            musics = [0] * len(body['music'])
             result = Music.objects.filter(id__in=body['music'])
-            a = {}
-            num = 0
-            for i in body['music']:
-                a[i] = num
-                num += 1
+            result = filterInOrder(result, body['music'])
+            musics = []
             for music in result:
-                musics[a[music.id]] = {'music': {"id": music.id, "source": music.source, "title": music.title,
-                                                 "artist": music.artist, "cover": music.cover,
-                                                 "likes": music.like(),
-                                                 "contributor": music.contributor.id, "visibility": music.visibility},
-                                       'contributor': simpleUserInfo(music.contributor)}
-            result = []
-            for item in musics:
-                if item:
-                    result.append(item)
-            return JsonResponse({"music": result}, status=200)
+                musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
+                                         "artist": music.artist, "cover": music.cover,
+                                         "likes": music.like(),
+                                         "contributor": music.contributor.id, "visibility": music.visibility},
+                               'contributor': simpleUserInfo(music.contributor)})
+            return JsonResponse({"music": musics}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 

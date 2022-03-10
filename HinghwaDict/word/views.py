@@ -8,7 +8,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from article.models import Article
-from website.views import evaluate, token_check, sendNotification, simpleUserInfo
+from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
 from .forms import WordForm, CharacterForm, PronunciationForm
 from .models import Word, Character, Pronunciation, User
 
@@ -65,13 +65,9 @@ def searchWords(request):
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
-            words = [0] * len(body['words'])
+            words = []
             result = Word.objects.filter(id__in=body['words'])
-            a = {}
-            num = 0
-            for i in body['words']:
-                a[i] = num
-                num += 1
+            result = filterInOrder(result, body['words'])
             for word in result:
                 pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
                     .filter(visibility=True)
@@ -84,22 +80,18 @@ def searchWords(request):
                         pronunciation = pronunciations[0].source
                     else:
                         pronunciation = 'null'
-                words[a[word.id]] = {'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
-                                              "contributor": word.contributor.id, "annotation": word.annotation,
-                                              "standard_ipa": word.standard_ipa,
-                                              "standard_pinyin": word.standard_pinyin,
-                                              "mandarin": eval(word.mandarin) if word.mandarin else [],
-                                              "views": word.views},
-                                     'contributor': simpleUserInfo(word.contributor),
-                                     'pronunciation': {
-                                         'url': pronunciation,
-                                         'tts': 'null'
-                                     }}
-            result = []
-            for item in words:
-                if item:
-                    result.append(item)
-            return JsonResponse({"words": result}, status=200)
+                words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
+                                       "contributor": word.contributor.id, "annotation": word.annotation,
+                                       "standard_ipa": word.standard_ipa,
+                                       "standard_pinyin": word.standard_pinyin,
+                                       "mandarin": eval(word.mandarin) if word.mandarin else [],
+                                       "views": word.views},
+                              'contributor': simpleUserInfo(word.contributor),
+                              'pronunciation': {
+                                  'url': pronunciation,
+                                  'tts': 'null'
+                              }})
+            return JsonResponse({"words": words}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
@@ -210,23 +202,15 @@ def searchCharacters(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             result = Character.objects.filter(id__in=body['characters'])
-            characters = [0] * len(body['characters'])
-            a = {}
-            num = 0
-            for i in body['characters']:
-                a[i] = num
-                num += 1
+            characters = []
+            result = filterInOrder(result, body['characters'])
             for character in result:
-                characters[a[character.id]] = {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                               'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                               'shengdiao': character.shengdiao,
-                                               'character': character.character, 'county': character.county,
-                                               'town': character.town}
-            result = []
-            for item in characters:
-                if item:
-                    result.append(item)
-            return JsonResponse({"characters": result}, status=200)
+                characters.append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                   'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                   'shengdiao': character.shengdiao,
+                                   'character': character.character, 'county': character.county,
+                                   'town': character.town})
+            return JsonResponse({"characters": characters}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
