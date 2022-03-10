@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from website.views import evaluate, token_check, simpleUserInfo
+from website.views import evaluate, token_check, simpleUserInfo, filterInOrder
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
@@ -54,7 +54,6 @@ def searchArticle(request):
         elif request.method == 'PUT':
             # 批量返回文章内容
             body = demjson.decode(request.body)
-            articles = [0] * len(body['articles'])
             result = Article.objects.filter(id__in=body['articles'])
             user = 0
             if 'token' in request.headers:
@@ -65,25 +64,18 @@ def searchArticle(request):
                         result = result.filter(visibility=True) | (result & user.articles.all())
             if not user:
                 result = result.filter(visibility=True)
-            a = {}
-            num = 0
-            for i in body['articles']:
-                a[i] = num
-                num += 1
+            result = filterInOrder(result, body['articles'])
+            articles = []
             for article in result:
-                articles[a[article.id]] = {
+                articles.append({
                     'article': {"id": article.id, "likes": article.like(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
                                 "cover": article.cover, 'visibility': article.visibility},
-                    'author': simpleUserInfo(article.author)}
-            result = []
-            for item in articles:
-                if item:
-                    result.append(item)
-            return JsonResponse({"articles": result}, status=200)
+                    'author': simpleUserInfo(article.author)})
+            return JsonResponse({"articles": articles}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
@@ -238,23 +230,15 @@ def searchComment(request):
     try:
         if request.method == 'PUT':
             body = demjson.decode(request.body)
-            comments = [0] * len(body['comments'])
             result = Comment.objects.filter(id__in=body['comments'])
-            a = {}
-            num = 0
-            for i in body['comments']:
-                a[i] = num
-                num += 1
+            result = filterInOrder(result, body['comments'])
+            comments = []
             for comment in result:
-                comments[a[comment.id]] = {'id': comment.id, 'user': comment.user.id, 'content': comment.content,
-                                           'time': comment.time.__format__('%Y-%m-%d %H:%M:%S'),
-                                           'parent': comment.parent_id if comment.parent else 0,
-                                           'article': comment.article.id}
-            result = []
-            for item in comments:
-                if item:
-                    result.append(item)
-            return JsonResponse({'comments': result}, status=200)
+                comments.append({'id': comment.id, 'user': comment.user.id, 'content': comment.content,
+                                 'time': comment.time.__format__('%Y-%m-%d %H:%M:%S'),
+                                 'parent': comment.parent_id if comment.parent else 0,
+                                 'article': comment.article.id})
+            return JsonResponse({'comments': comments}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:

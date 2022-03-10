@@ -158,33 +158,47 @@ def email(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+def filterInOrder(objs, order) -> list:
+    '''
+    将id为order顺序排序objs,len(objs)<=len(order)
+    :param objs:待排序的数组
+    :param order:
+    :return:
+    '''
+    mapping = {}
+    num = 0
+    for id in order:
+        mapping[id] = num
+        num += 1
+    result = [0] * len(order)
+    for item in objs:
+        result[mapping[item.id]] = item
+    result1 = []
+    for item in result:
+        if item:
+            result1.append(item)
+    return result1
+
+
 @csrf_exempt
 def announcements(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
             articles = eval(item.announcements) if item.announcements else []
-            articles = Article.objects.filter(id__in=articles)
-            announcements = [0] * len(articles)
-            a = {}
-            num = 0
-            for i in articles:
-                a[i.id] = num
-                num += 1
-            for article in articles:
-                announcements[a[article.id]] = {
+            result = Article.objects.filter(id__in=articles).filter(visibility=True)
+            result = filterInOrder(result, articles)
+            announcements = []
+            for article in result:
+                announcements.append({
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
-                                "cover": article.cover},
-                    'author': simpleUserInfo(article.author)}
-            result = []
-            for item in announcements:
-                if item:
-                    result.append(item)
-            return JsonResponse({"announcements": result}, status=200)
+                                "cover": article.cover, 'visibility': article.visibility},
+                    'author': simpleUserInfo(article.author)})
+            return JsonResponse({"announcements": announcements}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -207,27 +221,19 @@ def hot_articles(request):
         item = Website.objects.get(id=1)
         if request.method == 'GET':
             articles = eval(item.hot_articles) if item.hot_articles else []
-            articles = Article.objects.filter(id__in=articles)
-            hot_articles = [0] * len(articles)
-            a = {}
-            num = 0
-            for i in articles:
-                a[i.id] = num
-                num += 1
-            for article in articles:
-                hot_articles[a[article.id]] = {
+            result = Article.objects.filter(id__in=articles).filter(visibility=True)
+            result = filterInOrder(result, articles)
+            hot_articles = []
+            for article in result:
+                hot_articles.append({
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
-                                "cover": article.cover},
-                    'author': simpleUserInfo(article.author)}
-            result = []
-            for item in hot_articles:
-                if item:
-                    result.append(item)
-            return JsonResponse({"hot_articles": result}, status=200)
+                                "cover": article.cover, 'visibility': article.visibility},
+                    'author': simpleUserInfo(article.author)})
+            return JsonResponse({"hot_articles": hot_articles}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -634,4 +640,3 @@ def manageNotificationUnread(request):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
-
