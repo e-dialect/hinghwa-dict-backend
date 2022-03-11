@@ -324,13 +324,14 @@ def upload_file(path, key):
         LocalFilePath=path,
         Key=key
     )
-    return "https://{0}.cos.{1}.myqcloud.com/{2}".format(settings.COS_BUCKET, settings.COS_REGION, key)
+    return f"https://cos.edialect.top/{key}"
 
 
 def delete_file(key):
     config = CosConfig(Region=settings.COS_REGION, SecretId=settings.COS_SECRET_ID, SecretKey=settings.COS_SECRET_KEY)
     client = CosS3Client(config)
     response = client.delete_object(Bucket=settings.COS_BUCKET, Key=key)
+    return response
 
 
 @csrf_exempt
@@ -369,13 +370,14 @@ def files(request):
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
                 try:
-                    suffix = body['url'].split('/', 3)[-1]
+                    suffix = body['url'].split('/', 4)[-1]
                     type = suffix.split('/', 2)[0]
                     id = suffix.split('/', 2)[1]
-                    if user.id == id or user.is_superuser():
+                    if user.id == eval(id) or user.is_superuser():
                         filename = suffix.split('/', 2)[2]
                         filename = '_'.join(filename.split('/'))
                         path = os.path.join(settings.MEDIA_ROOT, type, id, filename)
+                        delete_file(suffix)
                         if os.path.exists(path):
                             os.remove(path)
                             delete_file(suffix)
