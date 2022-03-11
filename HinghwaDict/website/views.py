@@ -331,7 +331,6 @@ def delete_file(key):
     config = CosConfig(Region=settings.COS_REGION, SecretId=settings.COS_SECRET_ID, SecretKey=settings.COS_SECRET_KEY)
     client = CosS3Client(config)
     response = client.delete_object(Bucket=settings.COS_BUCKET, Key=key)
-    return response
 
 
 @csrf_exempt
@@ -377,7 +376,6 @@ def files(request):
                         filename = suffix.split('/', 2)[2]
                         filename = '_'.join(filename.split('/'))
                         path = os.path.join(settings.MEDIA_ROOT, type, id, filename)
-                        delete_file(suffix)
                         if os.path.exists(path):
                             os.remove(path)
                             delete_file(suffix)
