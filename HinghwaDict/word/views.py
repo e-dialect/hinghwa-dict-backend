@@ -217,6 +217,54 @@ def searchCharacters(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+def searchCharactersPinyin(request):
+    '''
+        其实就是seachCharacters方法的get接口不够用了，要增加多一个功能类似但是返回不同的
+    '''
+    try:
+        if request.method == 'GET':
+            characters = Character.objects.all()
+            if 'shengmu' in request.GET:
+                characters = characters.filter(shengmu=request.GET['shengmu'])
+            if 'yunmu' in request.GET:
+                characters = characters.filter(yunmu=request.GET['yunmu'])
+            if 'shengdiao' in request.GET:
+                characters = characters.filter(shengdiao=request.GET['shengdiao'])
+            result = {}
+            for item in characters:
+                if ((item.pinyin, item.character) not in result) or \
+                        (item.town == '城里' and item.county == '莆田'):
+                    result[(item.pinyin, item.character)] = item
+            result1 = {}
+            words_dict = {}
+            pronunciations_dict = {}
+            for item in Word.objects.filter(visibility=True):
+                if item.standard_pinyin not in words_dict:
+                    words_dict[item.standard_pinyin] = []
+                words_dict[item.standard_pinyin].append(item)
+            for item in Pronunciation.objects.filter(visibility=True):
+                if item.pinyin not in pronunciations_dict:
+                    pronunciations_dict[item.pinyin] = []
+                pronunciations_dict[item.pinyin].append(item)
+            t = 0
+            for (pinyin, character), item in result.items():
+                if pinyin not in result1:
+                    pronunciation = pronunciations_dict[pinyin][0].source if pinyin in pronunciations_dict else None
+                    result1[pinyin] = {'pinyin': pinyin, 'source': pronunciation, "characters": []}
+                word = None
+                if pinyin in words_dict:
+                    for item in words_dict[pinyin]:
+                        if item.word == character:
+                            word = item.id
+                            break
+                result1[pinyin]['characters'].append({'character': character, 'word': word})
+            return JsonResponse({"result": list(result1.values())}, status=200)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
 @csrf_exempt
 def searchEach(request):
     try:
@@ -249,8 +297,7 @@ def searchEachV2(request):
             for character in search:
                 dic[character] = []
             for character in result:
-                word = Word.objects.filter(standard_pinyin=character.pinyin) & \
-                       Word.objects.filter(word=character.character)
+                word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
                 if word.exists():
                     word = word[0]
                     pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
