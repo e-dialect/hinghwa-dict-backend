@@ -22,21 +22,32 @@ def searchWords(request):
                 words = words.filter(contributor=request.GET['contributor'])
             if 'search' in request.GET:
                 result = []
-                key = request.GET['search']
+                key = request.GET['search'].replace(' ', '')
+                if not key[0].isalnum():
+                    weights = [3.5, 2.5, 2, 1, 0.5, 0.5]
+                    alpha = 1
+                else:
+                    weights = [2, 1, 0.5, 0.5, 3, 3]
+                    alpha = 1
+                t = 0
                 for word in words:
-                    score = evaluate(
-                        [(word.word, 3), (word.definition, 2), (word.mandarin, 1.5), (word.annotation, 1)], key)
-                    result.append((word.id, score))
-                result.sort(key=lambda a: a[1], reverse=True)
-                words = []
-                for id, score in result:
+                    if word.id == 4707 or word.id == 4617:
+                        t = 1
+                    score = evaluate(list(zip([word.word, word.definition, word.mandarin,
+                                               word.annotation, word.standard_pinyin, word.standard_ipa], weights))
+                                     , key, alpha=alpha)
                     if score > 0:
-                        words.append(Word.objects.get(id=id))
-                    else:
-                        break
-
+                        result.append((word, score))
+                        t = max(t, score)
+                result.sort(key=lambda a: a[1], reverse=True)
+                if len(result) > 200:
+                    result = result[:200]
+                words = list(zip(*result))[0]
+            result = [{'id': word.id, 'word': word.word, 'definition': word.definition,
+                       'annotation': word.annotation, 'mandarin': eval(word.mandarin) if word.mandarin else [],
+                       'standard_ipa': word.standard_ipa, 'standard_pinyin': word.standard_pinyin} for word in words]
             words = [word.id for word in words]
-            return JsonResponse({"words": words}, status=200)
+            return JsonResponse({"result": result, "words": words}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
