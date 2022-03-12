@@ -12,7 +12,7 @@ class Word(models.Model):
     mandarin = models.TextField(verbose_name="对应普通话词语", blank=True, default='[]')
     related_words = models.ManyToManyField('self', related_name="related_words", verbose_name="相关词汇", blank=True)
     related_articles = models.ManyToManyField(Article, related_name="related_words", verbose_name="相关帖子", blank=True)
-    views = models.IntegerField(default=0, verbose_name="访问量")
+    views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
     visibility = models.BooleanField(default=False, verbose_name='是否审核')
     standard_ipa = models.CharField(max_length=30, verbose_name='标准IPA', blank=True)
     standard_pinyin = models.CharField(max_length=30, verbose_name='标准拼音', blank=True)
@@ -48,7 +48,7 @@ class Pronunciation(models.Model):
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contribute_pronunciation",
                                     verbose_name="贡献者")
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
-    views = models.IntegerField(default=0, verbose_name="访问量")
+    views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
 
     def clean(self):
         self.ipa = self.ipa.strip()
