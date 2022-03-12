@@ -18,7 +18,6 @@ from django_apscheduler.jobstores import DjangoJobStore, register_job, register_
 from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
-
 from article.models import Article
 from word.models import Word, Character, Pronunciation
 from .forms import DailyExpressionForm
@@ -83,36 +82,43 @@ def token_check(token, key, id=0):
         return 0
 
 
-def compare(item, key):
+def compare(test, key):
     total = 0
     j = 0
     m = len(key)
-    for character in item:
+    hint = 0
+    for character in test:
         if character == key[j]:
             if j == m - 1:
                 j = 0
                 total += 1
+                hint += 1
             else:
                 j += 1
         elif j:
-            total += math.exp(j - m)
+            total += math.pow(10, j - m)
+            if j > m / 2:
+                hint += 1
             j = 1 if character == key[0] else 0
     if j:
-        total += math.exp(j - m)
-    return total
+        total += math.pow(10, j - m)
+        if j > m / 2:
+            hint += 1
+    return total + math.pow(10, hint - m)
 
 
 def ReLu(x: float):
     return x if x < 50 else (x - 50) * 0.01 + 50
 
 
-def evaluate(standard, key):
+def evaluate(standard, key, alpha=1):
     total = 0
     key = str(key).lower()
     for item, score in standard:
-        item = str(item).lower()
+        item = str(item).lower().replace(' ', '')
         if len(item) > 0:
-            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(1 + ReLu(len(item)))
+            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(
+                1 + alpha * ReLu(len(item)))
     return total
 
 

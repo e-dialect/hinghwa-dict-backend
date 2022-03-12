@@ -41,7 +41,7 @@ urlpatterns = [
                                 path('/add', word.load_character),
                                 path('/words', word.searchEach),
                                 path('/words/v2', word.searchEachV2),
-                                path('/pinyin',word.searchCharactersPinyin)])),
+                                path('/pinyin', word.searchCharactersPinyin)])),
     path('pronunciation', include([path('', word.searchPronunciations),
                                    path('/<int:id>', word.managePronunciation),
                                    path('/<str:ipa>', word.combinePronunciation),
