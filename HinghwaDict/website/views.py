@@ -536,6 +536,9 @@ from notifications.models import Notification
 
 
 def sendNotification(sender, recipients, content, target=None, action_object=None, title=None):
+    '''
+    发送站内通知，recipients为列表，若为None表示向管理员发送通知
+    '''
     if recipients is None:
         transfer = User.objects.get(id=2)
         result = sendNotification(sender, [transfer], content, target, action_object, title)
