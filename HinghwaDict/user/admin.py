@@ -7,7 +7,7 @@ from .models import UserInfo
 
 class UserInfoAdmin(admin.ModelAdmin):
     list_display = ['ID', 'user', 'nickname', 'telephone']
-    search_fields = ['user__username', 'nickname', 'telephone', 'user__email']
+    search_fields = ['user__username', 'nickname', 'telephone', 'user__email', 'id']
     ordering = ['user__id']
     list_per_page = 50
 

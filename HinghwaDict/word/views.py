@@ -9,8 +9,8 @@ from django.views.decorators.http import require_POST
 
 from article.models import Article
 from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
-from .forms import WordForm, CharacterForm, PronunciationForm
-from .models import Word, Character, Pronunciation, User
+from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
+from .models import Word, Character, Pronunciation, User, Application
 
 
 @csrf_exempt
@@ -56,12 +56,12 @@ def searchWords(request):
                 body = body['word']
                 word_form = WordForm(body)
                 if word_form.is_valid() and isinstance(body['mandarin'], list):
-                    word = word_form.save(commit=False)
-                    word.contributor = user
                     for id in body['related_articles']:
                         Article.objects.get(id=id)
                     for id in body['related_words']:
                         Word.objects.get(id=id)
+                    word = word_form.save(commit=False)
+                    word.contributor = user
                     word.save()
                     for id in body['related_articles']:
                         article = Article.objects.get(id=id)
@@ -702,5 +702,162 @@ def managePronunciationVisibility(request, id):
                 return JsonResponse({}, status=401)
         else:
             return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def searchApplication(request):
+    try:
+        if request.method == 'GET':
+            token = request.headers['token']
+            user = token_check(token, '***REMOVED***', -1)
+            if user:
+                applications = Application.objects.filter(granted=False)
+                result = []
+                for application in applications:
+                    related_words = [word.id for word in application.related_words.all()]
+                    related_articles = [article.id for article in application.related_articles.all()]
+                    result.append({
+                        'content': {
+                            'word': application.content_word,
+                            'definition': application.definition,
+                            "annotation": application.annotation,
+                            "standard_ipa": application.standard_ipa,
+                            "standard_pinyin": application.standard_pinyin,
+                            "mandarin": eval(application.mandarin) if application.mandarin else [],
+                            "related_words": related_words, "related_articles": related_articles,
+                        },
+                        'word': application.word.id,
+                        'reason': application.reason,
+                        'application': application.id,
+                        'contributor': {
+                            'nickname': application.contributor.user_info.nickname,
+                            'avatar': application.contributor.user_info.avatar,
+                            'id': application.contributor.id
+                        },
+                        "granted": application.granted,
+                        "verifier": {
+                            'nickname': application.verifier.user_info.nickname,
+                            'avatar': application.verifier.user_info.avatar,
+                            'id': application.verifier.id
+                        } if application.verifier else None,
+                    })
+                return JsonResponse({'applications': result}, status=200)
+            else:
+                return JsonResponse({}, status=401)
+        elif request.method == 'POST':
+            token = request.headers['token']
+            user = token_check(token, '***REMOVED***')
+            if user:
+                body = demjson.decode(request.body)
+                if 'word' in body['content']:
+                    body['content_word'] = body['content']['word']
+                    body['content'].pop('word')
+                body.update(body['content'])
+                application_form = ApplicationForm(body)
+                word = Word.objects.filter(id=body['word'])
+                if word.exists() and application_form.is_valid() and isinstance(body['mandarin'], list):
+                    for id in body['related_articles']:
+                        Article.objects.get(id=id)
+                    for id in body['related_words']:
+                        Word.objects.get(id=id)
+                    word = word[0]
+                    application = application_form.save(commit=False)
+                    application.contributor = user
+                    application.word = word
+                    application.save()
+                    for id in body['related_articles']:
+                        article = Article.objects.get(id=id)
+                        application.related_articles.add(article)
+                    for id in body['related_words']:
+                        wordx = Word.objects.get(id=id)
+                        application.related_words.add(wordx)
+                    return JsonResponse({'id': application.id}, status=200)
+                else:
+                    return JsonResponse({}, status=400)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def manageApplication(request, id):
+    try:
+        application = Application.objects.filter(id=id)
+        if application.exists():
+            application = application[0]
+            if request.method == 'GET':
+                token = request.headers['token']
+                user = token_check(token, '***REMOVED***', application.contributor.id)
+                if user:
+                    related_words = [word.id for word in application.related_words.all()]
+                    related_articles = [article.id for article in application.related_articles.all()]
+                    result = {
+                        'content': {
+                            'word': application.content_word,
+                            'definition': application.definition,
+                            "annotation": application.annotation,
+                            "standard_ipa": application.standard_ipa,
+                            "standard_pinyin": application.standard_pinyin,
+                            "mandarin": eval(application.mandarin) if application.mandarin else [],
+                            "related_words": related_words, "related_articles": related_articles,
+                        },
+                        'word': application.word.id,
+                        'reason': application.reason,
+                        'application': application.id,
+                        'contributor': {
+                            'nickname': application.contributor.user_info.nickname,
+                            'avatar': application.contributor.user_info.avatar,
+                            'id': application.contributor.id
+                        },
+                        "granted": application.granted,
+                        "verifier": {
+                            'nickname': application.verifier.user_info.nickname,
+                            'avatar': application.verifier.user_info.avatar,
+                            'id': application.verifier.id
+                        } if application.verifier else None,
+                    }
+                    return JsonResponse({'application': result}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            elif request.method == 'PUT':
+                token = request.headers['token']
+                user = token_check(token, '***REMOVED***', -1)
+                if user:
+                    body = demjson.decode(request.body)
+                    application.granted = body['result']
+                    application.verifier = user
+                    application.save()
+                    if body['result']:
+                        word = application.word
+                        attributes = ['definition', 'annotation', 'standard_ipa', 'standard_pinyin',
+                                      'mandarin']
+                        for attribute in attributes:
+                            value = getattr(application, attribute)
+                            setattr(word, attribute, value)
+                        word.word = application.content_word
+                        word.related_articles.clear()
+                        for related_article in application.related_articles.all():
+                            word.related_articles.add(related_article)
+                        word.related_words.clear()
+                        for related_word in application.related_words.all():
+                            word.related_words.add(related_word)
+                        word.save()
+                    content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
+                              f'审核结果为：{"success" if body["result"] else "fail"}，理由是:\n\t{body["reason"]}'
+                    sendNotification(user, [application.contributor], content, target=application)
+
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
