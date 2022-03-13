@@ -321,11 +321,11 @@ def searchEachV2(request):
                         if pronunciations.exists():
                             source = pronunciations[0].source
                         else:
-                            source = 'null'
+                            source = None
                     word = word.id
                 else:
-                    word = 'null'
-                    source = 'null'
+                    word = None
+                    source = None
                 dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
                                                  'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                                  'shengdiao': character.shengdiao, 'character': character.character,
