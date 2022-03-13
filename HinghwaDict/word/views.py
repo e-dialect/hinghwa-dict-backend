@@ -291,7 +291,7 @@ def searchEach(request):
                                                  'shengdiao': character.shengdiao, 'character': character.character,
                                                  'county': character.county, 'town': character.town})
             ans = []
-            for character in search:
+            for character in dic.keys():
                 ans.append({'label': character, 'characters': dic[character]})
             return JsonResponse({'characters': ans}, status=200)
     except Exception as e:
@@ -332,7 +332,7 @@ def searchEachV2(request):
                                                  'county': character.county, 'town': character.town,
                                                  'word': word, 'source': source})
             ans = []
-            for character in search:
+            for character in dic.keys():
                 new_dic = {}
                 for item in dic[character]:
                     if (item['county'], item['town']) not in new_dic:
