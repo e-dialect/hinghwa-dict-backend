@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 
-from website.views import evaluate, token_check, simpleUserInfo, filterInOrder
+from website.views import evaluate, token_check, simpleUserInfo, filterInOrder, sendNotification
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 
@@ -127,7 +127,10 @@ def manageArticle(request, id):
                     for key in body:
                         setattr(article, key, body[key])
                     article.update_time = timezone.now()
+                    article.visibility = False
                     article.save()
+                    content = f'我修改了文章(id={article.id}),请及时去审核'
+                    sendNotification(article.author, None, content)
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
