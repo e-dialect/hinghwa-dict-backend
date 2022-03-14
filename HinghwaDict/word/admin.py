@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ngettext
 
-from .models import Word, Character, Pronunciation
+from .models import Word, Character, Pronunciation, Application
 
 
 # Register your models here.
@@ -11,7 +11,7 @@ from .models import Word, Character, Pronunciation
 class WordAdmin(admin.ModelAdmin):
     list_display = ['id', 'word', 'contributor', 'views', 'visibility', 'standard_ipa', 'standard_pinyin']
     list_filter = ['contributor', 'visibility']
-    search_fields = ['word', 'definition', 'contributor__username']
+    search_fields = ['word', 'definition', 'contributor__username', 'id']
     ordering = ['id', '-views']
     list_editable = ['visibility']
     list_per_page = 50
@@ -50,7 +50,7 @@ class WordAdmin(admin.ModelAdmin):
 class CharacterAdmin(admin.ModelAdmin):
     list_display = ['id', 'pinyin', 'character', 'county', 'town']
     list_filter = ['county']
-    search_fields = ['character', 'pinyin', 'shengmu', 'yunmu', 'shengdiao']
+    search_fields = ['character', 'pinyin', 'shengmu', 'yunmu', 'shengdiao', 'id']
     ordering = ['id']
     list_per_page = 50
 
@@ -58,12 +58,11 @@ class CharacterAdmin(admin.ModelAdmin):
 class PronunciationAdmin(admin.ModelAdmin):
     list_display = ['id', 'word', 'pinyin', 'contributor', 'county', 'views', 'visibility']
     list_filter = ['contributor', 'visibility', 'county']
-    search_fields = ['word__word', 'contributor__username', 'pinyin']
+    search_fields = ['word__word', 'contributor__username', 'pinyin', 'id']
     ordering = ['id', '-views']
     list_editable = ['visibility']
-    raw_id_fields = ['word']
     list_per_page = 50
-    raw_id_fields = ("contributor","word")
+    raw_id_fields = ("contributor", "word")
 
     def pass_visibility(self, request, queryset):
         for article in queryset:
@@ -94,6 +93,17 @@ class PronunciationAdmin(admin.ModelAdmin):
     actions = ['pass_visibility', 'withdraw_visibility']
 
 
+class ApplicationAdmin(admin.ModelAdmin):
+    list_display = ['id', 'word', 'reason', 'contributor', 'granted', 'verifier']
+    list_filter = ['contributor', 'granted', 'verifier', 'word']
+    search_fields = ['word__word', 'content_word', 'contributor__username', 'id', 'definition']
+    ordering = ['id']
+    list_per_page = 50
+    filter_horizontal = ['related_words', 'related_articles']
+    raw_id_fields = ("contributor", 'verifier', 'word')
+
+
 admin.site.register(Word, WordAdmin)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(Pronunciation, PronunciationAdmin)
+admin.site.register(Application, ApplicationAdmin)

@@ -6,7 +6,7 @@ from .models import Article, Comment
 
 class ArticleAdmin(admin.ModelAdmin):
     list_display = ['id', 'author', 'title', 'publish_time', 'update_time', 'views', 'like', 'visibility']
-    search_fields = ['author__username', 'title', 'description']
+    search_fields = ['author__username', 'title', 'description', 'id']
     list_filter = ['author', 'publish_time']
     date_hierarchy = 'publish_time'
     ordering = ('id', 'author__id', '-publish_time', '-views', '-update_time')
@@ -47,10 +47,11 @@ class ArticleAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     list_display = ['id', 'user', 'article', 'time']
     list_filter = ['user', 'article']
-    search_fields = ['user__username', 'content', 'article__title']
+    search_fields = ['user__username', 'content', 'article__title', 'id']
     date_hierarchy = 'time'
     ordering = ['id', '-time']
     list_per_page = 50
+    raw_id_fields = ("parent", 'article', 'user')
 
 
 admin.site.register(Article, ArticleAdmin)

@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Word, Pronunciation, Character
+from .models import Word, Pronunciation, Character, Application
 
 
 class WordForm(forms.ModelForm):
@@ -23,3 +23,10 @@ class CharacterForm(forms.ModelForm):
         fields = ('pinyin', 'ipa', 'character',
                   'shengmu', 'yunmu', 'shengdiao',
                   'county', 'town')
+
+
+class ApplicationForm(forms.ModelForm):
+    class Meta:
+        model = Application
+        fields = ('reason', 'content_word', 'definition',
+                  'annotation', 'mandarin', 'standard_ipa', 'standard_pinyin')
