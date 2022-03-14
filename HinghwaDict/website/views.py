@@ -18,7 +18,6 @@ from django_apscheduler.jobstores import DjangoJobStore, register_job, register_
 from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
-
 from article.models import Article
 from word.models import Word, Character, Pronunciation
 from .forms import DailyExpressionForm
@@ -83,36 +82,43 @@ def token_check(token, key, id=0):
         return 0
 
 
-def compare(item, key):
+def compare(test, key):
     total = 0
     j = 0
     m = len(key)
-    for character in item:
+    hint = 0
+    for character in test:
         if character == key[j]:
             if j == m - 1:
                 j = 0
                 total += 1
+                hint += 1
             else:
                 j += 1
         elif j:
-            total += math.exp(j - m)
+            total += math.pow(10, j - m)
+            if j > m / 2:
+                hint += 1
             j = 1 if character == key[0] else 0
     if j:
-        total += math.exp(j - m)
-    return total
+        total += math.pow(10, j - m)
+        if j > m / 2:
+            hint += 1
+    return total + math.pow(10, hint - m)
 
 
 def ReLu(x: float):
     return x if x < 50 else (x - 50) * 0.01 + 50
 
 
-def evaluate(standard, key):
+def evaluate(standard, key, alpha=1):
     total = 0
     key = str(key).lower()
     for item, score in standard:
-        item = str(item).lower()
+        item = str(item).lower().replace(' ', '')
         if len(item) > 0:
-            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(1 + ReLu(len(item)))
+            total += (compare(item, key) + compare(item[::-1], key[::-1])) * score / math.log(
+                1 + alpha * ReLu(len(item)))
     return total
 
 
@@ -158,33 +164,47 @@ def email(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+def filterInOrder(objs, order) -> list:
+    '''
+    将id为order顺序排序objs,len(objs)<=len(order)
+    :param objs:待排序的数组
+    :param order:
+    :return:
+    '''
+    mapping = {}
+    num = 0
+    for id in order:
+        mapping[id] = num
+        num += 1
+    result = [0] * len(order)
+    for item in objs:
+        result[mapping[item.id]] = item
+    result1 = []
+    for item in result:
+        if item:
+            result1.append(item)
+    return result1
+
+
 @csrf_exempt
 def announcements(request):
     try:
         item = Website.objects.get(id=1)
         if request.method == 'GET':
             articles = eval(item.announcements) if item.announcements else []
-            articles = Article.objects.filter(id__in=articles)
-            announcements = [0] * len(articles)
-            a = {}
-            num = 0
-            for i in articles:
-                a[i.id] = num
-                num += 1
-            for article in articles:
-                announcements[a[article.id]] = {
+            result = Article.objects.filter(id__in=articles).filter(visibility=True)
+            result = filterInOrder(result, articles)
+            announcements = []
+            for article in result:
+                announcements.append({
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
-                                "cover": article.cover},
-                    'author': simpleUserInfo(article.author)}
-            result = []
-            for item in announcements:
-                if item:
-                    result.append(item)
-            return JsonResponse({"announcements": result}, status=200)
+                                "cover": article.cover, 'visibility': article.visibility},
+                    'author': simpleUserInfo(article.author)})
+            return JsonResponse({"announcements": announcements}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -207,27 +227,19 @@ def hot_articles(request):
         item = Website.objects.get(id=1)
         if request.method == 'GET':
             articles = eval(item.hot_articles) if item.hot_articles else []
-            articles = Article.objects.filter(id__in=articles)
-            hot_articles = [0] * len(articles)
-            a = {}
-            num = 0
-            for i in articles:
-                a[i.id] = num
-                num += 1
-            for article in articles:
-                hot_articles[a[article.id]] = {
+            result = Article.objects.filter(id__in=articles).filter(visibility=True)
+            result = filterInOrder(result, articles)
+            hot_articles = []
+            for article in result:
+                hot_articles.append({
                     'article': {"id": article.id, "likes": article.like_users.count(), 'author': article.author.id,
                                 "views": article.views,
                                 "publish_time": article.publish_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "update_time": article.update_time.__format__('%Y-%m-%d %H:%M:%S'),
                                 "title": article.title, "description": article.description, "content": article.content,
-                                "cover": article.cover},
-                    'author': simpleUserInfo(article.author)}
-            result = []
-            for item in hot_articles:
-                if item:
-                    result.append(item)
-            return JsonResponse({"hot_articles": result}, status=200)
+                                "cover": article.cover, 'visibility': article.visibility},
+                    'author': simpleUserInfo(article.author)})
+            return JsonResponse({"hot_articles": hot_articles}, status=200)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -318,7 +330,7 @@ def upload_file(path, key):
         LocalFilePath=path,
         Key=key
     )
-    return "https://{0}.cos.{1}.myqcloud.com/{2}".format(settings.COS_BUCKET, settings.COS_REGION, key)
+    return f"https://cos.edialect.top/{key}"
 
 
 def delete_file(key):
@@ -363,10 +375,10 @@ def files(request):
             elif request.method == 'DELETE':
                 body = demjson.decode(request.body)
                 try:
-                    suffix = body['url'].split('/', 3)[-1]
+                    suffix = body['url'].split('/', 4)[-1]
                     type = suffix.split('/', 2)[0]
                     id = suffix.split('/', 2)[1]
-                    if user.id == id or user.is_superuser():
+                    if user.id == eval(id) or user.is_superuser():
                         filename = suffix.split('/', 2)[2]
                         filename = '_'.join(filename.split('/'))
                         path = os.path.join(settings.MEDIA_ROOT, type, id, filename)
@@ -524,6 +536,9 @@ from notifications.models import Notification
 
 
 def sendNotification(sender, recipients, content, target=None, action_object=None, title=None):
+    '''
+    发送站内通知，recipients为列表，若为None表示向管理员发送通知
+    '''
     if recipients is None:
         transfer = User.objects.get(id=2)
         result = sendNotification(sender, [transfer], content, target, action_object, title)
@@ -634,4 +649,3 @@ def manageNotificationUnread(request):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
-

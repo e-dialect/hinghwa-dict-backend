@@ -9,7 +9,7 @@ from .models import Music
 class MusicAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'artist', 'contributor', 'like', 'visibility']
     list_filter = ['contributor', 'title', 'visibility']
-    search_fields = ['title', 'artist', 'contributor__username']
+    search_fields = ['title', 'artist', 'contributor__username', 'id']
     list_editable = ['visibility']
     ordering = ['id']
     filter_horizontal = ['like_users']
@@ -43,5 +43,6 @@ class MusicAdmin(admin.ModelAdmin):
     withdraw_visibility.short_description = "所选 音乐 不通过审核"
 
     actions = ['pass_visibility', 'withdraw_visibility']
+
 
 admin.site.register(Music, MusicAdmin)

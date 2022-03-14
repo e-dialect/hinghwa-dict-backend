@@ -8,9 +8,9 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from article.models import Article
-from website.views import evaluate, token_check, sendNotification, simpleUserInfo
-from .forms import WordForm, CharacterForm, PronunciationForm
-from .models import Word, Character, Pronunciation, User
+from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
+from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
+from .models import Word, Character, Pronunciation, User, Application
 
 
 @csrf_exempt
@@ -22,21 +22,32 @@ def searchWords(request):
                 words = words.filter(contributor=request.GET['contributor'])
             if 'search' in request.GET:
                 result = []
-                key = request.GET['search']
+                key = request.GET['search'].replace(' ', '')
+                if not key[0].isalnum():
+                    weights = [3.5, 2.5, 2, 1, 0.5, 0.5]
+                    alpha = 1
+                else:
+                    weights = [2, 1, 0.5, 0.5, 3, 3]
+                    alpha = 1
+                t = 0
                 for word in words:
-                    score = evaluate(
-                        [(word.word, 3), (word.definition, 2), (word.mandarin, 1.5), (word.annotation, 1)], key)
-                    result.append((word.id, score))
-                result.sort(key=lambda a: a[1], reverse=True)
-                words = []
-                for id, score in result:
+                    if word.id == 4707 or word.id == 4617:
+                        t = 1
+                    score = evaluate(list(zip([word.word, word.definition, word.mandarin,
+                                               word.annotation, word.standard_pinyin, word.standard_ipa], weights))
+                                     , key, alpha=alpha)
                     if score > 0:
-                        words.append(Word.objects.get(id=id))
-                    else:
-                        break
-
+                        result.append((word, score))
+                        t = max(t, score)
+                result.sort(key=lambda a: a[1], reverse=True)
+                if len(result) > 200:
+                    result = result[:200]
+                words = list(zip(*result))[0]
+            result = [{'id': word.id, 'word': word.word, 'definition': word.definition,
+                       'annotation': word.annotation, 'mandarin': eval(word.mandarin) if word.mandarin else [],
+                       'standard_ipa': word.standard_ipa, 'standard_pinyin': word.standard_pinyin} for word in words]
             words = [word.id for word in words]
-            return JsonResponse({"words": words}, status=200)
+            return JsonResponse({"result": result, "words": words}, status=200)
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -45,12 +56,12 @@ def searchWords(request):
                 body = body['word']
                 word_form = WordForm(body)
                 if word_form.is_valid() and isinstance(body['mandarin'], list):
-                    word = word_form.save(commit=False)
-                    word.contributor = user
                     for id in body['related_articles']:
                         Article.objects.get(id=id)
                     for id in body['related_words']:
                         Word.objects.get(id=id)
+                    word = word_form.save(commit=False)
+                    word.contributor = user
                     word.save()
                     for id in body['related_articles']:
                         article = Article.objects.get(id=id)
@@ -65,13 +76,9 @@ def searchWords(request):
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
-            words = [0] * len(body['words'])
+            words = []
             result = Word.objects.filter(id__in=body['words'])
-            a = {}
-            num = 0
-            for i in body['words']:
-                a[i] = num
-                num += 1
+            result = filterInOrder(result, body['words'])
             for word in result:
                 pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
                     .filter(visibility=True)
@@ -84,22 +91,18 @@ def searchWords(request):
                         pronunciation = pronunciations[0].source
                     else:
                         pronunciation = 'null'
-                words[a[word.id]] = {'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
-                                              "contributor": word.contributor.id, "annotation": word.annotation,
-                                              "standard_ipa": word.standard_ipa,
-                                              "standard_pinyin": word.standard_pinyin,
-                                              "mandarin": eval(word.mandarin) if word.mandarin else [],
-                                              "views": word.views},
-                                     'contributor': simpleUserInfo(word.contributor),
-                                     'pronunciation': {
-                                         'url': pronunciation,
-                                         'tts': 'null'
-                                     }}
-            result = []
-            for item in words:
-                if item:
-                    result.append(item)
-            return JsonResponse({"words": result}, status=200)
+                words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
+                                       "contributor": word.contributor.id, "annotation": word.annotation,
+                                       "standard_ipa": word.standard_ipa,
+                                       "standard_pinyin": word.standard_pinyin,
+                                       "mandarin": eval(word.mandarin) if word.mandarin else [],
+                                       "views": word.views},
+                              'contributor': simpleUserInfo(word.contributor),
+                              'pronunciation': {
+                                  'url': pronunciation,
+                                  'tts': 'null'
+                              }})
+            return JsonResponse({"words": words}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
@@ -210,23 +213,63 @@ def searchCharacters(request):
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             result = Character.objects.filter(id__in=body['characters'])
-            characters = [0] * len(body['characters'])
-            a = {}
-            num = 0
-            for i in body['characters']:
-                a[i] = num
-                num += 1
+            characters = []
+            result = filterInOrder(result, body['characters'])
             for character in result:
-                characters[a[character.id]] = {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                               'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                               'shengdiao': character.shengdiao,
-                                               'character': character.character, 'county': character.county,
-                                               'town': character.town}
-            result = []
+                characters.append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
+                                   'pinyin': character.pinyin, 'yunmu': character.yunmu,
+                                   'shengdiao': character.shengdiao,
+                                   'character': character.character, 'county': character.county,
+                                   'town': character.town})
+            return JsonResponse({"characters": characters}, status=200)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+def searchCharactersPinyin(request):
+    '''
+        其实就是seachCharacters方法的get接口不够用了，要增加多一个功能类似但是返回不同的
+    '''
+    try:
+        if request.method == 'GET':
+            characters = Character.objects.all()
+            if 'shengmu' in request.GET:
+                characters = characters.filter(shengmu=request.GET['shengmu'])
+            if 'yunmu' in request.GET:
+                characters = characters.filter(yunmu=request.GET['yunmu'])
+            if 'shengdiao' in request.GET:
+                characters = characters.filter(shengdiao=request.GET['shengdiao'])
+            result = {}
             for item in characters:
-                if item:
-                    result.append(item)
-            return JsonResponse({"characters": result}, status=200)
+                if ((item.pinyin, item.character) not in result) or \
+                        (item.town == '城里' and item.county == '莆田'):
+                    result[(item.pinyin, item.character)] = item
+            result1 = {}
+            words_dict = {}
+            pronunciations_dict = {}
+            for item in Word.objects.filter(visibility=True):
+                if item.standard_pinyin not in words_dict:
+                    words_dict[item.standard_pinyin] = []
+                words_dict[item.standard_pinyin].append(item)
+            for item in Pronunciation.objects.filter(visibility=True):
+                if item.pinyin not in pronunciations_dict:
+                    pronunciations_dict[item.pinyin] = []
+                pronunciations_dict[item.pinyin].append(item)
+            t = 0
+            for (pinyin, character), item in result.items():
+                if pinyin not in result1:
+                    pronunciation = pronunciations_dict[pinyin][0].source if pinyin in pronunciations_dict else None
+                    result1[pinyin] = {'pinyin': pinyin, 'source': pronunciation, "characters": []}
+                word = None
+                if pinyin in words_dict:
+                    for item in words_dict[pinyin]:
+                        if item.word == character:
+                            word = item.id
+                            break
+                result1[pinyin]['characters'].append({'character': character, 'word': word})
+            return JsonResponse({"result": list(result1.values())}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:
@@ -248,7 +291,7 @@ def searchEach(request):
                                                  'shengdiao': character.shengdiao, 'character': character.character,
                                                  'county': character.county, 'town': character.town})
             ans = []
-            for character in search:
+            for character in dic.keys():
                 ans.append({'label': character, 'characters': dic[character]})
             return JsonResponse({'characters': ans}, status=200)
     except Exception as e:
@@ -265,8 +308,7 @@ def searchEachV2(request):
             for character in search:
                 dic[character] = []
             for character in result:
-                word = Word.objects.filter(standard_pinyin=character.pinyin) & \
-                       Word.objects.filter(word=character.character)
+                word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
                 if word.exists():
                     word = word[0]
                     pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
@@ -279,18 +321,18 @@ def searchEachV2(request):
                         if pronunciations.exists():
                             source = pronunciations[0].source
                         else:
-                            source = 'null'
+                            source = None
                     word = word.id
                 else:
-                    word = 'null'
-                    source = 'null'
+                    word = None
+                    source = None
                 dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
                                                  'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                                  'shengdiao': character.shengdiao, 'character': character.character,
                                                  'county': character.county, 'town': character.town,
                                                  'word': word, 'source': source})
             ans = []
-            for character in search:
+            for character in dic.keys():
                 new_dic = {}
                 for item in dic[character]:
                     if (item['county'], item['town']) not in new_dic:
@@ -496,10 +538,10 @@ def load_character(request):
         body = demjson.decode(request.body)
         file = body['file']
         sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
-        line = sheet.nrows
+        lines = sheet.nrows
         col = sheet.ncols
         title = sheet.row(0)
-        for line in range(1, line):
+        for line in range(1, lines):
             info = sheet.row(line)
             dic = {}
             for i in range(col):
@@ -511,7 +553,7 @@ def load_character(request):
                     print('load character {}'.format(character.id))
             else:
                 raise Exception('add fail in {}'.format(dic))
-            return JsonResponse({}, status=200)
+        return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -660,5 +702,162 @@ def managePronunciationVisibility(request, id):
                 return JsonResponse({}, status=401)
         else:
             return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def searchApplication(request):
+    try:
+        if request.method == 'GET':
+            token = request.headers['token']
+            user = token_check(token, '***REMOVED***', -1)
+            if user:
+                applications = Application.objects.filter(granted=False)
+                result = []
+                for application in applications:
+                    related_words = [word.id for word in application.related_words.all()]
+                    related_articles = [article.id for article in application.related_articles.all()]
+                    result.append({
+                        'content': {
+                            'word': application.content_word,
+                            'definition': application.definition,
+                            "annotation": application.annotation,
+                            "standard_ipa": application.standard_ipa,
+                            "standard_pinyin": application.standard_pinyin,
+                            "mandarin": eval(application.mandarin) if application.mandarin else [],
+                            "related_words": related_words, "related_articles": related_articles,
+                        },
+                        'word': application.word.id,
+                        'reason': application.reason,
+                        'application': application.id,
+                        'contributor': {
+                            'nickname': application.contributor.user_info.nickname,
+                            'avatar': application.contributor.user_info.avatar,
+                            'id': application.contributor.id
+                        },
+                        "granted": application.granted,
+                        "verifier": {
+                            'nickname': application.verifier.user_info.nickname,
+                            'avatar': application.verifier.user_info.avatar,
+                            'id': application.verifier.id
+                        } if application.verifier else None,
+                    })
+                return JsonResponse({'applications': result}, status=200)
+            else:
+                return JsonResponse({}, status=401)
+        elif request.method == 'POST':
+            token = request.headers['token']
+            user = token_check(token, '***REMOVED***')
+            if user:
+                body = demjson.decode(request.body)
+                if 'word' in body['content']:
+                    body['content_word'] = body['content']['word']
+                    body['content'].pop('word')
+                body.update(body['content'])
+                application_form = ApplicationForm(body)
+                word = Word.objects.filter(id=body['word'])
+                if word.exists() and application_form.is_valid() and isinstance(body['mandarin'], list):
+                    for id in body['related_articles']:
+                        Article.objects.get(id=id)
+                    for id in body['related_words']:
+                        Word.objects.get(id=id)
+                    word = word[0]
+                    application = application_form.save(commit=False)
+                    application.contributor = user
+                    application.word = word
+                    application.save()
+                    for id in body['related_articles']:
+                        article = Article.objects.get(id=id)
+                        application.related_articles.add(article)
+                    for id in body['related_words']:
+                        wordx = Word.objects.get(id=id)
+                        application.related_words.add(wordx)
+                    return JsonResponse({'id': application.id}, status=200)
+                else:
+                    return JsonResponse({}, status=400)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+@csrf_exempt
+def manageApplication(request, id):
+    try:
+        application = Application.objects.filter(id=id)
+        if application.exists():
+            application = application[0]
+            if request.method == 'GET':
+                token = request.headers['token']
+                user = token_check(token, '***REMOVED***', application.contributor.id)
+                if user:
+                    related_words = [word.id for word in application.related_words.all()]
+                    related_articles = [article.id for article in application.related_articles.all()]
+                    result = {
+                        'content': {
+                            'word': application.content_word,
+                            'definition': application.definition,
+                            "annotation": application.annotation,
+                            "standard_ipa": application.standard_ipa,
+                            "standard_pinyin": application.standard_pinyin,
+                            "mandarin": eval(application.mandarin) if application.mandarin else [],
+                            "related_words": related_words, "related_articles": related_articles,
+                        },
+                        'word': application.word.id,
+                        'reason': application.reason,
+                        'application': application.id,
+                        'contributor': {
+                            'nickname': application.contributor.user_info.nickname,
+                            'avatar': application.contributor.user_info.avatar,
+                            'id': application.contributor.id
+                        },
+                        "granted": application.granted,
+                        "verifier": {
+                            'nickname': application.verifier.user_info.nickname,
+                            'avatar': application.verifier.user_info.avatar,
+                            'id': application.verifier.id
+                        } if application.verifier else None,
+                    }
+                    return JsonResponse({'application': result}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            elif request.method == 'PUT':
+                token = request.headers['token']
+                user = token_check(token, '***REMOVED***', -1)
+                if user:
+                    body = demjson.decode(request.body)
+                    application.granted = body['result']
+                    application.verifier = user
+                    application.save()
+                    if body['result']:
+                        word = application.word
+                        attributes = ['definition', 'annotation', 'standard_ipa', 'standard_pinyin',
+                                      'mandarin']
+                        for attribute in attributes:
+                            value = getattr(application, attribute)
+                            setattr(word, attribute, value)
+                        word.word = application.content_word
+                        word.related_articles.clear()
+                        for related_article in application.related_articles.all():
+                            word.related_articles.add(related_article)
+                        word.related_words.clear()
+                        for related_word in application.related_words.all():
+                            word.related_words.add(related_word)
+                        word.save()
+                    content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
+                              f'审核结果为：{"success" if body["result"] else "fail"}，理由是:\n\t{body["reason"]}'
+                    sendNotification(user, [application.contributor], content, target=application)
+
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=401)
+            else:
+                return JsonResponse({}, status=405)
+        else:
+            return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
