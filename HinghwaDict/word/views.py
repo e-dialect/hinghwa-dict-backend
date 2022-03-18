@@ -11,6 +11,7 @@ from article.models import Article
 from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
 from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
 from .models import Word, Character, Pronunciation, User, Application
+from django.db.models import Q
 
 
 @csrf_exempt
@@ -590,13 +591,18 @@ def load_word(request):
 @csrf_exempt
 def record(request):
     if request.method == 'GET':
-        words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
-                  'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
-                 for word in Word.objects.all() if word.standard_ipa and word.standard_pinyin]
+        words = Word.objects.filter(
+            Q(standard_ipa__isnull=False) &
+            Q(standard_pinyin__isnull=False)
+        )
         pageSize = int(request.GET['pageSize']) if 'pageSize' in request.GET else 15
-        page = int(request.GET['page']) if 'page' in request.GET else 15
+        page = int(request.GET['page']) if 'page' in request.GET else 1
         r = min(len(words), page * pageSize)
         l = min(len(words) + 1, (page - 1) * pageSize)
+        words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
+                  'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
+                 for word in words[l:r]]
+
         words = words
         return JsonResponse({
             'records': words[l:r],
