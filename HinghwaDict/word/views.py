@@ -30,16 +30,14 @@ def searchWords(request):
                 else:
                     weights = [2, 1, 0.5, 0.5, 3, 3]
                     alpha = 1
-                t = 0
                 for word in words:
-                    if word.id == 4707 or word.id == 4617:
+                    if word.id == 4086:
                         t = 1
                     score = evaluate(list(zip([word.word, word.definition, word.mandarin,
                                                word.annotation, word.standard_pinyin, word.standard_ipa], weights))
                                      , key, alpha=alpha)
                     if score > 0:
                         result.append((word, score))
-                        t = max(t, score)
                 result.sort(key=lambda a: a[1], reverse=True)
                 if len(result) > 200:
                     result = result[:200]
