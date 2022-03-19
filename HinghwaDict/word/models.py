@@ -39,7 +39,8 @@ class Word(models.Model):
 
 
 class Application(models.Model):
-    word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="applications", verbose_name="关联词条")
+    word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="applications",
+                             verbose_name="关联词条", blank=True, null=True)
     reason = models.CharField(max_length=200, blank=True, verbose_name='理由')
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications", verbose_name="贡献者")
     # 是是否审核的意思，可能审核了但是不通过，此时granted也是True

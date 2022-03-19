@@ -732,7 +732,7 @@ def searchApplication(request):
                             "mandarin": eval(application.mandarin) if application.mandarin else [],
                             "related_words": related_words, "related_articles": related_articles,
                         },
-                        'word': application.word.id,
+                        'word': application.word.id if application.word else 0,
                         'reason': application.reason,
                         'application': application.id,
                         'contributor': {
@@ -761,25 +761,29 @@ def searchApplication(request):
                 body.update(body['content'])
                 application_form = ApplicationForm(body)
                 word = Word.objects.filter(id=body['word'])
-                if word.exists() and application_form.is_valid() and isinstance(body['mandarin'], list):
-                    for id in body['related_articles']:
-                        Article.objects.get(id=id)
-                    for id in body['related_words']:
-                        Word.objects.get(id=id)
-                    word = word[0]
-                    application = application_form.save(commit=False)
-                    application.contributor = user
-                    application.word = word
-                    application.save()
-                    for id in body['related_articles']:
-                        article = Article.objects.get(id=id)
-                        application.related_articles.add(article)
-                    for id in body['related_words']:
-                        wordx = Word.objects.get(id=id)
-                        application.related_words.add(wordx)
-                    return JsonResponse({'id': application.id}, status=200)
+                if word.exists() or ~body['word']:
+                    if application_form.is_valid() and isinstance(body['mandarin'], list):
+                        for id in body['related_articles']:
+                            Article.objects.get(id=id)
+                        for id in body['related_words']:
+                            Word.objects.get(id=id)
+                        application = application_form.save(commit=False)
+                        application.contributor = user
+                        if word.exists():
+                            word = word[0]
+                            application.word = word
+                        application.save()
+                        for id in body['related_articles']:
+                            article = Article.objects.get(id=id)
+                            application.related_articles.add(article)
+                        for id in body['related_words']:
+                            wordx = Word.objects.get(id=id)
+                            application.related_words.add(wordx)
+                        return JsonResponse({'id': application.id}, status=200)
+                    else:
+                        return JsonResponse({}, status=400)
                 else:
-                    return JsonResponse({}, status=400)
+                    return JsonResponse({}, status=404)
             else:
                 return JsonResponse({}, status=401)
         else:
@@ -811,7 +815,7 @@ def manageApplication(request, id):
                             "mandarin": eval(application.mandarin) if application.mandarin else [],
                             "related_words": related_words, "related_articles": related_articles,
                         },
-                        'word': application.word.id,
+                        'word': application.word.id if application.word else 0,
                         'reason': application.reason,
                         'application': application.id,
                         'contributor': {
@@ -838,7 +842,12 @@ def manageApplication(request, id):
                     application.verifier = user
                     application.save()
                     if body['result']:
-                        word = application.word
+                        if application.word:
+                            word = application.word
+                        else:
+                            word = Word.objects.create(contributor=application.contributor, visibility=True)
+                            application.word = word
+                            application.save()
                         attributes = ['definition', 'annotation', 'standard_ipa', 'standard_pinyin',
                                       'mandarin']
                         for attribute in attributes:
