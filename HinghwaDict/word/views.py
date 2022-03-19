@@ -11,6 +11,7 @@ from article.models import Article
 from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
 from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
 from .models import Word, Character, Pronunciation, User, Application
+from django.db.models import Q
 
 
 @csrf_exempt
@@ -29,16 +30,14 @@ def searchWords(request):
                 else:
                     weights = [2, 1, 0.5, 0.5, 3, 3]
                     alpha = 1
-                t = 0
                 for word in words:
-                    if word.id == 4707 or word.id == 4617:
+                    if word.id == 4086:
                         t = 1
                     score = evaluate(list(zip([word.word, word.definition, word.mandarin,
                                                word.annotation, word.standard_pinyin, word.standard_ipa], weights))
                                      , key, alpha=alpha)
                     if score > 0:
                         result.append((word, score))
-                        t = max(t, score)
                 result.sort(key=lambda a: a[1], reverse=True)
                 if len(result) > 200:
                     result = result[:200]
@@ -590,13 +589,18 @@ def load_word(request):
 @csrf_exempt
 def record(request):
     if request.method == 'GET':
-        words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
-                  'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
-                 for word in Word.objects.all() if word.standard_ipa and word.standard_pinyin]
+        words = Word.objects.filter(
+            Q(standard_ipa__isnull=False) &
+            Q(standard_pinyin__isnull=False)
+        )
         pageSize = int(request.GET['pageSize']) if 'pageSize' in request.GET else 15
-        page = int(request.GET['page']) if 'page' in request.GET else 15
+        page = int(request.GET['page']) if 'page' in request.GET else 1
         r = min(len(words), page * pageSize)
         l = min(len(words) + 1, (page - 1) * pageSize)
+        words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
+                  'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
+                 for word in words[l:r]]
+
         words = words
         return JsonResponse({
             'records': words[l:r],
