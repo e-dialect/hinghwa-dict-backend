@@ -42,12 +42,13 @@ class Application(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="applications", verbose_name="关联词条")
     reason = models.CharField(max_length=200, blank=True, verbose_name='理由')
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications", verbose_name="贡献者")
+    # 是是否审核的意思，可能审核了但是不通过，此时granted也是True
     granted = models.BooleanField(default=False, verbose_name="是否审核", editable=False)
     verifier = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verified_applications", blank=True,
                                  null=True, verbose_name="审核人", editable=False)
     # 修改内容
     content_word = models.CharField(max_length=60, verbose_name="词", blank=True)
-    definition = models.TextField(verbose_name="注释",blank=True)
+    definition = models.TextField(verbose_name="注释", blank=True)
     annotation = models.TextField(verbose_name="附注", blank=True)
     mandarin = models.TextField(verbose_name="对应普通话词语", blank=True, default='[]')
     standard_ipa = models.CharField(max_length=30, verbose_name='标准IPA', blank=True)

@@ -834,7 +834,7 @@ def manageApplication(request, id):
                 user = token_check(token, 'dxw', -1)
                 if user:
                     body = demjson.decode(request.body)
-                    application.granted = body['result']
+                    application.granted = True
                     application.verifier = user
                     application.save()
                     if body['result']:
