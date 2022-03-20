@@ -766,7 +766,7 @@ def searchApplication(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***')
+            user = token_check(token, '***REMOVED***', -1)
             if user:
                 body = demjson.decode(request.body)
                 if 'word' in body['content']:
@@ -859,14 +859,18 @@ def manageApplication(request, id):
                     body = demjson.decode(request.body)
                     application.granted = True
                     application.verifier = user
-                    application.save()
                     if body['result']:
                         if application.word:
                             word = application.word
+                            content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})已通过' \
+                                      f'，感谢您为社区所做的贡献！'
+                            title = '【通知】词条修改申请审核结果'
                         else:
                             word = Word.objects.create(contributor=application.contributor, visibility=True)
                             application.word = word
-                            application.save()
+                            content = f'您的创建申请 (id = {application.id})已通过，' \
+                                      f'已创建词条(id = {word.id})，感谢您为社区所做的贡献！'
+                            title = '【通知】词条创建申请审核结果'
                         attributes = ['definition', 'annotation', 'standard_ipa', 'standard_pinyin',
                                       'mandarin']
                         for attribute in attributes:
@@ -880,10 +884,12 @@ def manageApplication(request, id):
                         for related_word in application.related_words.all():
                             word.related_words.add(related_word)
                         word.save()
-                    content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
-                              f'审核结果为：{"success" if body["result"] else "fail"}，理由是:\n\t{body["reason"]}'
-                    sendNotification(user, [application.contributor], content, target=application)
-
+                    else:
+                        content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
+                                  f'未能通过审核，理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
+                        title = '【通知】词条修改申请审核结果'
+                    sendNotification(user, [application.contributor], content, target=application, title=title)
+                    application.save()
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)

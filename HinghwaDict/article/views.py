@@ -130,7 +130,7 @@ def manageArticle(request, id):
                     article.visibility = False
                     article.save()
                     content = f'我修改了文章(id={article.id}),请及时去审核'
-                    sendNotification(article.author, None, content)
+                    sendNotification(article.author, None, content,title='【提醒】文章待审核')
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
