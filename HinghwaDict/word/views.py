@@ -153,11 +153,15 @@ def manageWord(request, id):
                         if key != 'related_words' and key != 'related_articles':
                             setattr(word, key, body[key])
                         elif key == 'related_words':
+                            for id in body['related_words']:
+                                Word.objects.get(id=id)
                             word.related_words.clear()
                             for id in body['related_words']:
                                 wordx = Word.objects.get(id=id)
                                 word.related_words.add(wordx)
                         elif key == 'related_articles':
+                            for id in body['related_articles']:
+                                Article.objects.get(id=id)
                             word.related_articles.clear()
                             for id in body['related_articles']:
                                 article = Article.objects.get(id=id)
