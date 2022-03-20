@@ -50,7 +50,7 @@ def searchWords(request):
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
-            user = token_check(token, 'dxw')
+            user = token_check(token, 'dxw', -1)
             if user:
                 body = body['word']
                 word_form = WordForm(body)
@@ -61,6 +61,7 @@ def searchWords(request):
                         Word.objects.get(id=id)
                     word = word_form.save(commit=False)
                     word.contributor = user
+                    word.visibility = True
                     word.save()
                     for id in body['related_articles']:
                         article = Article.objects.get(id=id)
