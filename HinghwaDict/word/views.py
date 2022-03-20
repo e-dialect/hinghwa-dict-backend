@@ -601,19 +601,19 @@ def record(request):
     if request.method == 'GET':
         words = Word.objects.filter(
             Q(standard_ipa__isnull=False) &
-            Q(standard_pinyin__isnull=False)
+            Q(standard_pinyin__isnull=False) &
+            Q(visibility=True)
         )
         pageSize = int(request.GET['pageSize']) if 'pageSize' in request.GET else 15
         page = int(request.GET['page']) if 'page' in request.GET else 1
         r = min(len(words), page * pageSize)
         l = min(len(words) + 1, (page - 1) * pageSize)
-        words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
-                  'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
-                 for word in words[l:r]]
+        result = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
+                   'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
+                  for word in words[l:r]]
 
-        words = words
         return JsonResponse({
-            'records': words[l:r],
+            'records': result,
             "total": {
                 "item": len(words),
                 "page": (len(words) - 1) // pageSize + 1
