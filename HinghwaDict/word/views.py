@@ -50,7 +50,7 @@ def searchWords(request):
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***')
+            user = token_check(token, '***REMOVED***', -1)
             if user:
                 body = body['word']
                 word_form = WordForm(body)
@@ -61,6 +61,7 @@ def searchWords(request):
                         Word.objects.get(id=id)
                     word = word_form.save(commit=False)
                     word.contributor = user
+                    word.visibility = True
                     word.save()
                     for id in body['related_articles']:
                         article = Article.objects.get(id=id)
@@ -115,11 +116,14 @@ def manageWord(request, id):
         if word.exists():
             word = word[0]
             if request.method == 'GET':
-                related_words = [word.id for word in word.related_words.all()]
-                related_articles = [article.id for article in word.related_articles.all()]
+                related_words = [{"id": word.id, 'word': word.word} for word in word.related_words.all()]
+                related_articles = [{"id": article.id, 'title': article.title}
+                                    for article in word.related_articles.all()]
                 word.views = word.views + 1
                 word.save()
                 user = word.contributor
+                source = Pronunciation.objects.filter(ipa=word.standard_ipa).filter(visibility=True)
+                source = source[0].source if source.exists() else None
                 return JsonResponse({"word": {"id": word.id, 'word': word.word, 'definition': word.definition,
                                               "contributor": {"id": user.id, 'username': user.username,
                                                               'nickname': user.user_info.nickname,
@@ -139,7 +143,8 @@ def manageWord(request, id):
                                               "standard_pinyin": word.standard_pinyin,
                                               "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "related_words": related_words, "related_articles": related_articles,
-                                              "views": word.views}}, status=200)
+                                              "views": word.views,
+                                              'source': source}}, status=200)
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
@@ -153,11 +158,15 @@ def manageWord(request, id):
                         if key != 'related_words' and key != 'related_articles':
                             setattr(word, key, body[key])
                         elif key == 'related_words':
+                            for id in body['related_words']:
+                                Word.objects.get(id=id)
                             word.related_words.clear()
                             for id in body['related_words']:
                                 wordx = Word.objects.get(id=id)
                                 word.related_words.add(wordx)
                         elif key == 'related_articles':
+                            for id in body['related_articles']:
+                                Article.objects.get(id=id)
                             word.related_articles.clear()
                             for id in body['related_articles']:
                                 article = Article.objects.get(id=id)
@@ -219,7 +228,7 @@ def searchCharacters(request):
                                    'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                    'shengdiao': character.shengdiao,
                                    'character': character.character, 'county': character.county,
-                                   'town': character.town})
+                                   'town': character.town, 'traditional': character.traditional})
             return JsonResponse({"characters": characters}, status=200)
         else:
             return JsonResponse({}, status=405)
@@ -288,7 +297,8 @@ def searchEach(request):
                 dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
                                                  'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                                  'shengdiao': character.shengdiao, 'character': character.character,
-                                                 'county': character.county, 'town': character.town})
+                                                 'county': character.county, 'town': character.town,
+                                                 'traditional': character.traditional})
             ans = []
             for character in dic.keys():
                 ans.append({'label': character, 'characters': dic[character]})
@@ -302,46 +312,42 @@ def searchEachV2(request):
     try:
         if request.method == 'GET':
             search = request.GET['search']
-            result = Character.objects.filter(character__in=search)
+            result = Character.objects.filter(Q(character__in=search)
+                                              | Q(traditional__in=search))
             dic = {}
-            for character in search:
-                dic[character] = []
+            scores = {}
+            for idx, character in enumerate(search):
+                scores[character] = idx * 10
             for character in result:
                 word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
-                if word.exists():
-                    word = word[0]
-                    pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
-                        .filter(visibility=True)
-                    if pronunciations.exists():
-                        source = pronunciations[0].source
-                    else:
-                        pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
-                            .filter(visibility=True)
-                        if pronunciations.exists():
-                            source = pronunciations[0].source
-                        else:
-                            source = None
-                    word = word.id
-                else:
-                    word = None
-                    source = None
-                dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                                 'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                                 'shengdiao': character.shengdiao, 'character': character.character,
-                                                 'county': character.county, 'town': character.town,
-                                                 'word': word, 'source': source})
+                word = word[0].id if word.exists() else None
+                source = Pronunciation.objects.filter(pinyin=character.pinyin)
+                source = source[0].source if source.exists() else None
+                if character.character not in scores:
+                    scores[character.character] = 1000
+                if character.traditional not in scores:
+                    scores[character.traditional] = 1000
+                score = scores[character.character] + scores[character.traditional]
+                if (character.character, character.traditional) not in dic:
+                    dic[(score, character.character, character.traditional)] = []
+                dic[(score, character.character, character.traditional)].append(
+                    {"id": character.id, 'pinyin': character.pinyin, 'ipa': character.ipa,
+                     'shengmu': character.shengmu, 'yunmu': character.yunmu, 'shengdiao': character.shengdiao,
+                     'character': character.character, 'traditional': character.traditional,
+                     'county': character.county, 'town': character.town,
+                     'word': word, 'source': source})
             ans = []
-            for character in dic.keys():
+            dict_list = sorted(dic.keys())
+            for score, character, traditional in dict_list:
                 new_dic = {}
-                for item in dic[character]:
+                for item in dic[(score, character, traditional)]:
                     if (item['county'], item['town']) not in new_dic:
-                        new_dic[(item['county'], item['town'])] = [item]
-                    else:
-                        new_dic[(item['county'], item['town'])].append(item)
+                        new_dic[(item['county'], item['town'])] = []
+                    new_dic[(item['county'], item['town'])].append(item)
                 result = []
                 for (county, town), value in new_dic.items():
                     result.append({'county': county, 'town': town, 'characters': value})
-                ans.append({'label': character, 'characters': result})
+                ans.append({'label': character, 'traditional': traditional, 'characters': result})
             return JsonResponse({'characters': ans}, status=200)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
@@ -359,7 +365,7 @@ def manageCharacter(request, id):
                                    'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                    'shengdiao': character.shengdiao,
                                    'character': character.character, 'county': character.county,
-                                   'town': character.town}}, status=200)
+                                   'town': character.town, 'traditional': character.traditional}}, status=200)
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
@@ -517,7 +523,8 @@ def managePronunciation(request, id):
                         body = demjson.decode(request.body)
                         message = body["message"] if "message" in body else "管理员操作"
                         content = f'您的语音(id = {pronunciation.id}) 已被删除，理由是：\n\t{message}'
-                        sendNotification(user, [pronunciation.contributor], content, target=pronunciation)
+                        sendNotification(None, [pronunciation.contributor], content, target=pronunciation,
+                                         title='【通知】语音处理结果')
                     pronunciation.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -535,24 +542,32 @@ def managePronunciation(request, id):
 def load_character(request):
     try:
         body = demjson.decode(request.body)
-        file = body['file']
-        sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
-        lines = sheet.nrows
-        col = sheet.ncols
-        title = sheet.row(0)
-        for line in range(1, lines):
-            info = sheet.row(line)
-            dic = {}
-            for i in range(col):
-                dic[title[i].value] = info[i].value
-            character_form = CharacterForm(dic)
-            if character_form.is_valid():
-                character = character_form.save(commit=True)
-                if character.id % 100 == 0:
-                    print('load character {}'.format(character.id))
-            else:
-                raise Exception('add fail in {}'.format(dic))
-        return JsonResponse({}, status=200)
+        token = request.headers['token']
+        user = token_check(token, '***REMOVED***', -1)
+        if user:
+            file = body['file']
+            flush = body['flush']
+            if flush:
+                Character.objects.all().delete()
+            sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
+            lines = sheet.nrows
+            col = sheet.ncols
+            title = sheet.row(0)
+            for line in range(1, lines):
+                info = sheet.row(line)
+                dic = {}
+                for i in range(col):
+                    dic[title[i].value] = info[i].value
+                character_form = CharacterForm(dic)
+                if character_form.is_valid():
+                    character = character_form.save(commit=True)
+                    if character.id % 100 == 0:
+                        print('load character {}'.format(character.id))
+                else:
+                    raise Exception('add fail in {}'.format(dic))
+            return JsonResponse({}, status=200)
+        else:
+            return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -591,19 +606,19 @@ def record(request):
     if request.method == 'GET':
         words = Word.objects.filter(
             Q(standard_ipa__isnull=False) &
-            Q(standard_pinyin__isnull=False)
+            Q(standard_pinyin__isnull=False) &
+            Q(visibility=True)
         )
         pageSize = int(request.GET['pageSize']) if 'pageSize' in request.GET else 15
         page = int(request.GET['page']) if 'page' in request.GET else 1
         r = min(len(words), page * pageSize)
         l = min(len(words) + 1, (page - 1) * pageSize)
-        words = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
-                  'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
-                 for word in words[l:r]]
+        result = [{'word': word.id, 'ipa': word.standard_ipa, 'pinyin': word.standard_pinyin,
+                   'count': word.pronunciation.count(), 'item': word.word, 'definition': word.definition}
+                  for word in words[l:r]]
 
-        words = words
         return JsonResponse({
-            'records': words[l:r],
+            'records': result,
             "total": {
                 "item": len(words),
                 "page": (len(words) - 1) // pageSize + 1
@@ -697,7 +712,7 @@ def managePronunciationVisibility(request, id):
                         body = demjson.decode(request.body) if len(request.body) else {}
                         msg = body['message'] if 'message' in body else '管理员审核不通过'
                         content = f'您的语音(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
-                    sendNotification(user, [pro.contributor], content=content, target=pro)
+                    sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
                     pro.save()
                     return JsonResponse({}, status=200)
                 else:
@@ -732,7 +747,7 @@ def searchApplication(request):
                             "mandarin": eval(application.mandarin) if application.mandarin else [],
                             "related_words": related_words, "related_articles": related_articles,
                         },
-                        'word': application.word.id,
+                        'word': application.word.id if application.word else 0,
                         'reason': application.reason,
                         'application': application.id,
                         'contributor': {
@@ -752,7 +767,7 @@ def searchApplication(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***')
+            user = token_check(token, '***REMOVED***', -1)
             if user:
                 body = demjson.decode(request.body)
                 if 'word' in body['content']:
@@ -761,25 +776,29 @@ def searchApplication(request):
                 body.update(body['content'])
                 application_form = ApplicationForm(body)
                 word = Word.objects.filter(id=body['word'])
-                if word.exists() and application_form.is_valid() and isinstance(body['mandarin'], list):
-                    for id in body['related_articles']:
-                        Article.objects.get(id=id)
-                    for id in body['related_words']:
-                        Word.objects.get(id=id)
-                    word = word[0]
-                    application = application_form.save(commit=False)
-                    application.contributor = user
-                    application.word = word
-                    application.save()
-                    for id in body['related_articles']:
-                        article = Article.objects.get(id=id)
-                        application.related_articles.add(article)
-                    for id in body['related_words']:
-                        wordx = Word.objects.get(id=id)
-                        application.related_words.add(wordx)
-                    return JsonResponse({'id': application.id}, status=200)
+                if word.exists() or ~body['word']:
+                    if application_form.is_valid() and isinstance(body['mandarin'], list):
+                        for id in body['related_articles']:
+                            Article.objects.get(id=id)
+                        for id in body['related_words']:
+                            Word.objects.get(id=id)
+                        application = application_form.save(commit=False)
+                        application.contributor = user
+                        if word.exists():
+                            word = word[0]
+                            application.word = word
+                        application.save()
+                        for id in body['related_articles']:
+                            article = Article.objects.get(id=id)
+                            application.related_articles.add(article)
+                        for id in body['related_words']:
+                            wordx = Word.objects.get(id=id)
+                            application.related_words.add(wordx)
+                        return JsonResponse({'id': application.id}, status=200)
+                    else:
+                        return JsonResponse({}, status=400)
                 else:
-                    return JsonResponse({}, status=400)
+                    return JsonResponse({}, status=404)
             else:
                 return JsonResponse({}, status=401)
         else:
@@ -811,7 +830,7 @@ def manageApplication(request, id):
                             "mandarin": eval(application.mandarin) if application.mandarin else [],
                             "related_words": related_words, "related_articles": related_articles,
                         },
-                        'word': application.word.id,
+                        'word': application.word.id if application.word else 0,
                         'reason': application.reason,
                         'application': application.id,
                         'contributor': {
@@ -834,11 +853,20 @@ def manageApplication(request, id):
                 user = token_check(token, '***REMOVED***', -1)
                 if user:
                     body = demjson.decode(request.body)
-                    application.granted = body['result']
+                    application.granted = True
                     application.verifier = user
-                    application.save()
                     if body['result']:
-                        word = application.word
+                        if application.word:
+                            word = application.word
+                            content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})已通过' \
+                                      f'，感谢您为社区所做的贡献！'
+                            title = '【通知】词条修改申请审核结果'
+                        else:
+                            word = Word.objects.create(contributor=application.contributor, visibility=True)
+                            application.word = word
+                            content = f'您的创建申请 (id = {application.id})已通过，' \
+                                      f'已创建词条(id = {word.id})，感谢您为社区所做的贡献！'
+                            title = '【通知】词条创建申请审核结果'
                         attributes = ['definition', 'annotation', 'standard_ipa', 'standard_pinyin',
                                       'mandarin']
                         for attribute in attributes:
@@ -852,10 +880,12 @@ def manageApplication(request, id):
                         for related_word in application.related_words.all():
                             word.related_words.add(related_word)
                         word.save()
-                    content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
-                              f'审核结果为：{"success" if body["result"] else "fail"}，理由是:\n\t{body["reason"]}'
-                    sendNotification(user, [application.contributor], content, target=application)
-
+                    else:
+                        content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
+                                  f'未能通过审核，理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
+                        title = '【通知】词条修改申请审核结果'
+                    sendNotification(None, [application.contributor], content, target=application, title=title)
+                    application.save()
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)

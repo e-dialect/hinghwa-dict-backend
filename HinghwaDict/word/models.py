@@ -24,6 +24,8 @@ class Word(models.Model):
         self.word = self.word.strip()
         self.definition = self.definition.strip()
         self.annotation = self.annotation.strip()
+        if ~isinstance(self.mandarin, str):
+            self.mandarin = str(self.mandarin)
         self.mandarin = self.mandarin.strip()
         self.standard_ipa = self.standard_ipa.strip()
         self.standard_pinyin = self.standard_pinyin.strip()
@@ -39,15 +41,17 @@ class Word(models.Model):
 
 
 class Application(models.Model):
-    word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="applications", verbose_name="关联词条")
+    word = models.ForeignKey(Word, on_delete=models.CASCADE, related_name="applications",
+                             verbose_name="关联词条", blank=True, null=True)
     reason = models.CharField(max_length=200, blank=True, verbose_name='理由')
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications", verbose_name="贡献者")
+    # 是是否审核的意思，可能审核了但是不通过，此时granted也是True
     granted = models.BooleanField(default=False, verbose_name="是否审核", editable=False)
     verifier = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verified_applications", blank=True,
                                  null=True, verbose_name="审核人", editable=False)
     # 修改内容
     content_word = models.CharField(max_length=60, verbose_name="词", blank=True)
-    definition = models.TextField(verbose_name="注释",blank=True)
+    definition = models.TextField(verbose_name="注释", blank=True)
     annotation = models.TextField(verbose_name="附注", blank=True)
     mandarin = models.TextField(verbose_name="对应普通话词语", blank=True, default='[]')
     standard_ipa = models.CharField(max_length=30, verbose_name='标准IPA', blank=True)
@@ -64,6 +68,8 @@ class Application(models.Model):
         self.content_word = self.content_word.strip()
         self.definition = self.definition.strip()
         self.annotation = self.annotation.strip()
+        if ~isinstance(self.mandarin, str):
+            self.mandarin = str(self.mandarin)
         self.mandarin = self.mandarin.strip()
         self.standard_ipa = self.standard_ipa.strip()
         self.standard_pinyin = self.standard_pinyin.strip()
@@ -115,6 +121,7 @@ class Character(models.Model):
     character = models.CharField(max_length=10, verbose_name="汉字")
     county = models.CharField(max_length=100, verbose_name="县区")
     town = models.CharField(max_length=100, verbose_name="乡镇")
+    traditional = models.CharField(max_length=30, verbose_name='繁体字', default='')
 
     def clean(self):
         self.shengmu = self.shengmu.strip()
@@ -125,6 +132,7 @@ class Character(models.Model):
         self.ipa = self.ipa.strip()
         self.county = self.county.strip()
         self.town = self.town.strip()
+        self.traditional = self.traditional.strip()
         return super(Character, self).clean()
 
     def save(self, *args, **kwargs):
