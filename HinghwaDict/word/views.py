@@ -526,7 +526,8 @@ def managePronunciation(request, id):
                         body = demjson.decode(request.body)
                         message = body["message"] if "message" in body else "管理员操作"
                         content = f'您的语音(id = {pronunciation.id}) 已被删除，理由是：\n\t{message}'
-                        sendNotification(None, [pronunciation.contributor], content, target=pronunciation)
+                        sendNotification(None, [pronunciation.contributor], content, target=pronunciation,
+                                         title='【通知】语音处理结果')
                     pronunciation.delete()
                     return JsonResponse({}, status=200)
                 else:
