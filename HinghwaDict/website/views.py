@@ -546,6 +546,8 @@ def sendNotification(sender, recipients, content, target=None, action_object=Non
         target = Notification.objects.get(id=result[0])
         sendNotification(transfer, recipients, content, target, action_object, title)
         return result
+    if sender is None:
+        sender = User.objects.get(id=2)
     if title is None:
         title = f'【通知】{sender.username} 回复了你'
     try:

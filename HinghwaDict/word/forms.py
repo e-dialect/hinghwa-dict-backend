@@ -22,7 +22,7 @@ class CharacterForm(forms.ModelForm):
         model = Character
         fields = ('pinyin', 'ipa', 'character',
                   'shengmu', 'yunmu', 'shengdiao',
-                  'county', 'town')
+                  'county', 'town', 'traditional')
 
 
 class ApplicationForm(forms.ModelForm):

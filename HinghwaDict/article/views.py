@@ -46,6 +46,8 @@ def searchArticle(request):
                     article.update_time = timezone.now()
                     article.author = user
                     article.save()
+                    content = f'我创建了文章(id={article.id}),请及时去审核'
+                    sendNotification(article.author, None, content, title='【提醒】文章待审核')
                     return JsonResponse({'id': article.id}, status=200)
                 else:
                     return JsonResponse({}, status=400)
@@ -130,7 +132,7 @@ def manageArticle(request, id):
                     article.visibility = False
                     article.save()
                     content = f'我修改了文章(id={article.id}),请及时去审核'
-                    sendNotification(article.author, None, content)
+                    sendNotification(article.author, None, content, title='【提醒】文章待审核')
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
@@ -146,6 +148,36 @@ def manageArticle(request, id):
             return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def manageArticleVisibility(request, id):
+    try:
+        if request.method == 'PUT':
+            token = request.headers['token']
+            user = token_check(token, 'dxw', -1)
+            if user:
+                article = Article.objects.filter(id=id)
+                if article.exists():
+                    article = article[0]
+                    body = demjson.decode(request.body)
+                    article.visibility = body['result']
+                    if article.visibility:
+                        content = f"恭喜您的文章(id ={id}) 已通过审核"
+                    else:
+                        msg = body['reason']
+                        content = f'您的文章(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
+                    sendNotification(None, [article.author], content=content, target=article, title='【通知】文章审核结果')
+                    article.save()
+                    return JsonResponse({}, status=200)
+                else:
+                    return JsonResponse({}, status=404)
+            else:
+                return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
 
 
 @csrf_exempt
