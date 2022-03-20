@@ -24,6 +24,8 @@ class Word(models.Model):
         self.word = self.word.strip()
         self.definition = self.definition.strip()
         self.annotation = self.annotation.strip()
+        if ~isinstance(self.mandarin, str):
+            self.mandarin = str(self.mandarin)
         self.mandarin = self.mandarin.strip()
         self.standard_ipa = self.standard_ipa.strip()
         self.standard_pinyin = self.standard_pinyin.strip()
@@ -66,6 +68,8 @@ class Application(models.Model):
         self.content_word = self.content_word.strip()
         self.definition = self.definition.strip()
         self.annotation = self.annotation.strip()
+        if ~isinstance(self.mandarin, str):
+            self.mandarin = str(self.mandarin)
         self.mandarin = self.mandarin.strip()
         self.standard_ipa = self.standard_ipa.strip()
         self.standard_pinyin = self.standard_pinyin.strip()
