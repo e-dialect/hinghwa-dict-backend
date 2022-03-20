@@ -414,30 +414,30 @@ def openUrl(request, type, id, Y, M, D, X):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-# try:
-#     def random_word_of_the_day():
-#         all = Word.objects.all()
-#         item = Website.objects.get(id=1)
-#         item.word_of_the_day = random.choice(all).id
-#         item.save()
-#         print('update word of the day at 0:00')
-#
-#
-#     def register(fun, id, replace_existing):
-#         scheduler = BackgroundScheduler()
-#         scheduler.add_jobstore(DjangoJobStore(), 'default')
-#         register_job(scheduler, 'cron', id=id, hour=0, replace_existing=replace_existing) \
-#             (fun)
-#         register_events(scheduler)
-#         scheduler.start()
-#
-#
-#     try:
-#         register(random_word_of_the_day, 'random_word_of_the_day', False)
-#     except Exception:
-#         register(random_word_of_the_day, 'random_word_of_the_day', True)
-# except Exception as e:
-#     print(str(e))
+try:
+    def random_word_of_the_day():
+        all = Word.objects.all()
+        item = Website.objects.get(id=1)
+        item.word_of_the_day = random.choice(all).id
+        item.save()
+        print('update word of the day at 0:00')
+
+
+    def register(fun, id, replace_existing):
+        scheduler = BackgroundScheduler()
+        scheduler.add_jobstore(DjangoJobStore(), 'default')
+        register_job(scheduler, 'cron', id=id, hour=0, replace_existing=replace_existing) \
+            (fun)
+        register_events(scheduler)
+        scheduler.start()
+
+
+    try:
+        register(random_word_of_the_day, 'random_word_of_the_day', False)
+    except Exception:
+        register(random_word_of_the_day, 'random_word_of_the_day', True)
+except Exception as e:
+    print(str(e))
 from django.db.models import Q
 
 
