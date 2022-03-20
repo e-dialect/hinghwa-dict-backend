@@ -115,8 +115,13 @@ def manageWord(request, id):
         if word.exists():
             word = word[0]
             if request.method == 'GET':
-                related_words = [word.id for word in word.related_words.all()]
-                related_articles = [article.id for article in word.related_articles.all()]
+                related_words = []
+                for wordx in word.related_words.all():
+                    source = Pronunciation.objects.filter(ipa=wordx.standard_ipa).filter(visibility=True)
+                    source = source[0].source if source.exists() else None
+                    related_words.append({"id": wordx.id, 'word': wordx.word, 'source': source})
+                related_articles = [{"id": article.id, 'title': article.title}
+                                    for article in word.related_articles.all()]
                 word.views = word.views + 1
                 word.save()
                 user = word.contributor
@@ -724,8 +729,13 @@ def searchApplication(request):
                 applications = Application.objects.filter(granted=False)
                 result = []
                 for application in applications:
-                    related_words = [word.id for word in application.related_words.all()]
-                    related_articles = [article.id for article in application.related_articles.all()]
+                    related_words = []
+                    for wordx in application.related_words.all():
+                        source = Pronunciation.objects.filter(ipa=wordx.standard_ipa).filter(visibility=True)
+                        source = source[0].source if source.exists() else None
+                        related_words.append({"id": wordx.id, 'word': wordx.word, 'source': source})
+                    related_articles = [{"id": article.id, 'title': article.title}
+                                        for article in application.related_articles.all()]
                     result.append({
                         'content': {
                             'word': application.content_word,
@@ -807,8 +817,13 @@ def manageApplication(request, id):
                 token = request.headers['token']
                 user = token_check(token, '***REMOVED***', application.contributor.id)
                 if user:
-                    related_words = [word.id for word in application.related_words.all()]
-                    related_articles = [article.id for article in application.related_articles.all()]
+                    related_words = []
+                    for wordx in application.related_words.all():
+                        source = Pronunciation.objects.filter(ipa=wordx.standard_ipa).filter(visibility=True)
+                        source = source[0].source if source.exists() else None
+                        related_words.append({"id": wordx.id, 'word': wordx.word, 'source': source})
+                    related_articles = [{"id": article.id, 'title': article.title}
+                                        for article in application.related_articles.all()]
                     result = {
                         'content': {
                             'word': application.content_word,
