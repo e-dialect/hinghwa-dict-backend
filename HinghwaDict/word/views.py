@@ -115,16 +115,14 @@ def manageWord(request, id):
         if word.exists():
             word = word[0]
             if request.method == 'GET':
-                related_words = []
-                for wordx in word.related_words.all():
-                    source = Pronunciation.objects.filter(ipa=wordx.standard_ipa).filter(visibility=True)
-                    source = source[0].source if source.exists() else None
-                    related_words.append({"id": wordx.id, 'word': wordx.word, 'source': source})
+                related_words = [{"id": word.id, 'word': word.word} for word in word.related_words.all()]
                 related_articles = [{"id": article.id, 'title': article.title}
                                     for article in word.related_articles.all()]
                 word.views = word.views + 1
                 word.save()
                 user = word.contributor
+                source = Pronunciation.objects.filter(ipa=word.standard_ipa).filter(visibility=True)
+                source = source[0].source if source.exists() else None
                 return JsonResponse({"word": {"id": word.id, 'word': word.word, 'definition': word.definition,
                                               "contributor": {"id": user.id, 'username': user.username,
                                                               'nickname': user.user_info.nickname,
@@ -144,7 +142,8 @@ def manageWord(request, id):
                                               "standard_pinyin": word.standard_pinyin,
                                               "mandarin": eval(word.mandarin) if word.mandarin else [],
                                               "related_words": related_words, "related_articles": related_articles,
-                                              "views": word.views}}, status=200)
+                                              "views": word.views,
+                                              'source': source}}, status=200)
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
@@ -706,7 +705,7 @@ def managePronunciationVisibility(request, id):
                         body = demjson.decode(request.body) if len(request.body) else {}
                         msg = body['message'] if 'message' in body else '管理员审核不通过'
                         content = f'您的语音(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
-                    sendNotification(None, [pro.contributor], content=content, target=pro,title='【通知】语音审核结果')
+                    sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
                     pro.save()
                     return JsonResponse({}, status=200)
                 else:
@@ -729,13 +728,8 @@ def searchApplication(request):
                 applications = Application.objects.filter(granted=False)
                 result = []
                 for application in applications:
-                    related_words = []
-                    for wordx in application.related_words.all():
-                        source = Pronunciation.objects.filter(ipa=wordx.standard_ipa).filter(visibility=True)
-                        source = source[0].source if source.exists() else None
-                        related_words.append({"id": wordx.id, 'word': wordx.word, 'source': source})
-                    related_articles = [{"id": article.id, 'title': article.title}
-                                        for article in application.related_articles.all()]
+                    related_words = [word.id for word in application.related_words.all()]
+                    related_articles = [article.id for article in application.related_articles.all()]
                     result.append({
                         'content': {
                             'word': application.content_word,
@@ -817,13 +811,8 @@ def manageApplication(request, id):
                 token = request.headers['token']
                 user = token_check(token, '***REMOVED***', application.contributor.id)
                 if user:
-                    related_words = []
-                    for wordx in application.related_words.all():
-                        source = Pronunciation.objects.filter(ipa=wordx.standard_ipa).filter(visibility=True)
-                        source = source[0].source if source.exists() else None
-                        related_words.append({"id": wordx.id, 'word': wordx.word, 'source': source})
-                    related_articles = [{"id": article.id, 'title': article.title}
-                                        for article in application.related_articles.all()]
+                    related_words = [word.id for word in application.related_words.all()]
+                    related_articles = [article.id for article in application.related_articles.all()]
                     result = {
                         'content': {
                             'word': application.content_word,
