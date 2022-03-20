@@ -250,25 +250,29 @@ def searchCharactersPinyin(request):
             if 'shengdiao' in request.GET:
                 characters = characters.filter(shengdiao=request.GET['shengdiao'])
             result = {}
+            pinyin_list = []
             for item in characters:
                 if ((item.pinyin, item.character) not in result) or \
                         (item.town == '城里' and item.county == '莆田'):
-                    result[(item.pinyin, item.character)] = item
+                    result[(item.pinyin, item.character, item.traditional)] = item
+                    pinyin_list.append(item.pinyin)
+            # 实现逻辑是将所有Word和Pronunciation按pinyin归类
+            # 然后将result的pinyin去匹配他们，要求语音的pinyin一致，字词的pinyin和character一致
+            # 提前归类有利于减少索引负载
             result1 = {}
             words_dict = {}
             pronunciations_dict = {}
-            for item in Word.objects.filter(visibility=True):
+            for item in Word.objects.filter(standard_pinyin__in=pinyin_list).filter(visibility=True):
                 if item.standard_pinyin not in words_dict:
                     words_dict[item.standard_pinyin] = []
                 words_dict[item.standard_pinyin].append(item)
-            for item in Pronunciation.objects.filter(visibility=True):
+            for item in Pronunciation.objects.filter(pinyin__in=pinyin_list).filter(visibility=True):
                 if item.pinyin not in pronunciations_dict:
-                    pronunciations_dict[item.pinyin] = []
-                pronunciations_dict[item.pinyin].append(item)
+                    pronunciations_dict[item.pinyin] = item
             t = 0
-            for (pinyin, character), item in result.items():
+            for (pinyin, character, traditional), item in result.items():
                 if pinyin not in result1:
-                    pronunciation = pronunciations_dict[pinyin][0].source if pinyin in pronunciations_dict else None
+                    pronunciation = pronunciations_dict[pinyin].source if pinyin in pronunciations_dict else None
                     result1[pinyin] = {'pinyin': pinyin, 'source': pronunciation, "characters": []}
                 word = None
                 if pinyin in words_dict:
@@ -276,7 +280,7 @@ def searchCharactersPinyin(request):
                         if item.word == character:
                             word = item.id
                             break
-                result1[pinyin]['characters'].append({'character': character, 'word': word})
+                result1[pinyin]['characters'].append({'character': character, 'word': word, 'traditional': traditional})
             return JsonResponse({"result": list(result1.values())}, status=200)
         else:
             return JsonResponse({}, status=405)
