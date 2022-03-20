@@ -121,6 +121,7 @@ class Character(models.Model):
     character = models.CharField(max_length=10, verbose_name="汉字")
     county = models.CharField(max_length=100, verbose_name="县区")
     town = models.CharField(max_length=100, verbose_name="乡镇")
+    traditional = models.CharField(max_length=30, verbose_name='繁体字', default='')
 
     def clean(self):
         self.shengmu = self.shengmu.strip()
@@ -131,6 +132,7 @@ class Character(models.Model):
         self.ipa = self.ipa.strip()
         self.county = self.county.strip()
         self.town = self.town.strip()
+        self.traditional = self.traditional.strip()
         return super(Character, self).clean()
 
     def save(self, *args, **kwargs):

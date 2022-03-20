@@ -228,7 +228,7 @@ def searchCharacters(request):
                                    'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                    'shengdiao': character.shengdiao,
                                    'character': character.character, 'county': character.county,
-                                   'town': character.town})
+                                   'town': character.town, 'traditional': character.traditional})
             return JsonResponse({"characters": characters}, status=200)
         else:
             return JsonResponse({}, status=405)
@@ -297,7 +297,8 @@ def searchEach(request):
                 dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
                                                  'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                                  'shengdiao': character.shengdiao, 'character': character.character,
-                                                 'county': character.county, 'town': character.town})
+                                                 'county': character.county, 'town': character.town,
+                                                 'traditional': character.traditional})
             ans = []
             for character in dic.keys():
                 ans.append({'label': character, 'characters': dic[character]})
@@ -311,46 +312,42 @@ def searchEachV2(request):
     try:
         if request.method == 'GET':
             search = request.GET['search']
-            result = Character.objects.filter(character__in=search)
+            result = Character.objects.filter(Q(character__in=search)
+                                              | Q(traditional__in=search))
             dic = {}
-            for character in search:
-                dic[character] = []
+            scores = {}
+            for idx, character in enumerate(search):
+                scores[character] = idx * 10
             for character in result:
                 word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
-                if word.exists():
-                    word = word[0]
-                    pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
-                        .filter(visibility=True)
-                    if pronunciations.exists():
-                        source = pronunciations[0].source
-                    else:
-                        pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
-                            .filter(visibility=True)
-                        if pronunciations.exists():
-                            source = pronunciations[0].source
-                        else:
-                            source = None
-                    word = word.id
-                else:
-                    word = None
-                    source = None
-                dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                                 'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                                 'shengdiao': character.shengdiao, 'character': character.character,
-                                                 'county': character.county, 'town': character.town,
-                                                 'word': word, 'source': source})
+                word = word[0].id if word.exists() else None
+                source = Pronunciation.objects.filter(pinyin=character.pinyin)
+                source = source[0].source if source.exists() else None
+                if character.character not in scores:
+                    scores[character.character] = 1000
+                if character.traditional not in scores:
+                    scores[character.traditional] = 1000
+                score = scores[character.character] + scores[character.traditional]
+                if (character.character, character.traditional) not in dic:
+                    dic[(score, character.character, character.traditional)] = []
+                dic[(score, character.character, character.traditional)].append(
+                    {"id": character.id, 'pinyin': character.pinyin, 'ipa': character.ipa,
+                     'shengmu': character.shengmu, 'yunmu': character.yunmu, 'shengdiao': character.shengdiao,
+                     'character': character.character, 'traditional': character.traditional,
+                     'county': character.county, 'town': character.town,
+                     'word': word, 'source': source})
             ans = []
-            for character in dic.keys():
+            dict_list = sorted(dic.keys())
+            for score, character, traditional in dict_list:
                 new_dic = {}
-                for item in dic[character]:
+                for item in dic[(score, character, traditional)]:
                     if (item['county'], item['town']) not in new_dic:
-                        new_dic[(item['county'], item['town'])] = [item]
-                    else:
-                        new_dic[(item['county'], item['town'])].append(item)
+                        new_dic[(item['county'], item['town'])] = []
+                    new_dic[(item['county'], item['town'])].append(item)
                 result = []
                 for (county, town), value in new_dic.items():
                     result.append({'county': county, 'town': town, 'characters': value})
-                ans.append({'label': character, 'characters': result})
+                ans.append({'label': character, 'traditional': traditional, 'characters': result})
             return JsonResponse({'characters': ans}, status=200)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
@@ -368,7 +365,7 @@ def manageCharacter(request, id):
                                    'pinyin': character.pinyin, 'yunmu': character.yunmu,
                                    'shengdiao': character.shengdiao,
                                    'character': character.character, 'county': character.county,
-                                   'town': character.town}}, status=200)
+                                   'town': character.town, 'traditional': character.traditional}}, status=200)
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
@@ -545,24 +542,32 @@ def managePronunciation(request, id):
 def load_character(request):
     try:
         body = demjson.decode(request.body)
-        file = body['file']
-        sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
-        lines = sheet.nrows
-        col = sheet.ncols
-        title = sheet.row(0)
-        for line in range(1, lines):
-            info = sheet.row(line)
-            dic = {}
-            for i in range(col):
-                dic[title[i].value] = info[i].value
-            character_form = CharacterForm(dic)
-            if character_form.is_valid():
-                character = character_form.save(commit=True)
-                if character.id % 100 == 0:
-                    print('load character {}'.format(character.id))
-            else:
-                raise Exception('add fail in {}'.format(dic))
-        return JsonResponse({}, status=200)
+        token = request.headers['token']
+        user = token_check(token, 'dxw', -1)
+        if user:
+            file = body['file']
+            flush = body['flush']
+            if flush:
+                Character.objects.all().delete()
+            sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
+            lines = sheet.nrows
+            col = sheet.ncols
+            title = sheet.row(0)
+            for line in range(1, lines):
+                info = sheet.row(line)
+                dic = {}
+                for i in range(col):
+                    dic[title[i].value] = info[i].value
+                character_form = CharacterForm(dic)
+                if character_form.is_valid():
+                    character = character_form.save(commit=True)
+                    if character.id % 100 == 0:
+                        print('load character {}'.format(character.id))
+                else:
+                    raise Exception('add fail in {}'.format(dic))
+            return JsonResponse({}, status=200)
+        else:
+            return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
