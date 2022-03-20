@@ -48,9 +48,9 @@ class WordAdmin(admin.ModelAdmin):
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['id', 'pinyin', 'character', 'county', 'town']
+    list_display = ['id', 'pinyin', 'character', 'traditional', 'county', 'town']
     list_filter = ['county']
-    search_fields = ['character', 'pinyin', 'shengmu', 'yunmu', 'shengdiao', 'id']
+    search_fields = ['character', 'pinyin', 'shengmu', 'yunmu', 'shengdiao', 'id', 'traditional']
     ordering = ['id']
     list_per_page = 50
 
