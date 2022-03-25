@@ -41,7 +41,10 @@ def searchWords(request):
                 result.sort(key=lambda a: a[1], reverse=True)
                 if len(result) > 200:
                     result = result[:200]
-                words = list(zip(*result))[0]
+                if len(result):
+                    words = list(zip(*result))[0]
+                else:
+                    words = []
             result = [{'id': word.id, 'word': word.word, 'definition': word.definition,
                        'annotation': word.annotation, 'mandarin': eval(word.mandarin) if word.mandarin else [],
                        'standard_ipa': word.standard_ipa, 'standard_pinyin': word.standard_pinyin} for word in words]
