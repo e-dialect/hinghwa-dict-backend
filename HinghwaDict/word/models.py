@@ -2,7 +2,11 @@ from django.contrib.auth.models import User
 from django.db import models
 
 from article.models import Article
+import re
 
+
+def split(x: str) -> str:
+    return re.sub('([0-9])([a-zA-Z])','\g<1>  \g<2>',x)
 
 class Word(models.Model):
     word = models.CharField(max_length=60, verbose_name="词")
@@ -27,8 +31,8 @@ class Word(models.Model):
         if ~isinstance(self.mandarin, str):
             self.mandarin = str(self.mandarin)
         self.mandarin = self.mandarin.strip()
-        self.standard_ipa = self.standard_ipa.strip()
-        self.standard_pinyin = self.standard_pinyin.strip()
+        self.standard_ipa = split(self.standard_ipa.strip())
+        self.standard_pinyin = split(self.standard_pinyin.strip())
         return super(Word, self).clean()
 
     def save(self, *args, **kwargs):
@@ -71,8 +75,8 @@ class Application(models.Model):
         if ~isinstance(self.mandarin, str):
             self.mandarin = str(self.mandarin)
         self.mandarin = self.mandarin.strip()
-        self.standard_ipa = self.standard_ipa.strip()
-        self.standard_pinyin = self.standard_pinyin.strip()
+        self.standard_ipa = split(self.standard_ipa.strip())
+        self.standard_pinyin = split(self.standard_pinyin.strip())
         return super(Application, self).clean()
 
     def save(self, *args, **kwargs):
@@ -97,8 +101,8 @@ class Pronunciation(models.Model):
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
 
     def clean(self):
-        self.ipa = self.ipa.strip()
-        self.pinyin = self.pinyin.strip()
+        self.ipa = split(self.ipa.strip())
+        self.pinyin = split(self.pinyin.strip())
         self.county = self.county.strip()
         self.town = self.town.strip()
         return super(Pronunciation, self).clean()
@@ -128,8 +132,8 @@ class Character(models.Model):
         self.yunmu = self.yunmu.strip()
         self.shengdiao = self.shengdiao.strip()
         self.character = self.character.strip()
-        self.pinyin = self.pinyin.strip()
-        self.ipa = self.ipa.strip()
+        self.pinyin = split(self.pinyin.strip())
+        self.ipa = split(self.ipa.strip())
         self.county = self.county.strip()
         self.town = self.town.strip()
         self.traditional = self.traditional.strip()
