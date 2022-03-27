@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from article.models import Article
 from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
 from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
-from .models import Word, Character, Pronunciation, User, Application
+from .models import Word, Character, Pronunciation, User, Application,split
 from django.db.models import Q
 
 
@@ -463,7 +463,7 @@ def searchPronunciations(request):
 def combinePronunciation(request, ipa):
     try:
         if request.method == 'GET':
-            ipa = str(ipa).strip()
+            ipa = split(ipa)
             ans = [(len(p.ipa), p.contributor.username, p.source) for p in
                    Pronunciation.objects.filter(ipa=ipa).filter(visibility=True)]
             ans.sort(key=lambda x: x[0])
