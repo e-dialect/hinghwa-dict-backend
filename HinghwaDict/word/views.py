@@ -340,7 +340,7 @@ def searchEachV2(request):
                     scores[character.character] = 1000
                 if character.traditional not in scores:
                     scores[character.traditional] = 1000
-                score = scores[character.character] + scores[character.traditional]
+                score = min(scores[character.character], scores[character.traditional])
                 if (score, character.character, character.traditional) not in dic:
                     dic[(score, character.character, character.traditional)] = []
                 dic[(score, character.character, character.traditional)].append(
