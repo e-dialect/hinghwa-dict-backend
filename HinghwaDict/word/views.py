@@ -10,7 +10,7 @@ from django.views.decorators.http import require_POST
 from article.models import Article
 from website.views import evaluate, token_check, sendNotification, simpleUserInfo, filterInOrder
 from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
-from .models import Word, Character, Pronunciation, User, Application,split
+from .models import Word, Character, Pronunciation, User, Application, split
 from django.db.models import Q
 
 
@@ -83,17 +83,23 @@ def searchWords(request):
             result = Word.objects.filter(id__in=body['words'])
             result = filterInOrder(result, body['words'])
             for word in result:
-                pronunciations = word.pronunciation.filter(ipa__iexact=word.standard_ipa.strip()) \
-                    .filter(visibility=True)
+                pronunciations = word.pronunciation.filter(
+                    Q(ipa__iexact=word.standard_ipa)
+                    & Q(visibility=True)
+                    & Q(source__isnull=False)
+                )
                 if pronunciations.exists():
                     pronunciation = pronunciations[0].source
                 else:
-                    pronunciations = Pronunciation.objects.filter(ipa__iexact=word.standard_ipa.strip()) \
-                        .filter(visibility=True)
+                    pronunciations = Pronunciation.objects.filter(
+                        Q(ipa__iexact=word.standard_ipa)
+                        & Q(visibility=True)
+                        & Q(source__isnull=False)
+                    )
                     if pronunciations.exists():
                         pronunciation = pronunciations[0].source
                     else:
-                        pronunciation = 'null'
+                        pronunciation = None
                 words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                        "contributor": word.contributor.id, "annotation": word.annotation,
                                        "standard_ipa": word.standard_ipa,
