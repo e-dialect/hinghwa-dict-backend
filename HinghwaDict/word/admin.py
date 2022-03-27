@@ -9,9 +9,9 @@ from .models import Word, Character, Pronunciation, Application
 
 
 class WordAdmin(admin.ModelAdmin):
-    list_display = ['id', 'word', 'contributor', 'views', 'visibility', 'standard_ipa', 'standard_pinyin']
+    list_display = ['id', 'word', 'standard_ipa', 'standard_pinyin', 'contributor', 'views', 'visibility']
     list_filter = ['contributor', 'visibility']
-    search_fields = ['word', 'definition', 'contributor__username', 'id']
+    search_fields = ['word', 'definition', 'contributor__username', 'id', 'standard_ipa', 'standard_pinyin']
     ordering = ['id', '-views']
     list_editable = ['visibility']
     list_per_page = 50
@@ -48,17 +48,17 @@ class WordAdmin(admin.ModelAdmin):
 
 
 class CharacterAdmin(admin.ModelAdmin):
-    list_display = ['id', 'pinyin', 'character', 'traditional', 'county', 'town']
+    list_display = ['id', 'character', 'pinyin', 'ipa', 'traditional', 'county', 'town']
     list_filter = ['county']
-    search_fields = ['character', 'pinyin', 'shengmu', 'yunmu', 'shengdiao', 'id', 'traditional']
+    search_fields = ['character', 'pinyin', 'shengmu', 'yunmu', 'shengdiao', 'ipa', 'id', 'traditional']
     ordering = ['id']
     list_per_page = 50
 
 
 class PronunciationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'word', 'pinyin', 'contributor', 'county', 'views', 'visibility']
+    list_display = ['id', 'word', 'pinyin', 'ipa', 'contributor', 'county', 'views', 'visibility']
     list_filter = ['contributor', 'visibility', 'county']
-    search_fields = ['word__word', 'contributor__username', 'pinyin', 'id']
+    search_fields = ['word__word', 'contributor__username', 'pinyin', 'id', 'ipa']
     ordering = ['id', '-views']
     list_editable = ['visibility']
     list_per_page = 50
