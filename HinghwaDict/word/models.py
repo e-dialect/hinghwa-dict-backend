@@ -6,7 +6,7 @@ import re
 
 
 def split(x: str) -> str:
-    return re.sub('([0-9])([^0-9])', '\g<1>  \g<2>', re.sub(' *', '', x))
+    return re.sub('([0-9])([^0-9])', '\g<1> \g<2>', re.sub(' *', '', x))
 
 
 class Word(models.Model):
