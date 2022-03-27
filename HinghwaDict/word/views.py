@@ -99,7 +99,7 @@ def searchWords(request):
                     if pronunciations.exists():
                         pronunciation = pronunciations[0].source
                     else:
-                        pronunciation = None
+                        pronunciation = 'null'
                 words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                        "contributor": word.contributor.id, "annotation": word.annotation,
                                        "standard_ipa": word.standard_ipa,
