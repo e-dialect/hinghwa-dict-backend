@@ -330,7 +330,8 @@ def searchEachV2(request):
             dic = {}
             scores = {}
             for idx, character in enumerate(search):
-                scores[character] = idx * 10
+                if character not in scores:
+                    scores[character] = idx * 10
             for character in result:
                 word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
                 word = word[0].id if word.exists() else None
