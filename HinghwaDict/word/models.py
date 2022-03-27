@@ -6,7 +6,7 @@ import re
 
 
 def split(x: str) -> str:
-    return re.sub('([0-9])([a-zA-Z])','\g<1>  \g<2>',x)
+    return re.sub('([0-9])([^0-9])','\g<1>  \g<2>',x)
 
 class Word(models.Model):
     word = models.CharField(max_length=60, verbose_name="词")
