@@ -104,7 +104,7 @@ def compare(test, key):
         total += math.pow(10, j - m)
         if j > m / 2:
             hint += 1
-    return total + (math.pow(10, hint - m) if hint else 0)
+    return total + (math.pow(10, hint * math.ceil(m / 2) - len(test)) if hint else 0)
 
 
 def ReLu(x: float):
