@@ -2,12 +2,12 @@ version: "3.6"
 services: 
     hinghwadict-backend:
         build: .
-        image: sheeplin/hinghwadict-backend
-        container_name: hinghwadict-backend
+        image: sheeplin/hinghwadict-backend-api
+        container_name: hinghwadict-backend-api
         # ports: 
         #     - "80:8000"
         labels: 
-            - "traefik.http.routers.hinghwadict-backend.rule=Host(`api.pxm.edialect.top`)"
+            - "traefik.http.routers.hinghwadict-backend.rule=Host(`api.pxm.test.edialect.top`)"
             - "traefik.http.services.hinghwadict-backend.loadbalancer.server.port=8000"
             - "traefik.http.routers.hinghwadict-backend.entrypoints=websecure"
             - "traefik.http.routers.hinghwadict-backend.tls=true"
