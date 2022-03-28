@@ -25,10 +25,10 @@ def searchWords(request):
                 result = []
                 key = request.GET['search'].replace(' ', '')
                 if not key[0].encode('utf-8').isalnum():
-                    weights = [4.5, 1.5, 1, 1, 0.5, 0.5]
+                    weights = [4, 2, 3, 1, 0.5, 0.5]
                     alpha = 1
                 else:
-                    weights = [2, 1, 0.5, 0.5, 3, 3]
+                    weights = [2, 1, 1.5, 0.5, 3, 3]
                     alpha = 1
                 for word in words:
                     if word.id == 4694 or word.id == 97:
