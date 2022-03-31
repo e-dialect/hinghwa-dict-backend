@@ -8,3 +8,4 @@ apscheduler==3.7.0
 django_apscheduler
 django-notifications-hq==1.6.0
 pydub==0.25.1
+ffmpeg==1.4
