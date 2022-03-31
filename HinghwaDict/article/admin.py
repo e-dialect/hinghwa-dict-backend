@@ -10,7 +10,6 @@ class ArticleAdmin(admin.ModelAdmin):
     list_filter = ['author', 'publish_time']
     date_hierarchy = 'publish_time'
     ordering = ('id', 'author__id', '-publish_time', '-views', '-update_time')
-    list_editable = ['visibility', ]
     list_per_page = 50
     filter_horizontal = ['like_users']
     raw_id_fields = ("author",)
