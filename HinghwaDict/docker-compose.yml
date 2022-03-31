@@ -2,17 +2,17 @@ version: "3.6"
 services: 
     hinghwadict-backend:
         build: .
-        image: sheeplin/hinghwadict-backend-test
-        container_name: hinghwadict-backend-test
+        image: "sheeplin/${SERVICE_NAME}"
+        container_name: "${SERVICE_NAME}"
         # ports: 
         #     - "80:8000"
         labels: 
-            - "traefik.http.routers.hinghwadict-backend-test.rule=Host(`api.pxm.test.edialect.top`)"
-            - "traefik.http.services.hinghwadict-backend-test.loadbalancer.server.port=8000"
-            - "traefik.http.routers.hinghwadict-backend-test.entrypoints=websecure"
-            - "traefik.http.routers.hinghwadict-backend-test.tls=true"
-            - "traefik.http.routers.hinghwadict-backend-test.middlewares=hinghwadict-backend-test-compress"
-            - "traefik.http.middlewares.hinghwadict-backend-test-compress.compress=true"
+            - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${HOST_ADDRESS}`)"
+            - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=8000"
+            - "traefik.http.routers.${SERVICE_NAME}.entrypoints=websecure"
+            - "traefik.http.routers.${SERVICE_NAME}.tls=true"
+            - "traefik.http.routers.${SERVICE_NAME}.middlewares=${SERVICE_NAME}-compress"
+            - "traefik.http.middlewares.${SERVICE_NAME}-compress.compress=true"
         networks: 
             - traefik-global-proxy
         volumes:
