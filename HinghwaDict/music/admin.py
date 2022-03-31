@@ -10,7 +10,6 @@ class MusicAdmin(admin.ModelAdmin):
     list_display = ['id', 'title', 'artist', 'contributor', 'like', 'visibility']
     list_filter = ['contributor', 'title', 'visibility']
     search_fields = ['title', 'artist', 'contributor__username', 'id']
-    list_editable = ['visibility']
     ordering = ['id']
     filter_horizontal = ['like_users']
     raw_id_fields = ("contributor",)

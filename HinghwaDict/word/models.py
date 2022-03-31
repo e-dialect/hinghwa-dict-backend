@@ -50,8 +50,6 @@ class Application(models.Model):
                              verbose_name="关联词条", blank=True, null=True)
     reason = models.CharField(max_length=200, blank=True, verbose_name='理由')
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="applications", verbose_name="贡献者")
-    # 是是否审核的意思，可能审核了但是不通过，此时granted也是True
-    granted = models.BooleanField(default=False, verbose_name="是否审核", editable=False)
     verifier = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verified_applications", blank=True,
                                  null=True, verbose_name="审核人", editable=False)
     # 修改内容
@@ -65,6 +63,12 @@ class Application(models.Model):
                                            blank=True)
     related_articles = models.ManyToManyField(Article, related_name="related_applications", verbose_name="相关帖子",
                                               blank=True)
+
+    def granted(self):
+        return self.verifier is not None
+
+    granted.boolean = True  # admin中添加图标
+    granted.short_description = '是否审核'  # 展示名称
 
     def __str__(self):
         return f'用户{self.contributor.id} 对 {self.word.id} 号词语的修改申请'
@@ -98,8 +102,16 @@ class Pronunciation(models.Model):
     town = models.CharField(max_length=100, verbose_name="乡镇")
     contributor = models.ForeignKey(User, on_delete=models.CASCADE, related_name="contribute_pronunciation",
                                     verbose_name="贡献者")
-    visibility = models.BooleanField(default=False, verbose_name="是否审核")
+    visibility = models.BooleanField(default=False, verbose_name="是否可见")
+    verifier = models.ForeignKey(User, on_delete=models.CASCADE, related_name="verified_pronunciations", blank=True,
+                                 null=True, verbose_name="审核人", editable=False)
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
+
+    def granted(self):
+        return self.verifier is not None
+
+    granted.boolean = True  # admin中添加图标
+    granted.short_description = '是否审核'  # 展示名称
 
     def clean(self):
         self.ipa = split(self.ipa)
