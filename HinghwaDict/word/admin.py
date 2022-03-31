@@ -60,7 +60,7 @@ class PronunciationAdmin(admin.ModelAdmin):
                     'granted', 'verifier']
     list_filter = ['contributor', 'visibility', 'county']
     search_fields = ['word__word', 'contributor__username', 'pinyin', 'id', 'ipa']
-    ordering = ['id', '-views']
+    ordering = ['-id', '-views']
     list_per_page = 50
     raw_id_fields = ("contributor", "word")
 
@@ -105,7 +105,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_display = ['id', 'word', 'reason', 'contributor', 'granted', 'verifier']
     list_filter = ['contributor', 'verifier', 'word']
     search_fields = ['word__word', 'content_word', 'contributor__username', 'id', 'definition']
-    ordering = ['id']
+    ordering = ['-id']
     list_per_page = 50
     filter_horizontal = ['related_words', 'related_articles']
     raw_id_fields = ("contributor", 'verifier', 'word')

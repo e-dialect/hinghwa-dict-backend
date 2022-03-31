@@ -743,9 +743,10 @@ def managePronunciationVisibility(request, id):
                         pro.visibility ^= True
                     pro.verifier = user
                     if pro.visibility:
-                        content = f"恭喜您的语音(id ={id}) 已通过审核"
+                        extra = f"，理由是:\n\t{body['reason']}" if "reason" in body else ""
+                        content = f"恭喜您的语音(id ={id}) 已通过审核" + extra
                     else:
-                        msg = body['result'] if 'result' in body else body['message']
+                        msg = body['reason'] if 'reason' in body else body['message']
                         content = f'很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}'
                     sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
                     pro.save()
