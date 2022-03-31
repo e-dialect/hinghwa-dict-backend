@@ -2,8 +2,8 @@ version: "3.6"
 services: 
     hinghwadict-backend:
         build: .
-        image: sheeplin/hinghwadict-backend-api
-        container_name: hinghwadict-backend-api
+        image: sheeplin/hinghwadict-backend
+        container_name: hinghwadict-backend
         # ports: 
         #     - "80:8000"
         labels: 
