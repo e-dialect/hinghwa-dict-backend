@@ -66,11 +66,12 @@ class PronunciationAdmin(admin.ModelAdmin):
 
     def pass_visibility(self, request, queryset):
         for pro in queryset:
+            if not pro.visibility:
+                content = f"恭喜您的语音(id ={pro.id}) 已通过审核"
+                sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
             pro.visibility = True
             pro.verifier_id = 2
             pro.save()
-            content = f"恭喜您的语音(id ={pro.id}) 已通过审核"
-            sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
         updated = len(queryset)
         self.message_user(request, ngettext(
             '%d 个语音被成功标记为可见。',
@@ -82,11 +83,12 @@ class PronunciationAdmin(admin.ModelAdmin):
 
     def withdraw_visibility(self, request, queryset):
         for pro in queryset:
+            if pro.visibility:
+                content = f'很遗憾，您的语音(id = {id}) 没通过审核'
+                sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
             pro.visibility = False
             pro.verifier_id = 2
             pro.save()
-            content = f'很遗憾，您的语音(id = {id}) 没通过审核'
-            sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
         updated = len(queryset)
         self.message_user(request, ngettext(
             '%d 个语音被成功标记为不可见。',
