@@ -14,7 +14,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
-# from pydub import AudioSegment as audio
+from pydub import AudioSegment as audio
 from notifications.signals import notify
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
@@ -358,16 +358,15 @@ def files(request):
                     os.mkdir(folder)
                 elif not os.path.exists(folder):
                     os.mkdir(folder)
-                # if type != 'audio':
                 path = os.path.join(folder, filename)
-                with open(path, 'wb') as f:
-                    for i in file.chunks():
-                        f.write(i)
-                # else:
-                #     music = audio.from_file(file)
-                #     path = os.path.join(folder, filename)
-                #     music.set_frame_rate(44100)
-                #     music.export(path, format='mp3')
+                if type != 'audio':
+                    with open(path, 'wb') as f:
+                        for i in file.chunks():
+                            f.write(i)
+                else:
+                    music = audio.from_file(file)
+                    music.set_frame_rate(44100)
+                    music.export(path, format='mp3')
                 key = 'files/{}/{}/'.format(type, user.id) + timezone.now().__format__("%Y/%m/%d/") + \
                       filename.split('_')[-1]
                 url = upload_file(path, key)
