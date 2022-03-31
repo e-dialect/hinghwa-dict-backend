@@ -67,7 +67,7 @@ class PronunciationAdmin(admin.ModelAdmin):
     def pass_visibility(self, request, queryset):
         for pro in queryset:
             pro.visibility = True
-            pro.verifier_id = 5
+            pro.verifier_id = 2
             pro.save()
             content = f"恭喜您的语音(id ={pro.id}) 已通过审核"
             sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
