@@ -305,15 +305,20 @@ def carousel(request):
 
 
 def download_file(url, local_path, filename):
+def download_file(url, folder, filename):
     try:
         if not os.path.exists(local_path):
             os.makedirs(local_path)
         path = os.path.join(local_path, filename)
+        if not os.path.exists(folder):
+            os.makedirs(folder)
+        path = os.path.join(folder, filename)
         fd = open(path, 'w')
         fd.close()
         urllib.request.urlretrieve(url, filename=path)
         key = 'files/download/' + timezone.now().__format__("%Y/%m/%d/") + \
               filename.split('_')[-1]
+        key = 'files/' + '/'.join(folder.rsplit('/', 2)[1:]) + f'/{filename.replace("_", "/")}'
         url = upload_file(path, key)
         return url
     except Exception as e:
@@ -358,6 +363,9 @@ def files(request):
                     os.mkdir(folder)
                 elif not os.path.exists(folder):
                     os.mkdir(folder)
+                folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
                 path = os.path.join(folder, filename)
                 if type != 'audio':
                     with open(path, 'wb') as f:
@@ -378,6 +386,7 @@ def files(request):
                     type = suffix.split('/', 2)[0]
                     id = suffix.split('/', 2)[1]
                     if user.id == eval(id) or user.is_superuser():
+                    if user.id == eval(id) or user.is_superuser:
                         filename = suffix.split('/', 2)[2]
                         filename = '_'.join(filename.split('/'))
                         path = os.path.join(settings.MEDIA_ROOT, type, id, filename)

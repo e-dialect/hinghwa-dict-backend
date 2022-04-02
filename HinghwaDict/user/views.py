@@ -53,7 +53,7 @@ def register(request):
                         suffix = body['avatar'].split('.')[-1]
                         time = timezone.now().__format__("%Y_%m_%d")
                         filename = time + '_' + random_str(15) + '.' + suffix
-                        path = os.path.join(settings.MEDIA_ROOT, 'download')
+                        path = os.path.join(settings.MEDIA_ROOT, 'download', str(user.id))
                         url = download_file(body['avatar'], path, filename)
                         if url is not None:
                             user_info.avatar = url
