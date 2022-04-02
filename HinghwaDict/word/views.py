@@ -14,6 +14,27 @@ from .models import Word, Character, Pronunciation, User, Application, split
 from django.db.models import Q
 
 
+def word2pronunciation(word: Word, null=None):
+    pronunciations = word.pronunciation.filter(
+        Q(ipa__iexact=word.standard_ipa)
+        & Q(visibility=True)
+        & Q(source__isnull=False)
+    )
+    if pronunciations.exists():
+        source = pronunciations[0].source
+    else:
+        pronunciations = Pronunciation.objects.filter(
+            Q(ipa__iexact=word.standard_ipa)
+            & Q(visibility=True)
+            & Q(source__isnull=False)
+        )
+        if pronunciations.exists():
+            source = pronunciations[0].source
+        else:
+            source = null
+    return source
+
+
 @csrf_exempt
 def searchWords(request):
     try:
@@ -83,23 +104,7 @@ def searchWords(request):
             result = Word.objects.filter(id__in=body['words'])
             result = filterInOrder(result, body['words'])
             for word in result:
-                pronunciations = word.pronunciation.filter(
-                    Q(ipa__iexact=word.standard_ipa)
-                    & Q(visibility=True)
-                    & Q(source__isnull=False)
-                )
-                if pronunciations.exists():
-                    pronunciation = pronunciations[0].source
-                else:
-                    pronunciations = Pronunciation.objects.filter(
-                        Q(ipa__iexact=word.standard_ipa)
-                        & Q(visibility=True)
-                        & Q(source__isnull=False)
-                    )
-                    if pronunciations.exists():
-                        pronunciation = pronunciations[0].source
-                    else:
-                        pronunciation = 'null'
+                pronunciation = word2pronunciation(word, 'null')
                 words.append({'word': {"id": word.id, 'word': word.word, 'definition': word.definition,
                                        "contributor": word.contributor.id, "annotation": word.annotation,
                                        "standard_ipa": word.standard_ipa,
@@ -131,8 +136,7 @@ def manageWord(request, id):
                 word.views = word.views + 1
                 word.save()
                 user = word.contributor
-                source = Pronunciation.objects.filter(ipa=word.standard_ipa).filter(visibility=True)
-                source = source[0].source if source.exists() else None
+                source = word2pronunciation(word)
                 return JsonResponse({"word": {"id": word.id, 'word': word.word, 'definition': word.definition,
                                               "contributor": {"id": user.id, 'username': user.username,
                                                               'nickname': user.user_info.nickname,
