@@ -1,3 +1,4 @@
+import json
 import math
 import os
 import random
@@ -304,20 +305,14 @@ def carousel(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-def download_file(url, local_path, filename):
 def download_file(url, folder, filename):
     try:
-        if not os.path.exists(local_path):
-            os.makedirs(local_path)
-        path = os.path.join(local_path, filename)
         if not os.path.exists(folder):
             os.makedirs(folder)
         path = os.path.join(folder, filename)
         fd = open(path, 'w')
         fd.close()
         urllib.request.urlretrieve(url, filename=path)
-        key = 'files/download/' + timezone.now().__format__("%Y/%m/%d/") + \
-              filename.split('_')[-1]
         key = 'files/' + '/'.join(folder.rsplit('/', 2)[1:]) + f'/{filename.replace("_", "/")}'
         url = upload_file(path, key)
         return url
@@ -356,13 +351,6 @@ def files(request):
                 suffix = file._name.rsplit('.')[-1]
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
-                type_folder = os.path.join(settings.MEDIA_ROOT, type)
-                folder = os.path.join(type_folder, str(user.id))
-                if not os.path.exists(type_folder):
-                    os.mkdir(type_folder)
-                    os.mkdir(folder)
-                elif not os.path.exists(folder):
-                    os.mkdir(folder)
                 folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))
                 if not os.path.exists(folder):
                     os.makedirs(folder)
@@ -385,7 +373,6 @@ def files(request):
                     suffix = body['url'].split('/', 4)[-1]
                     type = suffix.split('/', 2)[0]
                     id = suffix.split('/', 2)[1]
-                    if user.id == eval(id) or user.is_superuser():
                     if user.id == eval(id) or user.is_superuser:
                         filename = suffix.split('/', 2)[2]
                         filename = '_'.join(filename.split('/'))
@@ -660,3 +647,51 @@ def manageNotificationUnread(request):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
+
+
+import requests
+
+
+@csrf_exempt
+def test(request):
+    try:
+        headers = {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImR4dyIsImlkIjoxLCJ2YWx1ZS'
+                            'I6IkJjTmlVQyJ9.rxvxJbnG856yk9k0uNfLFTGReAAEKKVKKIfkO9X98m0'}
+        origin_url = 'https://api.pxm.edialect.top'
+        for pron in Pronunciation.objects.all():
+            if pron.source:
+                old_source = pron.source
+                # 下载到本地
+                folder = os.path.join(settings.BASE_DIR, 'material', 'audio', '1')
+                if not os.path.exists(folder):
+                    os.makedirs(folder)
+                path = os.path.join(folder, 'dxw.mp3')
+                response = requests.get(pron.source)
+                with open(path, 'wb') as f:
+                    f.write(response.content)
+                # 上传文件
+                upload_url = f'{origin_url}/website/files'
+                response = requests.post(upload_url, headers=headers,
+                                         files={'file': ('dxw.mp3', open(path, 'rb'), 'audio/mpeg')})
+                if response.status_code == 200:
+                    new_source = eval(response.content)['url']
+                    # 更新语音
+                    update_url = f'{origin_url}/pronunciation/{pron.id}'
+                    body = {'pronunciation': {'source': new_source}}
+                    response = requests.put(update_url, headers=headers, data=json.dumps(body))
+                    if response.status_code == 200:
+                        # 删除原文件
+                        delete_url = f'{origin_url}/website/files'
+                        body = {'url': old_source}
+                        response = requests.delete(delete_url, headers=headers, data=json.dumps(body))
+                        if response.status_code == 200:
+                            pron.source = new_source
+                            pron.save()
+                        else:
+                            print('Fail')
+                    else:
+                        print('Fail')
+                else:
+                    print('Fail')
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
