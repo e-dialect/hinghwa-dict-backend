@@ -383,10 +383,11 @@ def files(request):
                         path = os.path.join(settings.MEDIA_ROOT, type, id, filename)
                         if os.path.exists(path):
                             os.remove(path)
-                            delete_file(suffix)
+                            key = body['url'].split('/', 3)[-1]
+                            delete_file(key)
                             return JsonResponse({}, status=200)
                         else:
-                            return JsonResponse({"msg": "文件不存在"}, status=500)
+                            return JsonResponse({}, status=404)
                     else:
                         return JsonResponse({}, status=401)
                 except Exception as e:
