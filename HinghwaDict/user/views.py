@@ -50,7 +50,7 @@ def register(request):
                     user_info = UserInfo.objects.create(user=user, nickname='用户{}'.format(random_str()))
                     if 'avatar' in body:
                         # 下载连接中图片
-                        suffix = body['avatar'].split('.')[-1]
+                        suffix = 'png'
                         time = timezone.now().__format__("%Y_%m_%d")
                         filename = time + '_' + random_str(15) + '.' + suffix
                         url = download_file(body['avatar'], 'download', str(user.id), filename)
@@ -222,6 +222,14 @@ def manageInfo(request, id):
                         for key in info:
                             if key != "username":
                                 setattr(user.user_info, key, info[key])
+                        if ('avatar' in info) and info['avatar'].split('/', 3)[2] not in ['api.pxm.edialect.top',
+                                                                                          'cos.edialect.top']:
+                            suffix = 'png'
+                            time = timezone.now().__format__("%Y_%m_%d")
+                            filename = time + '_' + random_str(15) + '.' + suffix
+                            url = download_file(info['avatar'], 'download', str(user.id), filename)
+                            if url is not None:
+                                user.user_info.avatar = url
                         user.save()
                         user.user_info.save()
                         payload = {'username': user.username, 'id': user.id,

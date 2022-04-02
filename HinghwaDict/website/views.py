@@ -2,8 +2,7 @@ import json
 import math
 import os
 import random
-import urllib.request
-
+import requests
 import demjson
 import jwt
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -648,5 +647,3 @@ def manageNotificationUnread(request):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
-
-
