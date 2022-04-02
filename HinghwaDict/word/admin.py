@@ -3,6 +3,7 @@ from django.contrib import messages
 from django.utils.translation import ngettext
 
 from .models import Word, Character, Pronunciation, Application
+from website.views import sendNotification
 
 
 # Register your models here.
@@ -13,7 +14,6 @@ class WordAdmin(admin.ModelAdmin):
     list_filter = ['contributor', 'visibility']
     search_fields = ['word', 'definition', 'contributor__username', 'id', 'standard_ipa', 'standard_pinyin']
     ordering = ['id', '-views']
-    list_editable = ['visibility']
     list_per_page = 50
     filter_horizontal = ['related_words', 'related_articles']
     raw_id_fields = ("contributor",)
@@ -56,18 +56,22 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 class PronunciationAdmin(admin.ModelAdmin):
-    list_display = ['id', 'word', 'pinyin', 'ipa', 'contributor', 'county', 'views', 'visibility']
+    list_display = ['id', 'word', 'pinyin', 'ipa', 'contributor', 'county', 'views', 'visibility',
+                    'granted', 'verifier']
     list_filter = ['contributor', 'visibility', 'county']
     search_fields = ['word__word', 'contributor__username', 'pinyin', 'id', 'ipa']
-    ordering = ['id', '-views']
-    list_editable = ['visibility']
+    ordering = ['-id', '-views']
     list_per_page = 50
     raw_id_fields = ("contributor", "word")
 
     def pass_visibility(self, request, queryset):
-        for article in queryset:
-            article.visibility = True
-            article.save()
+        for pro in queryset:
+            if not pro.visibility:
+                content = f"恭喜您的语音(id ={pro.id}) 已通过审核"
+                sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
+            pro.visibility = True
+            pro.verifier_id = 2
+            pro.save()
         updated = len(queryset)
         self.message_user(request, ngettext(
             '%d 个语音被成功标记为可见。',
@@ -78,9 +82,13 @@ class PronunciationAdmin(admin.ModelAdmin):
     pass_visibility.short_description = "所选 发音 通过审核"
 
     def withdraw_visibility(self, request, queryset):
-        for item in queryset:
-            item.visibility = False
-            item.save()
+        for pro in queryset:
+            if pro.visibility:
+                content = f'很遗憾，您的语音(id = {id}) 没通过审核'
+                sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
+            pro.visibility = False
+            pro.verifier_id = 2
+            pro.save()
         updated = len(queryset)
         self.message_user(request, ngettext(
             '%d 个语音被成功标记为不可见。',
@@ -95,9 +103,9 @@ class PronunciationAdmin(admin.ModelAdmin):
 
 class ApplicationAdmin(admin.ModelAdmin):
     list_display = ['id', 'word', 'reason', 'contributor', 'granted', 'verifier']
-    list_filter = ['contributor', 'granted', 'verifier', 'word']
+    list_filter = ['contributor', 'verifier', 'word']
     search_fields = ['word__word', 'content_word', 'contributor__username', 'id', 'definition']
-    ordering = ['id']
+    ordering = ['-id']
     list_per_page = 50
     filter_horizontal = ['related_words', 'related_articles']
     raw_id_fields = ("contributor", 'verifier', 'word')

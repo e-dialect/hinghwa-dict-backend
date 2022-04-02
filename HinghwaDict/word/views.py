@@ -418,6 +418,10 @@ def searchPronunciations(request):
                 pronunciations = Pronunciation.objects.all()
             else:
                 pronunciations = Pronunciation.objects.filter(visibility=True)
+            if 'verifier' in request.GET:
+                pronunciations = pronunciations.filter(verifier__id=request.GET['verifier'])
+            if 'granted' in request.GET:
+                pronunciations = pronunciations.filter(verifier__isnull=request.GET['granted'] != 'true')
             if 'word' in request.GET:
                 pronunciations = pronunciations.filter(word__id=request.GET['word'])
             if 'contributor' in request.GET:
@@ -440,7 +444,13 @@ def searchPronunciations(request):
                                                  'ipa': pronunciation.ipa, 'pinyin': pronunciation.pinyin,
                                                  'contributor': pronunciation.contributor.id,
                                                  'county': pronunciation.county, 'town': pronunciation.town,
-                                                 'visibility': pronunciation.visibility},
+                                                 'visibility': pronunciation.visibility,
+                                                 'verifier': {
+                                                     'nickname': pronunciation.verifier.user_info.nickname,
+                                                     'avatar': pronunciation.verifier.user_info.avatar,
+                                                     'id': pronunciation.verifier.id
+                                                 } if pronunciation.verifier else None,
+                                                 'granted': pronunciation.granted()},
                                'contributor': simpleUserInfo(pronunciation.contributor)})
             return JsonResponse({"pronunciation": result, 'total': total}, status=200)
         elif request.method == 'POST':
@@ -510,7 +520,14 @@ def managePronunciation(request, id):
                                                        'avatar': user.user_info.avatar,
                                                        'county': user.user_info.county, 'town': user.user_info.town,
                                                        'is_admin': user.is_superuser}, 'county': pronunciation.county,
-                                       'town': pronunciation.town, 'visibility': pronunciation.visibility}}, status=200)
+                                       'town': pronunciation.town, 'visibility': pronunciation.visibility,
+                                       'verifier': {
+                                           'nickname': pronunciation.verifier.user_info.nickname,
+                                           'avatar': pronunciation.verifier.user_info.avatar,
+                                           'id': pronunciation.verifier.id
+                                       } if pronunciation.verifier else None,
+                                       'granted': pronunciation.granted()
+                                       }}, status=200)
             elif request.method == 'PUT':
                 token = request.headers['token']
                 if token_check(token, 'dxw', pronunciation.contributor.id):
@@ -712,20 +729,25 @@ def managePronunciationVisibility(request, id):
     :return:
     '''
     try:
-        if request.method == 'PUT':
+        if request.method in ['PUT', 'POST']:
             token = request.headers['token']
             user = token_check(token, 'dxw', -1)
             if user:
                 pro = Pronunciation.objects.filter(id=id)
                 if pro.exists():
+                    body = demjson.decode(request.body) if len(request.body) else {}
                     pro = pro[0]
-                    pro.visibility ^= True
-                    if pro.visibility:
-                        content = f"恭喜您的语音(id ={id}) 已通过审核"
+                    if 'result' in body:
+                        pro.visibility = body['result']
                     else:
-                        body = demjson.decode(request.body) if len(request.body) else {}
-                        msg = body['message'] if 'message' in body else '管理员审核不通过'
-                        content = f'您的语音(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}'
+                        pro.visibility ^= True
+                    pro.verifier = user
+                    if pro.visibility:
+                        extra = f"，理由是:\n\t{body['reason']}" if "reason" in body else ""
+                        content = f"恭喜您的语音(id ={id}) 已通过审核" + extra
+                    else:
+                        msg = body['reason'] if 'reason' in body else body['message']
+                        content = f'很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}'
                     sendNotification(None, [pro.contributor], content=content, target=pro, title='【通知】语音审核结果')
                     pro.save()
                     return JsonResponse({}, status=200)
@@ -746,7 +768,7 @@ def searchApplication(request):
             token = request.headers['token']
             user = token_check(token, 'dxw', -1)
             if user:
-                applications = Application.objects.filter(granted=False)
+                applications = Application.objects.filter(verifier__isnull=True)
                 result = []
                 for application in applications:
                     related_words = [word.id for word in application.related_words.all()]
@@ -769,7 +791,7 @@ def searchApplication(request):
                             'avatar': application.contributor.user_info.avatar,
                             'id': application.contributor.id
                         },
-                        "granted": application.granted,
+                        "granted": application.granted(),
                         "verifier": {
                             'nickname': application.verifier.user_info.nickname,
                             'avatar': application.verifier.user_info.avatar,
@@ -852,7 +874,7 @@ def manageApplication(request, id):
                             'avatar': application.contributor.user_info.avatar,
                             'id': application.contributor.id
                         },
-                        "granted": application.granted,
+                        "granted": application.granted(),
                         "verifier": {
                             'nickname': application.verifier.user_info.nickname,
                             'avatar': application.verifier.user_info.avatar,
@@ -867,7 +889,6 @@ def manageApplication(request, id):
                 user = token_check(token, 'dxw', -1)
                 if user:
                     body = demjson.decode(request.body)
-                    application.granted = True
                     application.verifier = user
                     if body['result']:
                         if application.word:

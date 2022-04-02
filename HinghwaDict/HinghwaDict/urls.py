@@ -37,7 +37,7 @@ urlpatterns = [
                            path('/add', word.load_word),
                            path('/upload_standard', word.upload_standard),
                            path('/applications', word.searchApplication),
-                           path('/applications/<int:id>',word.manageApplication),
+                           path('/applications/<int:id>', word.manageApplication),
                            ])),
     path('characters', include([path('', word.searchCharacters),
                                 path('/<int:id>', word.manageCharacter),
@@ -48,6 +48,8 @@ urlpatterns = [
     path('pronunciation', include([path('', word.searchPronunciations),
                                    path('/<int:id>', word.managePronunciation),
                                    path('/<str:ipa>', word.combinePronunciation),
-                                   path('/<int:id>/visibility', word.managePronunciationVisibility)])),
+                                   path('/<int:id>/visibility', word.managePronunciationVisibility),
+                                   path('/<int:id>/examine', word.managePronunciationVisibility),
+                                   ])),
     path('record', word.record),
 ]
