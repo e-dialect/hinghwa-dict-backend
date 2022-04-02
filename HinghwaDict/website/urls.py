@@ -16,5 +16,5 @@ urlpatterns = [
     path('notifications', Notifications),
     path('notifications/<int:id>', manageNotification),
     path('notifications/unread', manageNotificationUnread),
-    # path('test',test)
+    # path('test', test)
 ]

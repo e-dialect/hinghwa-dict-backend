@@ -305,15 +305,16 @@ def carousel(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-def download_file(url, folder, filename):
+def download_file(url, type, user_id, filename):
     try:
+        folder = os.path.join(settings.MEDIA_ROOT, type, user_id)
         if not os.path.exists(folder):
             os.makedirs(folder)
         path = os.path.join(folder, filename)
-        fd = open(path, 'w')
-        fd.close()
-        urllib.request.urlretrieve(url, filename=path)
-        key = 'files/' + '/'.join(folder.rsplit('/', 2)[1:]) + f'/{filename.replace("_", "/")}'
+        response = requests.get(url)
+        with open(path, 'wb') as f:
+            f.write(response.content)
+        key = f'files/{type}/{user_id}/{filename.replace("_", "/")}'
         url = upload_file(path, key)
         return url
     except Exception as e:
@@ -649,49 +650,3 @@ def manageNotificationUnread(request):
         return JsonResponse({'msg': str(msg)}, status=500)
 
 
-import requests
-
-
-@csrf_exempt
-def test(request):
-    try:
-        headers = {'token': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImR4dyIsImlkIjoxLCJ2YWx1ZS'
-                            'I6IkJjTmlVQyJ9.rxvxJbnG856yk9k0uNfLFTGReAAEKKVKKIfkO9X98m0'}
-        origin_url = 'https://api.pxm.edialect.top'
-        for pron in Pronunciation.objects.all():
-            if pron.source:
-                old_source = pron.source
-                # 下载到本地
-                folder = os.path.join(settings.BASE_DIR, 'material', 'audio', '1')
-                if not os.path.exists(folder):
-                    os.makedirs(folder)
-                path = os.path.join(folder, '***REMOVED***.mp3')
-                response = requests.get(pron.source)
-                with open(path, 'wb') as f:
-                    f.write(response.content)
-                # 上传文件
-                upload_url = f'{origin_url}/website/files'
-                response = requests.post(upload_url, headers=headers,
-                                         files={'file': ('***REMOVED***.mp3', open(path, 'rb'), 'audio/mpeg')})
-                if response.status_code == 200:
-                    new_source = eval(response.content)['url']
-                    # 更新语音
-                    update_url = f'{origin_url}/pronunciation/{pron.id}'
-                    body = {'pronunciation': {'source': new_source}}
-                    response = requests.put(update_url, headers=headers, data=json.dumps(body))
-                    if response.status_code == 200:
-                        # 删除原文件
-                        delete_url = f'{origin_url}/website/files'
-                        body = {'url': old_source}
-                        response = requests.delete(delete_url, headers=headers, data=json.dumps(body))
-                        if response.status_code == 200:
-                            pron.source = new_source
-                            pron.save()
-                        else:
-                            print('Fail')
-                    else:
-                        print('Fail')
-                else:
-                    print('Fail')
-    except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=500)
