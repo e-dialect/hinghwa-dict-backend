@@ -11,6 +11,7 @@ services:
             - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=8000"
             - "traefik.http.routers.${SERVICE_NAME}.entrypoints=websecure"
             - "traefik.http.routers.${SERVICE_NAME}.tls=true"
+            - "traefik.http.routers.${SERVICE_NAME}.tls.certresolver=tencentcloud"
             - "traefik.http.routers.${SERVICE_NAME}.middlewares=${SERVICE_NAME}-compress"
             - "traefik.http.middlewares.${SERVICE_NAME}-compress.compress=true"
         networks: 
