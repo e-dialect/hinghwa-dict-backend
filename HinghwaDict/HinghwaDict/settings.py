@@ -11,23 +11,25 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import logging
 import os
-
+import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import time
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env('.env')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'o!(g#hcr&o0zj0f1ba^p%ig-ta+z@91+ri*$_isc-%wvpbg^ue'
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
-
 
 # Application definition
 
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     'django_apscheduler',
     'corsheaders',
     'notifications',
+    # 'rest_framework'
 ]
 
 MIDDLEWARE = [
@@ -79,7 +82,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'HinghwaDict.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
 
@@ -89,7 +91,6 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.0/ref/settings/#auth-password-validators
@@ -109,7 +110,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.0/topics/i18n/
 
@@ -123,7 +123,6 @@ USE_L10N = True
 
 USE_TZ = False
 
-
 STATIC_URL = '/static/'
 # STATICFILES_DIRS = [
 #     os.path.join(BASE_DIR, 'static'),
@@ -132,20 +131,19 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/login'
-EMAIL_HOST = 'smtp.exmail.qq.com'
-EMAIL_HOST_USER = 'edialect@edialect.top'
-EMAIL_HOST_PASSWORD = 'BF3zBTA8E7wkFXCg'
-EMAIL_PORT = 465
+EMAIL_HOST = env('EMAIL_HOST')
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_PORT = env('EMAIL_PORT')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = 'edialect@edialect.top'
+DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # 媒体图片下载到media/下
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
 
 # 跨域访问设置
 CORS_ORIGIN_ALLOW_ALL = True
@@ -177,17 +175,17 @@ CORS_ALLOW_HEADERS = (
     'token'
 )
 # parameter of Tencent cos
-COS_SECRET_ID = 'AKID0pQlpeFZcQyGI4YmjOnvnOilX2GCsIRI'  # 替换为用户的 secretId
-COS_SECRET_KEY = 'dy2pPjlW0D9oCJ9i0B6k6B03pKYU9XeU'  # 替换为用户的 secretKey
-COS_BUCKET = 'HinghwaDict-1259415432'  # BucketName-APPID
-COS_REGION = 'ap-shanghai'
+COS_SECRET_ID = env('COS_SECRET_ID')  # 替换为用户的 secretId
+COS_SECRET_KEY = env('COS_SECRET_KEY')  # 替换为用户的 secretKey
+COS_BUCKET = env('COS_BUCKET')  # BucketName-APPID
+COS_REGION = env('COS_REGION')
 
 # parameter of wechat login
-APP_ID = 'wxcfb772ecd3bd408e'
-APP_SECRECT = '88b0c5644575c13f4f43dc2cfa179fc4'
+APP_ID = env('APP_ID')
+APP_SECRECT = env('APP_SECRECT')
 
 # parameter of jwt
-JWT_KEY = 'dxw'
+JWT_KEY = env('JWT_KEY')
 
 import os
 
@@ -272,3 +270,14 @@ LOGGING = {
         },
     }
 }
+DATA_UPLOAD_MAX_NUMBER_FIELDS = 10240
+
+REST_FRAMEWORK = {
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAdminUser',
+    ],
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 15
+}
+
+
