@@ -71,7 +71,7 @@ class Application(models.Model):
     granted.short_description = '是否审核'  # 展示名称
 
     def __str__(self):
-        return f'用户{self.contributor.id} 对 {self.word.id} 号词语的修改申请'
+        return f'用户{self.contributor.id}'+(f'对 {self.word.id} 号词语的修改申请' if self.word else f'的新建词条申请')
 
     def clean(self):
         self.content_word = self.content_word.strip()
