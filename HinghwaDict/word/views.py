@@ -12,7 +12,7 @@ from website.views import evaluate, token_check, sendNotification, simpleUserInf
 from .forms import WordForm, CharacterForm, PronunciationForm, ApplicationForm
 from .models import Word, Character, Pronunciation, User, Application, split
 from django.db.models import Q
-
+from django.conf import settings
 
 def word2pronunciation(word: Word, null=None):
     pronunciations = word.pronunciation.filter(
@@ -74,7 +74,7 @@ def searchWords(request):
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.WT_KEY, -1)
             if user:
                 body = body['word']
                 word_form = WordForm(body)
@@ -161,7 +161,7 @@ def manageWord(request, id):
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
-                if token_check(token, 'dxw', word.contributor.id):
+                if token_check(token, settings.WT_KEY, word.contributor.id):
                     body = body['word']
                     word_form = WordForm(body)
                     for key in body:
@@ -190,7 +190,7 @@ def manageWord(request, id):
                     return JsonResponse({}, status=401)
             elif request.method == 'DELETE':
                 token = request.headers['token']
-                if token_check(token, 'dxw', word.contributor.id):
+                if token_check(token, settings.WT_KEY, word.contributor.id):
                     word.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -219,7 +219,7 @@ def searchCharacters(request):
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.WT_KEY, -1)
             if user:
                 body = body['character']
                 character_form = CharacterForm(body)
@@ -387,7 +387,7 @@ def manageCharacter(request, id):
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
-                if token_check(token, 'dxw', -1):
+                if token_check(token, settings.WT_KEY, -1):
                     body = body['character']
                     character_form = CharacterForm(body)
                     for key in body:
@@ -401,7 +401,7 @@ def manageCharacter(request, id):
                     return JsonResponse({}, status=401)
             elif request.method == 'DELETE':
                 token = request.headers['token']
-                if token_check(token, 'dxw', -1):
+                if token_check(token, settings.WT_KEY, -1):
                     character.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -418,7 +418,7 @@ def manageCharacter(request, id):
 def searchPronunciations(request):
     try:
         if request.method == 'GET':
-            if ('token' in request.headers) and token_check(request.headers['token'], 'dxw', -1):
+            if ('token' in request.headers) and token_check(request.headers['token'], settings.WT_KEY, -1):
                 pronunciations = Pronunciation.objects.all()
             else:
                 pronunciations = Pronunciation.objects.filter(visibility=True)
@@ -459,7 +459,7 @@ def searchPronunciations(request):
             return JsonResponse({"pronunciation": result, 'total': total}, status=200)
         elif request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, 'dxw')
+            user = token_check(token, settings.WT_KEY)
             if user:
                 body = demjson.decode(request.body)
                 body = body['pronunciation']
@@ -534,7 +534,7 @@ def managePronunciation(request, id):
                                        }}, status=200)
             elif request.method == 'PUT':
                 token = request.headers['token']
-                if token_check(token, 'dxw', pronunciation.contributor.id):
+                if token_check(token, settings.WT_KEY, pronunciation.contributor.id):
                     body = demjson.decode(request.body)
                     body = body['pronunciation']
                     pronunciation_form = PronunciationForm(body)
@@ -552,7 +552,7 @@ def managePronunciation(request, id):
                     return JsonResponse({}, status=401)
             elif request.method == 'DELETE':
                 token = request.headers['token']
-                user = token_check(token, 'dxw', pronunciation.contributor.id)
+                user = token_check(token, settings.WT_KEY, pronunciation.contributor.id)
                 if user:
                     if user != pronunciation.contributor:
                         body = demjson.decode(request.body)
@@ -578,7 +578,7 @@ def load_character(request):
     try:
         body = demjson.decode(request.body)
         token = request.headers['token']
-        user = token_check(token, 'dxw', -1)
+        user = token_check(token, settings.WT_KEY, -1)
         if user:
             file = body['file']
             flush = body['flush']
@@ -672,7 +672,7 @@ def upload_standard(request):
     try:
         if request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.WT_KEY, -1)
             if user:
                 file = request.FILES.get("file")
 
@@ -735,7 +735,7 @@ def managePronunciationVisibility(request, id):
     try:
         if request.method in ['PUT', 'POST']:
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.WT_KEY, -1)
             if user:
                 pro = Pronunciation.objects.filter(id=id)
                 if pro.exists():
@@ -770,7 +770,7 @@ def searchApplication(request):
     try:
         if request.method == 'GET':
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.WT_KEY, -1)
             if user:
                 applications = Application.objects.filter(verifier__isnull=True)
                 result = []
@@ -807,7 +807,7 @@ def searchApplication(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, 'dxw', -1)
+            user = token_check(token, settings.WT_KEY, -1)
             if user:
                 body = demjson.decode(request.body)
                 if 'word' in body['content']:
@@ -856,7 +856,7 @@ def manageApplication(request, id):
             application = application[0]
             if request.method == 'GET':
                 token = request.headers['token']
-                user = token_check(token, 'dxw', application.contributor.id)
+                user = token_check(token, settings.WT_KEY, application.contributor.id)
                 if user:
                     related_words = [word.id for word in application.related_words.all()]
                     related_articles = [article.id for article in application.related_articles.all()]
@@ -890,7 +890,7 @@ def manageApplication(request, id):
                     return JsonResponse({}, status=401)
             elif request.method == 'PUT':
                 token = request.headers['token']
-                user = token_check(token, 'dxw', -1)
+                user = token_check(token, settings.WT_KEY, -1)
                 if user:
                     body = demjson.decode(request.body)
                     application.verifier = user

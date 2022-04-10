@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from website.views import token_check, simpleUserInfo, filterInOrder
 from .forms import MusicForm
 from .models import Music
-
+from django.conf import settings
 
 @csrf_exempt
 def searchMusic(request):
@@ -23,7 +23,7 @@ def searchMusic(request):
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
-            user = token_check(token, 'dxw')
+            user = token_check(token, settings.JWT_KEY)
             if user:
                 music_form = MusicForm(body)
                 if music_form.is_valid():
@@ -79,7 +79,7 @@ def manageMusic(request, id):
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
-                user = token_check(token, 'dxw', music.contributor.id)
+                user = token_check(token, settings.JWT_KEY, music.contributor.id)
                 if user:
                     body = body['music']
                     music_form = MusicForm(body)
@@ -94,7 +94,7 @@ def manageMusic(request, id):
                     return JsonResponse({}, status=401)
             elif request.method == 'DELETE':
                 token = request.headers['token']
-                user = token_check(token, 'dxw', music.contributor.id)
+                user = token_check(token, settings.JWT_KEY, music.contributor.id)
                 if user:
                     music.delete()
                     return JsonResponse({}, status=200)
@@ -113,7 +113,7 @@ def like(request, id):
         if music.exists() and music[0].visibility:
             music = music[0]
             token = request.headers['token']
-            user = token_check(token, 'dxw')
+            user = token_check(token, settings.JWT_KEY)
             if user:
                 if request.method == 'POST':
                     music.like_users.add(user)
