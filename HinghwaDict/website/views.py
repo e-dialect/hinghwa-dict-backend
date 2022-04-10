@@ -348,7 +348,14 @@ def files(request):
             if request.method == "POST":
                 file = request.FILES.get("file")
                 type = str(file.content_type).split('/')[0]
-                suffix = file._name.rsplit('.')[-1]
+                if file._name.find('.') != -1:
+                    suffix = file._name.rsplit('.')[-1]
+                elif type == 'image':
+                    suffix = 'png'
+                elif type == 'video':
+                    suffix = 'mp4'
+                else:
+                    suffix = 'mp3'
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
                 folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))
