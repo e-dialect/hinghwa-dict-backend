@@ -43,19 +43,6 @@ def email_check(email, code):
         return 0
 
 
-token_dict = {}
-
-
-def token_register(token):
-    token_dict[token] = timezone.now()
-    if len(token_dict) > 1e4:
-        now = timezone.now()
-        ls = token_dict.items()
-        for key, value in ls:
-            if (now - value).seconds > 6000:
-                token_dict.pop(key)
-
-
 def token_check(token, key, id=0):
     '''
     id=-1表示要求管理员权限
@@ -69,12 +56,10 @@ def token_check(token, key, id=0):
     '''
     try:
         info = jwt.decode(token, key, algorithms=['HS256'])
-        if (token in token_dict) and (timezone.now() - token_dict[token]).seconds > 6000:
-            token_dict.pop(token)
+        if info['exp'] < timezone.now().timestamp():
             return 0
         user = User.objects.get(id=info['id'])
         if user.username == info['username'] and (id == 0 or id == info['id'] or user.is_superuser):
-            token_dict[token] = timezone.now()
             return user
         else:
             return 0
@@ -348,7 +333,14 @@ def files(request):
             if request.method == "POST":
                 file = request.FILES.get("file")
                 type = str(file.content_type).split('/')[0]
-                suffix = file._name.rsplit('.')[-1]
+                if file._name.find('.') != -1:
+                    suffix = file._name.rsplit('.')[-1]
+                elif type == 'image':
+                    suffix = 'png'
+                elif type == 'video':
+                    suffix = 'mp4'
+                else:
+                    suffix = 'mp3'
                 time = timezone.now().__format__("%Y_%m_%d")
                 filename = time + '_' + random_str(15) + '.' + suffix
                 folder = os.path.join(settings.MEDIA_ROOT, type, str(user.id))

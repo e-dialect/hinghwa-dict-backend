@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from website.views import evaluate, token_check, simpleUserInfo, filterInOrder, sendNotification
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
-
+from django.conf import settings
 
 @csrf_exempt
 def searchArticle(request):
@@ -38,7 +38,7 @@ def searchArticle(request):
             body = demjson.decode(request.body)
             # 创建新的文章
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***')
+            user = token_check(token, settings.JWT_KEY)
             if user:
                 article_form = ArticleForm(body)
                 if article_form.is_valid():
@@ -60,7 +60,7 @@ def searchArticle(request):
             user = 0
             if 'token' in request.headers:
                 token = request.headers['token']
-                user = token_check(token, '***REMOVED***')
+                user = token_check(token, settings.JWT_KEY)
                 if user:
                     if not user.is_superuser:
                         result = result.filter(visibility=True) | (result & user.articles.all())
@@ -92,7 +92,7 @@ def manageArticle(request, id):
             article = article[0]
             token = request.headers['token']
             if request.method == 'GET':
-                user = token_check(token, '***REMOVED***')
+                user = token_check(token, settings.JWT_KEY)
                 if article.visibility or user.is_superuser or user == article.author:
                     article.views += 1
                     article.save()
@@ -119,7 +119,7 @@ def manageArticle(request, id):
                 else:
                     return JsonResponse({}, status=404)
             elif request.method == 'PUT':
-                if token_check(token, '***REMOVED***', article.author.id):
+                if token_check(token, settings.JWT_KEY, article.author.id):
                     body = demjson.decode(request.body)
                     body = body['article']
                     article_form = ArticleForm(body)
@@ -137,7 +137,7 @@ def manageArticle(request, id):
                 else:
                     return JsonResponse({}, status=401)
             elif request.method == 'DELETE':
-                if token_check(token, '***REMOVED***', article.author.id):
+                if token_check(token, settings.JWT_KEY, article.author.id):
                     article.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -155,7 +155,7 @@ def manageArticleVisibility(request, id):
     try:
         if request.method == 'PUT':
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***', -1)
+            user = token_check(token, settings.JWT_KEY, -1)
             if user:
                 article = Article.objects.filter(id=id)
                 if article.exists():
@@ -187,7 +187,7 @@ def like(request, id):
         if article.exists() and article[0].visibility:
             article = article[0]
             token = request.headers['token']
-            user = token_check(token, '***REMOVED***')
+            user = token_check(token, settings.JWT_KEY)
             if user:
                 if request.method == 'POST':
                     article.like_users.add(user)
@@ -213,7 +213,7 @@ def comment(request, id):
     try:
         article = Article.objects.filter(id=id)
         token = request.headers['token']
-        user = token_check(token, '***REMOVED***')
+        user = token_check(token, settings.JWT_KEY)
         if article.exists() and (article[0].visibility or user.is_superuser or user == article[0].author):
             article = article[0]
             if request.method == 'GET':
@@ -226,7 +226,7 @@ def comment(request, id):
                 return JsonResponse({"comments": comments}, status=200)
             elif request.method == 'POST':
                 token = request.headers['token']
-                user = token_check(token, '***REMOVED***')
+                user = token_check(token, settings.JWT_KEY)
                 if user:
                     body = demjson.decode(request.body)
                     comment_form = CommentForm(body)
@@ -246,7 +246,7 @@ def comment(request, id):
                 body = demjson.decode(request.body)
                 token = request.headers['token']
                 comment = Comment.objects.get(id=body['id'])
-                if token_check(token, '***REMOVED***', comment.user.id):
+                if token_check(token, settings.JWT_KEY, comment.user.id):
                     # 应该超级管理员也能删除吧
                     comment.delete()
                     return JsonResponse({}, status=200)

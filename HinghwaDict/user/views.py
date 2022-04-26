@@ -1,3 +1,4 @@
+import datetime
 import os.path
 
 import demjson
@@ -12,7 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from notifications.models import Notification
 
-from website.views import random_str, email_check, token_check, download_file, token_register, simpleUserInfo
+from website.views import random_str, email_check, token_check, download_file, simpleUserInfo
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -72,28 +73,42 @@ def register(request):
 
 
 @csrf_exempt
-@require_POST
 def login(request):
     try:
-        body = demjson.decode(request.body)
-        username = body['username']
-        password = body['password']
-        user = authenticate(username=username, password=password)
-        if user:
-            user.last_login = timezone.now()
-            user.save()
-            payload = {'username': username, 'id': user.id,
-                       "value": random_str()}
-            # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
-            token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
-            try:
-                token = token.decode('utf-8')
-            except Exception as e:
-                pass
-            token_register(token)
-            return JsonResponse({"token": token, 'id': user.id}, status=200)
-        else:
-            return JsonResponse({}, status=401)
+        if request.method == 'POST':
+            body = demjson.decode(request.body)
+            username = body['username']
+            password = body['password']
+            user = authenticate(username=username, password=password)
+            if user:
+                user.last_login = timezone.now()
+                user.save()
+                payload = {'username': username, 'id': user.id,
+                           "exp": (timezone.now() + datetime.timedelta(seconds=3600)).timestamp()}
+                # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
+                token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
+                try:
+                    token = token.decode('utf-8')
+                except Exception as e:
+                    pass
+                return JsonResponse({"token": token, 'id': user.id}, status=200)
+            else:
+                return JsonResponse({}, status=401)
+        elif request.method == 'PUT':
+            token = request.headers['token']
+            user = token_check(token, settings.JWT_KEY)
+            if user:
+                payload = {'username': user.username, 'id': user.id,
+                           "exp": (timezone.now() + datetime.timedelta(seconds=3600)).timestamp()}
+                # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
+                token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
+                try:
+                    token = token.decode('utf-8')
+                except Exception as e:
+                    pass
+                return JsonResponse({"token": token, 'id': user.id}, status=200)
+            else:
+                return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
 
@@ -129,13 +144,12 @@ def wxlogin(request):
             user.last_login = timezone.now()
             user.save()
             payload = {'username': user.username, 'id': user.id,
-                       "value": random_str()}
+                       "exp": (timezone.now() + datetime.timedelta(seconds=3600)).timestamp()}
             token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
             try:
                 token = token.decode('utf-8')
             except Exception as e:
                 pass
-            token_register(token)
             return JsonResponse({"token": token, 'id': user.id}, status=200)
         else:
             return JsonResponse({}, status=404)
@@ -233,13 +247,12 @@ def manageInfo(request, id):
                         user.save()
                         user.user_info.save()
                         payload = {'username': user.username, 'id': user.id,
-                                   "value": random_str()}
+                                   "exp": (timezone.now() + datetime.timedelta(seconds=3600)).timestamp()}
                         token = jwt.encode(payload, settings.JWT_KEY, algorithm='HS256')
                         try:
                             token = token.decode('utf-8')
                         except Exception as e:
                             pass
-                        token_register(token)
                         return JsonResponse({"token": token}, status=200)
                     else:
                         if (not user_form.is_valid()) and 'username' in user_form.errors:
