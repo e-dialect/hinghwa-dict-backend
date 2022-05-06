@@ -79,6 +79,10 @@ def searchPronunciations(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+def Ipa2Pinyin(ipa) -> str:
+    return ipa
+
+
 @csrf_exempt
 def combinePronunciation(request, ipa):
     try:
@@ -89,14 +93,13 @@ def combinePronunciation(request, ipa):
                 if file.endswith('.mp3'):
                     available.append(file.replace('.mp3', ''))
             available = set(available)
-
             ipa = split(ipa)
             ans = [(len(p.ipa), p.contributor.username, p.source) for p in
                    Pronunciation.objects.filter(ipa=ipa).filter(visibility=True)]
             ans.sort(key=lambda x: x[0])
             # 这部分直接拷贝下面的V2的代码
             inputs = []
-            for ipa1 in ipa:
+            for ipa1 in ipa.split(' '):
                 inputs.append(set([Ipa2Pinyin(ipa1)]))
             results = []
             for alt_pinyin in inputs:
@@ -155,34 +158,62 @@ def combinePronunciationV2(request):
     try:
         if request.method == 'GET':
             submit_list = os.listdir(os.path.join(settings.SAVED_PINYIN, 'submit'))
+            # secondary 即保证拼音对，不保证音调的正确性
             available = []
+            secondary_list = []
             for file in submit_list:
                 if file.endswith('.mp3'):
                     available.append(file.replace('.mp3', ''))
+                    secondary_list.append(file.replace('.mp3', '')[:-1])
             available = set(available)
+            secondary = set(secondary_list)
             inputs = []
+            secondary_inputs = []
             if 'words' in request.GET:
                 result = Character.objects.filter(character__in=request.GET['words'])
                 dic = {}
+                dic1 = {}
                 for character in request.GET['words']:
                     dic[character] = set()
+                    dic1[character] = set()
                 for character in result:
                     dic[character.character].add(character.pinyin)
+                    dic1[character.character].add(character.pinyin[:-1])
                 for character in request.GET['words']:
                     inputs.append(dic[character])
+                    secondary_inputs.append(dic1[character])
             elif 'ipas' in request.GET:
                 ipas = split(request.GET['ipas']).split(' ')
                 for ipa in ipas:
                     inputs.append(set([Ipa2Pinyin(ipa)]))
+                    secondary_inputs.append(set([Ipa2Pinyin(ipa)[:-1]]))
             elif 'pinyins' in request.GET:
                 pinyins = split(request.GET['pinyins']).split(' ')
                 for pinyin in pinyins:
                     inputs.append(set([pinyin]))
+                    secondary_inputs.append(set([pinyin[:-1]]))
             results = []
-            for alt_pinyin in inputs:
+            for alt_pinyin, secondary_pinyin in zip(inputs, secondary_inputs):
                 if len(alt_pinyin & available) > 0:
                     result = {'pinyin': list(alt_pinyin & available)[0],
                               'dir': os.path.join(settings.SAVED_PINYIN, 'submit')}
+                elif len(secondary_pinyin & secondary) > 0:
+                    temp = list(secondary_pinyin & secondary)
+                    a = list(alt_pinyin)
+                    mi = 8
+                    for x in temp:
+                        shengdiaos = []
+                        for y in a:
+                            if y.startswith(x):
+                                shengdiaos.append(int(y[-1]))
+                        for i in range(1, 8):
+                            pinyin = x + str(i)
+                            if pinyin in available:
+                                for shengdiao in shengdiaos:
+                                    if abs(shengdiao - i) < mi:
+                                        mi = abs(shengdiao - i)
+                                        optimize_pinyin = pinyin
+                    result = {'pinyin': optimize_pinyin, 'dir': os.path.join(settings.SAVED_PINYIN, 'submit')}
                 else:
                     result = {'pinyin': list(alt_pinyin)[0],
                               'dir': os.path.join(settings.SAVED_PINYIN, 'combine')}
