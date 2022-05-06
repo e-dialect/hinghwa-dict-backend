@@ -11,7 +11,7 @@ from website.views import token_check, sendNotification, simpleUserInfo, upload_
 from .forms import PronunciationForm
 from .models import Word, Character, Pronunciation, split
 from django.utils import timezone
-
+import translate
 
 @csrf_exempt
 def searchPronunciations(request):
@@ -79,8 +79,7 @@ def searchPronunciations(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-def Ipa2Pinyin(ipa) -> str:
-    return ipa
+
 
 
 @csrf_exempt
@@ -100,7 +99,7 @@ def combinePronunciation(request, ipa):
             # 这部分直接拷贝下面的V2的代码
             inputs = []
             for ipa1 in ipa.split(' '):
-                inputs.append(set([Ipa2Pinyin(ipa1)]))
+                inputs.append({translate.IPA_to_pinyin(ipa1)})
             results = []
             for alt_pinyin in inputs:
                 if len(alt_pinyin & available) > 0:
@@ -185,13 +184,13 @@ def combinePronunciationV2(request):
             elif 'ipas' in request.GET:
                 ipas = split(request.GET['ipas']).split(' ')
                 for ipa in ipas:
-                    inputs.append(set([Ipa2Pinyin(ipa)]))
-                    secondary_inputs.append(set([Ipa2Pinyin(ipa)[:-1]]))
+                    inputs.append({translate.IPA_to_pinyin(ipa)})
+                    secondary_inputs.append({translate.IPA_to_pinyin(ipa)[:-1]})
             elif 'pinyins' in request.GET:
                 pinyins = split(request.GET['pinyins']).split(' ')
                 for pinyin in pinyins:
-                    inputs.append(set([pinyin]))
-                    secondary_inputs.append(set([pinyin[:-1]]))
+                    inputs.append({pinyin})
+                    secondary_inputs.append({pinyin[:-1]})
             results = []
             for alt_pinyin, secondary_pinyin in zip(inputs, secondary_inputs):
                 if len(alt_pinyin & available) > 0:
