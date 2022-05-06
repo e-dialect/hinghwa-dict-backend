@@ -204,14 +204,6 @@ def manageWord(request, id):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-
-
-
-
-
-
-
-
 @require_POST
 @csrf_exempt
 def load_word(request):
@@ -328,9 +320,6 @@ def upload_standard(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({'msg': str(e)}, status=500)
-
-
-
 
 
 @csrf_exempt
@@ -462,6 +451,7 @@ def manageApplication(request, id):
                 if user:
                     body = demjson.decode(request.body)
                     application.verifier = user
+                    feedback = None
                     if body['result']:
                         if application.word:
                             word = application.word
@@ -487,13 +477,19 @@ def manageApplication(request, id):
                         for related_word in application.related_words.all():
                             word.related_words.add(related_word)
                         word.save()
+                        feedback = word.id
                     else:
-                        content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
-                                  f'未能通过审核，理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
+                        if application.word:
+                            content = f'您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})' \
+                                      f'未能通过审核，理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
+                            feedback = application.word.id
+                        else:
+                            content = f'您的创建申请 (id = {application.id})未能通过审核，' \
+                                      f'理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
                         title = '【通知】词条修改申请审核结果'
                     sendNotification(None, [application.contributor], content, target=application, title=title)
                     application.save()
-                    return JsonResponse({}, status=200)
+                    return JsonResponse({'word': feedback}, status=200)
                 else:
                     return JsonResponse({}, status=401)
             else:

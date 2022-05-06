@@ -131,23 +131,24 @@ def IPA_to_pinyin(IPA):
         return None
 
 
-data = []
-for line in open("list.txt", "r"):  #设置文件对象并读取每一行文件
-    data.append(line[0:-1])  #将每一行文件加入到list中
-# print(data)
-has = []
-for filename in os.listdir(path='.'):
-    if filename == "translate.py" or filename == "list.txt" or filename == "out.txt":
-        continue
-    matchObj = re.match(r'(.*).mp3$', filename, re.M | re.I)
-    s = matchObj.group(1)  # 获取非声调部分
-    has.append(s)
+if __name__ == '__main__':
+    data = []
+    for line in open("list.txt", "r"):  # 设置文件对象并读取每一行文件
+        data.append(line[0:-1])  # 将每一行文件加入到list中
+    # print(data)
+    has = []
+    for filename in os.listdir(path='.'):
+        if filename == "translate.py" or filename == "list.txt" or filename == "out.txt":
+            continue
+        matchObj = re.match(r'(.*).mp3$', filename, re.M | re.I)
+        s = matchObj.group(1)  # 获取非声调部分
+        has.append(s)
 
-for i in data:
-    flag = False
-    for s in has:
-        if i == s:
-            flag = True
-            break
-    if flag == False:
-        print(i)
+    for i in data:
+        flag = False
+        for s in has:
+            if i == s:
+                flag = True
+                break
+        if flag == False:
+            print(i)
