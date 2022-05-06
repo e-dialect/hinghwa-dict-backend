@@ -11,7 +11,7 @@ from website.views import token_check, sendNotification, simpleUserInfo, upload_
 from .forms import PronunciationForm
 from .models import Word, Character, Pronunciation, split
 from django.utils import timezone
-import translate
+from word import translate
 
 @csrf_exempt
 def searchPronunciations(request):
