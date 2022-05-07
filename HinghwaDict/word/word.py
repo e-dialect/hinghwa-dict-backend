@@ -364,7 +364,7 @@ def searchApplication(request):
                 return JsonResponse({}, status=401)
         elif request.method == 'POST':
             token = request.headers['token']
-            user = token_check(token, settings.JWT_KEY, -1)
+            user = token_check(token, settings.JWT_KEY)
             if user:
                 body = demjson.decode(request.body)
                 if 'word' in body['content']:
