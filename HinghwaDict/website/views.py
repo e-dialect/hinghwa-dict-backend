@@ -1,10 +1,11 @@
-import json
+# -*-coding:utf-8-*-
 import math
 import os
 import random
-import requests
+
 import demjson
 import jwt
+import requests
 from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
 from django.contrib.auth.models import User
@@ -14,12 +15,13 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
-from pydub import AudioSegment as audio
 from notifications.signals import notify
+from pydub import AudioSegment as audio
 from qcloud_cos import CosConfig
 from qcloud_cos import CosS3Client
+
 from article.models import Article
-from word.models import Word, Character, Pronunciation
+from word.models import Word
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 
@@ -402,6 +404,8 @@ def openUrl(request, type, id, Y, M, D, X):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+import shutil
+
 try:
     def random_word_of_the_day():
         all = Word.objects.all()
@@ -409,6 +413,11 @@ try:
         item.word_of_the_day = random.choice(all).id
         item.save()
         print('update word of the day at 0:00')
+
+
+    def clear_audio_buffer():
+        shutil.rmtree(os.path.join(settings.MEDIA_ROOT, 'audio', 'public'))
+        print('remove the audio buffer in public files')
 
 
     def register(fun, id, replace_existing):
@@ -422,8 +431,10 @@ try:
 
     try:
         register(random_word_of_the_day, 'random_word_of_the_day', False)
+        register(clear_audio_buffer, 'clear_audio_buffer', False)
     except Exception:
         register(random_word_of_the_day, 'random_word_of_the_day', True)
+        register(clear_audio_buffer, 'clear_audio_buffer', True)
 except Exception as e:
     print(str(e))
 from django.db.models import Q
@@ -639,3 +650,87 @@ def manageNotificationUnread(request):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({'msg': str(msg)}, status=500)
+
+
+from word.models import split
+
+
+def isconnect(a, b):
+    return a[1] == b[0] - 1
+
+
+def split_ipa_from_mp3(music, chunks=1):
+    DBFS = [db.dBFS for db in music[:]]
+    n = len(DBFS)
+    a = sorted(enumerate(DBFS), reverse=True, key=lambda a: a[1])
+    mean = a[int(n * 0.85)][1]
+    num = 0.3 * len(DBFS)
+    strip = 0.1 * len(DBFS) / chunks
+    d = [[a[0][0], a[0][0]]]
+    j = 1
+    for i in range(1, chunks):
+        while j < len(DBFS):
+            t = 0
+            for x, y in d:
+                if x - strip < a[j][0] < y + strip:
+                    t = 1
+                    break
+            if not t:
+                d.append([a[j][0], a[j][0]])
+                break
+            j += 1
+    d.sort(key=lambda a: a[0])
+    while num > 0:
+        t = num
+        for i in range(chunks):
+            if max(DBFS[d[i][0] - 1], DBFS[d[i][1] + 1]) >= mean:
+                if DBFS[d[i][0] - 1] >= DBFS[d[i][1] + 1] and (~i or not isconnect(d[i - 1], d[i])):
+                    d[i][0] -= 1
+                    num -= 1
+                elif DBFS[d[i][0] - 1] <= DBFS[d[i][1] + 1] and (i == chunks - 1 or not isconnect(d[i], d[i + 1])):
+                    d[i][1] += 1
+                    num -= 1
+        if t == num:
+            break
+    return d
+
+
+@csrf_exempt
+def test(request):
+    try:
+        folder = os.path.join(settings.BASE_DIR, 'material', 'audio', '老男单字')
+        result = os.path.join(settings.BASE_DIR, 'material', 'audio', 'result')
+        name_ipas = os.path.join(settings.BASE_DIR, 'material', 'audio', '单字老男.csv')
+        if not os.path.exists(result):
+            os.mkdir(result)
+        dic = {}
+        with open(name_ipas, newline='', encoding='utf-8') as f:
+            lines = f.readlines()
+            for line in lines:
+                line = line.split(',')
+                if len(line[2]) == 0:
+                    continue
+                name = line[1]
+                ipas = split(line[2]).split()
+                file = (line[0] if str.isdigit(line[0]) else '0001') + name + '.mp3'
+                music = audio.from_file(os.path.join(folder, file))
+                music.set_frame_rate(44100)
+                start_ends = split_ipa_from_mp3(music, len(ipas))
+                for ipa, (start, end) in zip(ipas, start_ends):
+                    if ipa not in dic:
+                        dic[ipa] = []
+                    dic[ipa].append(music[start:end])
+                print(line[0])
+        sum = 0
+        for i in dic.values():
+            sum += len(i)
+        for idx, (ipa, musics) in enumerate(dic.items()):
+            path = os.path.join(result, ipa + '.mp3')
+            musics[0].export(path, format='mp3')
+            for i, music in zip(range(1, len(musics)), musics[1:]):
+                path = os.path.join(result, ipa + f'-{i}.mp3')
+                music.export(path, format='mp3')
+            print(idx)
+        return JsonResponse({}, status=200)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
