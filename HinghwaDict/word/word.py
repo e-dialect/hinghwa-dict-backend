@@ -415,8 +415,8 @@ def manageApplication(request, id):
                 token = request.headers['token']
                 user = token_check(token, settings.JWT_KEY, application.contributor.id)
                 if user:
-                    related_words = [word.id for word in application.related_words.all()]
-                    related_articles = [article.id for article in application.related_articles.all()]
+                    related_words = [{"id": word.id, 'word': word.word} for word in application.related_words.all()]
+                    related_articles = [{"id": article.id, 'title': article.title} for article in application.related_articles.all()]
                     result = {
                         'content': {
                             'word': application.content_word,
