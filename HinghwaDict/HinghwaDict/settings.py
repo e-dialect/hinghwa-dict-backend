@@ -280,4 +280,6 @@ REST_FRAMEWORK = {
     'PAGE_SIZE': 15
 }
 
-
+# 保存的拼音语料.mp3
+# 分为submit和combine两个文件夹
+SAVED_PINYIN = os.path.join(BASE_DIR, 'material', 'audio')

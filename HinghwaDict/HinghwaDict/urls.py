@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from user import views as user
 from website import views as website
-from word import views as word
+from word import word, pronunciation, character
 
 urlpatterns = [
     path('admin', admin.site.urls),
@@ -39,17 +39,18 @@ urlpatterns = [
                            path('/applications', word.searchApplication),
                            path('/applications/<int:id>', word.manageApplication),
                            ])),
-    path('characters', include([path('', word.searchCharacters),
-                                path('/<int:id>', word.manageCharacter),
-                                path('/add', word.load_character),
-                                path('/words', word.searchEach),
-                                path('/words/v2', word.searchEachV2),
-                                path('/pinyin', word.searchCharactersPinyin)])),
-    path('pronunciation', include([path('', word.searchPronunciations),
-                                   path('/<int:id>', word.managePronunciation),
-                                   path('/<str:ipa>', word.combinePronunciation),
-                                   path('/<int:id>/visibility', word.managePronunciationVisibility),
-                                   path('/<int:id>/examine', word.managePronunciationVisibility),
+    path('characters', include([path('', character.searchCharacters),
+                                path('/<int:id>', character.manageCharacter),
+                                path('/add', character.load_character),
+                                path('/words', character.searchEach),
+                                path('/words/v2', character.searchEachV2),
+                                path('/pinyin', character.searchCharactersPinyin)])),
+    path('pronunciation', include([path('', pronunciation.searchPronunciations),
+                                   path('/<int:id>', pronunciation.managePronunciation),
+                                   path('/combine', pronunciation.combinePronunciationV2),
+                                   path('/<str:ipa>', pronunciation.combinePronunciation),
+                                   path('/<int:id>/visibility', pronunciation.managePronunciationVisibility),
+                                   path('/<int:id>/examine', pronunciation.managePronunciationVisibility),
                                    ])),
     path('record', word.record),
 ]
