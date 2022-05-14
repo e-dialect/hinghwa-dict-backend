@@ -1,0 +1,6 @@
+#!/bin/sh
+
+python2.7 `dirname $0`/main.py $@
+
+exit $?
+

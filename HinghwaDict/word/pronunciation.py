@@ -1,6 +1,11 @@
 import os
+import random
+import shutil
+import subprocess
+import time
 
 import demjson
+import numpy as np
 import pydub
 from django.conf import settings
 from django.http import JsonResponse
@@ -12,6 +17,10 @@ from .forms import PronunciationForm
 from .models import Word, Character, Pronunciation, split
 from django.utils import timezone
 from word import translate
+import requests
+from pydub.silence import split_on_silence
+from AudioCompare.main import audio_matcher, Arg
+
 
 @csrf_exempt
 def searchPronunciations(request):
@@ -77,9 +86,6 @@ def searchPronunciations(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
-
-
-
 
 
 @csrf_exempt
@@ -343,6 +349,76 @@ def managePronunciationVisibility(request, id):
                     return JsonResponse({}, status=404)
             else:
                 return JsonResponse({}, status=401)
+        else:
+            return JsonResponse({}, status=405)
+    except Exception as e:
+        return JsonResponse({'msg': str(e)}, status=500)
+
+
+def split_silence(music, rate=0.22):
+    musics = np.nan_to_num(sorted([db.dBFS for db in music[:]], reverse=True), neginf=-90)
+    thresh = musics.mean() + 1.8 * musics.std()
+    results = split_on_silence(music, silence_thresh=thresh, keep_silence=0, min_silence_len=11)
+    # for idx, result in enumerate(results):
+    #     result.export(f'{idx}.mp3', format='mp3')
+    return results
+
+
+import pickle
+
+
+@csrf_exempt
+def translatePronunciation(request):
+    try:
+        if request.method == 'POST':
+            # path = os.path.join(settings.BASE_DIR, 'temp')
+            # if not os.path.exists(path):
+            #     submit_list = os.listdir(os.path.join(settings.SAVED_PINYIN, 'submit'))
+            #     available_pinyin = {}
+            #     for file in submit_list:
+            #         if file.endswith('.mp3'):
+            #             music = audio.from_file(os.path.join(settings.SAVED_PINYIN, 'submit', file))
+            #             pinyin = file.replace('.mp3', '')
+            #             available_pinyin[pinyin] = [db.dBFS for db in music[:]]
+            #     with open(path, 'wb') as f:
+            #         pickle.dump(available_pinyin, f)
+            # else:
+            #     with open(path, 'rb') as f:
+            #         available_pinyin = pickle.load(f)
+            file = request.FILES.get("file")
+            music = audio.from_file(file)
+            music.set_frame_rate(44100)
+            videos = split_silence(music)
+            ans = ''
+            workingdir = os.path.join(settings.MEDIA_ROOT, 'audio', 'temp')
+            if not os.path.exists(workingdir):
+                os.makedirs(workingdir)
+            ls = []
+            for video in videos:
+                filename = str(int(time.time() * 1000000)) + '.wav'
+                video.export(os.path.join(workingdir, filename), format='wav')
+                ls.append(filename)
+            # command = f'{os.path.join(settings.BASE_DIR, "AudioCompare", "main.py")}' \
+            #           f' -d {os.path.join(settings.MEDIA_ROOT, "audio", "temp")}' \
+            #           f' -d {os.path.join(settings.BASE_DIR, "AudioCompare", "submit")}'
+            # process = subprocess.Popen('python ' + command, stdout=subprocess.PIPE, shell=False,
+            #                            cwd=f'{os.path.join(settings.BASE_DIR, "AudioCompare")}')
+            # process.wait()
+            result = audio_matcher(Arg([os.path.join(settings.MEDIA_ROOT, "audio", "temp"),
+                                        os.path.join(settings.SAVED_PINYIN, 'submit')
+                                        # os.path.join(settings.BASE_DIR, "AudioCompare", "submit")
+                                        ]))
+            for key in ls:
+                if result[key]:
+                    word = Character.objects.filter(pinyin=result[key].split('.')[0])
+                    if word.exists():
+                        ans += word[0].character
+                    else:
+                        ans += '?'
+                else:
+                    ans += '?'
+            shutil.rmtree(workingdir)
+            return JsonResponse({'word': ans}, status=200)
         else:
             return JsonResponse({}, status=405)
     except Exception as e:

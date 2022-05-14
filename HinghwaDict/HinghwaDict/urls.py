@@ -48,9 +48,10 @@ urlpatterns = [
     path('pronunciation', include([path('', pronunciation.searchPronunciations),
                                    path('/<int:id>', pronunciation.managePronunciation),
                                    path('/combine', pronunciation.combinePronunciationV2),
-                                   path('/<str:ipa>', pronunciation.combinePronunciation),
+                                   path('/translate', pronunciation.translatePronunciation),
                                    path('/<int:id>/visibility', pronunciation.managePronunciationVisibility),
                                    path('/<int:id>/examine', pronunciation.managePronunciationVisibility),
+                                   path('/<str:ipa>', pronunciation.combinePronunciation),
                                    ])),
     path('record', word.record),
 ]
