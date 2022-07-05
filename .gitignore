@@ -1,6 +1,6 @@
 .idea
+.vscode
 __pycache__
-!migrations/__pycache__
 media
 material
 logs
