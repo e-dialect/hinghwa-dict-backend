@@ -11,20 +11,16 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import logging
 import os
-import environ
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import time
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-env = environ.Env(
-    DEBUG=(bool, False)
-)
-environ.Env.read_env('.env')
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY', 'DEFAULT_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -97,16 +93,20 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
 
@@ -131,15 +131,16 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/login'
-EMAIL_HOST = env('EMAIL_HOST')
-EMAIL_HOST_USER = env('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = env('EMAIL_PORT')
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'DEFAULT_EMAIL_HOST')
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'DEFAULT_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD',
+                                     'DEFAULT_EMAIL_HOST_PASSWORD')
+EMAIL_PORT = os.environ.get('EMAIL_PORT', 'DEFAULT_EMAIL_PORT')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = env('DEFAULT_FROM_EMAIL')
+DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL',
+                                    'DEFAULT_DEFAULT_FROM_EMAIL')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-
 
 # 媒体图片下载到media/下
 MEDIA_URL = '/media/'
@@ -156,9 +157,17 @@ CORS_ORIGIN_WHITELIST = (
     'http://127.0.0.1:*',
     'https://api.pxm.edialect.top:*',
     'https://pxm.edialect.top:*',
-    'https://localhost:*'
+    'https://localhost:*',
 )
-CORS_ALLOW_METHODS = ('DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT', 'VIEW',)
+CORS_ALLOW_METHODS = (
+    'DELETE',
+    'GET',
+    'OPTIONS',
+    'PATCH',
+    'POST',
+    'PUT',
+    'VIEW',
+)
 CORS_ALLOW_HEADERS = (
     'XMLHttpRequest',
     'X_FILENAME',
@@ -172,20 +181,23 @@ CORS_ALLOW_HEADERS = (
     'x-requested-with',
     'Pragma',
     'x-token',
-    'token'
+    'token',
 )
 # parameter of Tencent cos
-COS_SECRET_ID = env('COS_SECRET_ID')  # 替换为用户的 secretId
-COS_SECRET_KEY = env('COS_SECRET_KEY')  # 替换为用户的 secretKey
-COS_BUCKET = env('COS_BUCKET')  # BucketName-APPID
-COS_REGION = env('COS_REGION')
+COS_SECRET_ID = os.environ.get('COS_SECRET_ID',
+                               'DEFAULT_COS_SECRET_ID')  # 替换为用户的 secretId
+COS_SECRET_KEY = os.environ.get('COS_SECRET_KEY',
+                                'DEFAULT_COS_SECRET_KEY')  # 替换为用户的 secretKey
+COS_BUCKET = os.environ.get('COS_BUCKET',
+                            'DEFAULT_COS_BUCKET')  # BucketName-APPID
+COS_REGION = os.environ.get('COS_REGION', 'DEFAULT_COS_REGION')
 
 # parameter of wechat login
-APP_ID = env('APP_ID')
-APP_SECRECT = env('APP_SECRECT')
+APP_ID = os.environ.get('APP_ID', 'DEFAULT_APP_ID')
+APP_SECRECT = os.environ.get('APP_SECRECT', 'DEFAULT_APP_SECRECT')
 
 # parameter of jwt
-JWT_KEY = env('JWT_KEY')
+JWT_KEY = os.environ.get('JWT_KEY', 'DEFAULT_JWT_KEY')
 
 import os
 
@@ -197,17 +209,18 @@ LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
     'formatters': {
-
         'standard': {
-            'format': '[%(asctime)s] [%(levelname)s] : '
-                      '[%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] '
-                      '- %(message)s'
+            'format':
+            '[%(asctime)s] [%(levelname)s] : '
+            '[%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] '
+            '- %(message)s'
         },
         'simple': {
             'format': '%(levelname)s %(module)s %(lineno)d %(message)s'
         },
         'verbose': {
-            'format': '%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s'
+            'format':
+            '%(levelname)s %(asctime)s %(module)s %(lineno)d %(message)s'
         }
     },
     'filters': {
@@ -225,34 +238,58 @@ LOGGING = {
 
         # 默认记录所有日志
         'default': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(log_path, 'all-{}.log'.format(time.strftime('%Y-%m-%d'))),
-            'maxBytes': 1024 * 1024 * 5,  # 文件大小
-            'backupCount': 5,  # 备份数
-            'formatter': 'standard',  # 输出格式
-            'encoding': 'utf-8',  # 设置默认编码，否则打印出来汉字乱码
+            'level':
+            'INFO',
+            'class':
+            'logging.handlers.RotatingFileHandler',
+            'filename':
+            os.path.join(log_path,
+                         'all-{}.log'.format(time.strftime('%Y-%m-%d'))),
+            'maxBytes':
+            1024 * 1024 * 5,  # 文件大小
+            'backupCount':
+            5,  # 备份数
+            'formatter':
+            'standard',  # 输出格式
+            'encoding':
+            'utf-8',  # 设置默认编码，否则打印出来汉字乱码
         },
 
         # 输出错误日志
         'error': {
-            'level': 'ERROR',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(log_path, 'error-{}.log'.format(time.strftime('%Y-%m-%d'))),
-            'maxBytes': 1024 * 1024 * 5,  # 文件大小
-            'backupCount': 5,  # 备份数
-            'formatter': 'standard',  # 输出格式
-            'encoding': 'utf-8',  # 设置默认编码
+            'level':
+            'ERROR',
+            'class':
+            'logging.handlers.RotatingFileHandler',
+            'filename':
+            os.path.join(log_path,
+                         'error-{}.log'.format(time.strftime('%Y-%m-%d'))),
+            'maxBytes':
+            1024 * 1024 * 5,  # 文件大小
+            'backupCount':
+            5,  # 备份数
+            'formatter':
+            'standard',  # 输出格式
+            'encoding':
+            'utf-8',  # 设置默认编码
         },
         # 输出info日志
         'info': {
-            'level': 'INFO',
-            'class': 'logging.handlers.RotatingFileHandler',
-            'filename': os.path.join(log_path, 'info-{}.log'.format(time.strftime('%Y-%m-%d'))),
-            'maxBytes': 1024 * 1024 * 5,
-            'backupCount': 5,
-            'formatter': 'standard',
-            'encoding': 'utf-8',  # 设置默认编码
+            'level':
+            'INFO',
+            'class':
+            'logging.handlers.RotatingFileHandler',
+            'filename':
+            os.path.join(log_path,
+                         'info-{}.log'.format(time.strftime('%Y-%m-%d'))),
+            'maxBytes':
+            1024 * 1024 * 5,
+            'backupCount':
+            5,
+            'formatter':
+            'standard',
+            'encoding':
+            'utf-8',  # 设置默认编码
         },
     },
     # 配置日志处理器
@@ -276,7 +313,8 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAdminUser',
     ],
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'DEFAULT_PAGINATION_CLASS':
+    'rest_framework.pagination.PageNumberPagination',
     'PAGE_SIZE': 15
 }
 
