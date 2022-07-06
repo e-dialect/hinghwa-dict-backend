@@ -25,7 +25,7 @@ urlpatterns = [
     # path('home/',TemplateView.as_view(template_name="home.html"),name='home')
     path('users/', include('user.urls', namespace='users')),
     path('login/', include('user.urls', namespace='login')),
-    path('users', user.register),
+    path('users', user.router_users),
     path('login', user.login),
     path('articles', include('article.urls', namespace='article')),
     path('music', include('music.urls', namespace='music')),

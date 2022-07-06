@@ -18,10 +18,11 @@ from website.views import random_str, email_check, token_check, download_file, s
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
-
+# for '/users/'
 @csrf_exempt
-def register(request):
+def router_users(request):
     try:
+        # US0202 批量获取用户信息
         if request.method == 'GET':
             result = User.objects.all()
             if 'email' in request.GET:
@@ -30,16 +31,10 @@ def register(request):
                 result = result.filter(username=request.GET['username'])
             users = []
             for user in result:
-                info = user.user_info
-                users.append({"id": user.id, 'username': user.username, 'nickname': info.nickname,
-                              'email': user.email, 'telephone': info.telephone,
-                              'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                              'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
-                              if user.last_login else '',
-                              'birthday': info.birthday, 'avatar': info.avatar,
-                              'county': info.county, 'town': info.town,
-                              'is_admin': user.is_superuser})
+                users.append(user_all(user))
             return JsonResponse({"users": users}, status=200)
+
+        # US0101 新建用户
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             user_form = UserForm(body)
