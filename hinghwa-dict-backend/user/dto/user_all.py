@@ -1,5 +1,8 @@
+from ..models import User
+
+
 # 返回用户除了 密码 以外的全部信息
-def user_all(user: object) -> dict:
+def user_all(user: User) -> dict:
     # 获取用户信息
     info = user.user_info
     response = {
