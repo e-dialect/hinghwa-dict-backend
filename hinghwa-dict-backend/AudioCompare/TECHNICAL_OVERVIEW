@@ -1,0 +1,87 @@
+Please see individual files for descriptions of individual methods
+
+main.py
+ - Entry point of the program
+ - Opens input files
+ - Runs matching algorithm on them
+
+Matcher.py
+ - Contains the code for the matching
+   algorithm that we chose
+
+common.py
+ - A few things that are not specific
+   to our matching algorithm, so they
+   get their own file
+
+error.py
+ - A few functions we use to report errors
+
+InputFile.py
+ - Opens and reads audio files
+
+FFT.py
+ - Performs an FFT transformation on
+   audio samples
+
+
+Processing:
+-----------
+The input to the program is two search paths:
+either directories or single files. We turn these
+into two lists of files.
+
+Open every file.
+
+Read samples from the input files, divide them
+into chunks by time, and convert the samples in each
+chunk into the frequency domain.
+
+Find the indices of the loudest frequencies
+in each "bucket" of frequencies (for every chunk).
+These loud frequencies will become the
+fingerprints that we'll use for matching.
+Each chunk will be reduced to a tuple of
+4 numbers which are 4 of the loudest frequencies
+in that chunk. This tuple is then encoded into
+a single 32 bit integer.
+
+Generate a hash mapping the fingerprints
+to the chunk numbers and files that they occurred in.
+Chunk numbers are an approximation for the
+timestamp in the file, and we'll use them
+that way further on.
+
+For the search path that has a greater combined file length
+(in other words, basically "more data"), we combine all the
+per-file hashes into one master hash. This maps every fingerprint
+found in the search path to the chunk index and file that the fingerprint
+was found in. To emphasize, this is not a hash of hashes, it
+is a single hash. This means we can take a fingerprint and
+make a constant-time lookup into the master hash and find at what
+time and in what file this fingerprint also appears.
+
+Now, for every file in the OTHER search path (the one
+with less data in it), see what we get when look up
+its fingerprints in the master hash. If we get a lot of matches
+at consistent time differences in a single file, then we might
+have a match.
+
+The length of the shorter file in important
+to deciding whether two audio files match.
+
+max_offset is the highest number of times that two matching
+hash keys were found with the same time difference
+relative to each other.
+
+The match score is the ratio of max_offset (as explained above)
+to the length of the shorter file. A short file that should
+match another file will result in less matching fingerprints
+than a long file would, so we take this into account. At the
+same time, a long file that should *not* match another file
+will generate a decent number of matching fingerprints by
+pure chance, so this corrects for that as well.
+
+What's really cool is that our matching algorithm scales about
+linearly with the size of the input, not quadratically. In order words,
+the time to compare two directories of n files is about 2n, not n^2.
