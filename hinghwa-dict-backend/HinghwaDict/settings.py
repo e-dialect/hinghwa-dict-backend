@@ -13,6 +13,9 @@ import logging
 import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import time
+import environ
+env = environ.Env()
+environ.Env.read_env(".env")
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,7 +23,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'DEFAULT_SECRET_KEY')
+SECRET_KEY = env.str('SECRET_KEY', 'DEFAULT_SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -131,14 +134,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, '/static/')
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGIN_URL = '/login'
-EMAIL_HOST = os.environ.get('EMAIL_HOST', 'DEFAULT_EMAIL_HOST')
-EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', 'DEFAULT_EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD',
+EMAIL_HOST = env.str('EMAIL_HOST', 'DEFAULT_EMAIL_HOST')
+EMAIL_HOST_USER = env.str('EMAIL_HOST_USER', 'DEFAULT_EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env.str('EMAIL_HOST_PASSWORD',
                                      'DEFAULT_EMAIL_HOST_PASSWORD')
-EMAIL_PORT = os.environ.get('EMAIL_PORT', 'DEFAULT_EMAIL_PORT')
+EMAIL_PORT = env.str('EMAIL_PORT', 'DEFAULT_EMAIL_PORT')
 EMAIL_USE_SSL = True
 EMAIL_USE_TLS = False
-DEFAULT_FROM_EMAIL = os.environ.get('DEFAULT_FROM_EMAIL',
+DEFAULT_FROM_EMAIL = env.str('DEFAULT_FROM_EMAIL',
                                     'DEFAULT_DEFAULT_FROM_EMAIL')
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
@@ -184,20 +187,20 @@ CORS_ALLOW_HEADERS = (
     'token',
 )
 # parameter of Tencent cos
-COS_SECRET_ID = os.environ.get('COS_SECRET_ID',
+COS_SECRET_ID = env.str('COS_SECRET_ID',
                                'DEFAULT_COS_SECRET_ID')  # 替换为用户的 secretId
-COS_SECRET_KEY = os.environ.get('COS_SECRET_KEY',
+COS_SECRET_KEY = env.str('COS_SECRET_KEY',
                                 'DEFAULT_COS_SECRET_KEY')  # 替换为用户的 secretKey
-COS_BUCKET = os.environ.get('COS_BUCKET',
+COS_BUCKET = env.str('COS_BUCKET',
                             'DEFAULT_COS_BUCKET')  # BucketName-APPID
-COS_REGION = os.environ.get('COS_REGION', 'DEFAULT_COS_REGION')
+COS_REGION = env.str('COS_REGION', 'DEFAULT_COS_REGION')
 
 # parameter of wechat login
-APP_ID = os.environ.get('APP_ID', 'DEFAULT_APP_ID')
-APP_SECRECT = os.environ.get('APP_SECRECT', 'DEFAULT_APP_SECRECT')
+APP_ID = env.str('APP_ID', 'DEFAULT_APP_ID')
+APP_SECRECT = env.str('APP_SECRECT', 'DEFAULT_APP_SECRECT')
 
 # parameter of jwt
-JWT_KEY = os.environ.get('JWT_KEY', 'DEFAULT_JWT_KEY')
+JWT_KEY = env.str('JWT_KEY', 'DEFAULT_JWT_KEY')
 
 import os
 

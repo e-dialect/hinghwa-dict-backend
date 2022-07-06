@@ -11,4 +11,4 @@ pydub==0.25.1
 ffmpeg==1.4
 ffprobe==0.5
 python-environ==0.4.54
-numpy==1.18.5
+numpy

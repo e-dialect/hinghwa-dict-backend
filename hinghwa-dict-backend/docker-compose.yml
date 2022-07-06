@@ -4,8 +4,7 @@ services:
         build: .
         image: "sheeplin/${SERVICE_NAME}"
         container_name: "${SERVICE_NAME}"
-        # ports: 
-        #     - "80:8000"
+        restart: unless-stopped
         labels: 
             - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${HOST_ADDRESS}`)"
             - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=8000"

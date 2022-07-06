@@ -313,7 +313,7 @@ def upload_file(path, key):
     config = CosConfig(Region=settings.COS_REGION, SecretId=settings.COS_SECRET_ID, SecretKey=settings.COS_SECRET_KEY)
     client = CosS3Client(config)
     response = client.upload_file(
-        Bucket='HinghwaDict-1259415432',
+        Bucket=settings.COS_BUCKET,
         LocalFilePath=path,
         Key=key
     )
