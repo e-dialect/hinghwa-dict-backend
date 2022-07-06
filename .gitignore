@@ -5,3 +5,4 @@ media
 material
 logs
 .env
+db.sqlite3
