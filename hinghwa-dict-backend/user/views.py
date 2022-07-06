@@ -15,6 +15,7 @@ from notifications.models import Notification
 from user.dto.user_all import user_all
 
 from website.views import random_str, email_check, token_check, download_file, simpleUserInfo
+from word.dto.pronunciation.pronunciation_simple import pronunciation_simple
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
@@ -265,10 +266,8 @@ def pronunciation(request, id):
             user = user[0]
             if request.method == 'GET':
                 pronunciations = []
-                for item in user.contribute_pronunciation.all():
-                    pronunciations.append({'word': {'id': item.word.id, 'word': item.word.word},
-                                           'source': item.source, 'ipa': item.ipa, 'pinyin': item.pinyin,
-                                           'county': item.county, 'town': item.town, 'visibility': item.visibility})
+                for pronuncitaion in user.contribute_pronunciation.all():
+                    pronunciations.append(pronunciation_simple(pronuncitaion))
                 return JsonResponse({'pronunciation': pronunciations}, status=200)
             else:
                 return JsonResponse({}, status=405)
