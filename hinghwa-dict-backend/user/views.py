@@ -12,6 +12,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from notifications.models import Notification
+from user.dto.user_all import user_all
 
 from website.views import random_str, email_check, token_check, download_file, simpleUserInfo
 from .forms import UserForm, UserInfoForm
@@ -165,21 +166,13 @@ def manageInfo(request, id):
             user = user[0]
             if request.method == 'GET':
                 # 获取用户信息
-                info = user.user_info
                 publish_articles = [article.id for article in user.articles.all()]
                 publish_comment = [comment.id for comment in user.comments.all()]
                 like_articles = [article.id for article in user.like_articles.all()]
                 contribute_listened = user.contribute_pronunciation.aggregate(Sum('views'))['views__sum']
-                response = {"user": {"id": user.id, 'username': user.username, 'nickname': info.nickname,
-                                     'email': user.email, 'telephone': info.telephone,
-                                     'registration_time': user.date_joined.__format__('%Y-%m-%d %H:%M:%S'),
-                                     'login_time': user.last_login.__format__('%Y-%m-%d %H:%M:%S')
-                                     if user.last_login else '',
-                                     'wechat': True if len(info.wechat) else False,
-                                     'birthday': info.birthday, 'avatar': info.avatar,
-                                     'county': info.county, 'town': info.town,
-                                     'is_admin': user.is_superuser},
-                            "publish_articles": publish_articles, 'publish_comments': publish_comment,
+                response = {"user": user_all(user),
+                            "publish_articles": publish_articles, 
+                            'publish_comments': publish_comment,
                             'like_articles': like_articles,
                             'contribution': {
                                 'pronunciation': user.contribute_pronunciation.filter(visibility=True).count(),
