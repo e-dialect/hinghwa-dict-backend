@@ -44,7 +44,10 @@ jobs:
           npm install -g apifox-cli
       - name: Run tests
         run: |
-          apifox run tests/user.apifox-cli.json -r html,cli   
+          for test in `ls tests`
+          do
+            apifox run ${test}; -r html,cli 
+          done          
       - name: Kill django service
         run: |
           pkill -9 -f manage.py
