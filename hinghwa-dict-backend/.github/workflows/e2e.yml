@@ -1,0 +1,54 @@
+name: e2e
+on:
+  push:
+    branches:
+      - main
+      - develop
+  workflow_dispatch: {}
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  test-build:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
+      - name: Install ffmpeg
+        run: |
+          apt-get update
+          apt-get install ffmpeg -y
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          cd hinghwa-dict-backend
+          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+      - name: Open django service
+        run: |
+          cd hinghwa-dict-backend
+          rm db.sqlite3
+          python3 manage.py makemigrations
+          python3 manage.py migrate
+          DJANGO_SUPERUSER_PASSWORD=testtest123 python manage.py createsuperuser --username admin --email test@test.com --no-input
+          python3 manage.py runserver &
+      - uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+      - name: Install apifox cli
+        run: |
+          npm install -g apifox-cli
+      - name: Run tests
+        run: |
+          apifox run https://api.apifox.cn/api/v1/api-test/ci-config/350181/detail?token=xu-XR_2B5TKPW70_jYhH1g -r html,cli   
+      - name: Kill django service
+        run: |
+          pkill -9 -f manage.py
+
+
+      
+          
