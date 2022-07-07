@@ -44,7 +44,8 @@ jobs:
           npm install -g apifox-cli
       - name: Run tests
         run: |
-          for test in `ls tests`
+          cd tests
+          for test in `ls .`
           do
             apifox run ${test} -r html,cli 
           done          
