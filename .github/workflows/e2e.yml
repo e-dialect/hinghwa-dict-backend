@@ -36,6 +36,7 @@ jobs:
           python3 manage.py migrate
           DJANGO_SUPERUSER_PASSWORD=testtest123 python manage.py createsuperuser --username admin --email test@test.com --no-input
           python3 manage.py runserver &
+          curl localhost:8000/users/1
       - uses: actions/setup-node@v3
         with:
           node-version: "16.x"
