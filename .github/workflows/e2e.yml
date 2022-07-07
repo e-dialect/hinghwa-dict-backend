@@ -46,7 +46,7 @@ jobs:
         run: |
           for test in `ls tests`
           do
-            apifox run ${test}; -r html,cli 
+            apifox run ${test} -r html,cli 
           done          
       - name: Kill django service
         run: |
