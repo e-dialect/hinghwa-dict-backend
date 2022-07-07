@@ -28,7 +28,7 @@ jobs:
           python -m pip install --upgrade pip
           cd hinghwa-dict-backend
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-      - name: Open django service
+      - name: Start django service
         run: |
           cd hinghwa-dict-backend
           rm db.sqlite3
@@ -44,7 +44,7 @@ jobs:
           npm install -g apifox-cli
       - name: Run tests
         run: |
-          apifox run https://api.apifox.cn/api/v1/api-test/ci-config/350181/detail?token=xu-XR_2B5TKPW70_jYhH1g -r html,cli   
+          apifox run tests/user.apifox-cli.json -r html,cli   
       - name: Kill django service
         run: |
           pkill -9 -f manage.py
