@@ -6,10 +6,12 @@ from website.views import token_check, simpleUserInfo, filterInOrder
 from .forms import MusicForm
 from .models import Music
 from django.conf import settings
+from music.dto.music_normal import music_normal
 
 @csrf_exempt
 def searchMusic(request):
     try:
+        #MC0201 搜索符合条件的音乐
         if request.method == 'GET':
             musics = Music.objects.filter(visibility=True)
             if 'artist' in request.GET:
@@ -20,6 +22,7 @@ def searchMusic(request):
             musics.sort(key=lambda item: item.title)
             musics = [music.id for music in musics]
             return JsonResponse({"music": musics}, status=200)
+        #MC0101 上传新音乐
         elif request.method == 'POST':
             body = demjson.decode(request.body)
             token = request.headers['token']
@@ -35,16 +38,14 @@ def searchMusic(request):
                     return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
+        #MC0202 音乐批量获取
         elif request.method == 'PUT':
             body = demjson.decode(request.body)
             result = Music.objects.filter(id__in=body['music'])
             result = filterInOrder(result, body['music'])
             musics = []
             for music in result:
-                musics.append({'music': {"id": music.id, "source": music.source, "title": music.title,
-                                         "artist": music.artist, "cover": music.cover,
-                                         "likes": music.like(),
-                                         "contributor": music.contributor.id, "visibility": music.visibility},
+                musics.append({'music': music_normal(music),
                                'contributor': simpleUserInfo(music.contributor)})
             return JsonResponse({"music": musics}, status=200)
     except Exception as e:
@@ -57,6 +58,7 @@ def manageMusic(request, id):
         music = Music.objects.filter(id=id)
         if music.exists():
             music = music[0]
+            #MC0104 获取音乐信息
             if request.method == 'GET':
                 user = music.contributor
                 return JsonResponse({"music": {"id": music.id, "source": music.source, "title": music.title,
@@ -76,6 +78,7 @@ def manageMusic(request, id):
                                                                'town': user.user_info.town,
                                                                'is_admin': user.is_superuser},
                                                "visibility": music.visibility}}, status=200)
+            #MC0103 更新音乐信息
             elif request.method == 'PUT':
                 body = demjson.decode(request.body)
                 token = request.headers['token']
@@ -92,6 +95,7 @@ def manageMusic(request, id):
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
+            #MC0102 删除音乐
             elif request.method == 'DELETE':
                 token = request.headers['token']
                 user = token_check(token, settings.JWT_KEY, music.contributor.id)
@@ -115,9 +119,11 @@ def like(request, id):
             token = request.headers['token']
             user = token_check(token, settings.JWT_KEY)
             if user:
+                #MC0301 给这音乐点赞
                 if request.method == 'POST':
                     music.like_users.add(user)
                     return JsonResponse({}, status=200)
+                #MC0302 取消这音乐点赞
                 elif request.method == 'DELETE':
                     if len(music.like_users.filter(id=user.id)):
                         music.like_users.remove(user)
