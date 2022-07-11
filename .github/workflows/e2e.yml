@@ -31,7 +31,6 @@ jobs:
       - name: Start django service
         run: |
           cd hinghwa-dict-backend
-          rm db.sqlite3
           python3 manage.py makemigrations
           python3 manage.py migrate
           DJANGO_SUPERUSER_PASSWORD=testtest123 python manage.py createsuperuser --username admin --email test@test.com --no-input
