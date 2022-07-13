@@ -16,7 +16,7 @@ from AudioCompare.common import *
 BUCKET_SIZE = 20
 BUCKETS = 4
 BITS_PER_NUMBER = int(math.ceil(math.log(BUCKET_SIZE, 2)))
-assert (BITS_PER_NUMBER * BUCKETS) <= 32
+assert ((BITS_PER_NUMBER * BUCKETS) <= 32)
 
 NORMAL_CHUNK_SIZE = 1024
 NORMAL_SAMPLE_RATE = 44100.0
@@ -67,13 +67,9 @@ class MatchResult(BaseResult):
         short_file2 = os.path.basename(self.file2)
         if self.score > SCORE_THRESHOLD:
             if self.file1_len < self.file2_len:
-                return "MATCH {f1} {f2} ({s})".format(
-                    f1=short_file1, f2=short_file2, s=self.score
-                )
+                return "MATCH {f1} {f2} ({s})".format(f1=short_file1, f2=short_file2, s=self.score)
             else:
-                return "MATCH {f2} {f1} ({s})".format(
-                    f1=short_file1, f2=short_file2, s=self.score
-                )
+                return "MATCH {f2} {f1} ({s})".format(f1=short_file1, f2=short_file2, s=self.score)
         else:
             return "NO MATCH"
 
@@ -95,7 +91,7 @@ def _to_fingerprints(freq_chunks):
             end_index = (bucket + 1) * BUCKET_SIZE
             bucket_vals = freq_chunks[chunk][start_index:end_index]
             max_index = bucket_vals.argmax()
-            fingerprint += max_index << (bucket * BITS_PER_NUMBER)
+            fingerprint += (max_index << (bucket * BITS_PER_NUMBER))
         fingerprints[chunk] = fingerprint
 
     # return the indexes of the loudest frequencies
@@ -120,7 +116,7 @@ def _file_fingerprint(filename):
         # file. It is important that each chunk represent the
         # same amount of time, regardless of the sample
         # rate of the file.
-        chunk_size_adjust_factor = NORMAL_SAMPLE_RATE / file.get_sample_rate()
+        chunk_size_adjust_factor = (NORMAL_SAMPLE_RATE / file.get_sample_rate())
         fft = FFT(file, int(NORMAL_CHUNK_SIZE / chunk_size_adjust_factor))
         series = fft.series()
 
@@ -157,7 +153,7 @@ class Matcher(object):
         them for files."""
         self.dir1 = dir1
         self.dir2 = dir2
-        if os.path.split(dir2)[1] != "submit":
+        if os.path.split(dir2)[1] != 'submit':
             self.change = True
         else:
             self.change = False
@@ -200,11 +196,7 @@ class Matcher(object):
             if stat.S_ISREG(node_stat.st_mode):
                 results.append(abs_node)
             else:
-                warn(
-                    "An inode that is not a regular file was found at {f}".format(
-                        abs_node
-                    )
-                )
+                warn("An inode that is not a regular file was found at {f}".format(abs_node))
 
         return results
 
@@ -296,9 +288,7 @@ class Matcher(object):
             else:
                 score = 0
 
-            results.append(
-                MatchResult(file.filename, f, file.file_len, file_lengths[f], score)
-            )
+            results.append(MatchResult(file.filename, f, file.file_len, file_lengths[f], score))
 
         return results
 
@@ -331,15 +321,13 @@ class Matcher(object):
             # map2_result = [_file_fingerprint(item) for item in dir2_files]
             # map1_result = pool.map_async(_file_fingerprint, dir1_files)
             dir1_results = map1_result
-            if self.change or not os.path.exists(
-                os.path.join(os.getcwd(), "submit结果存储.pkl")
-            ):
+            if self.change or not os.path.exists(os.path.join(os.getcwd(), 'submit结果存储.pkl')):
                 map2_result = [_file_fingerprint(item) for item in dir2_files]
                 dir2_results = map2_result
-                with open(os.path.join(os.getcwd(), "submit结果存储.pkl"), "wb") as f:
+                with open(os.path.join(os.getcwd(), 'submit结果存储.pkl'), 'wb') as f:
                     pickle.dump(dir2_results, f)
             else:
-                with open(os.path.join(os.getcwd(), "submit结果存储.pkl"), "rb") as f:
+                with open(os.path.join(os.getcwd(), 'submit结果存储.pkl'), 'rb') as f:
                     dir2_results = pickle.load(f)
                 print(len(dir2_results))
             # Wait for pool to finish processing
@@ -349,7 +337,7 @@ class Matcher(object):
             # dir2_results = map2_result
             # Get results from process pool
 
-            shutil.rmtree(os.path.join(os.getcwd(), "temp"))
+            shutil.rmtree(os.path.join(os.getcwd(), 'temp'))
         except KeyboardInterrupt:
             # pool.terminate()
             raise
@@ -363,12 +351,8 @@ class Matcher(object):
 
         # Proceed only with fingerprints that were computed
         # successfully
-        dir1_successes = list(
-            filter(lambda x: x.success and x.file_len > 0, dir1_results)
-        )
-        dir2_successes = list(
-            filter(lambda x: x.success and x.file_len > 0, dir2_results)
-        )
+        dir1_successes = list(filter(lambda x: x.success and x.file_len > 0, dir1_results))
+        dir2_successes = list(filter(lambda x: x.success and x.file_len > 0, dir2_results))
 
         # Empty files should match other empty files
         # Our matching algorithm will not report these as a match,
@@ -416,9 +400,7 @@ class Matcher(object):
             # same time difference relative to each
             # other. This indicates that the two files
             # contain similar audio.
-            file_matches = Matcher.__report_file_matches(
-                file, master_hash, file_lengths
-            )
+            file_matches = Matcher.__report_file_matches(file, master_hash, file_lengths)
             results.extend(file_matches)
 
         return results
