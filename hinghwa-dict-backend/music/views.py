@@ -1,3 +1,4 @@
+import imp
 import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,6 +8,7 @@ from .forms import MusicForm
 from .models import Music
 from django.conf import settings
 from .dto.music_all import music_all
+from .dto.music_normal import music_normal
 
 
 @csrf_exempt
@@ -48,16 +50,7 @@ def searchMusic(request):
             for music in result:
                 musics.append(
                     {
-                        "music": {
-                            "id": music.id,
-                            "source": music.source,
-                            "title": music.title,
-                            "artist": music.artist,
-                            "cover": music.cover,
-                            "likes": music.like(),
-                            "contributor": music.contributor.id,
-                            "visibility": music.visibility,
-                        },
+                        "music": music_normal(music),
                         "contributor": simpleUserInfo(music.contributor),
                     }
                 )
