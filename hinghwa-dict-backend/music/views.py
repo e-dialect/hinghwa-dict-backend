@@ -116,3 +116,22 @@ def like(request, id):
             return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+# /music/<int:id>/visibility
+@csrf_exempt
+def visiblity(request, id):
+    try:
+        music = Music.objects.filter(id=id)
+        if not music.exists():
+            return JsonResponse({}, status=404)
+        music = music[0]
+        # MC0105 设置音乐可见性
+        if request.method == 'PUT':
+            music.visibility = not music.visibility
+            music.save()
+            return JsonResponse(music_all(music), status=200)
+        else:
+            return JsonResponse({}, status=404)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
