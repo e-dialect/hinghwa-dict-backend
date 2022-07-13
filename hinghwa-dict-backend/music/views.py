@@ -57,6 +57,7 @@ def manageMusic(request, id):
         music = Music.objects.filter(id=id)
         if music.exists():
             music = music[0]
+            # MC0104 获取音乐信息
             if request.method == 'GET':
                 return JsonResponse({"music": music_all(music)}, status=200)
             elif request.method == 'PUT':
