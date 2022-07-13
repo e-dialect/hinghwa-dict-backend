@@ -6,4 +6,3 @@ material
 logs
 .env
 db.sqlite3
-migrations

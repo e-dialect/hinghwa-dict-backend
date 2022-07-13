@@ -8,6 +8,7 @@ import time
 
 
 class InputFile:
+
     def __init__(self, filename):
         """Open an Audio file with the given file path.
         Supported formats: WAVE, MP3.
@@ -26,7 +27,7 @@ class InputFile:
         original_name = filename
         self.wav_file = open(filename, "rb")
         # try to use lame to convert
-        self.workingdir = os.path.join(os.getcwd(), "temp")
+        self.workingdir = os.path.join(os.getcwd(), 'temp')
         if not os.path.exists(self.workingdir):
             os.makedirs(self.workingdir)
         if not self.__is_wave_file(self.wav_file):
@@ -36,16 +37,14 @@ class InputFile:
             # make sure the filename has a ".mp3" extension before sending to lame
             if filename[-4:] != ".mp3":
                 # create a copy of the file in
-                temp_file_name = os.path.join(
-                    self.workingdir, str(time.time()) + ".mp3"
-                )
+                temp_file_name = os.path.join(self.workingdir, str(time.time()) + ".mp3")
                 shutil.copyfile(filename, temp_file_name)
                 filename = temp_file_name
             # Use lame to make a wav representation of the mp3 file to be analyzed
-            lame = [lame, "--silent", "--decode", filename, canonical_form]
+            lame = [lame, '--silent', '--decode', filename, canonical_form]
 
             music = pydub.AudioSegment.from_file(filename)
-            music.export(canonical_form, format="wav")
+            music.export(canonical_form, format='wav')
 
             if not os.path.exists(canonical_form):
                 raise IOError("{f} 's format is not supported".format(f=original_name))
@@ -68,22 +67,22 @@ class InputFile:
 
         self.wav_file.seek(40, 0)
         self.data_chunk_size = InputFile.__read_size(self.wav_file)
-        self.total_samples = self.data_chunk_size / self.block_align
+        self.total_samples = (self.data_chunk_size / self.block_align)
 
     @staticmethod
     def __is_wave_file(file):
 
-        if not InputFile.__check_riff_format(file):
+        if (not InputFile.__check_riff_format(file)):
             return False
-        if not InputFile.__check_wave_id(file):
+        if (not InputFile.__check_wave_id(file)):
             return False
-        if not InputFile.__check_fmt(file):
+        if (not InputFile.__check_fmt(file)):
             return False
 
         file.seek(20)
         data = file.read(2)
         file.seek(0)
-        if not InputFile.__check_fmt_valid(data):
+        if (not InputFile.__check_fmt_valid(data)):
             return False
         return InputFile.__check_data(file)
 
@@ -147,7 +146,7 @@ class InputFile:
         data = np.fromfile(self.wav_file, dtype=np.int16, count=n * self.channels)
         result = np.zeros((self.channels, n), dtype=int)
         for c in range(self.channels):
-            result[c] = data[c :: self.channels]
+            result[c] = data[c::self.channels]
 
         return result
 

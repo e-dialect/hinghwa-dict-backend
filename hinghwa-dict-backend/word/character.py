@@ -11,11 +11,13 @@ from django.views.decorators.http import require_POST
 from website.views import token_check, filterInOrder
 from .forms import CharacterForm
 from .models import Word, Character, Pronunciation
+from word.dto.character_all import character_all
 
 
 @csrf_exempt
 def searchCharacters(request):
     try:
+        # CH0202 单字列表过滤器
         if request.method == "GET":
             characters = Character.objects.all()
             if "shengmu" in request.GET:
@@ -26,6 +28,7 @@ def searchCharacters(request):
                 characters = characters.filter(shengdiao=request.GET["shengdiao"])
             characters = [character.id for character in characters]
             return JsonResponse({"characters": characters}, status=200)
+        # CH0102 单字上传
         elif request.method == "POST":
             body = demjson.decode(request.body)
             token = request.headers["token"]
@@ -41,26 +44,14 @@ def searchCharacters(request):
                     return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
+        # CH0201 单字信息批量获取
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             result = Character.objects.filter(id__in=body["characters"])
             characters = []
             result = filterInOrder(result, body["characters"])
             for character in result:
-                characters.append(
-                    {
-                        "id": character.id,
-                        "shengmu": character.shengmu,
-                        "ipa": character.ipa,
-                        "pinyin": character.pinyin,
-                        "yunmu": character.yunmu,
-                        "shengdiao": character.shengdiao,
-                        "character": character.character,
-                        "county": character.county,
-                        "town": character.town,
-                        "traditional": character.traditional,
-                    }
-                )
+                characters.append({character_all(character)})
             return JsonResponse({"characters": characters}, status=200)
         else:
             return JsonResponse({}, status=405)
@@ -73,6 +64,7 @@ def searchCharactersPinyin(request):
     其实就是seachCharacters方法的get接口不够用了，要增加多一个功能类似但是返回不同的
     """
     try:
+        # CH0204 拼音查字
         if request.method == "GET":
             characters = Character.objects.all()
             if "shengmu" in request.GET:
@@ -138,6 +130,7 @@ def searchCharactersPinyin(request):
 @csrf_exempt
 def searchEach(request):
     try:
+        # CH0203 多汉字搜索
         if request.method == "GET":
             search = request.GET["search"]
             result = Character.objects.filter(character__in=search)
@@ -145,20 +138,7 @@ def searchEach(request):
             for character in search:
                 dic[character] = []
             for character in result:
-                dic[character.character].append(
-                    {
-                        "id": character.id,
-                        "shengmu": character.shengmu,
-                        "ipa": character.ipa,
-                        "pinyin": character.pinyin,
-                        "yunmu": character.yunmu,
-                        "shengdiao": character.shengdiao,
-                        "character": character.character,
-                        "county": character.county,
-                        "town": character.town,
-                        "traditional": character.traditional,
-                    }
-                )
+                dic[character.character].append({character_all(character)})
             ans = []
             for character in dic.keys():
                 ans.append({"label": character, "characters": dic[character]})
@@ -170,6 +150,7 @@ def searchEach(request):
 @csrf_exempt
 def searchEachV2(request):
     try:
+        # CH0203-2 多汉字搜索
         if request.method == "GET":
             search = request.GET["search"]
             result = Character.objects.filter(
@@ -196,16 +177,7 @@ def searchEachV2(request):
                     dic[(score, character.character, character.traditional)] = []
                 dic[(score, character.character, character.traditional)].append(
                     {
-                        "id": character.id,
-                        "pinyin": character.pinyin,
-                        "ipa": character.ipa,
-                        "shengmu": character.shengmu,
-                        "yunmu": character.yunmu,
-                        "shengdiao": character.shengdiao,
-                        "character": character.character,
-                        "traditional": character.traditional,
-                        "county": character.county,
-                        "town": character.town,
+                        "character": character_all(character),
                         "word": word,
                         "source": source,
                     }
@@ -239,24 +211,10 @@ def manageCharacter(request, id):
         character = Character.objects.filter(id=id)
         if character.exists():
             character = character[0]
+            # CH0101 单字获取
             if request.method == "GET":
-                return JsonResponse(
-                    {
-                        "character": {
-                            "id": character.id,
-                            "shengmu": character.shengmu,
-                            "ipa": character.ipa,
-                            "pinyin": character.pinyin,
-                            "yunmu": character.yunmu,
-                            "shengdiao": character.shengdiao,
-                            "character": character.character,
-                            "county": character.county,
-                            "town": character.town,
-                            "traditional": character.traditional,
-                        }
-                    },
-                    status=200,
-                )
+                return JsonResponse({"character": character_all(character)}, status=200)
+            # CH0103 单字更改
             elif request.method == "PUT":
                 body = demjson.decode(request.body)
                 token = request.headers["token"]
@@ -272,6 +230,7 @@ def manageCharacter(request, id):
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
+            # CH0104 单字删除
             elif request.method == "DELETE":
                 token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, -1):
@@ -291,6 +250,7 @@ def manageCharacter(request, id):
 @csrf_exempt
 def load_character(request):
     try:
+        # CH0301 文件批量添加
         body = demjson.decode(request.body)
         token = request.headers["token"]
         user = token_check(token, settings.JWT_KEY, -1)

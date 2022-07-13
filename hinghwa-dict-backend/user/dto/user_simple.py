@@ -7,7 +7,7 @@ def user_simple(user: User) -> dict:
     info = user.user_info
     response = {
         "id": user.id,
-        "nickname": info.nickname,
-        "avatar": info.avatar,
+        'nickname': info.nickname,
+        'avatar': info.avatar,   
     }
     return response

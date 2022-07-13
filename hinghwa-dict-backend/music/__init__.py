@@ -1,1 +1,1 @@
-default_app_config = "music.apps.MusicConfig"
+default_app_config = 'music.apps.MusicConfig'
