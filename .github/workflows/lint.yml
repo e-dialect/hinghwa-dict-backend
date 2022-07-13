@@ -38,6 +38,6 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }} ; do
             # check if file is python file
             if [[ ${file} == *.py ]]; then
-              DJANGO_SETTINGS_MODULE=HinghwaDict.settings pylint --load-plugins pylint_django ${file}
+              DJANGO_SETTINGS_MODULE=hinghwa-dict-backend.HinghwaDict.settings pylint --load-plugins pylint_django ${file}
             fi
           done
