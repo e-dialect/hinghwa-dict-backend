@@ -4,7 +4,7 @@
         {
             "item": [
                 {
-                    "id": "7954c1d1-ed2a-4f87-9d30-0f4d0cfe8cc4",
+                    "id": "f66a89ee-ff1e-464d-befb-c1aa46635892",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
@@ -130,7 +130,7 @@
                     }
                 },
                 {
-                    "id": "35633ecf-7c98-43d3-bc97-e68531666e6e",
+                    "id": "916959cc-3f39-45fa-a9e5-cb5ccf795dc4",
                     "name": "MC0101 上传新音乐(添加陈诺歌曲)",
                     "request": {
                         "url": {
@@ -213,7 +213,74 @@
                     }
                 },
                 {
-                    "id": "b79c227b-ff23-450b-84b3-43dfe29cbaa4",
+                    "id": "bbb5f446-65f1-4d96-aedc-73ddb904ac65",
+                    "name": "MC0105 审核音乐(MC0105 审核音乐)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "music",
+                                "1",
+                                "visibility"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "PUT",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "$ref": "#/definitions/1077714",
+                            "x-apifox-overrides": {}
+                        },
+                        "defaultEnable": true,
+                        "id": 68644493,
+                        "name": "成功",
+                        "apiDetailId": 29173734,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2022-07-13T07:28:35.000Z",
+                        "updatedAt": "2022-07-13T07:38:43.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 29173734,
+                        "httpApiCaseId": 32713059,
+                        "httpApiName": "MC0105 审核音乐",
+                        "httpApiPath": "/music/{id}/visibility",
+                        "httpApiMethod": "put",
+                        "httpApiCaseName": "MC0105 审核音乐"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "cd0cdb15-1e7a-4022-b614-a6da62ee6c5e",
                     "name": "MC0104 获取音乐信息(MC0104 获取音乐信息)",
                     "request": {
                         "url": {
@@ -288,7 +355,7 @@
                     }
                 },
                 {
-                    "id": "545103c1-8dd1-4c5c-b20e-c0a3366c7b75",
+                    "id": "24616df6-cb64-4b1f-a157-72930cce6bbf",
                     "name": "MC0301 给这音乐点赞(MC0301 给这音乐点赞)",
                     "request": {
                         "url": {
@@ -311,7 +378,7 @@
                         "header": [
                             {
                                 "key": "token",
-                                "value": ""
+                                "value": "{{token}}"
                             },
                             {
                                 "key": "User-Agent",
@@ -356,7 +423,7 @@
                     }
                 },
                 {
-                    "id": "ad5a7dfb-0567-4cf5-85ff-83aa635e2f59",
+                    "id": "29b58c5e-fdeb-457f-a574-7cbc23c9f227",
                     "name": "MC0302 取消这音乐点赞(MC0302 取消这音乐点赞)",
                     "request": {
                         "url": {
@@ -379,7 +446,7 @@
                         "header": [
                             {
                                 "key": "token",
-                                "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImR4dyIsImlkIjoxLCJsb2dpbl90aW1lIjoiMjAyMS0xMC0wOCAxODoxNjowMSIsInZhbHVlIjoiM09QdEtBIn0.BIpLN9GWHp4aPSDtxHSrl3HEseMEkVc46FwgnaqXs1w"
+                                "value": "{{token}}"
                             },
                             {
                                 "key": "User-Agent",
@@ -424,7 +491,7 @@
                     }
                 },
                 {
-                    "id": "6e9b32e3-2b4f-461f-a1a3-273c1b724fb9",
+                    "id": "8352b353-c7f7-480d-8204-1dd2babf6026",
                     "name": "MC0103 更新音乐信息(MC0103 更新音乐信息)",
                     "request": {
                         "url": {
@@ -497,7 +564,7 @@
                     }
                 },
                 {
-                    "id": "66f16e2f-7b94-4b96-98c6-39943c2da1c7",
+                    "id": "0c8fe2bf-c44f-42fd-809a-22e738ac81c8",
                     "name": "MC0102 删除音乐(MC0102 删除音乐)",
                     "request": {
                         "url": {
@@ -519,7 +586,7 @@
                         "header": [
                             {
                                 "key": "token",
-                                "value": ""
+                                "value": "{{token}}"
                             },
                             {
                                 "key": "User-Agent",
@@ -748,12 +815,12 @@
             "default": "http://127.0.0.1:8000"
         },
         "variable": {
-            "id": "5283fa07-d837-4eac-b787-c3ef2a4a6880",
+            "id": "b3b4be28-7d16-4891-9fa0-92e73cac37c8",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1NzIxMjQwNC42NTE0MDd9.KsGDnXc_E600LjgtITwbyMOzqTSMKATJa5oF4olc9Yg",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1NzcwMTgwMS43MTI0MTd9.H56KNtuSUzY3d8TrbKFwCF8jYfqplNLJoCwMX_ibHmw",
                     "key": "token"
                 }
             ]
@@ -768,7 +835,7 @@
     },
     "globals": {
         "variable": {
-            "id": "64e79a9d-cbcb-456b-bb89-e2d7e974b49e",
+            "id": "f2d462f6-9556-4bb9-bf42-24bb34e1a1bb",
             "values": []
         },
         "parameter": {
