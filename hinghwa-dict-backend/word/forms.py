@@ -6,27 +6,48 @@ from .models import Word, Pronunciation, Character, Application
 class WordForm(forms.ModelForm):
     class Meta:
         model = Word
-        fields = ('word', 'definition',
-                  'annotation', 'mandarin', 'visibility', 'standard_ipa', 'standard_pinyin')
+        fields = (
+            "word",
+            "definition",
+            "annotation",
+            "mandarin",
+            "visibility",
+            "standard_ipa",
+            "standard_pinyin",
+        )
 
 
 class PronunciationForm(forms.ModelForm):
     class Meta:
         model = Pronunciation
-        fields = ('source', 'ipa', 'pinyin',
-                  'county', 'town')
+        fields = ("source", "ipa", "pinyin", "county", "town")
 
 
 class CharacterForm(forms.ModelForm):
     class Meta:
         model = Character
-        fields = ('pinyin', 'ipa', 'character',
-                  'shengmu', 'yunmu', 'shengdiao',
-                  'county', 'town', 'traditional')
+        fields = (
+            "pinyin",
+            "ipa",
+            "character",
+            "shengmu",
+            "yunmu",
+            "shengdiao",
+            "county",
+            "town",
+            "traditional",
+        )
 
 
 class ApplicationForm(forms.ModelForm):
     class Meta:
         model = Application
-        fields = ('reason', 'content_word', 'definition',
-                  'annotation', 'mandarin', 'standard_ipa', 'standard_pinyin')
+        fields = (
+            "reason",
+            "content_word",
+            "definition",
+            "annotation",
+            "mandarin",
+            "standard_ipa",
+            "standard_pinyin",
+        )
