@@ -12,6 +12,7 @@ from website.views import token_check, filterInOrder
 from .forms import CharacterForm
 from .models import Word, Character, Pronunciation
 from .dto.character_normal import character_normal
+from .dto.character_all import character_all
 
 
 @csrf_exempt
@@ -170,11 +171,7 @@ def searchEachV2(request):
                 if (score, character.character, character.traditional) not in dic:
                     dic[(score, character.character, character.traditional)] = []
                 dic[(score, character.character, character.traditional)].append(
-                    {
-                        "character": character_normal(character),
-                        "word": word,
-                        "source": source,
-                    }
+                    character_all(character, word, source)
                 )
             ans = []
             dict_list = sorted(dic.keys())
