@@ -13,6 +13,6 @@ def music_all(music: Music) -> dict:
         "cover": music.cover,
         "likes": music.like(),
         "contributor": user_all(user),
-        "visibility": music.visibility
+        "visibility": music.visibility,
     }
     return response

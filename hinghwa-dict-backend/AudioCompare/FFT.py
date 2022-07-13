@@ -32,9 +32,12 @@ class FFT:
         samples = self.input_file.get_audio_samples(chunks * self.chunk_size)
         # mix those samples down into one channel
         samples = samples.mean(axis=0)
-        result = self.specgram(samples, NFFT=self.chunk_size,
-                               window=FFT.__window_hanning,
-                               noverlap=int(self.chunk_size / self.overlap_ratio))
+        result = self.specgram(
+            samples,
+            NFFT=self.chunk_size,
+            window=FFT.__window_hanning,
+            noverlap=int(self.chunk_size / self.overlap_ratio),
+        )
         result = result.transpose()
         return result
 
@@ -65,7 +68,7 @@ class FFT:
 
         # do the ffts of the slices
         for i in range(n):
-            thisX = x[ind[i]:ind[i] + NFFT]
+            thisX = x[ind[i] : ind[i] + NFFT]
             thisX = windowVals * thisX
             fx = np.fft.fft(thisX, n=NFFT)
             Pxx[:, i] = np.conjugate(fx[:numFreqs]) * fx[:numFreqs]

@@ -16,42 +16,51 @@ from .models import Word, Character, Pronunciation
 @csrf_exempt
 def searchCharacters(request):
     try:
-        if request.method == 'GET':
+        if request.method == "GET":
             characters = Character.objects.all()
-            if 'shengmu' in request.GET:
-                characters = characters.filter(shengmu=request.GET['shengmu'])
-            if 'yunmu' in request.GET:
-                characters = characters.filter(yunmu=request.GET['yunmu'])
-            if 'shengdiao' in request.GET:
-                characters = characters.filter(shengdiao=request.GET['shengdiao'])
+            if "shengmu" in request.GET:
+                characters = characters.filter(shengmu=request.GET["shengmu"])
+            if "yunmu" in request.GET:
+                characters = characters.filter(yunmu=request.GET["yunmu"])
+            if "shengdiao" in request.GET:
+                characters = characters.filter(shengdiao=request.GET["shengdiao"])
             characters = [character.id for character in characters]
             return JsonResponse({"characters": characters}, status=200)
-        elif request.method == 'POST':
+        elif request.method == "POST":
             body = demjson.decode(request.body)
-            token = request.headers['token']
+            token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
             if user:
-                body = body['character']
+                body = body["character"]
                 character_form = CharacterForm(body)
                 if character_form.is_valid():
                     character = character_form.save(commit=False)
                     character.save()
-                    return JsonResponse({'id': character.id}, status=200)
+                    return JsonResponse({"id": character.id}, status=200)
                 else:
                     return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             body = demjson.decode(request.body)
-            result = Character.objects.filter(id__in=body['characters'])
+            result = Character.objects.filter(id__in=body["characters"])
             characters = []
-            result = filterInOrder(result, body['characters'])
+            result = filterInOrder(result, body["characters"])
             for character in result:
-                characters.append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                   'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                   'shengdiao': character.shengdiao,
-                                   'character': character.character, 'county': character.county,
-                                   'town': character.town, 'traditional': character.traditional})
+                characters.append(
+                    {
+                        "id": character.id,
+                        "shengmu": character.shengmu,
+                        "ipa": character.ipa,
+                        "pinyin": character.pinyin,
+                        "yunmu": character.yunmu,
+                        "shengdiao": character.shengdiao,
+                        "character": character.character,
+                        "county": character.county,
+                        "town": character.town,
+                        "traditional": character.traditional,
+                    }
+                )
             return JsonResponse({"characters": characters}, status=200)
         else:
             return JsonResponse({}, status=405)
@@ -60,23 +69,24 @@ def searchCharacters(request):
 
 
 def searchCharactersPinyin(request):
-    '''
-        其实就是seachCharacters方法的get接口不够用了，要增加多一个功能类似但是返回不同的
-    '''
+    """
+    其实就是seachCharacters方法的get接口不够用了，要增加多一个功能类似但是返回不同的
+    """
     try:
-        if request.method == 'GET':
+        if request.method == "GET":
             characters = Character.objects.all()
-            if 'shengmu' in request.GET:
-                characters = characters.filter(shengmu=request.GET['shengmu'])
-            if 'yunmu' in request.GET:
-                characters = characters.filter(yunmu=request.GET['yunmu'])
-            if 'shengdiao' in request.GET:
-                characters = characters.filter(shengdiao=request.GET['shengdiao'])
+            if "shengmu" in request.GET:
+                characters = characters.filter(shengmu=request.GET["shengmu"])
+            if "yunmu" in request.GET:
+                characters = characters.filter(yunmu=request.GET["yunmu"])
+            if "shengdiao" in request.GET:
+                characters = characters.filter(shengdiao=request.GET["shengdiao"])
             result = {}
             pinyin_list = []
             for item in characters:
-                if ((item.pinyin, item.character) not in result) or \
-                        (item.town == '城里' and item.county == '莆田'):
+                if ((item.pinyin, item.character) not in result) or (
+                    item.town == "城里" and item.county == "莆田"
+                ):
                     result[(item.pinyin, item.character, item.traditional)] = item
                     pinyin_list.append(item.pinyin)
             # 实现逻辑是将所有Word和Pronunciation按pinyin归类
@@ -85,25 +95,39 @@ def searchCharactersPinyin(request):
             result1 = {}
             words_dict = {}
             pronunciations_dict = {}
-            for item in Word.objects.filter(standard_pinyin__in=pinyin_list).filter(visibility=True):
+            for item in Word.objects.filter(standard_pinyin__in=pinyin_list).filter(
+                visibility=True
+            ):
                 if item.standard_pinyin not in words_dict:
                     words_dict[item.standard_pinyin] = []
                 words_dict[item.standard_pinyin].append(item)
-            for item in Pronunciation.objects.filter(pinyin__in=pinyin_list).filter(visibility=True):
+            for item in Pronunciation.objects.filter(pinyin__in=pinyin_list).filter(
+                visibility=True
+            ):
                 if item.pinyin not in pronunciations_dict:
                     pronunciations_dict[item.pinyin] = item
             t = 0
             for (pinyin, character, traditional), item in result.items():
                 if pinyin not in result1:
-                    pronunciation = pronunciations_dict[pinyin].source if pinyin in pronunciations_dict else None
-                    result1[pinyin] = {'pinyin': pinyin, 'source': pronunciation, "characters": []}
+                    pronunciation = (
+                        pronunciations_dict[pinyin].source
+                        if pinyin in pronunciations_dict
+                        else None
+                    )
+                    result1[pinyin] = {
+                        "pinyin": pinyin,
+                        "source": pronunciation,
+                        "characters": [],
+                    }
                 word = None
                 if pinyin in words_dict:
                     for item in words_dict[pinyin]:
                         if item.word == character:
                             word = item.id
                             break
-                result1[pinyin]['characters'].append({'character': character, 'word': word, 'traditional': traditional})
+                result1[pinyin]["characters"].append(
+                    {"character": character, "word": word, "traditional": traditional}
+                )
             return JsonResponse({"result": list(result1.values())}, status=200)
         else:
             return JsonResponse({}, status=405)
@@ -114,40 +138,52 @@ def searchCharactersPinyin(request):
 @csrf_exempt
 def searchEach(request):
     try:
-        if request.method == 'GET':
-            search = request.GET['search']
+        if request.method == "GET":
+            search = request.GET["search"]
             result = Character.objects.filter(character__in=search)
             dic = {}
             for character in search:
                 dic[character] = []
             for character in result:
-                dic[character.character].append({"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                                 'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                                 'shengdiao': character.shengdiao, 'character': character.character,
-                                                 'county': character.county, 'town': character.town,
-                                                 'traditional': character.traditional})
+                dic[character.character].append(
+                    {
+                        "id": character.id,
+                        "shengmu": character.shengmu,
+                        "ipa": character.ipa,
+                        "pinyin": character.pinyin,
+                        "yunmu": character.yunmu,
+                        "shengdiao": character.shengdiao,
+                        "character": character.character,
+                        "county": character.county,
+                        "town": character.town,
+                        "traditional": character.traditional,
+                    }
+                )
             ans = []
             for character in dic.keys():
-                ans.append({'label': character, 'characters': dic[character]})
-            return JsonResponse({'characters': ans}, status=200)
+                ans.append({"label": character, "characters": dic[character]})
+            return JsonResponse({"characters": ans}, status=200)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=500)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
 def searchEachV2(request):
     try:
-        if request.method == 'GET':
-            search = request.GET['search']
-            result = Character.objects.filter(Q(character__in=search)
-                                              | Q(traditional__in=search))
+        if request.method == "GET":
+            search = request.GET["search"]
+            result = Character.objects.filter(
+                Q(character__in=search) | Q(traditional__in=search)
+            )
             dic = {}
             scores = {}
             for idx, character in enumerate(search):
                 if character not in scores:
                     scores[character] = idx * 10
             for character in result:
-                word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
+                word = Word.objects.filter(standard_pinyin=character.pinyin).filter(
+                    word=character.character
+                )
                 word = word[0].id if word.exists() else None
                 source = Pronunciation.objects.filter(pinyin=character.pinyin)
                 source = source[0].source if source.exists() else None
@@ -159,26 +195,42 @@ def searchEachV2(request):
                 if (score, character.character, character.traditional) not in dic:
                     dic[(score, character.character, character.traditional)] = []
                 dic[(score, character.character, character.traditional)].append(
-                    {"id": character.id, 'pinyin': character.pinyin, 'ipa': character.ipa,
-                     'shengmu': character.shengmu, 'yunmu': character.yunmu, 'shengdiao': character.shengdiao,
-                     'character': character.character, 'traditional': character.traditional,
-                     'county': character.county, 'town': character.town,
-                     'word': word, 'source': source})
+                    {
+                        "id": character.id,
+                        "pinyin": character.pinyin,
+                        "ipa": character.ipa,
+                        "shengmu": character.shengmu,
+                        "yunmu": character.yunmu,
+                        "shengdiao": character.shengdiao,
+                        "character": character.character,
+                        "traditional": character.traditional,
+                        "county": character.county,
+                        "town": character.town,
+                        "word": word,
+                        "source": source,
+                    }
+                )
             ans = []
             dict_list = sorted(dic.keys())
             for score, character, traditional in dict_list:
                 new_dic = {}
                 for item in dic[(score, character, traditional)]:
-                    if (item['county'], item['town']) not in new_dic:
-                        new_dic[(item['county'], item['town'])] = []
-                    new_dic[(item['county'], item['town'])].append(item)
+                    if (item["county"], item["town"]) not in new_dic:
+                        new_dic[(item["county"], item["town"])] = []
+                    new_dic[(item["county"], item["town"])].append(item)
                 result = []
                 for (county, town), value in new_dic.items():
-                    result.append({'county': county, 'town': town, 'characters': value})
-                ans.append({'label': character, 'traditional': traditional, 'characters': result})
-            return JsonResponse({'characters': ans}, status=200)
+                    result.append({"county": county, "town": town, "characters": value})
+                ans.append(
+                    {
+                        "label": character,
+                        "traditional": traditional,
+                        "characters": result,
+                    }
+                )
+            return JsonResponse({"characters": ans}, status=200)
     except Exception as e:
-        return JsonResponse({'msg': str(e)}, status=500)
+        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
@@ -187,18 +239,29 @@ def manageCharacter(request, id):
         character = Character.objects.filter(id=id)
         if character.exists():
             character = character[0]
-            if request.method == 'GET':
+            if request.method == "GET":
                 return JsonResponse(
-                    {'character': {"id": character.id, 'shengmu': character.shengmu, 'ipa': character.ipa,
-                                   'pinyin': character.pinyin, 'yunmu': character.yunmu,
-                                   'shengdiao': character.shengdiao,
-                                   'character': character.character, 'county': character.county,
-                                   'town': character.town, 'traditional': character.traditional}}, status=200)
-            elif request.method == 'PUT':
+                    {
+                        "character": {
+                            "id": character.id,
+                            "shengmu": character.shengmu,
+                            "ipa": character.ipa,
+                            "pinyin": character.pinyin,
+                            "yunmu": character.yunmu,
+                            "shengdiao": character.shengdiao,
+                            "character": character.character,
+                            "county": character.county,
+                            "town": character.town,
+                            "traditional": character.traditional,
+                        }
+                    },
+                    status=200,
+                )
+            elif request.method == "PUT":
                 body = demjson.decode(request.body)
-                token = request.headers['token']
+                token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, -1):
-                    body = body['character']
+                    body = body["character"]
                     character_form = CharacterForm(body)
                     for key in body:
                         if len(character_form[key].errors.data):
@@ -209,8 +272,8 @@ def manageCharacter(request, id):
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
-            elif request.method == 'DELETE':
-                token = request.headers['token']
+            elif request.method == "DELETE":
+                token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, -1):
                     character.delete()
                     return JsonResponse({}, status=200)
@@ -229,14 +292,16 @@ def manageCharacter(request, id):
 def load_character(request):
     try:
         body = demjson.decode(request.body)
-        token = request.headers['token']
+        token = request.headers["token"]
         user = token_check(token, settings.JWT_KEY, -1)
         if user:
-            file = body['file']
-            flush = body['flush']
+            file = body["file"]
+            flush = body["flush"]
             if flush:
                 Character.objects.all().delete()
-            sheet = xlrd.open_workbook(os.path.join('material', 'character', file)).sheet_by_index(0)
+            sheet = xlrd.open_workbook(
+                os.path.join("material", "character", file)
+            ).sheet_by_index(0)
             lines = sheet.nrows
             col = sheet.ncols
             title = sheet.row(0)
@@ -249,9 +314,9 @@ def load_character(request):
                 if character_form.is_valid():
                     character = character_form.save(commit=True)
                     if character.id % 100 == 0:
-                        print('load character {}'.format(character.id))
+                        print("load character {}".format(character.id))
                 else:
-                    raise Exception('add fail in {}'.format(dic))
+                    raise Exception("add fail in {}".format(dic))
             return JsonResponse({}, status=200)
         else:
             return JsonResponse({}, status=401)
