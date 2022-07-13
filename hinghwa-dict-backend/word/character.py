@@ -11,6 +11,7 @@ from django.views.decorators.http import require_POST
 from website.views import token_check, filterInOrder
 from .forms import CharacterForm
 from .models import Word, Character, Pronunciation
+from .dto.character_normal import character_normal
 
 
 @csrf_exempt
@@ -47,20 +48,7 @@ def searchCharacters(request):
             characters = []
             result = filterInOrder(result, body["characters"])
             for character in result:
-                characters.append(
-                    {
-                        "id": character.id,
-                        "shengmu": character.shengmu,
-                        "ipa": character.ipa,
-                        "pinyin": character.pinyin,
-                        "yunmu": character.yunmu,
-                        "shengdiao": character.shengdiao,
-                        "character": character.character,
-                        "county": character.county,
-                        "town": character.town,
-                        "traditional": character.traditional,
-                    }
-                )
+                characters.append({character_normal(character)})
             return JsonResponse({"characters": characters}, status=200)
         else:
             return JsonResponse({}, status=405)
@@ -145,20 +133,7 @@ def searchEach(request):
             for character in search:
                 dic[character] = []
             for character in result:
-                dic[character.character].append(
-                    {
-                        "id": character.id,
-                        "shengmu": character.shengmu,
-                        "ipa": character.ipa,
-                        "pinyin": character.pinyin,
-                        "yunmu": character.yunmu,
-                        "shengdiao": character.shengdiao,
-                        "character": character.character,
-                        "county": character.county,
-                        "town": character.town,
-                        "traditional": character.traditional,
-                    }
-                )
+                dic[character.character].append({character_normal(character)})
             ans = []
             for character in dic.keys():
                 ans.append({"label": character, "characters": dic[character]})
@@ -196,16 +171,7 @@ def searchEachV2(request):
                     dic[(score, character.character, character.traditional)] = []
                 dic[(score, character.character, character.traditional)].append(
                     {
-                        "id": character.id,
-                        "pinyin": character.pinyin,
-                        "ipa": character.ipa,
-                        "shengmu": character.shengmu,
-                        "yunmu": character.yunmu,
-                        "shengdiao": character.shengdiao,
-                        "character": character.character,
-                        "traditional": character.traditional,
-                        "county": character.county,
-                        "town": character.town,
+                        "character": character_normal(character),
                         "word": word,
                         "source": source,
                     }
@@ -241,20 +207,7 @@ def manageCharacter(request, id):
             character = character[0]
             if request.method == "GET":
                 return JsonResponse(
-                    {
-                        "character": {
-                            "id": character.id,
-                            "shengmu": character.shengmu,
-                            "ipa": character.ipa,
-                            "pinyin": character.pinyin,
-                            "yunmu": character.yunmu,
-                            "shengdiao": character.shengdiao,
-                            "character": character.character,
-                            "county": character.county,
-                            "town": character.town,
-                            "traditional": character.traditional,
-                        }
-                    },
+                    {"character": {character_normal(character)}},
                     status=200,
                 )
             elif request.method == "PUT":
