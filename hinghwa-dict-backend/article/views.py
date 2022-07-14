@@ -13,13 +13,16 @@ from website.views import (
 from .forms import ArticleForm, CommentForm
 from .models import Article, Comment
 from django.conf import settings
+from .dto.article_all import article_all
+from .dto.article_normal import article_normal
+from .dto.comment_normal import comment_normal
 
 
 @csrf_exempt
 def searchArticle(request):
     try:
         if request.method == "GET":
-            # 搜索符合条件的文章并返回id TODO 正式版search
+            # AT0201 搜索符合条件的文章并返回id TODO 正式版search
             articles = list(Article.objects.filter(visibility=True))
             if "search" in request.GET:
                 result = []
@@ -51,7 +54,7 @@ def searchArticle(request):
             return JsonResponse({"articles": articles})
         elif request.method == "POST":
             body = demjson.decode(request.body)
-            # 创建新的文章
+            # AT0101 创建新的文章
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY)
             if user:
@@ -69,7 +72,7 @@ def searchArticle(request):
             else:
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
-            # 批量返回文章内容
+            # AT0202 文章内容批量获取
             body = demjson.decode(request.body)
             result = Article.objects.filter(id__in=body["articles"])
             user = 0
@@ -88,23 +91,7 @@ def searchArticle(request):
             for article in result:
                 articles.append(
                     {
-                        "article": {
-                            "id": article.id,
-                            "likes": article.like(),
-                            "author": article.author.id,
-                            "views": article.views,
-                            "publish_time": article.publish_time.__format__(
-                                "%Y-%m-%d %H:%M:%S"
-                            ),
-                            "update_time": article.update_time.__format__(
-                                "%Y-%m-%d %H:%M:%S"
-                            ),
-                            "title": article.title,
-                            "description": article.description,
-                            "content": article.content,
-                            "cover": article.cover,
-                            "visibility": article.visibility,
-                        },
+                        "article": article_normal(article),
                         "author": simpleUserInfo(article.author),
                     }
                 )
@@ -122,6 +109,7 @@ def manageArticle(request, id):
         if article.exists():
             article = article[0]
             token = request.headers["token"]
+            # AT0104 获取文章内容
             if request.method == "GET":
                 user = token_check(token, settings.JWT_KEY)
                 if article.visibility or user.is_superuser or user == article.author:
@@ -135,47 +123,11 @@ def manageArticle(request, id):
                         if user
                         else {"liked": False, "is_author": False}
                     )
-                    user = article.author
-                    article = {
-                        "id": article.id,
-                        "author": {
-                            "id": user.id,
-                            "username": user.username,
-                            "nickname": user.user_info.nickname,
-                            "email": user.email,
-                            "telephone": user.user_info.telephone,
-                            "registration_time": user.date_joined.__format__(
-                                "%Y-%m-%d %H:%M:%S"
-                            ),
-                            "login_time": user.last_login.__format__(
-                                "%Y-%m-%d %H:%M:%S"
-                            )
-                            if user.last_login
-                            else "",
-                            "birthday": user.user_info.birthday,
-                            "avatar": user.user_info.avatar,
-                            "county": user.user_info.county,
-                            "town": user.user_info.town,
-                            "is_admin": user.is_superuser,
-                        },
-                        "likes": article.like(),
-                        "views": article.views,
-                        "publish_time": article.publish_time.__format__(
-                            "%Y-%m-%d %H:%M:%S"
-                        ),
-                        "update_time": article.update_time.__format__(
-                            "%Y-%m-%d %H:%M:%S"
-                        ),
-                        "title": article.title,
-                        "description": article.description,
-                        "content": article.content,
-                        "cover": article.cover,
-                        "visibility": article.visibility,
-                        "like_users": [x.id for x in article.like_users.all()],
-                    }
+                    article = article_all(article)
                     return JsonResponse({"article": article, "me": me}, status=200)
                 else:
                     return JsonResponse({}, status=404)
+            # AT0103 更新文章内容
             elif request.method == "PUT":
                 if token_check(token, settings.JWT_KEY, article.author.id):
                     body = demjson.decode(request.body)
@@ -194,6 +146,7 @@ def manageArticle(request, id):
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
+            # AT0102 删除文章
             elif request.method == "DELETE":
                 if token_check(token, settings.JWT_KEY, article.author.id):
                     article.delete()
@@ -211,6 +164,7 @@ def manageArticle(request, id):
 @csrf_exempt
 def manageArticleVisibility(request, id):
     try:
+        # WD0404 文章审核
         if request.method == "PUT":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
@@ -253,9 +207,11 @@ def like(request, id):
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY)
             if user:
+                # AT0301 给这篇文章点赞
                 if request.method == "POST":
                     article.like_users.add(user)
                     return JsonResponse({}, status=200)
+                # AT0302 取消给这篇文章点赞
                 elif request.method == "DELETE":
                     if len(article.like_users.filter(id=user.id)):
                         article.like_users.remove(user)
@@ -282,18 +238,13 @@ def comment(request, id):
             article[0].visibility or user.is_superuser or user == article[0].author
         ):
             article = article[0]
+            # AT0404 获取文章评论
             if request.method == "GET":
                 comments = [
-                    {
-                        "id": comment.id,
-                        "user": simpleUserInfo(comment.user),
-                        "content": comment.content,
-                        "time": comment.time.__format__("%Y-%m-%d %H:%M:%S"),
-                        "parent": comment.parent_id if comment.parent else 0,
-                    }
-                    for comment in article.comments.all()
+                    comment_normal(comment) for comment in article.comments.all()
                 ]
                 return JsonResponse({"comments": comments}, status=200)
+            # AT0401 发表文章评论
             elif request.method == "POST":
                 token = request.headers["token"]
                 user = token_check(token, settings.JWT_KEY)
@@ -312,6 +263,7 @@ def comment(request, id):
                         return JsonResponse({}, status=400)
                 else:
                     return JsonResponse({}, status=401)
+            # AT0402 删除文章评论（和子孙评论）
             elif request.method == "DELETE":
                 body = demjson.decode(request.body)
                 token = request.headers["token"]
@@ -333,22 +285,14 @@ def comment(request, id):
 @csrf_exempt
 def searchComment(request):
     try:
+        # AT0403 评论内容批量获取
         if request.method == "PUT":
             body = demjson.decode(request.body)
             result = Comment.objects.filter(id__in=body["comments"])
             result = filterInOrder(result, body["comments"])
             comments = []
             for comment in result:
-                comments.append(
-                    {
-                        "id": comment.id,
-                        "user": comment.user.id,
-                        "content": comment.content,
-                        "time": comment.time.__format__("%Y-%m-%d %H:%M:%S"),
-                        "parent": comment.parent_id if comment.parent else 0,
-                        "article": comment.article.id,
-                    }
-                )
+                comments.append(comment_normal(comment))
             return JsonResponse({"comments": comments}, status=200)
         else:
             return JsonResponse({}, status=405)
