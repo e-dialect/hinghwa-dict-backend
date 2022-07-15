@@ -18,31 +18,17 @@ from website.views import (
     filterInOrder,
 )
 from .forms import WordForm, ApplicationForm
-from .models import Word, Pronunciation, User, Application
-
-
-def word2pronunciation(word: Word, null=None):
-    pronunciations = word.pronunciation.filter(
-        Q(ipa__iexact=word.standard_ipa) & Q(visibility=True) & Q(source__isnull=False)
-    )
-    if pronunciations.exists():
-        source = pronunciations[0].source
-    else:
-        pronunciations = Pronunciation.objects.filter(
-            Q(ipa__iexact=word.standard_ipa)
-            & Q(visibility=True)
-            & Q(source__isnull=False)
-        )
-        if pronunciations.exists():
-            source = pronunciations[0].source
-        else:
-            source = null
-    return source
+from .models import Word, User, Application
+from word.word2pronunciation import word2pronunciation
+from word.dto.word_all import word_all
+from word.dto.word_quick import word_quick
+from word.dto.word_simple import word_simple
 
 
 @csrf_exempt
 def searchWords(request):
     try:
+        # WD0201 获取符合条件的字词的列表
         if request.method == "GET":
             words = Word.objects.filter(visibility=True)
             if "contributor" in request.GET:
@@ -85,20 +71,10 @@ def searchWords(request):
                     words = list(zip(*result))[0]
                 else:
                     words = []
-            result = [
-                {
-                    "id": word.id,
-                    "word": word.word,
-                    "definition": word.definition,
-                    "annotation": word.annotation,
-                    "mandarin": eval(word.mandarin) if word.mandarin else [],
-                    "standard_ipa": word.standard_ipa,
-                    "standard_pinyin": word.standard_pinyin,
-                }
-                for word in words
-            ]
+            result = [word_quick(word) for word in words]
             words = [word.id for word in words]
             return JsonResponse({"result": result, "words": words}, status=200)
+        # WD0102 管理员上传新词语
         elif request.method == "POST":
             body = demjson.decode(request.body)
             token = request.headers["token"]
@@ -126,6 +102,7 @@ def searchWords(request):
                     return JsonResponse({}, status=400)
             else:
                 return JsonResponse({}, status=401)
+        # WD0202 词语内容批量获取
         elif request.method == "PUT":
             body = demjson.decode(request.body)
             words = []
@@ -135,17 +112,7 @@ def searchWords(request):
                 pronunciation = word2pronunciation(word, "null")
                 words.append(
                     {
-                        "word": {
-                            "id": word.id,
-                            "word": word.word,
-                            "definition": word.definition,
-                            "contributor": word.contributor.id,
-                            "annotation": word.annotation,
-                            "standard_ipa": word.standard_ipa,
-                            "standard_pinyin": word.standard_pinyin,
-                            "mandarin": eval(word.mandarin) if word.mandarin else [],
-                            "views": word.views,
-                        },
+                        "word": word_simple(word),
                         "contributor": simpleUserInfo(word.contributor),
                         "pronunciation": {"url": pronunciation, "tts": "null"},
                     }
@@ -163,57 +130,15 @@ def manageWord(request, id):
         word = Word.objects.filter(id=id)
         if word.exists():
             word = word[0]
+            # WD0101 获取字词的内容
             if request.method == "GET":
-                related_words = [
-                    {"id": word.id, "word": word.word}
-                    for word in word.related_words.all()
-                ]
-                related_articles = [
-                    {"id": article.id, "title": article.title}
-                    for article in word.related_articles.all()
-                ]
                 word.views = word.views + 1
                 word.save()
-                user = word.contributor
-                source = word2pronunciation(word)
                 return JsonResponse(
-                    {
-                        "word": {
-                            "id": word.id,
-                            "word": word.word,
-                            "definition": word.definition,
-                            "contributor": {
-                                "id": user.id,
-                                "username": user.username,
-                                "nickname": user.user_info.nickname,
-                                "email": user.email,
-                                "telephone": user.user_info.telephone,
-                                "registration_time": user.date_joined.__format__(
-                                    "%Y-%m-%d %H:%M:%S"
-                                ),
-                                "login_time": user.last_login.__format__(
-                                    "%Y-%m-%d %H:%M:%S"
-                                )
-                                if user.last_login
-                                else "",
-                                "birthday": user.user_info.birthday,
-                                "avatar": user.user_info.avatar,
-                                "county": user.user_info.county,
-                                "town": user.user_info.town,
-                                "is_admin": user.is_superuser,
-                            },
-                            "annotation": word.annotation,
-                            "standard_ipa": word.standard_ipa,
-                            "standard_pinyin": word.standard_pinyin,
-                            "mandarin": eval(word.mandarin) if word.mandarin else [],
-                            "related_words": related_words,
-                            "related_articles": related_articles,
-                            "views": word.views,
-                            "source": source,
-                        }
-                    },
+                    {"word": word_all(word)},
                     status=200,
                 )
+            # WD0103 管理员更改字词的内容
             elif request.method == "PUT":
                 body = demjson.decode(request.body)
                 token = request.headers["token"]
@@ -244,6 +169,7 @@ def manageWord(request, id):
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
+            # WD0104 删除词语
             elif request.method == "DELETE":
                 token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, word.contributor.id):
@@ -263,6 +189,7 @@ def manageWord(request, id):
 @csrf_exempt
 def load_word(request):
     try:
+        # WD0301 文件批量添加
         body = demjson.decode(request.body)
         file = body["file"]
         sheet = open(os.path.join("material", "word", file))
@@ -290,6 +217,7 @@ def load_word(request):
 
 @csrf_exempt
 def record(request):
+    # PN0301 批量录音列表
     if request.method == "GET":
         words = Word.objects.filter(
             Q(standard_ipa__isnull=False)
@@ -330,6 +258,7 @@ def upload_standard(request):
     :return: 返回名为conflict的csv，展示与数据库冲突的word字段，为5列，id,init_ipa,init_pinyin,ipa,pinyin
     """
     try:
+        # WD0302 上传标准拼音和ipa
         if request.method == "POST":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
@@ -401,6 +330,7 @@ def upload_standard(request):
 @csrf_exempt
 def searchApplication(request):
     try:
+        # WD0403 查看多个申请
         if request.method == "GET":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
@@ -449,6 +379,7 @@ def searchApplication(request):
                 return JsonResponse({"applications": result}, status=200)
             else:
                 return JsonResponse({}, status=401)
+        # WD0401 申请更新
         elif request.method == "POST":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY)
@@ -500,6 +431,7 @@ def manageApplication(request, id):
         application = Application.objects.filter(id=id)
         if application.exists():
             application = application[0]
+            # WD0402 查看单个申请内容
             if request.method == "GET":
                 token = request.headers["token"]
                 user = token_check(token, settings.JWT_KEY, application.contributor.id)
@@ -545,6 +477,7 @@ def manageApplication(request, id):
                     return JsonResponse({"application": result}, status=200)
                 else:
                     return JsonResponse({}, status=401)
+            # WD0404 审核申请
             elif request.method == "PUT":
                 token = request.headers["token"]
                 user = token_check(token, settings.JWT_KEY, -1)
