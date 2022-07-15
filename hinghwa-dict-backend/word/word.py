@@ -19,25 +19,8 @@ from website.views import (
 )
 from .forms import WordForm, ApplicationForm
 from .models import Word, Pronunciation, User, Application
-
-
-def word2pronunciation(word: Word, null=None):
-    pronunciations = word.pronunciation.filter(
-        Q(ipa__iexact=word.standard_ipa) & Q(visibility=True) & Q(source__isnull=False)
-    )
-    if pronunciations.exists():
-        source = pronunciations[0].source
-    else:
-        pronunciations = Pronunciation.objects.filter(
-            Q(ipa__iexact=word.standard_ipa)
-            & Q(visibility=True)
-            & Q(source__isnull=False)
-        )
-        if pronunciations.exists():
-            source = pronunciations[0].source
-        else:
-            source = null
-    return source
+from word.word2pronunciation import word2pronunciation
+from word.dto.word_all import word_all
 
 
 @csrf_exempt
@@ -168,54 +151,10 @@ def manageWord(request, id):
             word = word[0]
             # WD0101 获取字词的内容
             if request.method == "GET":
-                related_words = [
-                    {"id": word.id, "word": word.word}
-                    for word in word.related_words.all()
-                ]
-                related_articles = [
-                    {"id": article.id, "title": article.title}
-                    for article in word.related_articles.all()
-                ]
                 word.views = word.views + 1
                 word.save()
-                user = word.contributor
-                source = word2pronunciation(word)
                 return JsonResponse(
-                    {
-                        "word": {
-                            "id": word.id,
-                            "word": word.word,
-                            "definition": word.definition,
-                            "contributor": {
-                                "id": user.id,
-                                "username": user.username,
-                                "nickname": user.user_info.nickname,
-                                "email": user.email,
-                                "telephone": user.user_info.telephone,
-                                "registration_time": user.date_joined.__format__(
-                                    "%Y-%m-%d %H:%M:%S"
-                                ),
-                                "login_time": user.last_login.__format__(
-                                    "%Y-%m-%d %H:%M:%S"
-                                )
-                                if user.last_login
-                                else "",
-                                "birthday": user.user_info.birthday,
-                                "avatar": user.user_info.avatar,
-                                "county": user.user_info.county,
-                                "town": user.user_info.town,
-                                "is_admin": user.is_superuser,
-                            },
-                            "annotation": word.annotation,
-                            "standard_ipa": word.standard_ipa,
-                            "standard_pinyin": word.standard_pinyin,
-                            "mandarin": eval(word.mandarin) if word.mandarin else [],
-                            "related_words": related_words,
-                            "related_articles": related_articles,
-                            "views": word.views,
-                            "source": source,
-                        }
-                    },
+                    {"word": word_all(word)},
                     status=200,
                 )
             # WD0103 管理员更改字词的内容
