@@ -1,4 +1,3 @@
-from urllib import response
 from ..models import Word, User
 
 

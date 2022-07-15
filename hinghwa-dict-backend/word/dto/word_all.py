@@ -1,6 +1,4 @@
 # 可用于WD0101
-from pydoc import Doc
-from urllib import response
 from ..models import Word
 from user.dto.user_simple import user_simple
 from word.word import word2pronunciation

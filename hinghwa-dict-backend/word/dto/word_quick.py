@@ -1,5 +1,4 @@
 # 用于WD0201
-from urllib import response
 from ..models import Word
 
 
