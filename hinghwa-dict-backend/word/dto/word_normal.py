@@ -19,3 +19,4 @@ def word_normal(word: Word) -> dict:
         "standard_ipa": word.standard_ipa,
         "standard_pinyin": word.standard_pinyin,
     }
+    return response
