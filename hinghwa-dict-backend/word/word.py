@@ -1,5 +1,4 @@
 import csv
-import imp
 import os
 
 import demjson
