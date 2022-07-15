@@ -35,12 +35,16 @@ urlpatterns = [
         "words",
         include(
             [
-                path("", word.searchWords), # WD0102POST    WD0201GET   WD0202PUT
-                path("/<int:id>", word.manageWord), # WD0101GET WD0103PUT
-                path("/add", word.load_word),   # WD0301POST
-                path("/upload_standard", word.upload_standard), # WD0302POST
-                path("/applications", word.searchApplication),  # WD0401POST    WD0403GET
-                path("/applications/<int:id>", word.manageApplication), # WD0402GET WD0404PUT
+                path("", word.searchWords),  # WD0102POST    WD0201GET   WD0202PUT
+                path("/<int:id>", word.manageWord),  # WD0101GET WD0103PUT
+                path("/add", word.load_word),  # WD0301POST
+                path("/upload_standard", word.upload_standard),  # WD0302POST
+                path(
+                    "/applications", word.searchApplication
+                ),  # WD0401POST    WD0403GET
+                path(
+                    "/applications/<int:id>", word.manageApplication
+                ),  # WD0402GET WD0404PUT
             ]
         ),
     ),
@@ -73,5 +77,5 @@ urlpatterns = [
             ]
         ),
     ),
-    path("record", word.record),    # PN0301GET
+    path("record", word.record),  # PN0301GET
 ]
