@@ -1,4 +1,4 @@
-from ..models import Word, User
+from ..models import Word
 
 
 def word_simple(word: Word) -> dict:
