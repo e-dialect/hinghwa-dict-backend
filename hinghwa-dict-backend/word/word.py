@@ -18,7 +18,7 @@ from website.views import (
     filterInOrder,
 )
 from .forms import WordForm, ApplicationForm
-from .models import Word, Pronunciation, User, Application
+from .models import Word, User, Application
 from word.word2pronunciation import word2pronunciation
 from word.dto.word_all import word_all
 from word.dto.word_quick import word_quick
