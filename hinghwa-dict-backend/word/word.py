@@ -22,6 +22,7 @@ from .models import Word, Pronunciation, User, Application
 from word.word2pronunciation import word2pronunciation
 from word.dto.word_all import word_all
 from word.dto.word_quick import word_quick
+from word.dto.word_simple import word_simple
 
 
 @csrf_exempt
@@ -111,17 +112,7 @@ def searchWords(request):
                 pronunciation = word2pronunciation(word, "null")
                 words.append(
                     {
-                        "word": {
-                            "id": word.id,
-                            "word": word.word,
-                            "definition": word.definition,
-                            "contributor": word.contributor.id,
-                            "annotation": word.annotation,
-                            "standard_ipa": word.standard_ipa,
-                            "standard_pinyin": word.standard_pinyin,
-                            "mandarin": eval(word.mandarin) if word.mandarin else [],
-                            "views": word.views,
-                        },
+                        "word": word_simple(word),
                         "contributor": simpleUserInfo(word.contributor),
                         "pronunciation": {"url": pronunciation, "tts": "null"},
                     }
