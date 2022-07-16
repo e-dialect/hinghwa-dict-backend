@@ -1,4 +1,4 @@
-# 可用于WD0101
+# 可用于WD0101 WD0201
 from ..models import Word
 from user.dto.user_simple import user_simple
 from word.word import word2pronunciation

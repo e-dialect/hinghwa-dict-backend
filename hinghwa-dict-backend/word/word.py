@@ -21,7 +21,6 @@ from .forms import WordForm, ApplicationForm
 from .models import Word, User, Application
 from word.word2pronunciation import word2pronunciation
 from word.dto.word_all import word_all
-from word.dto.word_quick import word_quick
 from word.dto.word_simple import word_simple
 
 
@@ -71,7 +70,7 @@ def searchWords(request):
                     words = list(zip(*result))[0]
                 else:
                     words = []
-            result = [word_quick(word) for word in words]
+            result = [word_all(word) for word in words]
             words = [word.id for word in words]
             return JsonResponse({"result": result, "words": words}, status=200)
         # WD0102 管理员上传新词语
