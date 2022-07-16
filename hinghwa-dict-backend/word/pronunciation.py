@@ -20,11 +20,14 @@ from word import translate
 import requests
 from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
+from .dto.pronunciation.pronunciation_all import pronunciation_all
+from .dto.pronunciation.pronunciation_normal import pronunciation_normal
 
 
 @csrf_exempt
 def searchPronunciations(request):
     try:
+        # PN0201 发音的批量获取
         if request.method == "GET":
             if ("token" in request.headers) and token_check(
                 request.headers["token"], settings.JWT_KEY, -1
@@ -61,30 +64,12 @@ def searchPronunciations(request):
             for pronunciation in pronunciations:
                 result.append(
                     {
-                        "pronunciation": {
-                            "id": pronunciation.id,
-                            "word_id": pronunciation.word.id,
-                            "word_word": pronunciation.word.word,
-                            "source": pronunciation.source,
-                            "ipa": pronunciation.ipa,
-                            "pinyin": pronunciation.pinyin,
-                            "contributor": pronunciation.contributor.id,
-                            "county": pronunciation.county,
-                            "town": pronunciation.town,
-                            "visibility": pronunciation.visibility,
-                            "verifier": {
-                                "nickname": pronunciation.verifier.user_info.nickname,
-                                "avatar": pronunciation.verifier.user_info.avatar,
-                                "id": pronunciation.verifier.id,
-                            }
-                            if pronunciation.verifier
-                            else None,
-                            "granted": pronunciation.granted(),
-                        },
+                        "pronunciation": pronunciation_normal(pronunciation),
                         "contributor": simpleUserInfo(pronunciation.contributor),
                     }
                 )
             return JsonResponse({"pronunciation": result, "total": total}, status=200)
+        # PN0102 增加一条语音
         elif request.method == "POST":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY)
@@ -111,6 +96,7 @@ def searchPronunciations(request):
 @csrf_exempt
 def combinePronunciation(request, ipa):
     try:
+        # PN0202 获取ipa发音
         if request.method == "GET":
             submit_list = os.listdir(os.path.join(settings.SAVED_PINYIN, "submit"))
             available = []
@@ -193,6 +179,7 @@ def MergeAudio(pinyins, path):
 @csrf_exempt
 def combinePronunciationV2(request):
     try:
+        # PN0203 获取发音
         if request.method == "GET":
             submit_list = os.listdir(os.path.join(settings.SAVED_PINYIN, "submit"))
             # secondary 即保证拼音对，不保证音调的正确性
@@ -289,54 +276,15 @@ def managePronunciation(request, id):
         pronunciation = Pronunciation.objects.filter(id=id)
         if pronunciation.exists():
             pronunciation = pronunciation[0]
+            # PN0101 获取发音信息
             if request.method == "GET":
                 pronunciation.views += 1
                 pronunciation.save()
-                user = pronunciation.contributor
                 return JsonResponse(
-                    {
-                        "pronunciation": {
-                            "id": pronunciation.id,
-                            "word_id": pronunciation.word.id,
-                            "word_word": pronunciation.word.word,
-                            "source": pronunciation.source,
-                            "ipa": pronunciation.ipa,
-                            "pinyin": pronunciation.pinyin,
-                            "contributor": {
-                                "id": user.id,
-                                "username": user.username,
-                                "nickname": user.user_info.nickname,
-                                "email": user.email,
-                                "telephone": user.user_info.telephone,
-                                "registration_time": user.date_joined.__format__(
-                                    "%Y-%m-%d %H:%M:%S"
-                                ),
-                                "login_time": user.last_login.__format__(
-                                    "%Y-%m-%d %H:%M:%S"
-                                )
-                                if user.last_login
-                                else "",
-                                "birthday": user.user_info.birthday,
-                                "avatar": user.user_info.avatar,
-                                "county": user.user_info.county,
-                                "town": user.user_info.town,
-                                "is_admin": user.is_superuser,
-                            },
-                            "county": pronunciation.county,
-                            "town": pronunciation.town,
-                            "visibility": pronunciation.visibility,
-                            "verifier": {
-                                "nickname": pronunciation.verifier.user_info.nickname,
-                                "avatar": pronunciation.verifier.user_info.avatar,
-                                "id": pronunciation.verifier.id,
-                            }
-                            if pronunciation.verifier
-                            else None,
-                            "granted": pronunciation.granted(),
-                        }
-                    },
+                    {"pronunciation": pronunciation_all(pronunciation)},
                     status=200,
                 )
+            # PN0103 更改发音信息
             elif request.method == "PUT":
                 token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, pronunciation.contributor.id):
@@ -355,6 +303,7 @@ def managePronunciation(request, id):
                     return JsonResponse({}, status=200)
                 else:
                     return JsonResponse({}, status=401)
+            # PN0104 删除发音
             elif request.method == "DELETE":
                 token = request.headers["token"]
                 user = token_check(
@@ -394,6 +343,7 @@ def managePronunciationVisibility(request, id):
     :return:
     """
     try:
+        # PN0105 更改审核结果 PN0106审核语音
         if request.method in ["PUT", "POST"]:
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
@@ -451,6 +401,7 @@ import pickle
 @csrf_exempt
 def translatePronunciation(request):
     try:
+        # PN0204 以音查字
         if request.method == "POST":
             # path = os.path.join(settings.BASE_DIR, 'temp')
             # if not os.path.exists(path):
