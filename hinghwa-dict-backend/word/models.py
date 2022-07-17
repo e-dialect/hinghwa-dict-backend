@@ -4,6 +4,9 @@ from django.db import models
 from article.models import Article
 import re
 
+# application是为了修改word而产生的
+# 所以当word字段发生变化的时候，需要考虑修改application
+
 
 def split(x: str) -> str:
     return re.sub("([0-9])([^0-9])", "\g<1> \g<2>", re.sub(" *", "", x))
