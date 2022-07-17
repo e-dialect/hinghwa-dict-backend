@@ -23,6 +23,7 @@ from word.word2pronunciation import word2pronunciation
 from word.dto.word_all import word_all
 from word.dto.word_simple import word_simple
 from word.dto.application_simple import application_simple
+from word.dto.application_all import application_all
 
 
 @csrf_exempt
@@ -399,45 +400,9 @@ def manageApplication(request, id):
                 token = request.headers["token"]
                 user = token_check(token, settings.JWT_KEY, application.contributor.id)
                 if user:
-                    related_words = [
-                        {"id": word.id, "word": word.word}
-                        for word in application.related_words.all()
-                    ]
-                    related_articles = [
-                        {"id": article.id, "title": article.title}
-                        for article in application.related_articles.all()
-                    ]
-                    result = {
-                        "content": {
-                            "word": application.content_word,
-                            "definition": application.definition,
-                            "annotation": application.annotation,
-                            "standard_ipa": application.standard_ipa,
-                            "standard_pinyin": application.standard_pinyin,
-                            "mandarin": eval(application.mandarin)
-                            if application.mandarin
-                            else [],
-                            "related_words": related_words,
-                            "related_articles": related_articles,
-                        },
-                        "word": application.word.id if application.word else 0,
-                        "reason": application.reason,
-                        "application": application.id,
-                        "contributor": {
-                            "nickname": application.contributor.user_info.nickname,
-                            "avatar": application.contributor.user_info.avatar,
-                            "id": application.contributor.id,
-                        },
-                        "granted": application.granted(),
-                        "verifier": {
-                            "nickname": application.verifier.user_info.nickname,
-                            "avatar": application.verifier.user_info.avatar,
-                            "id": application.verifier.id,
-                        }
-                        if application.verifier
-                        else None,
-                    }
-                    return JsonResponse({"application": result}, status=200)
+                    return JsonResponse(
+                        {"application": application_all(application)}, status=200
+                    )
                 else:
                     return JsonResponse({}, status=401)
             # WD0404 审核申请
