@@ -14,3 +14,4 @@ def application_all(application: Application) -> dict:
         "granted": application.granted(),
         "verifier": user_simple(application.verifier) if application.verifier else None,
     }
+    return response
