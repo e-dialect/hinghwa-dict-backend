@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     "user",
     "word",
     "music",
+    "quiz",
     "website",
     "django_apscheduler",
     "corsheaders",
