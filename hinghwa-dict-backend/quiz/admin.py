@@ -11,7 +11,6 @@ class QuizAdmin(admin.ModelAdmin):
     search_fields = ["id", "question"]
     ordering = ["id"]
     list_per_page = 50
-    raw_id_fields = ("options",)
 
 
 admin.site.register(Quiz, QuizAdmin)

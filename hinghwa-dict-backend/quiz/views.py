@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from django.shortcuts import render
 from website.views import token_check, filterInOrder
 from django.conf import settings
+
 # Create your views here.
 
 
@@ -90,7 +91,7 @@ def searchQuiz(request, id):
 def randomQuzi(request):
     try:
         if request.method == "GET":
-            quiz = Quiz.objects.order_by('?')[:1]
+            quiz = Quiz.objects.order_by("?")[:1]
             return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
         else:
             return JsonResponse({}, status=404)
