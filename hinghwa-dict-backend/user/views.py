@@ -185,7 +185,7 @@ def manageInfo(request, id):
             user = user[0]
             if request.method == "GET":
                 # 超级管理员初始状况下没有 userinfo 字段
-                if not hasattr(user, "userinfo"):
+                if not hasattr(user, "user_info"):
                     user.userinfo = UserInfo.objects.create(
                         user=user, nickname="用户{}".format(random_str())
                     )

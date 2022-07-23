@@ -4,7 +4,7 @@
         {
             "item": [
                 {
-                    "id": "0b0ccb90-a86e-4025-82ba-c1babe475120",
+                    "id": "674bf06f-f386-49ed-96a6-5e891cfc720d",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
@@ -130,7 +130,7 @@
                     }
                 },
                 {
-                    "id": "0a1b0bd0-a57b-4bb1-8bdc-229554c62745",
+                    "id": "9d8e6eb9-5eda-4770-bc06-0f92046e1d79",
                     "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
                     "request": {
                         "url": {
@@ -264,6 +264,8 @@
                                     ]
                                 },
                                 "notification": {
+                                    "title": "站内通知",
+                                    "description": "token字段为用户自己或管理员时返回",
                                     "type": "object",
                                     "properties": {
                                         "statistics": {
@@ -381,13 +383,11 @@
                                             }
                                         }
                                     },
-                                    "title": "站内通知",
                                     "required": [
                                         "statistics",
                                         "sent",
                                         "received"
                                     ],
-                                    "description": "token字段为用户自己或管理员时返回",
                                     "x-apifox-orders": [
                                         "statistics",
                                         "sent",
@@ -421,7 +421,7 @@
                         "contentType": "json",
                         "ordering": 1,
                         "createdAt": "2021-07-28T16:58:17.000Z",
-                        "updatedAt": "2022-07-06T08:28:48.000Z",
+                        "updatedAt": "2022-07-07T16:44:41.000Z",
                         "deletedAt": null
                     },
                     "metaInfo": {
@@ -591,12 +591,12 @@
             "default": "http://127.0.0.1:8000"
         },
         "variable": {
-            "id": "c992735a-1c95-4f92-8e6f-18cc4b9cb9dc",
+            "id": "e3b3c6f6-7db4-48c9-aaec-dc27ff3e487c",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1NzIxMjQwNC42NTE0MDd9.KsGDnXc_E600LjgtITwbyMOzqTSMKATJa5oF4olc9Yg",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1Nzg3NDIwOS4xODg5MzF9.J5scZFT1CYpQ49PFrJuaUDUBDHa6IxsgUOtcxExmP3Y",
                     "key": "token"
                 }
             ]
@@ -611,7 +611,7 @@
     },
     "globals": {
         "variable": {
-            "id": "f998ecb9-1ed9-4e6e-b102-dd8a237aa82a",
+            "id": "a0b79e0b-c165-44e5-b475-9aaef92f93c7",
             "values": []
         },
         "parameter": {
