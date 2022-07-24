@@ -4,80 +4,7 @@
         {
             "item": [
                 {
-                    "id": "e71a1cd6-f829-4664-a37e-49ee17c8f632",
-                    "name": "WD0401 申请更新(未登录发情请求)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "words",
-                                "applications"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "method": "POST",
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"sunt labore voluptate ea\",\n        \"standard_pinyin\": \"proident\",\n        \"related_articles\": [\n  \n        ],\n        \"visibility\": false,\n        \"annotation\": \"节按面安决人层带准工保行儿料领将美。应也力属一过斗任有青织号。红革四战变们米些意这容则成己质区。置众毛入干教社化建还次前气机放金内放。严调选权把子解想性到放程志完状国备要。\",\n        \"definition\": \"学计办重大并响史住厂受说且看示二做。国成引我得火须加明率才它具。用革广形性属比候面满效群动身。近因林划六它切元表长资化特月共用场。数表林处广育元变们经全适角放代。上使周解同实已高严改北条除路。\",\n        \"word\": \"往\",\n        \"related_words\": [\n   \n        ],\n        \"mandarin\": [\n            \"只\",\n            \"须\",\n            \"间\",\n            \"治\"\n        ]\n    },\n    \"word\": 0,\n    \"reason\": \"irure\"\n}"
-                        },
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {}
-                        },
-                        "defaultEnable": false,
-                        "id": 69812493,
-                        "name": "未登录",
-                        "apiDetailId": 0,
-                        "projectId": 404238,
-                        "code": 401,
-                        "contentType": "json",
-                        "ordering": 10,
-                        "createdAt": "2022-07-15T06:52:00.000Z",
-                        "updatedAt": "2022-07-15T06:52:21.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 13560281,
-                        "httpApiCaseId": 33178071,
-                        "httpApiName": "WD0401 申请更新",
-                        "httpApiPath": "/words/applications",
-                        "httpApiMethod": "post",
-                        "httpApiCaseName": "未登录发情请求"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "bbc09ee0-032c-4af2-aec0-69aa31699b28",
+                    "id": "52ea8647-dea2-40ad-b84f-881d1818132d",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
@@ -191,7 +118,7 @@
                     },
                     "metaInfo": {
                         "httpApiId": 5318056,
-                        "httpApiCaseId": 32697822,
+                        "httpApiCaseId": 34647873,
                         "httpApiName": "LG0101 账号密码登录",
                         "httpApiPath": "/login",
                         "httpApiMethod": "post",
@@ -203,7 +130,7 @@
                     }
                 },
                 {
-                    "id": "0c205ddc-838e-4d98-a68d-1e819816983d",
+                    "id": "822ee1aa-a486-477c-849a-210124e176d8",
                     "name": "WD0401 申请更新(WD0401 申请更新)",
                     "request": {
                         "url": {
@@ -239,7 +166,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"Excepteur quis sed\",\n        \"standard_pinyin\": \"sit elit nulla\",\n        \"mandarin\": [\n            \"严\"\n        ],\n        \"related_articles\": [\n\n        ],\n        \"annotation\": \"结半县体得转火议深证议今活。象值温系于线此切府影知性约厂重细热。己手打圆低验什最代除志已厂报就。眼很养金边设心数亲影此天规声低音争。划是价很动圆又王公象战或被多。们复八色据处参需场果总火较所。\",\n        \"definition\": \"保要参验教重和识号支高应。自常类做很主本常为始火列军化气三劳决。目回京基反片权看布积西法识图政约。设车可周加九口度许所效儿全第强。军中元便名六结次建将长准打红命体。系派南实机认先装布由且里全。\",\n        \"visibility\": true,\n        \"related_words\": [\n\n        ],\n        \"word\": \"青\"\n    },\n    \"word\": 0,\n    \"reason\": \"amet anim magna\"\n}"
+                            "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"consequat et aliquip eu\",\n        \"standard_pinyin\": \"ut proident laboris\",\n        \"related_words\": [\n        ],\n        \"mandarin\": [\n            \"议\",\n            \"它\",\n            \"织\",\n            \"提\"\n        ],\n        \"word\": \"生\",\n        \"related_articles\": [\n\n        ],\n        \"definition\": \"照少资状外受影出两强派约调音强。心山市的青求社什部三术许。导决合从门目新很斗约反龙么决后。军派单局代酸目收干科选圆书派示。员级义层系七方持有型九音手阶。林十率由程不无技出活两义。\",\n        \"visibility\": false,\n        \"annotation\": \"和头海易近东度基据海严里生共。直段没向象所亲发管米走七火。北便响采儿流出公相则打社况它产。业人命人原般查快最系除王花选现号二。江节证新社才般议政场清加交他权价力。\"\n    },\n    \"word\": 0,\n    \"reason\": \"in\"\n}"
                         },
                         "type": "http"
                     },
@@ -273,9 +200,9 @@
                                     "            break;",
                                     "        }",
                                     "      ",
-                                    "        pm.variables.set(`application_id`, value);console.log('已设置临时变量【'+ `application_id` + '】，值为【' + value + '】')",
+                                    "        pm.variables.set(`id`, value);console.log('已设置临时变量【'+ `id` + '】，值为【' + value + '】')",
                                     "      } catch(e) {",
-                                    "        e.message = '提取变量【application_id】出错：' + e.message;",
+                                    "        e.message = '提取变量【id】出错：' + e.message;",
                                     "        throw e;",
                                     "      }",
                                     "  "
@@ -310,7 +237,7 @@
                     },
                     "metaInfo": {
                         "httpApiId": 13560281,
-                        "httpApiCaseId": 33177889,
+                        "httpApiCaseId": 34647875,
                         "httpApiName": "WD0401 申请更新",
                         "httpApiPath": "/words/applications",
                         "httpApiMethod": "post",
@@ -322,7 +249,7 @@
                     }
                 },
                 {
-                    "id": "1a08e4a7-95b1-4d17-b1cc-a5567de0a33f",
+                    "id": "0470fcd1-f556-4b41-af98-fc72e5aa1a78",
                     "name": "WD0402 查看单个申请内容(WD0402 查看单个申请内容)",
                     "request": {
                         "url": {
@@ -331,7 +258,7 @@
                             "path": [
                                 "words",
                                 "applications",
-                                "{{application_id}}"
+                                "{{id}}"
                             ],
                             "host": [
                                 "127",
@@ -388,7 +315,7 @@
                     },
                     "metaInfo": {
                         "httpApiId": 13562145,
-                        "httpApiCaseId": 33177890,
+                        "httpApiCaseId": 34647876,
                         "httpApiName": "WD0402 查看单个申请内容",
                         "httpApiPath": "/words/applications/{id}",
                         "httpApiMethod": "get",
@@ -400,7 +327,7 @@
                     }
                 },
                 {
-                    "id": "6ce032eb-e208-4c51-a85c-4812c296d6f9",
+                    "id": "374f3478-3cab-4562-bb18-dc59e0a8c474",
                     "name": "WD0403 查看多个申请(WD0403 查看多个申请)",
                     "request": {
                         "url": {
@@ -434,48 +361,7 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "id": "postProcessors.0.assertion",
-                                "type": "text/javascript",
-                                "exec": [
-                                    "pm.test(pm.variables.replaceIn(`$.applications[0] 存在 `), function() {",
-                                    "        ",
-                                    "          const expression = pm.variables.replaceIn(`$.applications[0]`);",
-                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                                    "          let jsonData;",
-                                    "          try {",
-                                    "            jsonData = pm.response.json();",
-                                    "          } catch(e) {",
-                                    "            let text = pm.response.text();",
-                                    "            // xml 转 json",
-                                    "            const xml2js = require('xml2js');",
-                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
-                                    "            let json;",
-                                    "            let xmlParseOptions = {",
-                                    "                explicitArray: false,",
-                                    "                trim: true,",
-                                    "                ignoreAttrs: true,",
-                                    "            };",
-                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
-                                    "                jsonData = result;",
-                                    "            });",
-                                    "          }",
-                                    "          const value = JSONPath({",
-                                    "            json: jsonData,",
-                                    "            path: expression,",
-                                    "            wrap: false",
-                                    "          });",
-                                    "          ",
-                                    "        ",
-                                    "        pm.expectWithKey({key:'$.applications[0]',value:value}).to.exist",
-                                    "      });"
-                                ]
-                            }
-                        }
-                    ],
+                    "event": [],
                     "responseDefinition": {
                         "jsonSchema": {
                             "type": "object",
@@ -505,7 +391,7 @@
                     },
                     "metaInfo": {
                         "httpApiId": 13562708,
-                        "httpApiCaseId": 33177891,
+                        "httpApiCaseId": 34647928,
                         "httpApiName": "WD0403 查看多个申请",
                         "httpApiPath": "/words/applications",
                         "httpApiMethod": "get",
@@ -517,7 +403,7 @@
                     }
                 },
                 {
-                    "id": "507a94ad-375a-4d35-85db-b5ff58ad84ae",
+                    "id": "6a1aa377-d698-4f61-9842-c2a7d9c5291e",
                     "name": "WD0404 审核申请(WD0404 审核申请)",
                     "request": {
                         "url": {
@@ -526,7 +412,7 @@
                             "path": [
                                 "words",
                                 "applications",
-                                "{{application_id}}"
+                                "{{id}}"
                             ],
                             "host": [
                                 "127",
@@ -554,7 +440,7 @@
                         "method": "PUT",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\n    \"result\": true,\n    \"reason\": \"deserunt Duis laborum\"\n}"
+                            "raw": "{\n    \"result\": true,\n    \"reason\": \"dolor dolore enim\"\n}"
                         },
                         "type": "http"
                     },
@@ -625,7 +511,7 @@
                     },
                     "metaInfo": {
                         "httpApiId": 13563705,
-                        "httpApiCaseId": 33177892,
+                        "httpApiCaseId": 34647961,
                         "httpApiName": "WD0404 审核申请",
                         "httpApiPath": "/words/applications/{id}",
                         "httpApiMethod": "put",
@@ -637,7 +523,7 @@
                     }
                 },
                 {
-                    "id": "0c938b0f-b848-4b33-82fe-3c8b0d75885f",
+                    "id": "264f8109-3047-47cd-8eba-052190a15939",
                     "name": "WD0101 获取字词的内容(WD0101 获取字词的内容)",
                     "request": {
                         "url": {
@@ -700,7 +586,7 @@
                     },
                     "metaInfo": {
                         "httpApiId": 5349889,
-                        "httpApiCaseId": 33195536,
+                        "httpApiCaseId": 34648000,
                         "httpApiName": "WD0101 获取字词的内容",
                         "httpApiPath": "/words/{id}",
                         "httpApiMethod": "get",
@@ -712,11 +598,509 @@
                     }
                 }
             ],
-            "name": "创建词条"
+            "name": "词语创建"
+        },
+        {
+            "item": [
+                {
+                    "id": "ab96bd66-a689-4e93-bfd9-7dbca13a99cd",
+                    "name": "WD0401 申请更新(WD0401 申请更新)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "words",
+                                "applications"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"qui\",\n        \"standard_pinyin\": \"sunt est non\",\n        \"annotation\": \"点育本个义计很空条常行市专流外它。始连天群容所路几称月音思代。好机史今须层分记强年非须然。\",\n        \"mandarin\": [\n            \"着\",\n            \"活\",\n            \"科\",\n            \"地\"\n        ],\n        \"related_articles\": [\n            67,\n            4,\n            18,\n            4\n        ],\n        \"visibility\": true,\n        \"related_words\": [\n            74,\n            62,\n            37,\n            96,\n            19\n        ],\n        \"word\": \"表\",\n        \"definition\": \"线队价加解到教族维般且长间圆说。保林义组务深京南周市运学又到和。计广立消级党何做少队从为车题。\"\n    },\n    \"word\": 14,\n    \"reason\": \"proident ad dolor ut labore\"\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {},
+                            "x-apifox-orders": []
+                        },
+                        "defaultEnable": false,
+                        "id": 69812493,
+                        "name": "未登录",
+                        "apiDetailId": 0,
+                        "projectId": 404238,
+                        "code": 401,
+                        "contentType": "json",
+                        "ordering": 10,
+                        "createdAt": "2022-07-15T06:52:00.000Z",
+                        "updatedAt": "2022-07-24T10:44:24.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 13560281,
+                        "httpApiCaseId": 34650774,
+                        "httpApiName": "WD0401 申请更新",
+                        "httpApiPath": "/words/applications",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "WD0401 申请更新"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                }
+            ],
+            "name": "词语创建-未登录"
+        },
+        {
+            "item": [
+                {
+                    "id": "ae2f0376-c9f9-4948-ad99-740990f7a285",
+                    "name": "LG0101 账号密码登录(登录用户admin)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "login"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.token`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【token】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "mock": {
+                                        "mock": "@string"
+                                    },
+                                    "title": "权"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "title": "用户id"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4183271,
+                        "name": "成功",
+                        "apiDetailId": 5318056,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-29T14:43:37.000Z",
+                        "updatedAt": "2021-08-12T16:27:18.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318056,
+                        "httpApiCaseId": 34651736,
+                        "httpApiName": "LG0101 账号密码登录",
+                        "httpApiPath": "/login",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "登录用户admin"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "dd84b75c-faa9-4263-a1bd-228f13179d7b",
+                    "name": "WD0401 申请更新(WD0401 申请更新)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "words",
+                                "applications"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"incididunt cupidatat mollit dolor\",\n        \"standard_pinyin\": \"quis\",\n        \"related_words\": [\n            17,\n            1,\n            72,\n            8\n        ],\n        \"mandarin\": [\n            \"划\",\n            \"越\",\n            \"准\"\n        ],\n        \"visibility\": false,\n        \"word\": \"育\",\n        \"related_articles\": [\n            69\n        ],\n        \"definition\": \"路际外带市候前省然基厂集时圆记步直温。拉特离加求专起究以完济报非格。单法用也公其空难场红按定力美给厂金后。片些素还体月公要据张集角争况按。还他始书特子再别场办回和解基族。条亲志这子己候教认连行样总公。思山同战参图更江圆工传程识么等装支。\",\n        \"annotation\": \"验看解先形如起近精阶路示受三量。向因路各边九安力导我长条你少义去。传来量变点数九美根存向安府。石程始所能等律东认格重准际民住队铁教。\"\n    },\n    \"word\": 0,\n    \"reason\": \"adipisicing\"\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "title": "",
+                            "type": "object",
+                            "properties": {
+                                "msg": {
+                                    "type": "string"
+                                }
+                            },
+                            "x-apifox-orders": [
+                                "msg"
+                            ],
+                            "required": [
+                                "msg"
+                            ]
+                        },
+                        "defaultEnable": false,
+                        "id": 73275463,
+                        "name": "请求有误",
+                        "apiDetailId": 0,
+                        "projectId": 404238,
+                        "code": 400,
+                        "contentType": "json",
+                        "ordering": 50,
+                        "createdAt": "2022-07-24T10:43:07.000Z",
+                        "updatedAt": "2022-07-24T10:43:07.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 13560281,
+                        "httpApiCaseId": 34651780,
+                        "httpApiName": "WD0401 申请更新",
+                        "httpApiPath": "/words/applications",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "WD0401 申请更新"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                }
+            ],
+            "name": "词语创建-400测试"
+        },
+        {
+            "item": [
+                {
+                    "id": "6374dbc7-0162-4614-af46-6f07540d24ce",
+                    "name": "LG0101 账号密码登录(登录用户admin)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "login"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.token`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【token】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "mock": {
+                                        "mock": "@string"
+                                    },
+                                    "title": "权"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "title": "用户id"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4183271,
+                        "name": "成功",
+                        "apiDetailId": 5318056,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-29T14:43:37.000Z",
+                        "updatedAt": "2021-08-12T16:27:18.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318056,
+                        "httpApiCaseId": 34651890,
+                        "httpApiName": "LG0101 账号密码登录",
+                        "httpApiPath": "/login",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "登录用户admin"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "ff333312-d49c-4991-8d99-b6fb8adf752d",
+                    "name": "WD0401 申请更新(WD0401 申请更新)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "words",
+                                "applications"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"commodo\",\n        \"standard_pinyin\": \"nostrud amet\",\n        \"visibility\": false,\n        \"definition\": \"低斗满导本先么但几作系青二改清你应。打算组量有查战六还议主然制清去联。什民已传照加给教交路气名。力联育上便做并便到备门身问量公。\",\n        \"related_articles\": [\n            58,\n            16\n        ],\n        \"related_words\": [\n            99,\n            52,\n            26,\n            46,\n            89\n        ],\n        \"annotation\": \"选称任要程为量根正情上少铁收设。包今况根值号存方叫科指约八没矿院争当。理温即上明律理图千门效温志般约。林线照织七生原并业改身严本来。公家性以与派经决离得空太况全响院线。目主根放难美报克感队影期号效力采。务写得八方来之用想就说亲交。\",\n        \"word\": \"真\",\n        \"mandarin\": [\n            \"争\"\n        ]\n    },\n    \"word\": 26,\n    \"reason\": \"quis adipisicing tempor aute laboris\"\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "defaultEnable": false,
+                        "id": 69812670,
+                        "name": "不存在",
+                        "apiDetailId": 0,
+                        "projectId": 404238,
+                        "code": 404,
+                        "contentType": "json",
+                        "ordering": 30,
+                        "createdAt": "2022-07-15T06:52:36.000Z",
+                        "updatedAt": "2022-07-15T06:52:36.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 13560281,
+                        "httpApiCaseId": 34651891,
+                        "httpApiName": "WD0401 申请更新",
+                        "httpApiPath": "/words/applications",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "WD0401 申请更新"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                }
+            ],
+            "name": "词语创建-404测试"
         }
     ],
     "info": {
-        "name": "创建词条"
+        "name": "词语创建"
     },
     "dataSchemas": {
         "1077996": {
@@ -1177,12 +1561,12 @@
             "default": "http://127.0.0.1:8000"
         },
         "variable": {
-            "id": "e313e303-3e2a-4896-a700-3defb61fa0f7",
+            "id": "226552f4-6ce1-4646-890d-dda608bdab36",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1Nzg3NDIwOS4xODg5MzF9.J5scZFT1CYpQ49PFrJuaUDUBDHa6IxsgUOtcxExmP3Y",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImNzIiwiaWQiOjUsImV4cCI6MTY1ODY4NzAzMS41MTYxMTF9.2DY-Ttc8x6I75btpDjPp_ZP0kEG5RChsRrw1DCq8JLo",
                     "key": "token"
                 }
             ]
@@ -1197,7 +1581,7 @@
     },
     "globals": {
         "variable": {
-            "id": "a0b79e0b-c165-44e5-b475-9aaef92f93c7",
+            "id": "e41c214f-dc1d-4b82-bf79-3f6bf31ff8e6",
             "values": []
         },
         "parameter": {
