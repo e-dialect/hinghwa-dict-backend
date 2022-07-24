@@ -9,7 +9,7 @@ from utils.exception.types.bad_request import BadRequestExcption
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import WordNotFoundExcption
 from utils.TypeCheking import islist
-from website.utils.token import token_pass, token_user
+from utils.TokenCheking import token_pass, token_user
 from website.views import (
     token_check,
     sendNotification,
