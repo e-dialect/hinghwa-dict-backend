@@ -13,7 +13,7 @@ class Quiz(models.Model):
     def clean(self):
         self.question = self.question.strip()
         self.options = self.options.strip()
-        self.answer = self.answer.strip()
+        # self.answer = self.answer.strip()
         self.explanation = self.explanation.strip()
         return super(Quiz, self)
 
