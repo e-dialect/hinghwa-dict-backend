@@ -1,9 +1,15 @@
 import demjson
 from django.conf import settings
 from django.http import JsonResponse
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from article.models import Article
+from utils.exception.types.bad_request import BadRequestExcption
+from utils.exception.types.common import CommonException
+from utils.exception.types.not_found import WordNotFoundExcption
+from utils.types import isList
+from website.utils.token import token_pass, token_user
 from website.views import (
     token_check,
     sendNotification,
@@ -14,65 +20,60 @@ from word.application.dto.application_simple import application_simple
 from word.application.dto.application_all import application_all
 
 
-@csrf_exempt
-def searchApplication(request):
-    try:
-        # WD0403 查看多个申请
-        if request.method == "GET":
-            token = request.headers["token"]
-            user = token_check(token, settings.JWT_KEY, -1)
-            if user:
-                applications = Application.objects.filter(verifier__isnull=True)
-                result = []
-                for application in applications:
-                    result.append(application_simple(application))
-                return JsonResponse({"applications": result}, status=200)
-            else:
-                return JsonResponse({}, status=401)
-        # WD0401 申请更新
-        elif request.method == "POST":
-            token = request.headers["token"]
-            user = token_check(token, settings.JWT_KEY)
-            if user:
-                body = demjson.decode(request.body)
-                if "word" in body["content"]:
-                    body["content_word"] = body["content"]["word"]
-                    body["content"].pop("word")
-                body.update(body["content"])
-                application_form = ApplicationForm(body)
-                word = Word.objects.filter(id=body["word"])
-                if word.exists() or ~body["word"]:
-                    if application_form.is_valid() and isinstance(
-                        body["mandarin"], list
-                    ):
-                        for id in body["related_articles"]:
-                            Article.objects.get(id=id)
-                        for id in body["related_words"]:
-                            Word.objects.get(id=id)
-                        application = application_form.save(commit=False)
-                        application.contributor = user
-                        if word.exists():
-                            word = word[0]
-                            application.word = word
-                        application.save()
-                        for id in body["related_articles"]:
-                            article = Article.objects.get(id=id)
-                            application.related_articles.add(article)
-                        for id in body["related_words"]:
-                            wordx = Word.objects.get(id=id)
-                            application.related_words.add(wordx)
-                        return JsonResponse({"id": application.id}, status=200)
-                    else:
-                        return JsonResponse({}, status=400)
-                else:
-                    return JsonResponse({}, status=404)
-            else:
-                return JsonResponse({}, status=401)
-        else:
-            return JsonResponse({}, status=405)
+class MultiApplication(View):
+    def get(self, request) -> JsonResponse:
+        """
+        WD0403 查看多个申请
+        """
+        token_pass(request.headers, -1)  # 仅限管理员
+        print("okk")
+        applications = Application.objects.filter(verifier__isnull=True)
+        result = []
+        print("okk")
+        for application in applications:
+            result.append(application_simple(application))
+        return JsonResponse({"applications": result}, status=200)
 
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+    def post(self, request) -> JsonResponse:
+        """
+        WD0401 申请更新
+        """
+        try:
+            token = token_pass(request.headers, 0)
+            user = token_user(token)  # user = 操作用户
+            body = demjson.decode(request.body)  # body = 申请内容
+
+            # 检查申请修改的词语是否存在（为0表示新建词语）
+            word = Word.objects.filter(id=body["word"])
+            if not word.exists() and not body["word"] == 0:
+                raise WordNotFoundExcption(body["word"])
+
+            # 检查修改申请是否合法
+            if "word" in body["content"]:
+                body["content_word"] = body["content"]["word"]
+                body["content"].pop("word")
+            body.update(body["content"])
+            application_form = ApplicationForm(body)
+            if not (application_form.is_valid() and isList(body["mandarin"])):
+                raise BadRequestExcption()
+
+            # 构建申请
+            application = application_form.save(commit=False)
+            application.contributor = user
+            if word.exists():
+                word = word[0]
+                application.word = word
+            for id in body["related_articles"]:
+                application.related_articles.add(Article.objects.get(id=id))
+            for id in body["related_words"]:
+                application.related_words.add(Word.objects.get(id=id))
+            application.save()
+
+            return JsonResponse({"id": application.id}, status=200)
+        except CommonException as e:
+            raise e
+        except Exception as e:
+            raise BadRequestExcption(repr(e))
 
 
 @csrf_exempt
