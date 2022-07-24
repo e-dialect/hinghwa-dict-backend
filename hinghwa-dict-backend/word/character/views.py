@@ -9,8 +9,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from website.views import token_check, filterInOrder
-from .forms import CharacterForm
-from .models import Word, Character, Pronunciation
+from ..forms import CharacterForm
+from ..models import Word, Character, Pronunciation
 from .dto.character_normal import character_normal
 from .dto.character_all import character_all
 

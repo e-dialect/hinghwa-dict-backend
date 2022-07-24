@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from user import views as user
 from website import views as website
-from word import word, pronunciation, character
+from word import word, pronunciation
 
 urlpatterns = [
     path("admin", admin.site.urls),
@@ -50,16 +50,7 @@ urlpatterns = [
     ),
     path(
         "characters",
-        include(
-            [
-                path("", character.searchCharacters),
-                path("/<int:id>", character.manageCharacter),
-                path("/add", character.load_character),
-                path("/words", character.searchEach),
-                path("/words/v2", character.searchEachV2),
-                path("/pinyin", character.searchCharactersPinyin),
-            ]
-        ),
+        include("word.character.urls", namespace="word.character"),
     ),
     path(
         "pronunciation",
