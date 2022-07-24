@@ -13,15 +13,15 @@ from django.views.decorators.csrf import csrf_exempt
 from pydub import AudioSegment as audio
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
-from .forms import PronunciationForm
-from .models import Word, Character, Pronunciation, split
+from ..forms import PronunciationForm
+from ..models import Word, Character, Pronunciation, split
 from django.utils import timezone
 from word import translate
 import requests
 from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
-from .dto.pronunciation.pronunciation_all import pronunciation_all
-from .dto.pronunciation.pronunciation_normal import pronunciation_normal
+from .dto.pronunciation_all import pronunciation_all
+from .dto.pronunciation_normal import pronunciation_normal
 
 
 @csrf_exempt

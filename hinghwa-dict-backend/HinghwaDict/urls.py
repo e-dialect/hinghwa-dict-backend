@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from user import views as user
 from website import views as website
-from word import word, pronunciation
+from word import word
 
 urlpatterns = [
     path("admin", admin.site.urls),
@@ -54,19 +54,7 @@ urlpatterns = [
     ),
     path(
         "pronunciation",
-        include(
-            [
-                path("", pronunciation.searchPronunciations),
-                path("/<int:id>", pronunciation.managePronunciation),
-                path("/combine", pronunciation.combinePronunciationV2),
-                path("/translate", pronunciation.translatePronunciation),
-                path(
-                    "/<int:id>/visibility", pronunciation.managePronunciationVisibility
-                ),
-                path("/<int:id>/examine", pronunciation.managePronunciationVisibility),
-                path("/<str:ipa>", pronunciation.combinePronunciation),
-            ]
-        ),
+        include("word.pronunciation.urls", namespace="word.pronunciation"),
     ),
     path("record", word.record),  # PN0301GET
 ]
