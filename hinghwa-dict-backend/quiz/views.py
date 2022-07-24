@@ -61,7 +61,7 @@ def searchQuiz(request, id):
             elif request.method == "PUT":
                 body = demjson.decode(request.body)
                 token = request.headers["token"]
-                user = token_check(token, settings.JWT_KEY, 0)
+                user = token_check(token, settings.JWT_KEY, -1)
                 if user:
                     body = body["quiz"]
                     for key in body:
