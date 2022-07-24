@@ -3,7 +3,7 @@ from ...models import Word
 
 
 def word_simple(word: Word) -> dict:
-    user = Word.contributor
+    user = word.contributor
     response = {
         "id": word.id,
         "word": word.word,
