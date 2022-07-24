@@ -12,6 +12,8 @@ class Quiz(models.Model):
 
     def clean(self):
         self.question = self.question.strip()
+        if ~isinstance(self.options, str):
+            self.options = str(self.options)
         self.options = self.options.strip()
         # self.answer = self.answer.strip()
         self.explanation = self.explanation.strip()

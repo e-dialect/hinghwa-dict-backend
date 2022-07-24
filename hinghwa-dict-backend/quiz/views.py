@@ -1,3 +1,5 @@
+import json
+
 import demjson
 from django.http import JsonResponse
 from django.shortcuts import render
@@ -40,7 +42,7 @@ def manageQuiz(request):
             if "keywords" in request.GET:
                 quizzes = quizzes.filter(question__contains=request.GET["keywords"])
             quizzes = list(quizzes)
-            result = [quiz for quiz in quizzes]
+            result = [quiz_all(quiz) for quiz in quizzes]
             return JsonResponse({"result": result}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
@@ -59,13 +61,9 @@ def searchQuiz(request, id):
             elif request.method == "PUT":
                 body = demjson.decode(request.body)
                 token = request.headers["token"]
-                user = token_check(token, settings.JWT_KEY, -1)
+                user = token_check(token, settings.JWT_KEY, 0)
                 if user:
                     body = body["quiz"]
-                    quiz_form = QuizForm(quiz)
-                    for key in body:
-                        if len(quiz_form[key].errors.data):
-                            return JsonResponse({}, status=400)
                     for key in body:
                         setattr(quiz, key, body[key])
                     quiz.save()
