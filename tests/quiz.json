@@ -13,22 +13,22 @@
                             "path": ["login"],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": '{\r\n    "username": "admin",\r\n    "password": "testtest123"\r\n}',
+                            "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
                         },
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [
@@ -65,9 +65,9 @@
                                     "        e.message = '提取变量【token】出错：' + e.message;",
                                     "        throw e;",
                                     "      }",
-                                    "  ",
-                                ],
-                            },
+                                    "  "
+                                ]
+                            }
                         }
                     ],
                     "responseDefinition": {
@@ -77,11 +77,11 @@
                                 "token": {
                                     "type": "string",
                                     "mock": {"mock": "@string"},
-                                    "title": "权",
+                                    "title": "权"
                                 },
-                                "id": {"type": "integer", "title": "用户id"},
+                                "id": {"type": "integer", "title": "用户id"}
                             },
-                            "required": ["token", "id"],
+                            "required": ["token", "id"]
                         },
                         "defaultEnable": true,
                         "id": 4183271,
@@ -93,7 +93,7 @@
                         "ordering": 1,
                         "createdAt": "2021-07-29T14:43:37.000Z",
                         "updatedAt": "2021-08-12T16:27:18.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 5318056,
@@ -101,10 +101,10 @@
                         "httpApiName": "LG0101 账号密码登录",
                         "httpApiPath": "/login",
                         "httpApiMethod": "post",
-                        "httpApiCaseName": "登录用户admin",
+                        "httpApiCaseName": "登录用户admin"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "b942aba4-4a95-4e59-84e7-688495354b1b",
@@ -116,19 +116,19 @@
                             "path": ["quizzes"],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {"mode": "raw", "raw": ""},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -140,11 +140,11 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "required": ["quiz"],
-                            "x-apifox-orders": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -156,7 +156,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:22:03.000Z",
                         "updatedAt": "2022-07-23T08:30:31.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29662986,
@@ -164,10 +164,10 @@
                         "httpApiName": "QZ0102 增加单个测试",
                         "httpApiPath": "/quizzes",
                         "httpApiMethod": "post",
-                        "httpApiCaseName": "QZ0102 增加单个测试",
+                        "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "6da24b09-b9c6-4da0-ac9c-2e9f6e8df7e4",
@@ -179,18 +179,18 @@
                             "path": ["quizzes", ""],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
-                            },
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
                         ],
                         "method": "GET",
                         "body": {},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -201,12 +201,12 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "x-apifox-refs": {},
                             "x-apifox-orders": ["quiz"],
-                            "required": ["quiz"],
+                            "required": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70047710,
@@ -218,7 +218,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:04:02.000Z",
                         "updatedAt": "2022-07-23T07:28:13.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29662407,
@@ -226,10 +226,10 @@
                         "httpApiName": "QZ0101 获取单个测试",
                         "httpApiPath": "/quizzes/{id}",
                         "httpApiMethod": "get",
-                        "httpApiCaseName": "QZ0101 获取单个测试",
+                        "httpApiCaseName": "QZ0101 获取单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "9d8d293a-9faa-4d6c-be3f-2bcfed2dba41",
@@ -241,19 +241,19 @@
                             "path": ["quizzes", ""],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "PUT",
                         "body": {"mode": "raw", "raw": ""},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -263,11 +263,11 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "x-apifox-orders": ["quiz"],
-                            "required": ["quiz"],
+                            "required": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048846,
@@ -279,7 +279,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:23:50.000Z",
                         "updatedAt": "2022-07-23T08:32:09.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29663120,
@@ -287,10 +287,10 @@
                         "httpApiName": "QZ0103 修改单个测试",
                         "httpApiPath": "/quizzes/{id}",
                         "httpApiMethod": "put",
-                        "httpApiCaseName": "QZ0103 修改单个测试",
+                        "httpApiCaseName": "QZ0103 修改单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "380df6ed-dce7-4c13-a260-03b059f05310",
@@ -302,18 +302,18 @@
                             "path": ["quizzes", ""],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
-                            },
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
                         ],
                         "method": "DELETE",
                         "body": {},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -329,7 +329,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:25:39.000Z",
                         "updatedAt": "2022-07-15T11:25:39.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29663170,
@@ -337,10 +337,10 @@
                         "httpApiName": "QZ0104 删除单个测试",
                         "httpApiPath": "/quizzes/{id}",
                         "httpApiMethod": "delete",
-                        "httpApiCaseName": "QZ0104 删除单个测试",
+                        "httpApiCaseName": "QZ0104 删除单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "73fcb0b1-2b97-4351-95bb-a9d367be0435",
@@ -352,19 +352,19 @@
                             "path": ["quizzes"],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {"mode": "raw", "raw": ""},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -376,11 +376,11 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "required": ["quiz"],
-                            "x-apifox-orders": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -392,7 +392,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:22:03.000Z",
                         "updatedAt": "2022-07-23T08:30:31.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29662986,
@@ -400,10 +400,10 @@
                         "httpApiName": "QZ0102 增加单个测试",
                         "httpApiPath": "/quizzes",
                         "httpApiMethod": "post",
-                        "httpApiCaseName": "QZ0102 增加单个测试",
+                        "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "b80f0e2d-2fdc-4e93-b74a-41ed09922d76",
@@ -415,19 +415,19 @@
                             "path": ["quizzes"],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {"mode": "raw", "raw": ""},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -439,11 +439,11 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "required": ["quiz"],
-                            "x-apifox-orders": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -455,7 +455,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:22:03.000Z",
                         "updatedAt": "2022-07-23T08:30:31.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29662986,
@@ -463,10 +463,10 @@
                         "httpApiName": "QZ0102 增加单个测试",
                         "httpApiPath": "/quizzes",
                         "httpApiMethod": "post",
-                        "httpApiCaseName": "QZ0102 增加单个测试",
+                        "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "3d63cf58-bec5-45e4-9a16-a5a5962183a4",
@@ -478,19 +478,19 @@
                             "path": ["quizzes"],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"},
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {"mode": "raw", "raw": ""},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -502,11 +502,11 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "required": ["quiz"],
-                            "x-apifox-orders": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -518,7 +518,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:22:03.000Z",
                         "updatedAt": "2022-07-23T08:30:31.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29662986,
@@ -526,10 +526,10 @@
                         "httpApiName": "QZ0102 增加单个测试",
                         "httpApiPath": "/quizzes",
                         "httpApiMethod": "post",
-                        "httpApiCaseName": "QZ0102 增加单个测试",
+                        "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "12ffbcca-8c03-464c-8523-c0f7b5ed632a",
@@ -541,18 +541,18 @@
                             "path": ["quizzes"],
                             "host": ["127", "0", "0", "1"],
                             "query": [{"key": "keywords", "value": ""}],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
-                            },
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
                         ],
                         "method": "GET",
                         "body": {},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -562,11 +562,11 @@
                             "properties": {
                                 "result": {
                                     "type": "array",
-                                    "items": {"$ref": "#/definitions/13080595"},
+                                    "items": {"$ref": "#/definitions/13080595"}
                                 }
                             },
                             "x-apifox-orders": ["result"],
-                            "required": ["result"],
+                            "required": ["result"]
                         },
                         "defaultEnable": true,
                         "id": 70049266,
@@ -578,7 +578,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:28:36.000Z",
                         "updatedAt": "2022-07-15T11:29:54.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29663288,
@@ -586,10 +586,10 @@
                         "httpApiName": "QZ0201 搜索测试题",
                         "httpApiPath": "/quizzes",
                         "httpApiMethod": "get",
-                        "httpApiCaseName": "QZ0201 搜索测试题",
+                        "httpApiCaseName": "QZ0201 搜索测试题"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
                     "id": "e98501a9-afe5-43f7-9ab4-8fe6a16acf54",
@@ -601,18 +601,18 @@
                             "path": ["quizzes", "random"],
                             "host": ["127", "0", "0", "1"],
                             "query": [],
-                            "variable": [],
+                            "variable": []
                         },
                         "header": [
                             {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)",
-                            },
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
                         ],
                         "method": "GET",
                         "body": {},
-                        "type": "http",
+                        "type": "http"
                     },
                     "response": [],
                     "event": [],
@@ -623,12 +623,12 @@
                             "properties": {
                                 "quiz": {
                                     "$ref": "#/definitions/13080595",
-                                    "x-apifox-overrides": {},
+                                    "x-apifox-overrides": {}
                                 }
                             },
                             "x-apifox-refs": {},
                             "x-apifox-orders": ["quiz"],
-                            "required": ["quiz"],
+                            "required": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70049339,
@@ -640,7 +640,7 @@
                         "ordering": 1,
                         "createdAt": "2022-07-15T11:30:51.000Z",
                         "updatedAt": "2022-07-23T08:32:52.000Z",
-                        "deletedAt": null,
+                        "deletedAt": null
                     },
                     "metaInfo": {
                         "httpApiId": 29663329,
@@ -648,13 +648,13 @@
                         "httpApiName": "QZ0202 随机测试题",
                         "httpApiPath": "/quizzes/random",
                         "httpApiMethod": "get",
-                        "httpApiCaseName": "QZ0202 随机测试题",
+                        "httpApiCaseName": "QZ0202 随机测试题"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false},
-                },
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                }
             ],
-            "name": "QU模块",
+            "name": "QU模块"
         }
     ],
     "info": {"name": "QU模块"},
@@ -665,24 +665,24 @@
                 "question": {
                     "type": "string",
                     "title": "问题",
-                    "mock": {"mock": "@ctitle"},
+                    "mock": {"mock": "@ctitle"}
                 },
                 "options": {
                     "type": "array",
                     "items": {"type": "string", "mock": {"mock": "@csentence"}},
-                    "title": "选项",
+                    "title": "选项"
                 },
                 "explanation": {
                     "type": "string",
                     "title": "答案解析",
-                    "mock": {"mock": "@cparagraph"},
+                    "mock": {"mock": "@cparagraph"}
                 },
                 "answer": {"type": "integer", "title": "答案序号"},
-                "id": {"type": "integer"},
+                "id": {"type": "integer"}
             },
             "x-apifox-orders": ["question", "options", "answer", "explanation", "id"],
             "required": ["question", "answer", "options", "explanation", "id"],
-            "title": "quiz_all",
+            "title": "quiz_all"
         }
     },
     "environment": {
@@ -692,14 +692,14 @@
         "variable": {
             "id": "cac33cba-fd4a-4674-b28c-bbc18dc5a63c",
             "name": "测试环境",
-            "values": [],
+            "values": []
         },
         "type": "normal",
-        "parameter": {"header": [], "query": [], "body": [], "cookie": []},
+        "parameter": {"header": [], "query": [], "body": [], "cookie": []}
     },
     "globals": {
         "variable": {"id": "bf3c18aa-ce17-46c5-b65d-b17978f6d44e", "values": []},
-        "parameter": {"header": [], "query": [], "body": [], "cookie": []},
+        "parameter": {"header": [], "query": [], "body": [], "cookie": []}
     },
-    "isServerBuild": false,
+    "isServerBuild": false
 }
