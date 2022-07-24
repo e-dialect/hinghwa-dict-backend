@@ -8,7 +8,7 @@ from article.models import Article
 from utils.exception.types.bad_request import BadRequestExcption
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import WordNotFoundExcption
-from utils.types import isList
+from utils.TypeCheking import islist
 from website.utils.token import token_pass, token_user
 from website.views import (
     token_check,
@@ -54,7 +54,7 @@ class MultiApplication(View):
                 body["content"].pop("word")
             body.update(body["content"])
             application_form = ApplicationForm(body)
-            if not (application_form.is_valid() and isList(body["mandarin"])):
+            if not (application_form.is_valid() and islist(body["mandarin"])):
                 raise BadRequestExcption()
 
             # 构建申请
