@@ -16,7 +16,7 @@ from website.views import token_check, sendNotification, simpleUserInfo, upload_
 from ..forms import PronunciationForm
 from ..models import Word, Character, Pronunciation, split
 from django.utils import timezone
-from word import translate
+from word.utils import translate
 import requests
 from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg

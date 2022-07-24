@@ -1,4 +1,3 @@
-import os
 import re
 
 
@@ -134,27 +133,6 @@ def IPA_to_pinyin(IPA):
 
 
 if __name__ == "__main__":
-    # data = []
-    # for line in open("list.txt", "r"):  #设置文件对象并读取每一行文件
-    #     data.append(line[0:-1])  #将每一行文件加入到list中
-    # # print(data)
-    # has = []
-    # for filename in os.listdir(path='.'):
-    #     if filename == "translate.py" or filename == "list.txt" or filename == "out.txt":
-    #         continue
-    #     matchObj = re.match(r'(.*).mp3$', filename, re.M | re.I)
-    #     s = matchObj.group(1)  # 获取非声调部分
-    #     has.append(s)
-
-    # for i in data:
-    #     flag = False
-    #     for s in has:
-    #         if i == s:
-    #             flag = True
-    #             break
-    #     if flag == False:
-    #         print(i)
-
     data = ["ai42", "bia42", "zai13", "e11", "yɒ13"]
     for i in data:
         print(IPA_to_pinyin(i))
