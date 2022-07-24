@@ -34,13 +34,18 @@ python3 manage.py makemigrations
 python3 manage.py migrate
 DJANGO_SUPERUSER_PASSWORD=testtest123 python manage.py createsuperuser --username admin --email test@test.com --no-input
 DJANGO_SUPERUSER_PASSWORD=testtest222 python manage.py createsuperuser --username admin2 --email test@test.com --no-input
+```
+
+> 创建两个用户的原因是在目前的代码中，发送邮件默认是由2号用户进行发送。
+
+而在启动服务之后，你需要首先运行：
+
+```shell
 curl 127.0.0.1:8000/users/1
 curl 127.0.0.1:8000/users/2
 ```
 
-> 创建两个用户的原因是在目前的代码中，发送邮件默认是由2号用户进行发送。
->
-> 获取用户详细信息的原因是：直接创建的用户只有 Django 默认的用户模型，不包括我们自定义的 `UserInfo` 模型，在获取用户模块中实现了自动创建功能，否则在其他模块调用时会出错。
+其原因是：直接创建的用户只有 Django 默认的用户模型，不包括我们自定义的 `UserInfo` 模型，在获取用户模块中实现了自动创建功能，否则在其他模块调用时会出错。
 
 #### Apifox 自动化测试
 
