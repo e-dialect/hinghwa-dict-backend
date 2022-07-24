@@ -7,7 +7,6 @@ from django.conf import settings
 # Create your views here.
 
 
-# QZ0202 随机测试题
 from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz
 from .forms import QuizForm
@@ -88,8 +87,9 @@ def searchQuiz(request, id):
 
 
 @csrf_exempt
-def randomQuzi(request):
+def randomQuiz(request):
     try:
+        # QZ0202 随机测试题
         if request.method == "GET":
             quiz = Quiz.objects.order_by("?")[:1]
             return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
