@@ -20,6 +20,7 @@ class OutdatedException(UnauthorizedExcption):
     def __init__(self):
         super().__init__("登录过期，请重新登录")
 
+
 class InvalidTokenException(UnauthorizedExcption):
     """
     无效的token异常
