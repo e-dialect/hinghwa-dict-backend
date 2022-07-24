@@ -1,6 +1,6 @@
 from django.db.models import Q
 
-from .models import Word, Pronunciation
+from ..models import Word, Pronunciation
 
 
 def word2pronunciation(word: Word, null=None):

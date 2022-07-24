@@ -1,9 +1,7 @@
-from ..models import Character
-from ..models import Word
-from ..models import Pronunciation
+from ...models import Character
 
 
-def character_all(character: Character, word: Word, source: Pronunciation) -> dict:
+def character_normal(character: Character) -> dict:
     response = {
         "id": character.id,
         "shengmu": character.shengmu,
@@ -15,7 +13,5 @@ def character_all(character: Character, word: Word, source: Pronunciation) -> di
         "county": character.county,
         "town": character.town,
         "traditional": character.traditional,
-        "word": word,
-        "source": source,
     }
     return response

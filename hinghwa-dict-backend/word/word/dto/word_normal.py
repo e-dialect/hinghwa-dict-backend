@@ -1,4 +1,4 @@
-from ..models import Word
+from ...models import Word
 
 
 def word_normal(word: Word) -> dict:
