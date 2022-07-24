@@ -18,7 +18,7 @@ from website.views import (
 )
 from ..forms import WordForm
 from ..models import Word, User
-from word.word2pronunciation import word2pronunciation
+from .word2pronunciation import word2pronunciation
 from .dto.word_all import word_all
 from .dto.word_simple import word_simple
 
@@ -106,8 +106,10 @@ def searchWords(request):
             words = []
             result = Word.objects.filter(id__in=body["words"])
             result = filterInOrder(result, body["words"])
+           
             for word in result:
                 pronunciation = word2pronunciation(word, "null")
+                print(word,type(word))
                 words.append(
                     {
                         "word": word_simple(word),
@@ -115,6 +117,7 @@ def searchWords(request):
                         "pronunciation": {"url": pronunciation, "tts": "null"},
                     }
                 )
+            print(words)
             return JsonResponse({"words": words}, status=200)
         else:
             return JsonResponse({}, status=405)
