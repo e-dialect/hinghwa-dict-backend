@@ -4,7 +4,7 @@
         {
             "item": [
                 {
-                    "id": "0f36737f-7594-4899-8e5b-bdd5bda4021b",
+                    "id": "f75a43fe-c6bd-495b-a37e-05b0ace3d742",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
@@ -130,7 +130,7 @@
                     }
                 },
                 {
-                    "id": "0b782d32-0b86-40ec-9a83-bf9cb48cdf11",
+                    "id": "2207f8b4-ec3b-4ddf-80e3-c43354597297",
                     "name": "WD0401 申请更新(WD0401 申请更新)",
                     "request": {
                         "url": {
@@ -249,7 +249,7 @@
                     }
                 },
                 {
-                    "id": "3c5b61be-c589-493b-934c-4b319550ff2d",
+                    "id": "48e68d87-6a13-49f0-bce2-aa1070dc09b1",
                     "name": "WD0402 查看单个申请内容(WD0402 查看单个申请内容)",
                     "request": {
                         "url": {
@@ -327,7 +327,7 @@
                     }
                 },
                 {
-                    "id": "f0cf266a-af68-4915-94f7-dfb440c5d351",
+                    "id": "e11308b5-aa76-4eed-a576-cab073edd3cc",
                     "name": "WD0403 查看多个申请(WD0403 查看多个申请)",
                     "request": {
                         "url": {
@@ -403,7 +403,7 @@
                     }
                 },
                 {
-                    "id": "ea980352-c742-4ed4-8910-da20395b8cfa",
+                    "id": "338b13bf-937c-4e2f-ba87-72181ac8044e",
                     "name": "WD0404 审核申请(WD0404 审核申请)",
                     "request": {
                         "url": {
@@ -523,7 +523,7 @@
                     }
                 },
                 {
-                    "id": "7b4ff2aa-479c-4106-bc81-ed67f09a9a07",
+                    "id": "12f8db43-a80e-4e14-aa5d-fae9d9762319",
                     "name": "WD0101 获取字词的内容(WD0101 获取字词的内容)",
                     "request": {
                         "url": {
@@ -603,7 +603,7 @@
         {
             "item": [
                 {
-                    "id": "899db0ea-77e8-4f80-a1e3-95d85ccfea34",
+                    "id": "9b8473ee-4cf6-4f25-aa4e-5246c9b21500",
                     "name": "WD0401 申请更新(WD0401 申请更新)",
                     "request": {
                         "url": {
@@ -688,7 +688,7 @@
                     }
                 },
                 {
-                    "id": "e1fc9bf3-acf7-42e6-9ffd-954a0bb2cc2e",
+                    "id": "3484f19a-9700-4b05-ad58-49e4d7daf5d9",
                     "name": "WD0401 申请更新(WD0401 申请更新)",
                     "request": {
                         "url": {
@@ -729,26 +729,19 @@
                     "responseDefinition": {
                         "jsonSchema": {
                             "type": "object",
-                            "properties": {
-                                "id": {
-                                    "type": "integer",
-                                    "title": "申请的编号"
-                                }
-                            },
-                            "required": [
-                                "id"
-                            ]
+                            "properties": {},
+                            "x-apifox-orders": []
                         },
-                        "defaultEnable": true,
-                        "id": 25794940,
-                        "name": "成功",
-                        "apiDetailId": 13560281,
-                        "projectId": 0,
-                        "code": 200,
+                        "defaultEnable": false,
+                        "id": 69812493,
+                        "name": "未登录",
+                        "apiDetailId": 0,
+                        "projectId": 404238,
+                        "code": 401,
                         "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2022-03-10T09:51:45.000Z",
-                        "updatedAt": "2022-03-17T11:33:33.000Z",
+                        "ordering": 10,
+                        "createdAt": "2022-07-15T06:52:00.000Z",
+                        "updatedAt": "2022-07-24T10:44:24.000Z",
                         "deletedAt": null
                     },
                     "metaInfo": {
@@ -770,7 +763,7 @@
         {
             "item": [
                 {
-                    "id": "dffb1b55-68ca-4372-ab2d-2f5d8b467273",
+                    "id": "8fc184d1-be94-4272-abef-82a8bd2b27e8",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
@@ -896,7 +889,7 @@
                     }
                 },
                 {
-                    "id": "68a70f93-fb34-42fd-87ac-968c94a6abbf",
+                    "id": "80f2290f-c6d3-4ac3-8e77-7713e15bb11b",
                     "name": "WD0401 申请更新(WD0401 申请更新)",
                     "request": {
                         "url": {
@@ -985,7 +978,7 @@
         {
             "item": [
                 {
-                    "id": "4886a9f9-2cb5-4818-99a1-6ffd4ffd63cb",
+                    "id": "e72c2658-2a10-4201-b824-fff573993b46",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
@@ -1111,7 +1104,7 @@
                     }
                 },
                 {
-                    "id": "a9db45b6-5227-494c-af35-ba0059548666",
+                    "id": "ed44bd8a-05c1-4a55-aac2-6ac89ca640b8",
                     "name": "WD0401 申请更新(WD0401 申请更新)",
                     "request": {
                         "url": {
@@ -1649,7 +1642,7 @@
             "default": "http://127.0.0.1:8000"
         },
         "variable": {
-            "id": "16bb795e-ab1b-44d8-a122-e9dc6bcbfef1",
+            "id": "a5f90061-fa67-4241-a6ef-469264f060d8",
             "name": "测试环境",
             "values": [
                 {
@@ -1669,7 +1662,7 @@
     },
     "globals": {
         "variable": {
-            "id": "c3259162-09e0-4045-9566-3fd65f4d2a06",
+            "id": "b719722a-95e5-4a4a-872b-49f57549f10e",
             "values": []
         },
         "parameter": {
