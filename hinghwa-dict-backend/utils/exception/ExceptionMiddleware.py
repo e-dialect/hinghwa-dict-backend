@@ -14,7 +14,7 @@ class ExceptionMiddleware(MiddlewareMixin):
         :param exception: 异常对象
         :return:
         """
-        print(type(exception))
         if isinstance(exception, CommonException):
             return exception.response()
+        print(repr(exception))
         return CommonException(exception).response()
