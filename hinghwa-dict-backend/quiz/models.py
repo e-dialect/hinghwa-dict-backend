@@ -4,7 +4,7 @@ from django.db import models
 class Quiz(models.Model):
     question = models.CharField(max_length=100, verbose_name="问题")
     options = models.TextField(verbose_name="选项", blank=True, default="[]")
-    answer = models.IntegerField(default=0, verbose_name="答案序号", editable=False)
+    answer = models.IntegerField(default=0, verbose_name="答案序号", editable=True)
     explanation = models.TextField(verbose_name="答案解析")
 
     def __str__(self):

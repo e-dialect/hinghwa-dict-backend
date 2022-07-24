@@ -30,6 +30,7 @@ urlpatterns = [
     path("articles", include("article.urls", namespace="article")),
     path("music", include("music.urls", namespace="music")),
     path("website/", include("website.urls", namespace="website")),
+    path("quizzes", include("quiz.urls", namespace="quizzes")),
     path("files/<type>/<id>/<Y>/<M>/<D>/<X>", website.openUrl),
     path(
         "words",

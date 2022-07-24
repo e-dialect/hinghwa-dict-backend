@@ -10,7 +10,7 @@ from django.conf import settings
 from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz
 from .forms import QuizForm
-from dto.quiz_all import quiz_all
+from .dto.quiz_all import quiz_all
 
 
 @csrf_exempt
