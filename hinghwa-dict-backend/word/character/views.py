@@ -204,7 +204,7 @@ def manageCharacter(request, id):
             character = character[0]
             if request.method == "GET":
                 return JsonResponse(
-                    {"character": {character_normal(character)}},
+                    {"character": character_normal(character)},
                     status=200,
                 )
             elif request.method == "PUT":
