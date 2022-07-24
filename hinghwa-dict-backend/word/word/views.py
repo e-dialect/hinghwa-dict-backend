@@ -106,10 +106,8 @@ def searchWords(request):
             words = []
             result = Word.objects.filter(id__in=body["words"])
             result = filterInOrder(result, body["words"])
-           
             for word in result:
                 pronunciation = word2pronunciation(word, "null")
-                print(word,type(word))
                 words.append(
                     {
                         "word": word_simple(word),
@@ -117,7 +115,6 @@ def searchWords(request):
                         "pronunciation": {"url": pronunciation, "tts": "null"},
                     }
                 )
-            print(words)
             return JsonResponse({"words": words}, status=200)
         else:
             return JsonResponse({}, status=405)

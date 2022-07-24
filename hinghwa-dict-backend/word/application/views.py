@@ -13,6 +13,7 @@ from ..models import Word, Application
 from word.application.dto.application_simple import application_simple
 from word.application.dto.application_all import application_all
 
+
 @csrf_exempt
 def searchApplication(request):
     try:
