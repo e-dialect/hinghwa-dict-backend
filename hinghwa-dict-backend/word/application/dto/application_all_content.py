@@ -1,5 +1,5 @@
 # 用于application_all
-from ..models import Application
+from ...models import Application
 
 
 def application_all_content(application: Application) -> dict:

@@ -1,5 +1,5 @@
 # 用于WD0202
-from ..models import Word
+from ...models import Word
 
 
 def word_simple(word: Word) -> dict:

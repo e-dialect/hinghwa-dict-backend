@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from user import views as user
 from website import views as website
-from word import word
+from word.word import views as word
 
 urlpatterns = [
     path("admin", admin.site.urls),
@@ -31,22 +31,10 @@ urlpatterns = [
     path("music", include("music.urls", namespace="music")),
     path("website/", include("website.urls", namespace="website")),
     path("files/<type>/<id>/<Y>/<M>/<D>/<X>", website.openUrl),
+    path("words", include("word.word.urls", namespace="word.word")),
     path(
         "words",
-        include(
-            [
-                path("", word.searchWords),  # WD0102POST    WD0201GET   WD0202PUT
-                path("/<int:id>", word.manageWord),  # WD0101GET WD0103PUT
-                path("/add", word.load_word),  # WD0301POST
-                path("/upload_standard", word.upload_standard),  # WD0302POST
-                path(
-                    "/applications", word.searchApplication
-                ),  # WD0401POST    WD0403GET
-                path(
-                    "/applications/<int:id>", word.manageApplication
-                ),  # WD0402GET WD0404PUT
-            ]
-        ),
+        include("word.application.urls", namespace="word.application"),
     ),
     path(
         "characters",
