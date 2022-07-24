@@ -7,6 +7,7 @@ def quiz_all(quiz: Quiz) -> dict:
         "id": quiz.id,
         "question": quiz.question,
         "options": eval(quiz.options) if quiz.options else [],
+        "answer": quiz.answer,
         "explanation": quiz.explanation,
     }
     return response

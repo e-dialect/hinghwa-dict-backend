@@ -92,7 +92,10 @@ def randomQuiz(request):
         # QZ0202 随机测试题
         if request.method == "GET":
             quiz = Quiz.objects.order_by("?")[:1]
-            return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
+            if quiz.count() == 0:
+                return JsonResponse({"quiz": {}}, status=200)
+            else:
+                return JsonResponse({"quiz": quiz_all(quiz[0])}, status=200)
         else:
             return JsonResponse({}, status=404)
     except Exception as e:
