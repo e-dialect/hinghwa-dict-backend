@@ -18,7 +18,7 @@ from django.urls import path, include
 
 from user import views as user
 from website import views as website
-from word import word, pronunciation, character
+from word.word import views as word
 
 urlpatterns = [
     path("admin", admin.site.urls),
@@ -32,51 +32,18 @@ urlpatterns = [
     path("website/", include("website.urls", namespace="website")),
     path("quizzes", include("quiz.urls", namespace="quiz")),
     path("files/<type>/<id>/<Y>/<M>/<D>/<X>", website.openUrl),
+    path("words", include("word.word.urls", namespace="word.word")),
     path(
         "words",
-        include(
-            [
-                path("", word.searchWords),  # WD0102POST    WD0201GET   WD0202PUT
-                path("/<int:id>", word.manageWord),  # WD0101GET WD0103PUT
-                path("/add", word.load_word),  # WD0301POST
-                path("/upload_standard", word.upload_standard),  # WD0302POST
-                path(
-                    "/applications", word.searchApplication
-                ),  # WD0401POST    WD0403GET
-                path(
-                    "/applications/<int:id>", word.manageApplication
-                ),  # WD0402GET WD0404PUT
-            ]
-        ),
+        include("word.application.urls", namespace="word.application"),
     ),
     path(
         "characters",
-        include(
-            [
-                path("", character.searchCharacters),
-                path("/<int:id>", character.manageCharacter),
-                path("/add", character.load_character),
-                path("/words", character.searchEach),
-                path("/words/v2", character.searchEachV2),
-                path("/pinyin", character.searchCharactersPinyin),
-            ]
-        ),
+        include("word.character.urls", namespace="word.character"),
     ),
     path(
         "pronunciation",
-        include(
-            [
-                path("", pronunciation.searchPronunciations),
-                path("/<int:id>", pronunciation.managePronunciation),
-                path("/combine", pronunciation.combinePronunciationV2),
-                path("/translate", pronunciation.translatePronunciation),
-                path(
-                    "/<int:id>/visibility", pronunciation.managePronunciationVisibility
-                ),
-                path("/<int:id>/examine", pronunciation.managePronunciationVisibility),
-                path("/<str:ipa>", pronunciation.combinePronunciation),
-            ]
-        ),
+        include("word.pronunciation.urls", namespace="word.pronunciation"),
     ),
     path("record", word.record),  # PN0301GET
 ]

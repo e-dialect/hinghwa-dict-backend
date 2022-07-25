@@ -21,7 +21,7 @@ from website.views import (
     download_file,
     simpleUserInfo,
 )
-from word.dto.pronunciation.pronunciation_simple import pronunciation_simple
+from word.pronunciation.dto.pronunciation_simple import pronunciation_simple
 from .forms import UserForm, UserInfoForm
 from .models import UserInfo, User
 
