@@ -31,7 +31,7 @@ def token_pass(header: dict, id: numbers = 0) -> string:
     # 如果token无效
     try:
         info = jwt.decode(token, key, algorithms=["HS256"])
-    except jwt.ExpiredSignatureError:
+    except Exception:
         raise InvalidTokenException()
     if not ("id" in info and "exp" in info and "username" in info):
         raise InvalidTokenException()
