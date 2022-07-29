@@ -1,7 +1,7 @@
 from .common import CommonException
 
 
-class NotFoundExcption(CommonException):
+class NotFoundException(CommonException):
     """
     资源不存在异常
     """
@@ -12,7 +12,7 @@ class NotFoundExcption(CommonException):
         self.msg = msg
 
 
-class WordNotFoundExcption(NotFoundExcption):
+class WordNotFoundException(NotFoundException):
     """
     词条不存在异常
     :param id: 词条id

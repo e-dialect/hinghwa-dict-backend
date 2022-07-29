@@ -1,42 +1,79 @@
-import json
-
 import demjson
 from django.http import JsonResponse
-from django.shortcuts import render
-from website.views import token_check, filterInOrder
 from django.conf import settings
-
-# Create your views here.
-
-
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz
 from .forms import QuizForm
 from .dto.quiz_all import quiz_all
+from utils.exception.types.bad_request import BadRequestException
+from utils.exception.types.common import CommonException
+from utils.exception.types.not_found import NotFoundException
+from utils.exception.types.forbidden import ForbiddenException
+from utils.TokenCheking import token_pass, token_user
 
 
-@csrf_exempt
-def manageQuiz(request):
-    try:
-        # QZ0102 增加单个测试
-        if request.method == "POST":
+class SingleQuiz(View):
+    # QZ0101 获取单个测试
+    def get(self, request, id) -> JsonResponse:
+        try:
+            quiz = Quiz.objects.filter(id=id)
+            if not quiz.exists():  # 404
+                raise NotFoundException()
+            quiz = quiz[0]
+            return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
+        except CommonException as e:  # 500
+            raise e
+        except Exception as e:  # 400
+            raise BadRequestException(repr(e))
+
+    # QZ0103 修改单个测试
+    @csrf_exempt
+    def put(self, request, id) -> JsonResponse:
+        try:
             body = demjson.decode(request.body)
-            token = request.headers["token"]
-            # 暂时设置为需要管理员权限
-            user = token_check(token, settings.JWT_KEY, -1)
-            if user:
-                quiz_form = QuizForm(body)
-                if quiz_form.is_valid():
-                    quiz = quiz_form.save(commit=False)
-                    quiz.save()
-                    return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
-                else:
-                    return JsonResponse({}, status=400)
-            else:
-                return JsonResponse({}, status=401)
-        # QZ0201 搜索测试题
-        # 注：默认搜索范围是所有测试题
-        elif request.method == "GET":
+            token = token_pass(request.headers, -1)
+            user = token_user(token)
+            quiz = Quiz.objects.filter(id=id)
+            if not quiz.exists():  # 404
+                raise NotFoundException()
+            quiz = quiz[0]
+            if not user:  # 403
+                raise ForbiddenException()
+            body = body["quiz"]
+            for key in body:
+                setattr(quiz, key, body[key])
+            quiz.save()
+            return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
+        except CommonException as e:  # 500
+            raise e
+        except Exception as e:  # 400
+            raise BadRequestException(repr(e))
+
+    # QZ0104 删除单个测试
+    @csrf_exempt
+    def delete(self, request, id) -> JsonResponse:
+        try:
+            quiz = Quiz.objects.filter(id=id)
+            token = token_pass(request.headers, -1)
+            user = token_user(token)
+            if not quiz.exists():  # 404
+                raise NotFoundException()
+            quiz = quiz[0]
+            if not user:  # 403
+                raise ForbiddenException()
+            quiz.delete()
+            return JsonResponse({}, status=200)
+        except CommonException as e:  # 500
+            raise e
+        except Exception as e:  # 400
+            raise BadRequestException(repr(e))
+
+
+class MultiQuiz(View):
+    # QZ0201 搜索测试题
+    def get(self, request) -> JsonResponse:
+        try:
             quizzes = Quiz.objects.all()
             # keywords此处默认对question进行模糊搜索
             if "keywords" in request.GET:
@@ -44,57 +81,36 @@ def manageQuiz(request):
             quizzes = list(quizzes)
             result = [quiz_all(quiz) for quiz in quizzes]
             return JsonResponse({"result": result}, status=200)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+        except CommonException as e:  # 500
+            raise e
+        except Exception as e:  # 400
+            raise BadRequestException(repr(e))
+
+    # QZ0102 增加单个测试
+    def post(self, request) -> JsonResponse:
+        body = demjson.decode(request.body)
+        token = token_pass(request.headers, -1)
+        user = token_user(token)
+        if not user:
+            raise ForbiddenException()
+        quiz_form = QuizForm(body)
+        if not quiz_form.is_valid():
+            raise BadRequestException()
+        quiz = quiz_form.save(commit=False)
+        quiz.save()
+        return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
 
 
-@csrf_exempt
-def searchQuiz(request, id):
-    try:
-        quiz = Quiz.objects.filter(id=id)
-        if quiz.exists():
-            quiz = quiz[0]
-            # QZ0101 获取单个测试
-            if request.method == "GET":
-                return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
-            # QZ0103 修改单个测试
-            elif request.method == "PUT":
-                body = demjson.decode(request.body)
-                token = request.headers["token"]
-                user = token_check(token, settings.JWT_KEY, -1)
-                if user:
-                    body = body["quiz"]
-                    for key in body:
-                        setattr(quiz, key, body[key])
-                    quiz.save()
-                    return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
-                else:
-                    return JsonResponse({}, status=403)
-            # QZ0104 删除单个测试
-            elif request.method == "DELETE":
-                token = request.headers["token"]
-                user = token_check(token, settings.JWT_KEY, -1)
-                if user:
-                    quiz.delete()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=403)
-        return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
-
-
-@csrf_exempt
-def randomQuiz(request):
-    try:
-        # QZ0202 随机测试题
-        if request.method == "GET":
+class RandomQuiz(View):
+    # QZ0202 随机测试题
+    def get(self, request) -> JsonResponse:
+        try:
             quiz = Quiz.objects.order_by("?")[:1]
             if quiz.count() == 0:
-                return JsonResponse({}, status=404)
+                raise NotFoundException()
             else:
                 return JsonResponse({"quiz": quiz_all(quiz[0])}, status=200)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+        except CommonException as e:  # 500
+            raise e
+        except Exception as e:  # 400
+            raise BadRequestException(repr(e))

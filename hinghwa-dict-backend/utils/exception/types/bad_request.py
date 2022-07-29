@@ -1,7 +1,7 @@
 from .common import CommonException
 
 
-class BadRequestExcption(CommonException):
+class BadRequestException(CommonException):
     """
     错误请求异常
     """
