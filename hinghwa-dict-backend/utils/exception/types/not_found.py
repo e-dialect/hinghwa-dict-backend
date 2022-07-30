@@ -22,3 +22,15 @@ class WordNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "词条{}不存在！".format(id)
+
+
+class QuizNotFoundException(NotFoundException):
+    """
+    测试题不存在异常
+    :param id: 测试题id
+    """
+
+    def __int__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "测试题{}不存在！".format(id)

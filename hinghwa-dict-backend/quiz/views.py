@@ -8,7 +8,7 @@ from .forms import QuizForm
 from .dto.quiz_all import quiz_all
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.common import CommonException
-from utils.exception.types.not_found import NotFoundException
+from utils.exception.types.not_found import QuizNotFoundException
 from utils.exception.types.forbidden import ForbiddenException
 from utils.TokenCheking import token_pass, token_user
 
@@ -19,27 +19,21 @@ class SingleQuiz(View):
         try:
             quiz = Quiz.objects.filter(id=id)
             if not quiz.exists():  # 404
-                raise NotFoundException()
+                raise QuizNotFoundException()
             quiz = quiz[0]
             return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
         except CommonException as e:  # 500
             raise e
-        except Exception as e:  # 400
-            raise BadRequestException(repr(e))
 
     # QZ0103 修改单个测试
-    @csrf_exempt
     def put(self, request, id) -> JsonResponse:
         try:
             body = demjson.decode(request.body)
             token = token_pass(request.headers, -1)
-            user = token_user(token)
             quiz = Quiz.objects.filter(id=id)
             if not quiz.exists():  # 404
-                raise NotFoundException()
+                raise QuizNotFoundException()
             quiz = quiz[0]
-            if not user:  # 403
-                raise ForbiddenException()
             body = body["quiz"]
             for key in body:
                 setattr(quiz, key, body[key])
@@ -47,27 +41,19 @@ class SingleQuiz(View):
             return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
         except CommonException as e:  # 500
             raise e
-        except Exception as e:  # 400
-            raise BadRequestException(repr(e))
 
     # QZ0104 删除单个测试
-    @csrf_exempt
     def delete(self, request, id) -> JsonResponse:
         try:
             quiz = Quiz.objects.filter(id=id)
             token = token_pass(request.headers, -1)
-            user = token_user(token)
             if not quiz.exists():  # 404
-                raise NotFoundException()
+                raise QuizNotFoundException()
             quiz = quiz[0]
-            if not user:  # 403
-                raise ForbiddenException()
             quiz.delete()
             return JsonResponse({}, status=200)
         except CommonException as e:  # 500
             raise e
-        except Exception as e:  # 400
-            raise BadRequestException(repr(e))
 
 
 class MultiQuiz(View):
@@ -90,9 +76,6 @@ class MultiQuiz(View):
     def post(self, request) -> JsonResponse:
         body = demjson.decode(request.body)
         token = token_pass(request.headers, -1)
-        user = token_user(token)
-        if not user:
-            raise ForbiddenException()
         quiz_form = QuizForm(body)
         if not quiz_form.is_valid():
             raise BadRequestException()
@@ -107,10 +90,8 @@ class RandomQuiz(View):
         try:
             quiz = Quiz.objects.order_by("?")[:1]
             if quiz.count() == 0:
-                raise NotFoundException()
+                raise QuizNotFoundException()
             else:
                 return JsonResponse({"quiz": quiz_all(quiz[0])}, status=200)
         except CommonException as e:  # 500
             raise e
-        except Exception as e:  # 400
-            raise BadRequestException(repr(e))
