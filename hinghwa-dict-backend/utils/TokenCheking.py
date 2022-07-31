@@ -9,7 +9,7 @@ from utils.exception.types.forbidden import OnlyAdminException
 from utils.exception.types.unauthorized import (
     InvalidTokenException,
     OutdatedException,
-    UnauthorizedExcption,
+    UnauthorizedException,
 )
 
 
@@ -23,7 +23,7 @@ def token_pass(header: dict, id: numbers = 0) -> string:
     """
     # 如果没有token
     if "token" not in header:
-        raise UnauthorizedExcption()
+        raise UnauthorizedException()
 
     token = header["token"]
     key = settings.JWT_KEY

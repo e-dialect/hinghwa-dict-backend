@@ -5,9 +5,9 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 
 from article.models import Article
-from utils.exception.types.bad_request import BadRequestExcption
+from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.common import CommonException
-from utils.exception.types.not_found import WordNotFoundExcption
+from utils.exception.types.not_found import WordNotFoundException
 from utils.TypeCheking import islist
 from utils.TokenCheking import token_pass, token_user
 from website.views import (
@@ -46,7 +46,7 @@ class MultiApplication(View):
             # 检查申请修改的词语是否存在（为0表示新建词语）
             word = Word.objects.filter(id=body["word"])
             if not word.exists() and not body["word"] == 0:
-                raise WordNotFoundExcption(body["word"])
+                raise WordNotFoundException(body["word"])
 
             # 检查修改申请是否合法
             if "word" in body["content"]:
@@ -55,7 +55,7 @@ class MultiApplication(View):
             body.update(body["content"])
             application_form = ApplicationForm(body)
             if not (application_form.is_valid() and islist(body["mandarin"])):
-                raise BadRequestExcption()
+                raise BadRequestException()
 
             # 构建申请
             application = application_form.save(commit=False)
@@ -73,7 +73,7 @@ class MultiApplication(View):
         except CommonException as e:
             raise e
         except Exception as e:
-            raise BadRequestExcption(repr(e))
+            raise BadRequestException(repr(e))
 
 
 @csrf_exempt

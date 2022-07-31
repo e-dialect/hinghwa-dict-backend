@@ -1,7 +1,7 @@
 from .common import CommonException
 
 
-class UnauthorizedExcption(CommonException):
+class UnauthorizedException(CommonException):
     """
     未登录异常
     """
@@ -12,7 +12,7 @@ class UnauthorizedExcption(CommonException):
         self.msg = msg
 
 
-class OutdatedException(UnauthorizedExcption):
+class OutdatedException(UnauthorizedException):
     """
     登录过期异常
     """
@@ -21,7 +21,7 @@ class OutdatedException(UnauthorizedExcption):
         super().__init__("登录过期，请重新登录")
 
 
-class InvalidTokenException(UnauthorizedExcption):
+class InvalidTokenException(UnauthorizedException):
     """
     无效的token异常
     """

@@ -1,7 +1,7 @@
 from .common import CommonException
 
 
-class NotFoundExcption(CommonException):
+class NotFoundException(CommonException):
     """
     资源不存在异常
     """
@@ -12,7 +12,7 @@ class NotFoundExcption(CommonException):
         self.msg = msg
 
 
-class WordNotFoundExcption(NotFoundExcption):
+class WordNotFoundException(NotFoundException):
     """
     词条不存在异常
     :param id: 词条id
@@ -22,3 +22,15 @@ class WordNotFoundExcption(NotFoundExcption):
         super().__init__()
         self.status = 404
         self.msg = "词条{}不存在！".format(id)
+
+
+class QuizNotFoundException(NotFoundException):
+    """
+    测试题不存在异常
+    :param id: 测试题id
+    """
+
+    def __int__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "测试题{}不存在！".format(id)

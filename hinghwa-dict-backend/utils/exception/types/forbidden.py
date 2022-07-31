@@ -1,7 +1,7 @@
 from .common import CommonException
 
 
-class ForbiddenExcption(CommonException):
+class ForbiddenException(CommonException):
     """
     权限不足异常
     """
@@ -12,7 +12,7 @@ class ForbiddenExcption(CommonException):
         self.msg = msg
 
 
-class OnlyAdminException(ForbiddenExcption):
+class OnlyAdminException(ForbiddenException):
     """
     只有管理员才能操作异常
     """
