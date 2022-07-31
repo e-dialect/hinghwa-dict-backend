@@ -24,5 +24,5 @@ class Quiz(models.Model):
         return super(Quiz, self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name_plural = "测试模块管理"
+        verbose_name_plural = "测试题"
         verbose_name = "测试题"
