@@ -33,5 +33,5 @@ def password_validator(password):
         可以考虑导入django.contrib.auth.password_validation中的类，
         也可以查看https://docs.djangoproject.com/zh-hans/4.0/topics/auth/passwords/
         """
-    except InvalidPassword as e:  # 400
-        return e
+    except ValidationError as e:  # 400
+        raise InvalidPassword
