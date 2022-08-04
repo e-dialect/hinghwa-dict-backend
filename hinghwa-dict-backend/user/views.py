@@ -13,6 +13,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from notifications.models import Notification
 from user.dto.user_all import user_all
+from password_validation import password_validator
 
 from website.views import (
     random_str,
@@ -49,6 +50,7 @@ def router_users(request):
             if user_form.is_valid():
                 if email_check(user_form.cleaned_data["email"], code):
                     user = user_form.save(commit=False)
+                    password_validator(user_form.cleaned_data["password"])
                     user.set_password(user_form.cleaned_data["password"])
                     user.save()
                     user_info = UserInfo.objects.create(
@@ -362,6 +364,7 @@ def updatePassword(request, id):
                 if token_check(token, settings.JWT_KEY, id):
                     if user.check_password(body["oldpassword"]):
                         if body["newpassword"]:
+                            password_validator(body["newpassword"])
                             user.set_password(body["newpassword"])
                             user.save()
                             return JsonResponse({}, status=200)
@@ -494,6 +497,7 @@ def forget(request):
                     user = user[0]
                     email = body["email"]
                     if user.email == email and email_check(email, body["code"]):
+                        password_validator(body["password"])
                         user.set_password(body["password"])
                         user.save()
                         return JsonResponse({}, status=200)
