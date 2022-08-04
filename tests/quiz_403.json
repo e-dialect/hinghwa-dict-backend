@@ -26,7 +26,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"username\": \"cs\",\r\n    \"password\": \"cs\"\r\n}"
+                            "raw": "{\r\n    \"username\": \"Norton\",\r\n    \"password\": \"20021213\"\r\n}"
                         },
                         "type": "http"
                     },
