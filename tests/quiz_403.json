@@ -4,7 +4,7 @@
         {
             "item": [
                 {
-                    "id": "b2a23c6c-03d1-48db-8002-c52aed82563d",
+                    "id": "e3ba1c1d-8459-41c5-92b6-2bafc183cf79",
                     "name": "LG0101 账号密码登录(登录用户)",
                     "request": {
                         "url": {
@@ -26,7 +26,7 @@
                         "method": "POST",
                         "body": {
                             "mode": "raw",
-                            "raw": "{\r\n    \"username\": \"Norton\",\r\n    \"password\": \"20021213\"\r\n}"
+                            "raw": "{\n    \"username\": \"rock\",\n    \"password\": \"123456\"\n}"
                         },
                         "type": "http"
                     },
@@ -107,7 +107,7 @@
                     "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "57ee56a2-e3dd-434c-94a5-144954897b52",
+                    "id": "12b37b9c-1011-4b3f-9113-89ec71b7cd31",
                     "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
                     "request": {
                         "url": {
@@ -161,7 +161,7 @@
                     "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "3fd29c02-7457-4cd6-b4a8-1d3825513116",
+                    "id": "9e1e6921-0761-4b4b-8659-66a88bc2438d",
                     "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
                     "request": {
                         "url": {
@@ -215,7 +215,7 @@
                     "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "a5f6f401-12e9-4b1f-ba5a-a50dc0e9d6d8",
+                    "id": "cb2b19e1-4277-48cf-830f-2858d99a6d4e",
                     "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
                     "request": {
                         "url": {
@@ -275,12 +275,12 @@
         "name": "测试环境",
         "baseUrls": {"default": "http://127.0.0.1:8000"},
         "variable": {
-            "id": "22fb20c1-7b9c-4694-937c-ea53c29485f8",
+            "id": "452eeef4-cc92-4217-86cc-545fcad9e936",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1OTU0NzkzNS41OTgyOTd9.rvcqZ_x03Eylx0ahyq3ut8KKPkbFjlZqiA9-xjnHX7Q",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvY2siLCJpZCI6MywiZXhwIjoxNjU5NjM1MTYwLjM4MjI2M30.fOdrqFgw4qze3gpm9cAkjXZQRd95j1BlWljNPUum9f0",
                     "key": "token"
                 }
             ]
@@ -289,7 +289,7 @@
         "parameter": {"header": [], "query": [], "body": [], "cookie": []}
     },
     "globals": {
-        "variable": {"id": "8a336893-d1b2-4edd-91d8-0170a684fe1e", "values": []},
+        "variable": {"id": "8eda21a8-829b-42bc-bacc-48fb4b9af0ac", "values": []},
         "parameter": {"header": [], "query": [], "body": [], "cookie": []}
     },
     "isServerBuild": false
