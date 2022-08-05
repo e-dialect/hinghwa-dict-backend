@@ -35,7 +35,7 @@ jobs:
           python3 manage.py migrate
           DJANGO_SUPERUSER_PASSWORD=testtest123 python manage.py createsuperuser --username admin --email test@test.com --no-input
           DJANGO_SUPERUSER_PASSWORD=testtest222 python manage.py createsuperuser --username admin2 --email test@test.com --no-input
-          python manage.py shell
+          python
           from django.contrib.auth.models import User
           user=User.objects.create_user("user_test","user_test@user_test.com","123456")
           user.set_password("123456")
