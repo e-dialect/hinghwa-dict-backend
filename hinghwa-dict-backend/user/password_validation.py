@@ -22,6 +22,9 @@ class MaximumLengthValidator:
 
 
 def password_validator(password):
+    """
+    检验（新）密码是否符合规范
+    """
     try:
         MinimumLengthValidator(password).validate(password)
         """
