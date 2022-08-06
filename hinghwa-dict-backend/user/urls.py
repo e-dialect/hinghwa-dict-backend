@@ -7,7 +7,7 @@ app_name = "users"
 urlpatterns = [
     path("<int:id>", manageInfo),
     path("<int:id>/pronunciation", pronunciation),
-    path("<int:id>/password", updatePassword),
+    path("<int:id>/password", updatePassword),  # US0302 
     path("<int:id>/wechat", updateWechat),
     path("<int:id>/email", updateEmail),
     path("app", app),
