@@ -1,5 +1,7 @@
 import datetime
+from genericpath import exists
 import os.path
+from signal import raise_signal
 
 import demjson
 import jwt
@@ -14,6 +16,12 @@ from django.views.decorators.http import require_POST
 from notifications.models import Notification
 from user.dto.user_all import user_all
 from user.password_validation import password_validator
+from django.views import View
+from utils.exception.types.common import CommonException
+from utils.exception.types.not_found import UserNotFoundException
+from utils.exception.types.unauthorized import InvalidTokenException, WrongPassword
+from utils.exception.types.bad_request import BadRequestException, InvalidPassword
+from utils.TokenCheking import token_user, token_pass
 
 from website.views import (
     random_str,
@@ -352,6 +360,34 @@ def pronunciation(request, id):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
+class UpdatePassword(View):
+    # US0302 更新用户密码
+    def put(self, request, id) -> JsonResponse:
+        try:
+            user = token_user(request.headers["token"])
+        except Exception as e:
+            raise CommonException(e)  # 500
+        if not user.exists():
+            raise UserNotFoundException(id)  # 404
+        token = request.headers["token"]
+        body = demjson.decode(request.body)
+        try:
+            token_pass(token, id)
+        except Exception as e:
+            raise e  # 401 或 403
+        if not user.check_password(body["oldpassword"]):
+            raise WrongPassword()  # 401
+        if not body["newpassword"]:
+            raise BadRequestException()  # 400
+        try:
+            password_validator(body["newpassword"])
+        except InvalidPassword as e:
+            raise e  # 400
+        user.set_password(body["newpassword"])
+        user.save()
+        return JsonResponse({}, status=200)
+
+
 @csrf_exempt
 def updatePassword(request, id):
     try:
@@ -373,7 +409,7 @@ def updatePassword(request, id):
                     else:
                         return JsonResponse({}, status=401)
                 else:
-                    return JsonResponse({}, status=401)
+                    return JsonResponse({}, status=600)
             else:
                 return JsonResponse({}, status=405)
         else:
