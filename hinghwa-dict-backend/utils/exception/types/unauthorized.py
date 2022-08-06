@@ -28,3 +28,12 @@ class InvalidTokenException(UnauthorizedException):
 
     def __init__(self):
         super().__init__("token无效，请重新登录")
+
+
+class WrongPassword(UnauthorizedException):
+    """
+    (旧）密码错误
+    """
+
+    def __init__(self):
+        super().__init__("（旧）密码错误")
