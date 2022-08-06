@@ -387,37 +387,6 @@ class UpdatePassword(View):
         user.save()
         return JsonResponse({}, status=200)
 
-
-@csrf_exempt
-def updatePassword(request, id):
-    try:
-        user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            if request.method == "PUT":
-                token = request.headers["token"]
-                body = demjson.decode(request.body)
-                if token_check(token, settings.JWT_KEY, id):
-                    if user.check_password(body["oldpassword"]):
-                        if body["newpassword"]:
-                            password_validator(body["newpassword"])
-                            user.set_password(body["newpassword"])
-                            user.save()
-                            return JsonResponse({}, status=200)
-                        else:
-                            return JsonResponse({}, status=400)
-                    else:
-                        return JsonResponse({}, status=401)
-                else:
-                    return JsonResponse({}, status=600)
-            else:
-                return JsonResponse({}, status=405)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
-
-
 @csrf_exempt
 def updateEmail(request, id):
     try:
