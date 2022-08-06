@@ -387,6 +387,7 @@ class UpdatePassword(View):
         user.save()
         return JsonResponse({}, status=200)
 
+
 @csrf_exempt
 def updateEmail(request, id):
     try:
