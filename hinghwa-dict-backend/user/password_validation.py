@@ -25,16 +25,5 @@ def password_validator(password):
     """
     检验（新）密码是否符合规范
     """
-    try:
-        MinimumLengthValidator().validate(password)
-        """
-        django 中默认是8 ，HinghwaDict/setting.py中已经改为6以符合微信小程序的要求
-        """
-        MaximumLengthValidator().validate(password)
-        """
-        可以在底下添加其它的检验密码使用的函数或者类，
-        可以考虑导入django.contrib.auth.password_validation中的类，
-        也可以查看https://docs.djangoproject.com/zh-hans/4.0/topics/auth/passwords/
-        """
-    except ValidationError:  # 400
+    if len(password) < 6 and len(password) > 32:
         raise InvalidPassword
