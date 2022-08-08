@@ -32,8 +32,8 @@ class InvalidTokenException(UnauthorizedException):
 
 class WrongPassword(UnauthorizedException):
     """
-    (旧）密码错误
+    密码错误
     """
 
     def __init__(self):
-        super().__init__("（旧）密码错误")
+        super().__init__("密码错误")
