@@ -4,37 +4,24 @@
         {
             "item": [
                 {
-                    "id": "e84c57ea-6be6-43d7-8c6d-f9e3db45d995",
+                    "id": "dd3bdf62-3a3e-47c5-afeb-4370ad4b3adb",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "login"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["login"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {
@@ -89,20 +76,12 @@
                             "properties": {
                                 "token": {
                                     "type": "string",
-                                    "mock": {
-                                        "mock": "@string"
-                                    },
+                                    "mock": {"mock": "@string"},
                                     "title": "权"
                                 },
-                                "id": {
-                                    "type": "integer",
-                                    "title": "用户id"
-                                }
+                                "id": {"type": "integer", "title": "用户id"}
                             },
-                            "required": [
-                                "token",
-                                "id"
-                            ]
+                            "required": ["token", "id"]
                         },
                         "defaultEnable": true,
                         "id": 4183271,
@@ -125,42 +104,125 @@
                         "httpApiCaseName": "登录用户admin"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "ec8777ad-6ac9-4f0d-beb0-52301ced5a1d",
+                    "id": "8fe5020a-c5f1-4261-92fc-07f987363235",
+                    "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
+                            "query": [{"key": "keywords", "value": ""}],
+                            "variable": []
+                        },
+                        "header": [
+                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.result.length`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`num_pre`, value);console.log('已设置环境变量【'+ `num_pre` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【num_pre】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "result": {
+                                    "type": "array",
+                                    "items": {"$ref": "#/definitions/13080595"}
+                                }
+                            },
+                            "x-apifox-orders": ["result"],
+                            "required": ["result"]
+                        },
+                        "defaultEnable": true,
+                        "id": 70049266,
+                        "name": "成功",
+                        "apiDetailId": 29663288,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2022-07-15T11:28:36.000Z",
+                        "updatedAt": "2022-07-15T11:29:54.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 29663288,
+                        "httpApiCaseId": 37835120,
+                        "httpApiName": "QZ0201 搜索测试题",
+                        "httpApiPath": "/quizzes",
+                        "httpApiMethod": "get",
+                        "httpApiCaseName": "QZ0201 搜索测试题"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                },
+                {
+                    "id": "45f41980-c1f7-456a-bc0a-7d3e92263b37",
                     "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {
@@ -170,7 +232,48 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`Quiz添加结果检查`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          let jsonData;",
+                                    "          try {",
+                                    "            jsonData = pm.response.json();",
+                                    "          } catch(e) {",
+                                    "            let text = pm.response.text();",
+                                    "            // xml 转 json",
+                                    "            const xml2js = require('xml2js');",
+                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                                    "            let json;",
+                                    "            let xmlParseOptions = {",
+                                    "                explicitArray: false,",
+                                    "                trim: true,",
+                                    "                ignoreAttrs: true,",
+                                    "            };",
+                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                                    "                jsonData = result;",
+                                    "            });",
+                                    "          }",
+                                    "          const value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        pm.expectWithKey({key:'$',value:value}).to.exist",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
                     "responseDefinition": {
                         "jsonSchema": {
                             "x-apifox-overrides": {},
@@ -182,12 +285,8 @@
                                     "x-apifox-overrides": {}
                                 }
                             },
-                            "required": [
-                                "quiz"
-                            ],
-                            "x-apifox-orders": [
-                                "quiz"
-                            ]
+                            "required": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -210,35 +309,227 @@
                         "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "0e526e89-270b-4466-a489-bec79cd07fa0",
+                    "id": "faa6229a-34f4-4d94-b835-c35cd8389ee8",
+                    "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
+                            "query": [{"key": "keywords", "value": ""}],
+                            "variable": []
+                        },
+                        "header": [
+                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "id": "commonScript.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    " ____string2Number = function(value, errorMsg) {",
+                                    "  if(typeof value !== 'string'){",
+                                    "    return value;",
+                                    "  }",
+                                    "  // 转换成数字类型后比较",
+                                    "  if (/^\\-?\\d+$/.test(value)) {",
+                                    "      return parseInt(value);",
+                                    "  } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                                    "      return parseFloat(value);",
+                                    "  } else {",
+                                    "      throw new Error(errorMsg || '数据类型不匹配')",
+                                    "  }",
+                                    "}",
+                                    "",
+                                    " ____formatValues = function(value, stringCompareValue, comparison) {",
+                                    "  try{",
+                                    "    const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                                    "    let compareValue;",
+                                    "    switch (typeof value) {",
+                                    "        case 'string':",
+                                    "            if (isNumberComparisons) {",
+                                    "                value = ____string2Number(value);",
+                                    "                compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'object':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            try {",
+                                    "                compareValue = JSON.parse(stringCompareValue);",
+                                    "            } catch (e) {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'boolean':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                                    "            break;",
+                                    "        case 'number':",
+                                    "            if (isNumberComparisons) {",
+                                    "              compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "              compareValue = stringCompareValue;",
+                                    "              value = '' + value;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'null':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('null 值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                                    "            break;",
+                                    "        default:",
+                                    "            compareValue = stringCompareValue;",
+                                    "            break;",
+                                    "    }",
+                                    "    return { compareValue, value };",
+                                    "  } catch(e) {",
+                                    "    console.log(e);",
+                                    "    throw e;",
+                                    "  }",
+                                    "}",
+                                    ""
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.result.length`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`num_later`, value);console.log('已设置环境变量【'+ `num_later` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【num_later】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.1.customScript",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var num_pre = Number(pm.environment.get('num_pre'));",
+                                    "",
+                                    "pm.environment.set('num_pre', Number(num_pre)+1);"
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.2.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`quiz数量校验`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`num_pre`);",
+                                    "          const value = pm.environment.get(expression)",
+                                    "      ",
+                                    "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`{{num_later}}`), 'equal');",
+                                    "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "result": {
+                                    "type": "array",
+                                    "items": {"$ref": "#/definitions/13080595"}
+                                }
+                            },
+                            "x-apifox-orders": ["result"],
+                            "required": ["result"]
+                        },
+                        "defaultEnable": true,
+                        "id": 70049266,
+                        "name": "成功",
+                        "apiDetailId": 29663288,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2022-07-15T11:28:36.000Z",
+                        "updatedAt": "2022-07-15T11:29:54.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 29663288,
+                        "httpApiCaseId": 37842102,
+                        "httpApiName": "QZ0201 搜索测试题",
+                        "httpApiPath": "/quizzes",
+                        "httpApiMethod": "get",
+                        "httpApiCaseName": "QZ0201 搜索测试题"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                },
+                {
+                    "id": "ac2d47fe-1fff-42d0-a555-a0589bcc8558",
                     "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes",
-                                "1"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes", "1"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
@@ -261,12 +552,8 @@
                                 }
                             },
                             "x-apifox-refs": {},
-                            "x-apifox-orders": [
-                                "quiz"
-                            ],
-                            "required": [
-                                "quiz"
-                            ]
+                            "x-apifox-orders": ["quiz"],
+                            "required": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70047710,
@@ -289,43 +576,27 @@
                         "httpApiCaseName": "QZ0101 获取单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "421ef166-ce2b-4219-bb8f-f342716b24ac",
+                    "id": "2befb86c-577e-48f6-b404-92f60369ce7e",
                     "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes",
-                                "1"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes", "1"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "PUT",
                         "body": {
@@ -335,7 +606,38 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "      const jsonData = pm.response.json();",
+                                    "      let value = jsonData;",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`quiz_new`, value);console.log('已设置环境变量【'+ `quiz_new` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【quiz_new】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        }
+                    ],
                     "responseDefinition": {
                         "jsonSchema": {
                             "type": "object",
@@ -345,12 +647,8 @@
                                     "x-apifox-overrides": {}
                                 }
                             },
-                            "x-apifox-orders": [
-                                "quiz"
-                            ],
-                            "required": [
-                                "quiz"
-                            ]
+                            "x-apifox-orders": ["quiz"],
+                            "required": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048846,
@@ -373,35 +671,203 @@
                         "httpApiCaseName": "QZ0103 修改单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "bf02de8a-1f72-4656-a598-daaf3dae8524",
+                    "id": "cac56a42-0012-436f-8774-496ba3bc3451",
+                    "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": ["quizzes", "1"],
+                            "host": ["127", "0", "0", "1"],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "id": "commonScript.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    " ____string2Number = function(value, errorMsg) {",
+                                    "  if(typeof value !== 'string'){",
+                                    "    return value;",
+                                    "  }",
+                                    "  // 转换成数字类型后比较",
+                                    "  if (/^\\-?\\d+$/.test(value)) {",
+                                    "      return parseInt(value);",
+                                    "  } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                                    "      return parseFloat(value);",
+                                    "  } else {",
+                                    "      throw new Error(errorMsg || '数据类型不匹配')",
+                                    "  }",
+                                    "}",
+                                    "",
+                                    " ____formatValues = function(value, stringCompareValue, comparison) {",
+                                    "  try{",
+                                    "    const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                                    "    let compareValue;",
+                                    "    switch (typeof value) {",
+                                    "        case 'string':",
+                                    "            if (isNumberComparisons) {",
+                                    "                value = ____string2Number(value);",
+                                    "                compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'object':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            try {",
+                                    "                compareValue = JSON.parse(stringCompareValue);",
+                                    "            } catch (e) {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'boolean':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                                    "            break;",
+                                    "        case 'number':",
+                                    "            if (isNumberComparisons) {",
+                                    "              compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "              compareValue = stringCompareValue;",
+                                    "              value = '' + value;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'null':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('null 值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                                    "            break;",
+                                    "        default:",
+                                    "            compareValue = stringCompareValue;",
+                                    "            break;",
+                                    "    }",
+                                    "    return { compareValue, value };",
+                                    "  } catch(e) {",
+                                    "    console.log(e);",
+                                    "    throw e;",
+                                    "  }",
+                                    "}",
+                                    ""
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`quiz修改校验`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          let jsonData;",
+                                    "          try {",
+                                    "            jsonData = pm.response.json();",
+                                    "          } catch(e) {",
+                                    "            let text = pm.response.text();",
+                                    "            // xml 转 json",
+                                    "            const xml2js = require('xml2js');",
+                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                                    "            let json;",
+                                    "            let xmlParseOptions = {",
+                                    "                explicitArray: false,",
+                                    "                trim: true,",
+                                    "                ignoreAttrs: true,",
+                                    "            };",
+                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                                    "                jsonData = result;",
+                                    "            });",
+                                    "          }",
+                                    "          const value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`{{quiz_new}}`), 'equal');",
+                                    "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "x-apifox-overrides": {},
+                            "type": "object",
+                            "properties": {
+                                "quiz": {
+                                    "$ref": "#/definitions/13080595",
+                                    "x-apifox-overrides": {}
+                                }
+                            },
+                            "x-apifox-refs": {},
+                            "x-apifox-orders": ["quiz"],
+                            "required": ["quiz"]
+                        },
+                        "defaultEnable": true,
+                        "id": 70047710,
+                        "name": "成功",
+                        "apiDetailId": 29662407,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2022-07-15T11:04:02.000Z",
+                        "updatedAt": "2022-07-23T07:28:13.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 29662407,
+                        "httpApiCaseId": 38220543,
+                        "httpApiName": "QZ0101 获取单个测试",
+                        "httpApiPath": "/quizzes/{id}",
+                        "httpApiMethod": "get",
+                        "httpApiCaseName": "QZ0101 获取单个测试"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                },
+                {
+                    "id": "5a6dcb66-a143-471a-93f6-3ccb59afce1b",
                     "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes",
-                                "1"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes", "1"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
@@ -412,12 +878,128 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {}
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "id": "commonScript.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    " ____string2Number = function(value, errorMsg) {",
+                                    "  if(typeof value !== 'string'){",
+                                    "    return value;",
+                                    "  }",
+                                    "  // 转换成数字类型后比较",
+                                    "  if (/^\\-?\\d+$/.test(value)) {",
+                                    "      return parseInt(value);",
+                                    "  } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                                    "      return parseFloat(value);",
+                                    "  } else {",
+                                    "      throw new Error(errorMsg || '数据类型不匹配')",
+                                    "  }",
+                                    "}",
+                                    "",
+                                    " ____formatValues = function(value, stringCompareValue, comparison) {",
+                                    "  try{",
+                                    "    const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                                    "    let compareValue;",
+                                    "    switch (typeof value) {",
+                                    "        case 'string':",
+                                    "            if (isNumberComparisons) {",
+                                    "                value = ____string2Number(value);",
+                                    "                compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'object':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            try {",
+                                    "                compareValue = JSON.parse(stringCompareValue);",
+                                    "            } catch (e) {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'boolean':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                                    "            break;",
+                                    "        case 'number':",
+                                    "            if (isNumberComparisons) {",
+                                    "              compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "              compareValue = stringCompareValue;",
+                                    "              value = '' + value;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'null':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('null 值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                                    "            break;",
+                                    "        default:",
+                                    "            compareValue = stringCompareValue;",
+                                    "            break;",
+                                    "    }",
+                                    "    return { compareValue, value };",
+                                    "  } catch(e) {",
+                                    "    console.log(e);",
+                                    "    throw e;",
+                                    "  }",
+                                    "}",
+                                    ""
+                                ]
+                            }
                         },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`Quiz删除校验`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          let jsonData;",
+                                    "          try {",
+                                    "            jsonData = pm.response.json();",
+                                    "          } catch(e) {",
+                                    "            let text = pm.response.text();",
+                                    "            // xml 转 json",
+                                    "            const xml2js = require('xml2js');",
+                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                                    "            let json;",
+                                    "            let xmlParseOptions = {",
+                                    "                explicitArray: false,",
+                                    "                trim: true,",
+                                    "                ignoreAttrs: true,",
+                                    "            };",
+                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                                    "                jsonData = result;",
+                                    "            });",
+                                    "          }",
+                                    "          const value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`{}`), 'equal');",
+                                    "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {"type": "object", "properties": {}},
                         "defaultEnable": true,
                         "id": 70048940,
                         "name": "成功",
@@ -439,42 +1021,232 @@
                         "httpApiCaseName": "QZ0104 删除单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "f73c508f-b7a8-4f2b-92e6-328eb0fed34c",
+                    "id": "6f0397e9-9c38-478a-9eaf-c8b892255591",
+                    "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
+                            "query": [{"key": "keywords", "value": ""}],
+                            "variable": []
+                        },
+                        "header": [
+                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "id": "commonScript.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    " ____string2Number = function(value, errorMsg) {",
+                                    "  if(typeof value !== 'string'){",
+                                    "    return value;",
+                                    "  }",
+                                    "  // 转换成数字类型后比较",
+                                    "  if (/^\\-?\\d+$/.test(value)) {",
+                                    "      return parseInt(value);",
+                                    "  } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                                    "      return parseFloat(value);",
+                                    "  } else {",
+                                    "      throw new Error(errorMsg || '数据类型不匹配')",
+                                    "  }",
+                                    "}",
+                                    "",
+                                    " ____formatValues = function(value, stringCompareValue, comparison) {",
+                                    "  try{",
+                                    "    const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                                    "    let compareValue;",
+                                    "    switch (typeof value) {",
+                                    "        case 'string':",
+                                    "            if (isNumberComparisons) {",
+                                    "                value = ____string2Number(value);",
+                                    "                compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'object':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            try {",
+                                    "                compareValue = JSON.parse(stringCompareValue);",
+                                    "            } catch (e) {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'boolean':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                                    "            break;",
+                                    "        case 'number':",
+                                    "            if (isNumberComparisons) {",
+                                    "              compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "              compareValue = stringCompareValue;",
+                                    "              value = '' + value;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'null':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('null 值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                                    "            break;",
+                                    "        default:",
+                                    "            compareValue = stringCompareValue;",
+                                    "            break;",
+                                    "    }",
+                                    "    return { compareValue, value };",
+                                    "  } catch(e) {",
+                                    "    console.log(e);",
+                                    "    throw e;",
+                                    "  }",
+                                    "}",
+                                    ""
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.result.length`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`num_later`, value);console.log('已设置环境变量【'+ `num_later` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【num_later】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.1.customScript",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var num_pre = Number(pm.environment.get('num_pre'));",
+                                    "",
+                                    "pm.environment.set('num_pre', Number(num_pre)-1);"
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.2.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`quiz数量校验`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`num_pre`);",
+                                    "          const value = pm.environment.get(expression)",
+                                    "      ",
+                                    "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`{{num_later}}`), 'equal');",
+                                    "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "result": {
+                                    "type": "array",
+                                    "items": {"$ref": "#/definitions/13080595"}
+                                }
+                            },
+                            "x-apifox-orders": ["result"],
+                            "required": ["result"]
+                        },
+                        "defaultEnable": true,
+                        "id": 70049266,
+                        "name": "成功",
+                        "apiDetailId": 29663288,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2022-07-15T11:28:36.000Z",
+                        "updatedAt": "2022-07-15T11:29:54.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 29663288,
+                        "httpApiCaseId": 37913169,
+                        "httpApiName": "QZ0201 搜索测试题",
+                        "httpApiPath": "/quizzes",
+                        "httpApiMethod": "get",
+                        "httpApiCaseName": "QZ0201 搜索测试题"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                },
+                {
+                    "id": "422ec1b1-9abc-46bc-b18d-08dedb1e350b",
                     "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {
@@ -484,7 +1256,48 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`Quiz添加结果检查`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          let jsonData;",
+                                    "          try {",
+                                    "            jsonData = pm.response.json();",
+                                    "          } catch(e) {",
+                                    "            let text = pm.response.text();",
+                                    "            // xml 转 json",
+                                    "            const xml2js = require('xml2js');",
+                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                                    "            let json;",
+                                    "            let xmlParseOptions = {",
+                                    "                explicitArray: false,",
+                                    "                trim: true,",
+                                    "                ignoreAttrs: true,",
+                                    "            };",
+                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                                    "                jsonData = result;",
+                                    "            });",
+                                    "          }",
+                                    "          const value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        pm.expectWithKey({key:'$',value:value}).to.exist",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
                     "responseDefinition": {
                         "jsonSchema": {
                             "x-apifox-overrides": {},
@@ -496,12 +1309,8 @@
                                     "x-apifox-overrides": {}
                                 }
                             },
-                            "required": [
-                                "quiz"
-                            ],
-                            "x-apifox-orders": [
-                                "quiz"
-                            ]
+                            "required": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -524,42 +1333,27 @@
                         "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "bef5f44c-38c2-4d89-922e-b70c524cb0e5",
+                    "id": "34daa6b8-528a-4172-bc80-8a940d876c2c",
                     "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {
@@ -569,7 +1363,48 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`Quiz添加结果检查`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          let jsonData;",
+                                    "          try {",
+                                    "            jsonData = pm.response.json();",
+                                    "          } catch(e) {",
+                                    "            let text = pm.response.text();",
+                                    "            // xml 转 json",
+                                    "            const xml2js = require('xml2js');",
+                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                                    "            let json;",
+                                    "            let xmlParseOptions = {",
+                                    "                explicitArray: false,",
+                                    "                trim: true,",
+                                    "                ignoreAttrs: true,",
+                                    "            };",
+                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                                    "                jsonData = result;",
+                                    "            });",
+                                    "          }",
+                                    "          const value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        pm.expectWithKey({key:'$',value:value}).to.exist",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
                     "responseDefinition": {
                         "jsonSchema": {
                             "x-apifox-overrides": {},
@@ -581,12 +1416,8 @@
                                     "x-apifox-overrides": {}
                                 }
                             },
-                            "required": [
-                                "quiz"
-                            ],
-                            "x-apifox-orders": [
-                                "quiz"
-                            ]
+                            "required": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -609,42 +1440,27 @@
                         "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "37cf76d9-4705-4159-9ed1-d400da9e145a",
+                    "id": "b805e9cc-7431-4c32-839e-1f9e3fbdea72",
                     "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
+                            {"key": "Content-Type", "value": "application/json"}
                         ],
                         "method": "POST",
                         "body": {
@@ -654,7 +1470,48 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`Quiz添加结果检查`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          let jsonData;",
+                                    "          try {",
+                                    "            jsonData = pm.response.json();",
+                                    "          } catch(e) {",
+                                    "            let text = pm.response.text();",
+                                    "            // xml 转 json",
+                                    "            const xml2js = require('xml2js');",
+                                    "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                                    "            let json;",
+                                    "            let xmlParseOptions = {",
+                                    "                explicitArray: false,",
+                                    "                trim: true,",
+                                    "                ignoreAttrs: true,",
+                                    "            };",
+                                    "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                                    "                jsonData = result;",
+                                    "            });",
+                                    "          }",
+                                    "          const value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        pm.expectWithKey({key:'$',value:value}).to.exist",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
                     "responseDefinition": {
                         "jsonSchema": {
                             "x-apifox-overrides": {},
@@ -666,12 +1523,8 @@
                                     "x-apifox-overrides": {}
                                 }
                             },
-                            "required": [
-                                "quiz"
-                            ],
-                            "x-apifox-orders": [
-                                "quiz"
-                            ]
+                            "required": ["quiz"],
+                            "x-apifox-orders": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70048663,
@@ -694,39 +1547,22 @@
                         "httpApiCaseName": "QZ0102 增加单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "920bccc8-1999-4e69-aff6-f9888a3ea301",
+                    "id": "2fdededb-5dbf-44f8-b268-c7e5d6ed307b",
                     "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [
-                                {
-                                    "key": "keywords",
-                                    "value": ""
-                                }
-                            ],
+                            "path": ["quizzes"],
+                            "host": ["127", "0", "0", "1"],
+                            "query": [{"key": "keywords", "value": ""}],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
@@ -737,24 +1573,163 @@
                         "type": "http"
                     },
                     "response": [],
-                    "event": [],
+                    "event": [
+                        {
+                            "listen": "prerequest",
+                            "script": {
+                                "id": "commonScript.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    " ____string2Number = function(value, errorMsg) {",
+                                    "  if(typeof value !== 'string'){",
+                                    "    return value;",
+                                    "  }",
+                                    "  // 转换成数字类型后比较",
+                                    "  if (/^\\-?\\d+$/.test(value)) {",
+                                    "      return parseInt(value);",
+                                    "  } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                                    "      return parseFloat(value);",
+                                    "  } else {",
+                                    "      throw new Error(errorMsg || '数据类型不匹配')",
+                                    "  }",
+                                    "}",
+                                    "",
+                                    " ____formatValues = function(value, stringCompareValue, comparison) {",
+                                    "  try{",
+                                    "    const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                                    "    let compareValue;",
+                                    "    switch (typeof value) {",
+                                    "        case 'string':",
+                                    "            if (isNumberComparisons) {",
+                                    "                value = ____string2Number(value);",
+                                    "                compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'object':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            try {",
+                                    "                compareValue = JSON.parse(stringCompareValue);",
+                                    "            } catch (e) {",
+                                    "                compareValue = stringCompareValue;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'boolean':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                                    "            break;",
+                                    "        case 'number':",
+                                    "            if (isNumberComparisons) {",
+                                    "              compareValue = ____string2Number(stringCompareValue);",
+                                    "            } else {",
+                                    "              compareValue = stringCompareValue;",
+                                    "              value = '' + value;",
+                                    "            }",
+                                    "            break;",
+                                    "        case 'null':",
+                                    "            if (isNumberComparisons) {",
+                                    "                throw new Error('null 值不能使用 ' + comparison + ' 方式比较')",
+                                    "            }",
+                                    "            compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                                    "            break;",
+                                    "        default:",
+                                    "            compareValue = stringCompareValue;",
+                                    "            break;",
+                                    "    }",
+                                    "    return { compareValue, value };",
+                                    "  } catch(e) {",
+                                    "    console.log(e);",
+                                    "    throw e;",
+                                    "  }",
+                                    "}",
+                                    ""
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.result.length`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`num_later`, value);console.log('已设置环境变量【'+ `num_later` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【num_later】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.1.customScript",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "var num_pre = Number(pm.environment.get('num_pre'));",
+                                    "",
+                                    "pm.environment.set('num_pre', Number(num_pre)+3);"
+                                ]
+                            }
+                        },
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.2.assertion",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "pm.test(pm.variables.replaceIn(`quiz数量校验`), function() {",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`num_pre`);",
+                                    "          const value = pm.variables.get(expression)",
+                                    "      ",
+                                    "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`{{num_later}}`), 'equal');",
+                                    "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                                    "      });"
+                                ]
+                            }
+                        }
+                    ],
                     "responseDefinition": {
                         "jsonSchema": {
                             "type": "object",
                             "properties": {
                                 "result": {
                                     "type": "array",
-                                    "items": {
-                                        "$ref": "#/definitions/13080595"
-                                    }
+                                    "items": {"$ref": "#/definitions/13080595"}
                                 }
                             },
-                            "x-apifox-orders": [
-                                "result"
-                            ],
-                            "required": [
-                                "result"
-                            ]
+                            "x-apifox-orders": ["result"],
+                            "required": ["result"]
                         },
                         "defaultEnable": true,
                         "id": 70049266,
@@ -777,35 +1752,22 @@
                         "httpApiCaseName": "QZ0201 搜索测试题"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 },
                 {
-                    "id": "9a47b2df-4878-4139-bd1e-d64938b87b87",
+                    "id": "498d4b26-9de8-47b8-bbbc-2f3a9de73ea5",
                     "name": "QZ0202 随机测试题(QZ0202 随机测试题)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": [
-                                "quizzes",
-                                "random"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
+                            "path": ["quizzes", "random"],
+                            "host": ["127", "0", "0", "1"],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
+                            {"key": "token", "value": "{{token}}"},
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
@@ -828,12 +1790,8 @@
                                 }
                             },
                             "x-apifox-refs": {},
-                            "x-apifox-orders": [
-                                "quiz"
-                            ],
-                            "required": [
-                                "quiz"
-                            ]
+                            "x-apifox-orders": ["quiz"],
+                            "required": ["quiz"]
                         },
                         "defaultEnable": true,
                         "id": 70049339,
@@ -856,17 +1814,13 @@
                         "httpApiCaseName": "QZ0202 随机测试题"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
+                    "protocolProfileBehavior": {"disableUrlEncoding": false}
                 }
             ],
             "name": "QZ模块理想状况"
         }
     ],
-    "info": {
-        "name": "QZ模块理想状况"
-    },
+    "info": {"name": "QZ模块理想状况"},
     "dataSchemas": {
         "13080595": {
             "type": "object",
@@ -874,88 +1828,50 @@
                 "question": {
                     "type": "string",
                     "title": "问题",
-                    "mock": {
-                        "mock": "@ctitle"
-                    }
+                    "mock": {"mock": "@ctitle"}
                 },
                 "options": {
                     "type": "array",
-                    "items": {
-                        "type": "string",
-                        "mock": {
-                            "mock": "@csentence"
-                        }
-                    },
+                    "items": {"type": "string", "mock": {"mock": "@csentence"}},
                     "title": "选项"
                 },
                 "explanation": {
                     "type": "string",
                     "title": "答案解析",
-                    "mock": {
-                        "mock": "@cparagraph"
-                    }
+                    "mock": {"mock": "@cparagraph"}
                 },
-                "answer": {
-                    "type": "integer",
-                    "title": "答案序号"
-                },
-                "id": {
-                    "type": "integer"
-                }
+                "answer": {"type": "integer", "title": "答案序号"},
+                "id": {"type": "integer"}
             },
-            "x-apifox-orders": [
-                "question",
-                "options",
-                "answer",
-                "explanation",
-                "id"
-            ],
-            "required": [
-                "question",
-                "answer",
-                "options",
-                "explanation",
-                "id"
-            ],
+            "x-apifox-orders": ["question", "options", "answer", "explanation", "id"],
+            "required": ["question", "answer", "options", "explanation", "id"],
             "title": "quiz_all"
         }
     },
     "environment": {
         "id": 510825,
         "name": "测试环境",
-        "baseUrls": {
-            "default": "http://127.0.0.1:8000"
-        },
+        "baseUrls": {"default": "http://127.0.0.1:8000"},
         "variable": {
-            "id": "e69d518b-196d-4d29-b527-203f2dfdfd73",
+            "id": "4af0bf72-ba1c-46b6-825c-d239aad490f2",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjY3LCJleHAiOjE2NTg2ODAxMDcuNTcxMjc2fQ.jn2W5XxHOmkVSMgPu0mGHlAc6OIfv5thT5LoUd1pJIQ",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvY2siLCJpZCI6MywiZXhwIjoxNjU5NjM1MTYwLjM4MjI2M30.fOdrqFgw4qze3gpm9cAkjXZQRd95j1BlWljNPUum9f0",
                     "key": "token"
-                }
+                },
+                {"type": "any", "value": "3", "key": "num"},
+                {"type": "any", "value": "73", "key": "num_later"},
+                {"type": "any", "value": 19, "key": "num_pre"}
             ]
         },
         "type": "normal",
-        "parameter": {
-            "header": [],
-            "query": [],
-            "body": [],
-            "cookie": []
-        }
+        "parameter": {"header": [], "query": [], "body": [], "cookie": []}
     },
     "globals": {
-        "variable": {
-            "id": "ce7694e3-62dc-432c-8895-6d251deb89e1",
-            "values": []
-        },
-        "parameter": {
-            "header": [],
-            "query": [],
-            "body": [],
-            "cookie": []
-        }
+        "variable": {"id": "e9c40ddb-fe71-42b6-89b7-00e03fae80ee", "values": []},
+        "parameter": {"header": [], "query": [], "body": [], "cookie": []}
     },
     "isServerBuild": false
 }
