@@ -11,7 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from notifications.models import Notification
 from user.dto.user_all import user_all
-from user.password_validation import password_validator
+from utils.PasswordValidation import password_validator
 from django.views import View
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import UserNotFoundException
