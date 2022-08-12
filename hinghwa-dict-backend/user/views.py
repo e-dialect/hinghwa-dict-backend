@@ -358,19 +358,16 @@ def pronunciation(request, id):
 class UpdatePassword(View):
     # US0302 更新用户密码
     def put(self, request, id) -> JsonResponse:
-        try:
-            user = token_user(request.headers["token"])
-            body = demjson.decode(request.body)
-            if not user.check_password(body["oldpassword"]):
-                raise WrongPassword()  # 401
-            if not body["newpassword"]:
-                raise BadRequestException()  # 400
-            password_validator(body["newpassword"])
-            user.set_password(body["newpassword"])
-            user.save()
-            return JsonResponse({}, status=200)
-        except CommonException as e:
-            raise e
+        user = token_user(request.headers["token"])
+        body = demjson.decode(request.body)
+        if not user.check_password(body["oldpassword"]):
+            raise WrongPassword()  # 401
+        if not body["newpassword"]:
+            raise BadRequestException()  # 400
+        password_validator(body["newpassword"])
+        user.set_password(body["newpassword"])
+        user.save()
+        return JsonResponse({}, status=200)
 
 
 @csrf_exempt
