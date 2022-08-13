@@ -1,1 +1,288 @@
-{"apifoxCli":"1.1.0","item":[{"item":[{"id":"609281d6-0acf-4236-821c-dce03231667d","name":"LG0101 账号密码登录(LG0101 账号密码登录)","request":{"url":{"protocol":"http","port":"8000","path":["login"],"host":["127","0","0","1"],"query":[],"variable":[]},"header":[{"key":"token","value":"{{token}}"},{"key":"User-Agent","value":"apifox/1.0.0 (https://www.apifox.cn)"},{"key":"Content-Type","value":"application/json"}],"method":"POST","body":{"mode":"raw","raw":"{\r\n    \"username\": \"user_test_old_password\",\r\n    \"password\": \"12\"\r\n}"},"type":"http"},"response":[],"event":[],"responseDefinition":{"jsonSchema":{"type":"object","properties":{"token":{"type":"string","mock":{"mock":"@string"},"title":"权"},"id":{"type":"integer","title":"用户id"}},"required":["token","id"]},"defaultEnable":true,"id":4183271,"name":"成功","apiDetailId":5318056,"projectId":0,"code":200,"contentType":"json","ordering":1,"createdAt":"2021-07-29T14:43:37.000Z","updatedAt":"2021-08-12T16:27:18.000Z","deletedAt":null},"metaInfo":{"httpApiId":5318056,"httpApiCaseId":38227496,"httpApiName":"LG0101 账号密码登录","httpApiPath":"/login","httpApiMethod":"post","httpApiCaseName":"LG0101 账号密码登录"},"type":"http","protocolProfileBehavior":{"disableUrlEncoding":false}},{"id":"668514e8-03fa-4472-a6bd-6dc2b578decb","name":"US0302 更新用户密码(US0302 更新用户密码)","request":{"url":{"protocol":"http","port":"8000","path":["users","4","password"],"host":["127","0","0","1"],"query":[],"variable":[]},"header":[{"key":"token","value":"{{token}}"},{"key":"User-Agent","value":"apifox/1.0.0 (https://www.apifox.cn)"},{"key":"Content-Type","value":"application/json"}],"method":"PUT","body":{"mode":"raw","raw":"{\r\n    \"oldpassword\": \"cs\",\r\n    \"newpassword\": \"abcde\"\r\n}"},"type":"http"},"response":[],"event":[],"responseDefinition":{"jsonSchema":{"type":"object","properties":{}},"defaultEnable":true,"id":82117265,"name":"新密码不符合规范","apiDetailId":5318021,"projectId":0,"code":400,"contentType":"json","ordering":4,"createdAt":"2022-08-11T15:29:58.000Z","updatedAt":"2022-08-11T15:29:58.000Z","deletedAt":null},"metaInfo":{"httpApiId":5318021,"httpApiCaseId":38227538,"httpApiName":"US0302 更新用户密码","httpApiPath":"/users/{id}/password","httpApiMethod":"put","httpApiCaseName":"US0302 更新用户密码"},"type":"http","protocolProfileBehavior":{"disableUrlEncoding":false}},{"id":"2e13ca12-4868-490b-90e0-b38a0c9937f6","name":"US0302 更新用户密码(US0302 更新用户密码)","request":{"url":{"protocol":"http","port":"8000","path":["users","4","password"],"host":["127","0","0","1"],"query":[],"variable":[]},"header":[{"key":"token","value":"{{token}}"},{"key":"User-Agent","value":"apifox/1.0.0 (https://www.apifox.cn)"},{"key":"Content-Type","value":"application/json"}],"method":"PUT","body":{"mode":"raw","raw":"{\r\n    \"oldpassword\": \"cs\",\r\n    \"newpassword\": \"abcdefghijklmnopqrstuvwxyz1234567\"\r\n}"},"type":"http"},"response":[],"event":[],"responseDefinition":{"jsonSchema":{"type":"object","properties":{}},"defaultEnable":true,"id":82117265,"name":"新密码不符合规范","apiDetailId":5318021,"projectId":0,"code":400,"contentType":"json","ordering":4,"createdAt":"2022-08-11T15:29:58.000Z","updatedAt":"2022-08-11T15:29:58.000Z","deletedAt":null},"metaInfo":{"httpApiId":5318021,"httpApiCaseId":38227575,"httpApiName":"US0302 更新用户密码","httpApiPath":"/users/{id}/password","httpApiMethod":"put","httpApiCaseName":"US0302 更新用户密码"},"type":"http","protocolProfileBehavior":{"disableUrlEncoding":false}}],"name":"更改密码-新密码不符合长度规范400测试"}],"info":{"name":"更改密码-新密码不符合长度规范400测试"},"dataSchemas":{},"environment":{"id":510825,"name":"测试环境","baseUrls":{"default":"http://127.0.0.1:8000"},"variable":{"id":"0e5888aa-4faa-4930-9a8d-099fd9aa1a78","name":"测试环境","values":[{"type":"any","value":"eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImNzIiwiaWQiOjUsImV4cCI6MTY2MDIzNTE0Ni45ODQ2NDZ9.U6cs1KbtadPBclMIUsq5ZwEjdYHB1jVWSkjA92Y_7TM","key":"token"}]},"type":"normal","parameter":{"header":[],"query":[],"body":[],"cookie":[]}},"globals":{"variable":{"id":"9fe1b973-ebe2-4312-b031-3fee46e43581","values":[]},"parameter":{"header":[],"query":[],"body":[],"cookie":[]}},"isServerBuild":false}
+{
+    "apifoxCli": "1.1.0",
+    "item": [
+        {
+            "item": [
+                {
+                    "id": "609281d6-0acf-4236-821c-dce03231667d",
+                    "name": "LG0101 账号密码登录(LG0101 账号密码登录)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "login"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"username\": \"user_test_old_password\",\r\n    \"password\": \"12\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "mock": {
+                                        "mock": "@string"
+                                    },
+                                    "title": "权"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "title": "用户id"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4183271,
+                        "name": "成功",
+                        "apiDetailId": 5318056,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-29T14:43:37.000Z",
+                        "updatedAt": "2021-08-12T16:27:18.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318056,
+                        "httpApiCaseId": 38227496,
+                        "httpApiName": "LG0101 账号密码登录",
+                        "httpApiPath": "/login",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "LG0101 账号密码登录"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "668514e8-03fa-4472-a6bd-6dc2b578decb",
+                    "name": "US0302 更新用户密码(US0302 更新用户密码)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "users",
+                                "4",
+                                "password"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"oldpassword\": \"cs\",\r\n    \"newpassword\": \"abcde\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "defaultEnable": true,
+                        "id": 82117265,
+                        "name": "新密码不符合规范",
+                        "apiDetailId": 5318021,
+                        "projectId": 0,
+                        "code": 400,
+                        "contentType": "json",
+                        "ordering": 4,
+                        "createdAt": "2022-08-11T15:29:58.000Z",
+                        "updatedAt": "2022-08-11T15:29:58.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318021,
+                        "httpApiCaseId": 38227538,
+                        "httpApiName": "US0302 更新用户密码",
+                        "httpApiPath": "/users/{id}/password",
+                        "httpApiMethod": "put",
+                        "httpApiCaseName": "US0302 更新用户密码"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "2e13ca12-4868-490b-90e0-b38a0c9937f6",
+                    "name": "US0302 更新用户密码(US0302 更新用户密码)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "users",
+                                "4",
+                                "password"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"oldpassword\": \"cs\",\r\n    \"newpassword\": \"abcdefghijklmnopqrstuvwxyz1234567\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "defaultEnable": true,
+                        "id": 82117265,
+                        "name": "新密码不符合规范",
+                        "apiDetailId": 5318021,
+                        "projectId": 0,
+                        "code": 400,
+                        "contentType": "json",
+                        "ordering": 4,
+                        "createdAt": "2022-08-11T15:29:58.000Z",
+                        "updatedAt": "2022-08-11T15:29:58.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318021,
+                        "httpApiCaseId": 38227575,
+                        "httpApiName": "US0302 更新用户密码",
+                        "httpApiPath": "/users/{id}/password",
+                        "httpApiMethod": "put",
+                        "httpApiCaseName": "US0302 更新用户密码"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                }
+            ],
+            "name": "更改密码-新密码不符合长度规范400测试"
+        }
+    ],
+    "info": {
+        "name": "更改密码-新密码不符合长度规范400测试"
+    },
+    "dataSchemas": {},
+    "environment": {
+        "id": 510825,
+        "name": "测试环境",
+        "baseUrls": {
+            "default": "http://127.0.0.1:8000"
+        },
+        "variable": {
+            "id": "0e5888aa-4faa-4930-9a8d-099fd9aa1a78",
+            "name": "测试环境",
+            "values": [
+                {
+                    "type": "any",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImNzIiwiaWQiOjUsImV4cCI6MTY2MDIzNTE0Ni45ODQ2NDZ9.U6cs1KbtadPBclMIUsq5ZwEjdYHB1jVWSkjA92Y_7TM",
+                    "key": "token"
+                }
+            ]
+        },
+        "type": "normal",
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
+        }
+    },
+    "globals": {
+        "variable": {
+            "id": "9fe1b973-ebe2-4312-b031-3fee46e43581",
+            "values": []
+        },
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
+        }
+    },
+    "isServerBuild": false
+}
