@@ -150,6 +150,7 @@ class VisibilityMusic(View):
     def put(self, request, id) -> JsonResponse:
         try:
             music = Music.objects.filter(id=id)
+            token = token_pass(request.headers, -1)
             if not music.exists():
                 raise MusicNotFoundException()
             music = music[0]
