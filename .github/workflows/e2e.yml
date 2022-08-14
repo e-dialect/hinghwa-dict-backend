@@ -48,6 +48,8 @@ jobs:
         run: |
           curl 127.0.0.1:8000/users/1
           curl 127.0.0.1:8000/users/2
+          curl 127.0.0.1:8000/users/3
+          curl 127.0.0.1:8000/users/4
           cd tests
           for test in `ls .`
           do
