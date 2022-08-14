@@ -30,7 +30,19 @@ class QuizNotFoundException(NotFoundException):
     :param id: 测试题id
     """
 
-    def __int__(self, id=""):
+    def __init__(self, id=""):
         super().__init__()
         self.status = 404
         self.msg = "测试题{}不存在！".format(id)
+
+
+class MusicNotFoundException(NotFoundException):
+    """
+    音乐不存在异常
+    ：param id:音乐id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "音乐{}不存在！".format(id)
