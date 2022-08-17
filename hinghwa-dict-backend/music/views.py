@@ -30,9 +30,9 @@ class SearchMusic(View):
 
     # MC0101 上传新音乐
     def post(self, request) -> JsonResponse:
-        body = demjson.decode(request.body)
         token = token_pass(request.headers)
         user = token_user(token)
+        body = demjson.decode(request.body)
         music_form = MusicForm(body)
         if not music_form.is_valid():
             raise BadRequestException()
@@ -72,8 +72,8 @@ class ManageMusic(View):
         if not music.exists():
             raise MusicNotFoundException()
         music = music[0]
-        body = demjson.decode(request.body)
         token = token_pass(request.headers, music.contributor.id)
+        body = demjson.decode(request.body)
         body = body["music"]
         music_form = MusicForm(body)
         for key in body:
@@ -124,8 +124,8 @@ class LikeMusic(View):
 class VisibilityMusic(View):
     # MC0105 设置音乐可见性
     def put(self, request, id) -> JsonResponse:
-        music = Music.objects.filter(id=id)
         token = token_pass(request.headers, -1)
+        music = Music.objects.filter(id=id)
         if not music.exists():
             raise MusicNotFoundException()
         music = music[0]
