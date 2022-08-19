@@ -36,7 +36,6 @@ class QuizNotFoundException(NotFoundException):
         self.msg = "测试题{}不存在！".format(id)
 
 
-
 class UserNotFoundException(NotFoundException):
     """
     用户不存在异常
