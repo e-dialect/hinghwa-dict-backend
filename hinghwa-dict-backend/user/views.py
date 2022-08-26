@@ -1,6 +1,4 @@
 import datetime
-import os.path
-
 import demjson
 import jwt
 import requests
@@ -13,6 +11,12 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from notifications.models import Notification
 from user.dto.user_all import user_all
+from utils.PasswordValidation import password_validator
+from django.views import View
+from utils.exception.types.common import CommonException
+from utils.exception.types.unauthorized import WrongPassword
+from utils.exception.types.bad_request import BadRequestException
+from utils.TokenCheking import token_user, token_pass
 
 from website.views import (
     random_str,
@@ -49,6 +53,7 @@ def router_users(request):
             if user_form.is_valid():
                 if email_check(user_form.cleaned_data["email"], code):
                     user = user_form.save(commit=False)
+                    password_validator(user_form.cleaned_data["password"])
                     user.set_password(user_form.cleaned_data["password"])
                     user.save()
                     user_info = UserInfo.objects.create(
@@ -350,33 +355,19 @@ def pronunciation(request, id):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-@csrf_exempt
-def updatePassword(request, id):
-    try:
-        user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            if request.method == "PUT":
-                token = request.headers["token"]
-                body = demjson.decode(request.body)
-                if token_check(token, settings.JWT_KEY, id):
-                    if user.check_password(body["oldpassword"]):
-                        if body["newpassword"]:
-                            user.set_password(body["newpassword"])
-                            user.save()
-                            return JsonResponse({}, status=200)
-                        else:
-                            return JsonResponse({}, status=400)
-                    else:
-                        return JsonResponse({}, status=401)
-                else:
-                    return JsonResponse({}, status=401)
-            else:
-                return JsonResponse({}, status=405)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+class UpdatePassword(View):
+    # US0302 更新用户密码
+    def put(self, request, id) -> JsonResponse:
+        user = token_user(request.headers["token"])
+        body = demjson.decode(request.body)
+        if not user.check_password(body["oldpassword"]):
+            raise WrongPassword()  # 401
+        if not body["newpassword"]:
+            raise BadRequestException()  # 400
+        password_validator(body["newpassword"])
+        user.set_password(body["newpassword"])
+        user.save()
+        return JsonResponse({}, status=200)
 
 
 @csrf_exempt
@@ -494,6 +485,7 @@ def forget(request):
                     user = user[0]
                     email = body["email"]
                     if user.email == email and email_check(email, body["code"]):
+                        password_validator(body["password"])
                         user.set_password(body["password"])
                         user.save()
                         return JsonResponse({}, status=200)

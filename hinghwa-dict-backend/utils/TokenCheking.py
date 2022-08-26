@@ -52,7 +52,7 @@ def token_pass(header: dict, id: numbers = 0) -> string:
 
     # 如果要求指定用户
     if id > 0 and user.id != id and not user.is_superuser:
-        raise UnauthorizedExcption()
+        raise UnauthorizedException()
 
     return token
 

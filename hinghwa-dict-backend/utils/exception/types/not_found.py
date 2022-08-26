@@ -36,6 +36,17 @@ class QuizNotFoundException(NotFoundException):
         self.msg = "测试题{}不存在！".format(id)
 
 
+class UserNotFoundException(NotFoundException):
+    """
+    用户不存在异常
+    :param id: 用户id
+    """
+
+    def __init__(self, id=0):
+        super().__init__()
+        self.msg = "用户{}不存在！".format(id)
+
+
 class MusicNotFoundException(NotFoundException):
     """
     音乐不存在异常
