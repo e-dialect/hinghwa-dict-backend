@@ -19,3 +19,12 @@ class InvalidPassword(BadRequestException):
 
     def __init__(self, msg="密码不符合规范异常"):
         super().__init__(msg)
+
+
+class IdentifyingCodeInDate(BadRequestException):
+    """
+    验证码请求过快
+    """
+
+    def __init__(self, msg="验证码请求太快嘞"):
+        super().__init__(msg)
