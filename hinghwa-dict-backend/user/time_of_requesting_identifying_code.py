@@ -6,6 +6,10 @@ request_time = {}
 
 
 class TimeOfRequestingIdentifyingCode:
+    """
+    用于对于存储上一次请求验证码的时间的字典进行操作的主类
+    """
+
     def add_request_time(id, req_t):
         request_time.update({id: req_t})
 
