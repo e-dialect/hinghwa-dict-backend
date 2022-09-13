@@ -24,6 +24,7 @@ from article.models import Article
 from word.models import Word
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
+from website.time_of_requesting_identifying_code import TimeOfRequestingIdentifyingCode
 
 
 def simpleUserInfo(user: User):
@@ -134,6 +135,7 @@ def email(request):
     def check(email):
         return str(email).find("@") == -1
 
+    TimeOfRequestingIdentifyingCode.accept_request(email)
     try:
         body = demjson.decode(request.body)
         email = body["email"].replace(" ", "")
