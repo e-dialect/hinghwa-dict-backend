@@ -33,13 +33,13 @@ def token_pass(header: dict, id: numbers = 0) -> string:
         info = jwt.decode(token, key, algorithms=["HS256"])
     except Exception:
         raise InvalidTokenException()
-    if not ("id" in info or "exp" in info or "username" in info):
+    if not ("id" in info and "exp" in info and "username" in info):
         raise InvalidTokenException()
     try:
         user = User.objects.get(id=info["id"])
     except User.DoesNotExist:
         raise InvalidTokenException()
-    if not (info["username"] or info["id"]):
+    if not (user.username == info["username"] and user.id == info["id"]):
         raise InvalidTokenException()
 
     # 如果token过期
