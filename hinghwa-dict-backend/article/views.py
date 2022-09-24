@@ -103,9 +103,9 @@ class ManageArticle(View):
             raise ArticleNotFoundException()
         article = article[0]
         if (
-                not article.visibility
-                and not user.is_superuser
-                and not user == article.author
+            not article.visibility
+            and not user.is_superuser
+            and not user == article.author
         ):
             raise ArticleNotFoundException()
         article.views += 1
@@ -213,7 +213,7 @@ class CommentArticle(View):
         user = token_user(token)
         article = Article.objects.filter(id=id)
         if not article.exists() or not (
-                article[0].visibility or user.is_superuser or user == article[0].author
+            article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
         article = article[0]
@@ -226,7 +226,7 @@ class CommentArticle(View):
         user = token_user(token)
         article = Article.objects.filter(id=id)
         if not article.exists() or not (
-                article[0].visibility or user.is_superuser or user == article[0].author
+            article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
         article = article[0]
@@ -248,13 +248,13 @@ class CommentArticle(View):
         user = token_user(token)
         article = Article.objects.filter(id=id)
         if not article.exists() or not (
-                article[0].visibility or user.is_superuser or user == article[0].author
+            article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
         body = demjson.decode(request.body)
         comment = Comment.objects.get(id=body["id"])
         if token_pass(request.headers, comment.user.id) or token_pass(
-                request.headers, -1
+            request.headers, -1
         ):
             # 应原注释要求，超级管理员也能删
             comment.delete()
@@ -338,7 +338,7 @@ def searchArticle(request):
                 if user:
                     if not user.is_superuser:
                         result = result.filter(visibility=True) | (
-                                result & user.articles.all()
+                            result & user.articles.all()
                         )
             if not user:
                 result = result.filter(visibility=True)
@@ -491,7 +491,7 @@ def comment(request, id):
         token = request.headers["token"]
         user = token_check(token, settings.JWT_KEY)
         if article.exists() and (
-                article[0].visibility or user.is_superuser or user == article[0].author
+            article[0].visibility or user.is_superuser or user == article[0].author
         ):
             article = article[0]
             # AT0404 获取文章评论
