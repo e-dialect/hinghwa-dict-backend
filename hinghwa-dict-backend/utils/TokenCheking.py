@@ -39,8 +39,6 @@ def token_pass(header: dict, id: numbers = 0) -> string:
         user = User.objects.get(id=info["id"])
     except User.DoesNotExist:
         raise InvalidTokenException()
-    if not (user.username == info["username"] and user.id == info["id"]):
-        raise InvalidTokenException()
 
     # 如果token过期
     if info["exp"] < timezone.now().timestamp():
