@@ -57,3 +57,15 @@ class MusicNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "音乐{}不存在！".format(id)
+
+
+class ArticleNotFoundException(NotFoundException):
+    """
+    文章不存在异常
+    ： parma id:音乐id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "文章{}不存在！".format(id)
