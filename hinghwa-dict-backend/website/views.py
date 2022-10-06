@@ -24,7 +24,7 @@ from article.models import Article
 from word.models import Word
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
-from website import time_of_requesting_identifying_code
+from website.verification_code_cache import VerificationCodeCache
 
 
 def simpleUserInfo(user: User):
@@ -140,18 +140,7 @@ def email(request):
         email = body["email"].replace(" ", "")
         if body["scene"]:
             scene = body["scene"]
-            if scene == "US0101":
-                time_of_requesting_identifying_code.TimeOfRequestingIdentifyingCodeUS0101.accept_request(
-                    email
-                )
-            elif scene == "LG0202":
-                time_of_requesting_identifying_code.TimeOfRequestingIdentifyingCodeLG0202.accept_request(
-                    email
-                )
-            else:
-                time_of_requesting_identifying_code.TimeOfRequestingIdentifyingCode.add_request_time(
-                    email
-                )
+            VerificationCodeCache(email, scene)
         if check(email):
             return JsonResponse({}, status=400)
         else:
