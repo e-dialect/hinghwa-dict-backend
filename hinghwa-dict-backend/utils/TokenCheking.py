@@ -5,7 +5,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.utils import timezone
 from utils.exception.types.forbidden import OnlyAdminException
-
+from utils.exception.types.forbidden import ForbiddenException
 from utils.exception.types.unauthorized import (
     InvalidTokenException,
     OutdatedException,
@@ -39,8 +39,6 @@ def token_pass(header: dict, id: numbers = 0) -> string:
         user = User.objects.get(id=info["id"])
     except User.DoesNotExist:
         raise InvalidTokenException()
-    if not (user.username == info["username"] and user.id == info["id"]):
-        raise InvalidTokenException()
 
     # 如果token过期
     if info["exp"] < timezone.now().timestamp():
@@ -52,7 +50,7 @@ def token_pass(header: dict, id: numbers = 0) -> string:
 
     # 如果要求指定用户
     if id > 0 and user.id != id and not user.is_superuser:
-        raise UnauthorizedException()
+        raise ForbiddenException()
 
     return token
 
