@@ -140,7 +140,8 @@ def email(request):
         email = body["email"].replace(" ", "")
         if body["scene"]:
             scene = body["scene"]
-            VerificationCodeCache(email, scene)
+            veri = VerificationCodeCache(email, scene)
+            veri.accept_request()
         if check(email):
             return JsonResponse({}, status=400)
         else:
