@@ -22,12 +22,7 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pylint
-          pip install pylint-django
-          cd hinghwa-dict-backend
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-          sudo apt-get update
-          sudo apt-get install ffmpeg -y
+          pip install black
 
       - name: Get changed files
         id: changed-files
@@ -38,6 +33,6 @@ jobs:
           for file in ${{ steps.changed-files.outputs.all_changed_files }} ; do
             # check if file is python file
             if [[ ${file} == *.py ]]; then
-              DJANGO_SETTINGS_MODULE=HinghwaDict.settings pylint --load-plugins pylint_django ${file}
+              black --check ${file}
             fi
           done

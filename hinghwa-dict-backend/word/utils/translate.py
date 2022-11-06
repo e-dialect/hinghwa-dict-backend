@@ -1,10 +1,9 @@
-import os
 import re
 
 
 def IPA_to_tone(IPA):
     try:
-        matchObj = re.match(r'([^0-9]+)([0-9]*)$', IPA, re.M | re.I)
+        matchObj = re.match(r"([^0-9]+)([0-9]*)$", IPA, re.M | re.I)
         return matchObj.group(2)
     except Exception:
         print("[寻找声调]这不是一个合法的IPA: ", IPA)
@@ -13,9 +12,9 @@ def IPA_to_tone(IPA):
 
 def IPA_to_shengmu(IPA):
     try:
-        matchObj = re.match(r'([^0-9]+)([0-9]*)$', IPA, re.M | re.I)
+        matchObj = re.match(r"([^0-9]+)([0-9]*)$", IPA, re.M | re.I)
         line = matchObj.group(1)  # 获取非声调部分
-        matchObj = re.match(r'([^aeiouyɛøɒɔœ]*)(.*)$', line, re.M | re.I)
+        matchObj = re.match(r"([^aeiouyɛøɒɔœ]*)(.*)$", line, re.M | re.I)
         sheng = matchObj.group(1)
         if line == "Ǿŋ":
             sheng = "Ǿ"
@@ -29,9 +28,9 @@ def IPA_to_shengmu(IPA):
 
 def IPA_to_yunmu(IPA):
     try:
-        matchObj = re.match(r'([^0-9]+)([0-9]*)$', IPA, re.M | re.I)
+        matchObj = re.match(r"([^0-9]+)([0-9]*)$", IPA, re.M | re.I)
         line = matchObj.group(1)  # 获取非声调部分
-        matchObj = re.match(r'([^aeiouyɛøɒɔœ]*)(.*)$', line, re.M | re.I)
+        matchObj = re.match(r"([^aeiouyɛøɒɔœ]*)(.*)$", line, re.M | re.I)
         yun = matchObj.group(2)
         if line == "Ǿŋ":
             yun = "ŋ"
@@ -46,7 +45,7 @@ def IPA_to_pinyin(IPA):
         sheng = IPA_to_shengmu(IPA)  # 声母
         yun = IPA_to_yunmu(IPA)  # 韵母
         tone = IPA_to_tone(IPA)  # 声调
-        matchObj = re.match(r'(.*?)(ŋ?|n?|ʔ?)$', yun, re.M | re.I)
+        matchObj = re.match(r"(.*?)(ŋ?|n?|ʔ?)$", yun, re.M | re.I)
         yun1 = matchObj.group(1)  # 韵母元音
         yun2 = matchObj.group(2)  # 韵尾
         # 声母的处理
@@ -133,28 +132,7 @@ def IPA_to_pinyin(IPA):
         return None
 
 
-if __name__ == '__main__':
-    # data = []
-    # for line in open("list.txt", "r"):  #设置文件对象并读取每一行文件
-    #     data.append(line[0:-1])  #将每一行文件加入到list中
-    # # print(data)
-    # has = []
-    # for filename in os.listdir(path='.'):
-    #     if filename == "translate.py" or filename == "list.txt" or filename == "out.txt":
-    #         continue
-    #     matchObj = re.match(r'(.*).mp3$', filename, re.M | re.I)
-    #     s = matchObj.group(1)  # 获取非声调部分
-    #     has.append(s)
-
-    # for i in data:
-    #     flag = False
-    #     for s in has:
-    #         if i == s:
-    #             flag = True
-    #             break
-    #     if flag == False:
-    #         print(i)
-
+if __name__ == "__main__":
     data = ["ai42", "bia42", "zai13", "e11", "yɒ13"]
     for i in data:
         print(IPA_to_pinyin(i))

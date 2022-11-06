@@ -2,13 +2,13 @@ from django.urls import path
 
 from .views import *
 
-app_name = 'articles'
+app_name = "articles"
 
 urlpatterns = [
-    path('', searchArticle),
-    path('/<int:id>', manageArticle),
-    path('/<int:id>/visibility', manageArticleVisibility),
-    path('/<int:id>/like', like),
-    path('/<int:id>/comments', comment),
-    path('/comments', searchComment)
+    path("", csrf_exempt(SearchArticle.as_view())),
+    path("/<int:id>", csrf_exempt(ManageArticle.as_view())),
+    path("/<int:id>/visibility", csrf_exempt(ManageVisibility.as_view())),
+    path("/<int:id>/like", csrf_exempt(LikeArticle.as_view())),
+    path("/<int:id>/comments", csrf_exempt(CommentArticle.as_view())),
+    path("/comments", csrf_exempt(SearchComment.as_view())),
 ]

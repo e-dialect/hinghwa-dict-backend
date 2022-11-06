@@ -9,4 +9,4 @@ from .models import DailyExpression
 class DailyExpressionForm(forms.ModelForm):
     class Meta:
         model = DailyExpression
-        fields = ('english', 'mandarin', 'character', 'pinyin')
+        fields = ("english", "mandarin", "character", "pinyin")

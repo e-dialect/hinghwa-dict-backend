@@ -1,0 +1,625 @@
+{
+    "apifoxCli": "1.1.0",
+    "item": [
+        {
+            "item": [
+                {
+                    "id": "674bf06f-f386-49ed-96a6-5e891cfc720d",
+                    "name": "LG0101 账号密码登录(登录用户admin)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "login"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.token`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【token】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "mock": {
+                                        "mock": "@string"
+                                    },
+                                    "title": "权"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "title": "用户id"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4183271,
+                        "name": "成功",
+                        "apiDetailId": 5318056,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-29T14:43:37.000Z",
+                        "updatedAt": "2021-08-12T16:27:18.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318056,
+                        "httpApiCaseId": 31459393,
+                        "httpApiName": "LG0101 账号密码登录",
+                        "httpApiPath": "/login",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "登录用户admin"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "9d8e6eb9-5eda-4770-bc06-0f92046e1d79",
+                    "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "users",
+                                "1"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "user": {
+                                    "title": "用户字典",
+                                    "description": "除了password",
+                                    "$ref": "#/definitions/1097305"
+                                },
+                                "publish_articles": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "mock": {
+                                            "mock": "@id"
+                                        }
+                                    },
+                                    "title": "发布文章"
+                                },
+                                "publish_comments": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "mock": {
+                                            "mock": "@id"
+                                        }
+                                    },
+                                    "title": "发布评论"
+                                },
+                                "like_articles": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer",
+                                        "mock": {
+                                            "mock": "@id"
+                                        }
+                                    },
+                                    "title": "点赞文章"
+                                },
+                                "contribution": {
+                                    "type": "object",
+                                    "properties": {
+                                        "pronunciation": {
+                                            "type": "integer",
+                                            "mock": {
+                                                "mock": "@integer"
+                                            },
+                                            "title": "语音",
+                                            "description": "审核通过语音数量"
+                                        },
+                                        "pronunciation_uploaded": {
+                                            "type": "integer",
+                                            "mock": {
+                                                "mock": "@integer"
+                                            },
+                                            "title": "上传语音",
+                                            "description": "上传语音数量"
+                                        },
+                                        "word": {
+                                            "type": "integer",
+                                            "mock": {
+                                                "mock": "@integer"
+                                            },
+                                            "title": "词",
+                                            "description": "审核通过数量"
+                                        },
+                                        "word_uploaded": {
+                                            "type": "integer",
+                                            "mock": {
+                                                "mock": "@integer"
+                                            },
+                                            "title": "上传词语",
+                                            "description": "上传词语数量"
+                                        },
+                                        "listened": {
+                                            "type": "integer",
+                                            "mock": {
+                                                "mock": "@integer"
+                                            },
+                                            "title": "听",
+                                            "description": "上传语音被播放的量"
+                                        }
+                                    },
+                                    "required": [
+                                        "pronunciation",
+                                        "pronunciation_uploaded",
+                                        "word",
+                                        "listened",
+                                        "word_uploaded"
+                                    ],
+                                    "x-apifox-orders": [
+                                        "pronunciation",
+                                        "pronunciation_uploaded",
+                                        "word",
+                                        "word_uploaded",
+                                        "listened"
+                                    ]
+                                },
+                                "notification": {
+                                    "title": "站内通知",
+                                    "description": "token字段为用户自己或管理员时返回",
+                                    "type": "object",
+                                    "properties": {
+                                        "statistics": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "integer"
+                                                },
+                                                "sent": {
+                                                    "type": "integer"
+                                                },
+                                                "received": {
+                                                    "type": "integer"
+                                                },
+                                                "unread": {
+                                                    "type": "integer"
+                                                }
+                                            },
+                                            "required": [
+                                                "total",
+                                                "sent",
+                                                "received",
+                                                "unread"
+                                            ],
+                                            "x-apifox-orders": [
+                                                "total",
+                                                "sent",
+                                                "received",
+                                                "unread"
+                                            ]
+                                        },
+                                        "sent": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "from": {
+                                                        "description": "寄信人id",
+                                                        "$ref": "#/definitions/1077996"
+                                                    },
+                                                    "to": {
+                                                        "description": "收信人id",
+                                                        "$ref": "#/definitions/1077996"
+                                                    },
+                                                    "time": {
+                                                        "type": "string"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "from",
+                                                    "to",
+                                                    "time",
+                                                    "title",
+                                                    "id"
+                                                ],
+                                                "x-apifox-orders": [
+                                                    "id",
+                                                    "from",
+                                                    "to",
+                                                    "time",
+                                                    "title"
+                                                ]
+                                            },
+                                            "description": "按照id倒序（其实就是按照时间）"
+                                        },
+                                        "received": {
+                                            "type": "array",
+                                            "items": {
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "from": {
+                                                        "description": "寄信人id",
+                                                        "$ref": "#/definitions/1077996"
+                                                    },
+                                                    "to": {
+                                                        "description": "收信人id",
+                                                        "$ref": "#/definitions/1077996"
+                                                    },
+                                                    "time": {
+                                                        "type": "string"
+                                                    },
+                                                    "title": {
+                                                        "type": "string"
+                                                    },
+                                                    "unread": {
+                                                        "type": "boolean"
+                                                    }
+                                                },
+                                                "required": [
+                                                    "from",
+                                                    "to",
+                                                    "time",
+                                                    "title",
+                                                    "unread",
+                                                    "id"
+                                                ],
+                                                "description": "按照id倒序（其实就是按照时间）",
+                                                "type": "object",
+                                                "x-apifox-orders": [
+                                                    "id",
+                                                    "from",
+                                                    "to",
+                                                    "time",
+                                                    "title",
+                                                    "unread"
+                                                ]
+                                            }
+                                        }
+                                    },
+                                    "required": [
+                                        "statistics",
+                                        "sent",
+                                        "received"
+                                    ],
+                                    "x-apifox-orders": [
+                                        "statistics",
+                                        "sent",
+                                        "received"
+                                    ]
+                                }
+                            },
+                            "required": [
+                                "user",
+                                "publish_articles",
+                                "publish_comments",
+                                "like_articles",
+                                "contribution",
+                                "notification"
+                            ],
+                            "x-apifox-orders": [
+                                "user",
+                                "publish_articles",
+                                "publish_comments",
+                                "like_articles",
+                                "contribution",
+                                "notification"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4116009,
+                        "name": "成功",
+                        "apiDetailId": 5298312,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-28T16:58:17.000Z",
+                        "updatedAt": "2022-07-07T16:44:41.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5298312,
+                        "httpApiCaseId": 31459402,
+                        "httpApiName": "US0201 获取指定用户信息",
+                        "httpApiPath": "/users/{id}",
+                        "httpApiMethod": "get",
+                        "httpApiCaseName": "US0201 获取指定用户信息"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                }
+            ],
+            "name": "用户信息获取"
+        }
+    ],
+    "info": {
+        "name": "用户信息获取"
+    },
+    "dataSchemas": {
+        "1077996": {
+            "type": "object",
+            "properties": {
+                "nickname": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@cname"
+                    },
+                    "title": "用户名"
+                },
+                "avatar": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                },
+                "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                }
+            },
+            "required": [
+                "nickname",
+                "avatar",
+                "id"
+            ],
+            "title": "user_simple"
+        },
+        "1097305": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "title": "user的id",
+                    "mock": {
+                        "mock": "@integer(10000)"
+                    }
+                },
+                "username": {
+                    "type": "string",
+                    "title": "用户名",
+                    "mock": {
+                        "mock": "@cname"
+                    }
+                },
+                "nickname": {
+                    "type": "string",
+                    "title": "昵称",
+                    "mock": {
+                        "mock": "@cname"
+                    }
+                },
+                "email": {
+                    "type": "string",
+                    "title": "邮箱",
+                    "mock": {
+                        "mock": "@email"
+                    }
+                },
+                "telephone": {
+                    "type": "string",
+                    "title": "电话"
+                },
+                "birthday": {
+                    "type": "string",
+                    "title": "生日",
+                    "mock": {
+                        "mock": "@date('yyyy-MM-dd')"
+                    }
+                },
+                "avatar": {
+                    "type": "string",
+                    "title": "头像",
+                    "description": "头像的url地址",
+                    "mock": {
+                        "mock": "@image"
+                    }
+                },
+                "is_admin": {
+                    "type": "boolean",
+                    "title": "是否管理员",
+                    "mock": {
+                        "mock": "@boolean"
+                    }
+                },
+                "county": {
+                    "type": "string",
+                    "title": "县区",
+                    "description": "用户所在县区",
+                    "mock": {
+                        "mock": "@county"
+                    }
+                },
+                "town": {
+                    "type": "string",
+                    "title": "乡镇",
+                    "description": "用户所在乡镇",
+                    "mock": {
+                        "mock": "@county"
+                    }
+                },
+                "registration_time": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "注册时间"
+                },
+                "login_time": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "登录时间"
+                },
+                "wechat": {
+                    "type": "boolean",
+                    "title": "绑定微信"
+                }
+            },
+            "required": [
+                "id",
+                "email",
+                "username",
+                "is_admin",
+                "avatar",
+                "registration_time",
+                "login_time",
+                "nickname",
+                "telephone",
+                "birthday",
+                "county",
+                "town",
+                "wechat"
+            ],
+            "title": "user_all"
+        }
+    },
+    "environment": {
+        "id": 510825,
+        "name": "测试环境",
+        "baseUrls": {
+            "default": "http://127.0.0.1:8000"
+        },
+        "variable": {
+            "id": "e3b3c6f6-7db4-48c9-aaec-dc27ff3e487c",
+            "name": "测试环境",
+            "values": [
+                {
+                    "type": "any",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1Nzg3NDIwOS4xODg5MzF9.J5scZFT1CYpQ49PFrJuaUDUBDHa6IxsgUOtcxExmP3Y",
+                    "key": "token"
+                }
+            ]
+        },
+        "type": "normal",
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
+        }
+    },
+    "globals": {
+        "variable": {
+            "id": "a0b79e0b-c165-44e5-b475-9aaef92f93c7",
+            "values": []
+        },
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
+        }
+    },
+    "isServerBuild": false
+}
