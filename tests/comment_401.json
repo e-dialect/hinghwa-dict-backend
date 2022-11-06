@@ -4,7 +4,7 @@
         {
             "item": [
                 {
-                    "id": "76036124-63ff-40a1-9669-91fac81318b0",
+                    "id": "55cd3742-6c08-4b15-9c68-b14f56003001",
                     "name": "AT0401 发表文章评论(AT0401 发表文章评论)",
                     "request": {
                         "url": {
@@ -78,7 +78,7 @@
                     }
                 },
                 {
-                    "id": "9fe8ea2c-8f68-49df-b4f4-6575a6ad5f01",
+                    "id": "edf09f2b-b6b7-44db-ad14-ac789a450f96",
                     "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
                     "request": {
                         "url": {
@@ -152,7 +152,7 @@
                     }
                 },
                 {
-                    "id": "37b84e58-e7bb-46be-918b-3541f3e4c60f",
+                    "id": "bf7f6956-7793-4f1b-aa2a-5fea09da3c28",
                     "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
                     "request": {
                         "url": {
@@ -235,7 +235,7 @@
                     }
                 },
                 {
-                    "id": "06795860-0bb0-4ba2-848c-eaf6d178f765",
+                    "id": "3be165a3-d649-4883-89d2-76d6fbe64c0c",
                     "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
                     "request": {
                         "url": {
@@ -314,9 +314,10 @@
                     "title": "评论id"
                 },
                 "user": {
-                    "type": "integer",
                     "title": "评论用户",
-                    "description": "用户id"
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
                 },
                 "content": {
                     "type": "string",
@@ -350,7 +351,44 @@
                 "time",
                 "article"
             ],
+            "x-apifox-orders": [
+                "id",
+                "user",
+                "content",
+                "time",
+                "parent",
+                "article"
+            ],
             "title": "comment_normal"
+        },
+        "1077996": {
+            "type": "object",
+            "properties": {
+                "nickname": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@cname"
+                    },
+                    "title": "用户名"
+                },
+                "avatar": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                },
+                "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                }
+            },
+            "required": [
+                "nickname",
+                "avatar",
+                "id"
+            ],
+            "title": "user_simple"
         }
     },
     "environment": {
@@ -360,12 +398,12 @@
             "default": "http://127.0.0.1:8000"
         },
         "variable": {
-            "id": "a12bac76-af82-49a7-b5a4-479d4ece6373",
+            "id": "77aaaba4-b6e5-4120-af7a-730e29680797",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzIiwiaWQiOjIsImV4cCI6MTY2Mzk5MTEyNC40MDgyMTF9.9SNlvRppW-Op9yykFgupHl4eKnLfLXmgmE0pw4xV450",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY2NzAzMjQ2Ny42MjMwNDV9.sGPGneEG3RBsr4756tPw07OY2lJBer2xekMJ9tUV2AY",
                     "key": "token"
                 },
                 {
@@ -382,6 +420,11 @@
                     "type": "any",
                     "value": 20,
                     "key": "num_pre"
+                },
+                {
+                    "type": "any",
+                    "value": "true",
+                    "key": "quiz_new"
                 }
             ]
         },
@@ -395,7 +438,7 @@
     },
     "globals": {
         "variable": {
-            "id": "e501a204-f7aa-4d94-9e48-4aff7f923286",
+            "id": "fe402bc4-fb5e-401b-bf5d-3332321478b3",
             "values": []
         },
         "parameter": {
