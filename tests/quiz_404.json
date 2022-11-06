@@ -4,24 +4,37 @@
         {
             "item": [
                 {
-                    "id": "56afd30d-a16e-41c4-8c6b-ee44ad524e87",
+                    "id": "3aac097a-3e54-47ae-b161-40abc9f0e8ad",
                     "name": "LG0101 账号密码登录(登录用户admin)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": ["login"],
-                            "host": ["127", "0", "0", "1"],
+                            "path": [
+                                "login"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"}
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
                         ],
                         "method": "POST",
                         "body": {
@@ -76,12 +89,20 @@
                             "properties": {
                                 "token": {
                                     "type": "string",
-                                    "mock": {"mock": "@string"},
+                                    "mock": {
+                                        "mock": "@string"
+                                    },
                                     "title": "权"
                                 },
-                                "id": {"type": "integer", "title": "用户id"}
+                                "id": {
+                                    "type": "integer",
+                                    "title": "用户id"
+                                }
                             },
-                            "required": ["token", "id"]
+                            "required": [
+                                "token",
+                                "id"
+                            ]
                         },
                         "defaultEnable": true,
                         "id": 4183271,
@@ -104,22 +125,35 @@
                         "httpApiCaseName": "登录用户admin"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
                 },
                 {
-                    "id": "36b75b65-3907-4e02-956d-45ff451b350c",
+                    "id": "2f15a6c2-d912-4936-a750-46fc1e4c5eba",
                     "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": ["quizzes", "1"],
-                            "host": ["127", "0", "0", "1"],
+                            "path": [
+                                "quizzes",
+                                "1"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
@@ -132,7 +166,10 @@
                     "response": [],
                     "event": [],
                     "responseDefinition": {
-                        "jsonSchema": {"type": "object", "properties": {}},
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
                         "defaultEnable": false,
                         "id": 69812670,
                         "name": "不存在",
@@ -154,27 +191,43 @@
                         "httpApiCaseName": "QZ0101 获取单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
                 },
                 {
-                    "id": "6cdde6f3-37b5-462a-a377-f79b627807a3",
+                    "id": "abb12c57-a4f0-459d-bba5-b4508dd21af5",
                     "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": ["quizzes", "1"],
-                            "host": ["127", "0", "0", "1"],
+                            "path": [
+                                "quizzes",
+                                "1"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
                             },
-                            {"key": "Content-Type", "value": "application/json"}
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
                         ],
                         "method": "PUT",
                         "body": {
@@ -186,7 +239,10 @@
                     "response": [],
                     "event": [],
                     "responseDefinition": {
-                        "jsonSchema": {"type": "object", "properties": {}},
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
                         "defaultEnable": false,
                         "id": 69812670,
                         "name": "不存在",
@@ -208,22 +264,35 @@
                         "httpApiCaseName": "QZ0103 修改单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
                 },
                 {
-                    "id": "d21a87f4-182d-4183-9d3b-0a97d910df0d",
+                    "id": "54b9eee1-4455-4d4b-8fbd-6b7e4cea6069",
                     "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
                     "request": {
                         "url": {
                             "protocol": "http",
                             "port": "8000",
-                            "path": ["quizzes", "1"],
-                            "host": ["127", "0", "0", "1"],
+                            "path": [
+                                "quizzes",
+                                "1"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
                             "query": [],
                             "variable": []
                         },
                         "header": [
-                            {"key": "token", "value": "{{token}}"},
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
                             {
                                 "key": "User-Agent",
                                 "value": "apifox/1.0.0 (https://www.apifox.cn)"
@@ -236,7 +305,10 @@
                     "response": [],
                     "event": [],
                     "responseDefinition": {
-                        "jsonSchema": {"type": "object", "properties": {}},
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
                         "defaultEnable": false,
                         "id": 69812670,
                         "name": "不存在",
@@ -258,35 +330,74 @@
                         "httpApiCaseName": "QZ0104 删除单个测试"
                     },
                     "type": "http",
-                    "protocolProfileBehavior": {"disableUrlEncoding": false}
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
                 }
             ],
             "name": "QZ模块 404测试"
         }
     ],
-    "info": {"name": "QZ模块 404测试"},
+    "info": {
+        "name": "QZ模块 404测试"
+    },
     "dataSchemas": {},
     "environment": {
         "id": 510825,
         "name": "测试环境",
-        "baseUrls": {"default": "http://127.0.0.1:8000"},
+        "baseUrls": {
+            "default": "http://127.0.0.1:8000"
+        },
         "variable": {
-            "id": "c6ac5c6c-0d4d-45ec-b137-739a9e1f97c6",
+            "id": "140ccb0d-d37b-4328-a4a1-36b534115157",
             "name": "测试环境",
             "values": [
                 {
                     "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY1OTU0NzkzNS41OTgyOTd9.rvcqZ_x03Eylx0ahyq3ut8KKPkbFjlZqiA9-xjnHX7Q",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzIiwiaWQiOjIsImV4cCI6MTY2Mzk5MTEyNC40MDgyMTF9.9SNlvRppW-Op9yykFgupHl4eKnLfLXmgmE0pw4xV450",
                     "key": "token"
+                },
+                {
+                    "type": "any",
+                    "value": "3",
+                    "key": "num"
+                },
+                {
+                    "type": "any",
+                    "value": "0",
+                    "key": "num_later"
+                },
+                {
+                    "type": "any",
+                    "value": 20,
+                    "key": "num_pre"
+                },
+                {
+                    "type": "any",
+                    "value": "true",
+                    "key": "quiz_new"
                 }
             ]
         },
         "type": "normal",
-        "parameter": {"header": [], "query": [], "body": [], "cookie": []}
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
+        }
     },
     "globals": {
-        "variable": {"id": "8a336893-d1b2-4edd-91d8-0170a684fe1e", "values": []},
-        "parameter": {"header": [], "query": [], "body": [], "cookie": []}
+        "variable": {
+            "id": "bb6b07e0-94b5-43f5-9721-a8afe7e807b7",
+            "values": []
+        },
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
+        }
     },
     "isServerBuild": false
 }

@@ -21,6 +21,8 @@ class SingleQuiz(View):
             if not quiz.exists():  # 404
                 raise QuizNotFoundException()
             quiz = quiz[0]
+            if not quiz.visibility:
+                raise QuizNotFoundException()
             return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
         except CommonException as e:  # 500
             raise e
@@ -37,6 +39,7 @@ class SingleQuiz(View):
             body = body["quiz"]
             for key in body:
                 setattr(quiz, key, body[key])
+            quiz.visibility = False
             quiz.save()
             return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
         except CommonException as e:  # 500
@@ -95,3 +98,22 @@ class RandomQuiz(View):
                 return JsonResponse({"quiz": quiz_all(quiz[0])}, status=200)
         except CommonException as e:  # 500
             raise e
+
+
+class ManageVisibility(View):
+    # QZ0105 问题审核
+    def put(self, request, id) -> JsonResponse:
+        token = token_pass(request.headers, -1)
+        quiz = Quiz.objects.filter(id=id)
+        if not quiz.exists():
+            raise QuizNotFoundException()
+        quiz = quiz[0]
+        body = demjson.decode(request.body)
+        quiz.visibility = body["result"]
+        if quiz.visibility:
+            content = f"问题(id={id})已通过审核"
+        else:
+            msg = body["reason"]
+            content = f"问题(id={id})审核状态变为不可见，理由是:\n\t{msg}"
+        quiz.save()
+        return JsonResponse({}, status=200)

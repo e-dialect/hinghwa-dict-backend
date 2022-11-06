@@ -6,6 +6,7 @@ class Quiz(models.Model):
     options = models.TextField(verbose_name="选项", blank=True, default="[]")
     answer = models.IntegerField(default=0, verbose_name="答案序号", editable=True)
     explanation = models.TextField(verbose_name="答案解析")
+    visibility = models.BooleanField(default=False, verbose_name="是否审核")
 
     def __str__(self):
         return self.question
