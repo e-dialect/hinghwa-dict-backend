@@ -1,4 +1,4 @@
-name: lint-changed-files
+name: Lint Test JSONs
 on:
   push:
     branches:
