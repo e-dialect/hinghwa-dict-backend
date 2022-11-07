@@ -46,6 +46,6 @@ jobs:
           done
           git --no-pager diff
           if ! git diff --quiet; then
-            echo "Please run 'for i in tests/*; do jq . $i > out.tmp && mv out.tmp $i ;done' to include all changes"
+            echo "Please run 'for i in tests/*; do jq . \$i > out.tmp && mv out.tmp \$i ; done' to format test JSONs."
             false
           fi
