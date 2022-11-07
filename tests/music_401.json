@@ -1,122 +1,122 @@
 {
-    "apifoxCli": "1.1.0",
-    "item": [
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
         {
-            "item": [
-                {
-                    "id": "1f8cf3c2-4142-4bc4-a0fc-2b5ec28652ba",
-                    "name": "MC0101 上传新音乐(MC0101 上传新音乐)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": ""
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "method": "POST",
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"source\": \"https://hlxmtxd.中国互联.公司/rievpbnf\",\n    \"title\": \"系料单\",\n    \"cover\": \"http://dummyimage.com/120x60\",\n    \"artist\": \"萧娜\"\n}"
-                        },
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "metaInfo": {
-                        "httpApiId": 5340074,
-                        "httpApiCaseId": 38480626,
-                        "httpApiName": "MC0101 上传新音乐",
-                        "httpApiPath": "/music",
-                        "httpApiMethod": "post",
-                        "httpApiCaseName": "MC0101 上传新音乐"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                }
+          "id": "1f8cf3c2-4142-4bc4-a0fc-2b5ec28652ba",
+          "name": "MC0101 上传新音乐(MC0101 上传新音乐)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": ""
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
-            "name": "单音乐操作 401测试"
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"source\": \"https://hlxmtxd.中国互联.公司/rievpbnf\",\n    \"title\": \"系料单\",\n    \"cover\": \"http://dummyimage.com/120x60\",\n    \"artist\": \"萧娜\"\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "metaInfo": {
+            "httpApiId": 5340074,
+            "httpApiCaseId": 38480626,
+            "httpApiName": "MC0101 上传新音乐",
+            "httpApiPath": "/music",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "MC0101 上传新音乐"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
         }
-    ],
-    "info": {
-        "name": "单音乐操作 401测试"
+      ],
+      "name": "单音乐操作 401测试"
+    }
+  ],
+  "info": {
+    "name": "单音乐操作 401测试"
+  },
+  "dataSchemas": {},
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
     },
-    "dataSchemas": {},
-    "environment": {
-        "id": 510825,
-        "name": "测试环境",
-        "baseUrls": {
-            "default": "http://127.0.0.1:8000"
+    "variable": {
+      "id": "b5f956e8-b599-4824-8fe8-a4bf10b5806d",
+      "name": "测试环境",
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvY2siLCJpZCI6MywiZXhwIjoxNjU5NjM1MTYwLjM4MjI2M30.fOdrqFgw4qze3gpm9cAkjXZQRd95j1BlWljNPUum9f0",
+          "key": "token"
         },
-        "variable": {
-            "id": "b5f956e8-b599-4824-8fe8-a4bf10b5806d",
-            "name": "测试环境",
-            "values": [
-                {
-                    "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvY2siLCJpZCI6MywiZXhwIjoxNjU5NjM1MTYwLjM4MjI2M30.fOdrqFgw4qze3gpm9cAkjXZQRd95j1BlWljNPUum9f0",
-                    "key": "token"
-                },
-                {
-                    "type": "any",
-                    "value": "3",
-                    "key": "num"
-                },
-                {
-                    "type": "any",
-                    "value": "73",
-                    "key": "num_later"
-                },
-                {
-                    "type": "any",
-                    "value": 19,
-                    "key": "num_pre"
-                }
-            ]
+        {
+          "type": "any",
+          "value": "3",
+          "key": "num"
         },
-        "type": "normal",
-        "parameter": {
-            "header": [],
-            "query": [],
-            "body": [],
-            "cookie": []
+        {
+          "type": "any",
+          "value": "73",
+          "key": "num_later"
+        },
+        {
+          "type": "any",
+          "value": 19,
+          "key": "num_pre"
         }
+      ]
     },
-    "globals": {
-        "variable": {
-            "id": "2a42b9bc-77b3-4d3c-9dcf-cc36edb5ef79",
-            "values": []
-        },
-        "parameter": {
-            "header": [],
-            "query": [],
-            "body": [],
-            "cookie": []
-        }
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "variable": {
+      "id": "2a42b9bc-77b3-4d3c-9dcf-cc36edb5ef79",
+      "values": []
     },
-    "isServerBuild": false
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false
 }

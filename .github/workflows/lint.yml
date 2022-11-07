@@ -15,10 +15,12 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
+      
       - name: Set up Python 3.8
         uses: actions/setup-python@v3
         with:
           python-version: "3.8"
+      
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
@@ -36,3 +38,14 @@ jobs:
               black --check ${file}
             fi
           done
+      
+      - name: Lint tests JSON
+        run: |
+          for i in tests/*; do
+            jq . $i > out.tmp && mv out.tmp $i
+          done
+          git --no-pager diff
+          if ! git diff --quiet; then
+            echo "Please run 'for i in tests/*; do jq . $i > out.tmp && mv out.tmp $i ;done' to include all changes"
+            false
+          fi
