@@ -1,867 +1,867 @@
 {
-    "apifoxCli": "1.1.0",
-    "item": [
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
         {
-            "item": [
-                {
-                    "id": "f953615e-e284-4e52-b92a-d967e166cc1b",
-                    "name": "LG0101 账号密码登录(登录用户admin)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "login"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "method": "POST",
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
-                        },
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [
-                        {
-                            "listen": "test",
-                            "script": {
-                                "id": "postProcessors.0.extractor",
-                                "type": "text/javascript",
-                                "exec": [
-                                    "",
-                                    "      try{",
-                                    "        ",
-                                    "          const expression = pm.variables.replaceIn(`$.token`);",
-                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                                    "          const jsonData = pm.response.json();",
-                                    "          let value = JSONPath({",
-                                    "            json: jsonData,",
-                                    "            path: expression,",
-                                    "            wrap: false",
-                                    "          });",
-                                    "          ",
-                                    "        ",
-                                    "        switch (typeof value) {",
-                                    "          case 'object':",
-                                    "            value = JSON.stringify(value);",
-                                    "            break;",
-                                    "          default:",
-                                    "            value = String(value);",
-                                    "            break;",
-                                    "        }",
-                                    "      ",
-                                    "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
-                                    "      } catch(e) {",
-                                    "        e.message = '提取变量【token】出错：' + e.message;",
-                                    "        throw e;",
-                                    "      }",
-                                    "  "
-                                ]
-                            }
-                        }
-                    ],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {
-                                "token": {
-                                    "type": "string",
-                                    "mock": {
-                                        "mock": "@string"
-                                    },
-                                    "title": "权"
-                                },
-                                "id": {
-                                    "type": "integer",
-                                    "title": "用户id"
-                                }
-                            },
-                            "required": [
-                                "token",
-                                "id"
-                            ]
-                        },
-                        "defaultEnable": true,
-                        "id": 4183271,
-                        "name": "成功",
-                        "apiDetailId": 5318056,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-07-29T14:43:37.000Z",
-                        "updatedAt": "2021-08-12T16:27:18.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 5318056,
-                        "httpApiCaseId": 38502701,
-                        "httpApiName": "LG0101 账号密码登录",
-                        "httpApiPath": "/login",
-                        "httpApiMethod": "post",
-                        "httpApiCaseName": "登录用户admin"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "7cdaa4a5-0030-4080-8c7d-a50bff067eb2",
-                    "name": "MC0101 上传新音乐(添加陈诺歌曲)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "method": "POST",
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\r\n    \"source\": \"https://cos.edialect.top/website/新年到.mp3\",\r\n    \"title\": \"新年到\",\r\n    \"cover\": \"https://cos.edialect.top/website/陈诺《家乡》.jpg\",\r\n    \"artist\": \"陈诺\"\r\n}"
-                        },
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {
-                                "id": {
-                                    "type": "integer",
-                                    "title": "音乐id",
-                                    "mock": {
-                                        "mock": "@integer"
-                                    }
-                                }
-                            },
-                            "required": [
-                                "id"
-                            ]
-                        },
-                        "defaultEnable": true,
-                        "id": 4257564,
-                        "name": "成功",
-                        "apiDetailId": 5340074,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-07-30T09:26:26.000Z",
-                        "updatedAt": "2021-08-06T08:25:04.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 5340074,
-                        "httpApiCaseId": 38480736,
-                        "httpApiName": "MC0101 上传新音乐",
-                        "httpApiPath": "/music",
-                        "httpApiMethod": "post",
-                        "httpApiCaseName": "添加陈诺歌曲"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "38346c9b-2797-497d-8651-b63b686f8b03",
-                    "name": "MC0105 审核音乐(MC0105 审核音乐)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music",
-                                "1",
-                                "visibility"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            }
-                        ],
-                        "method": "PUT",
-                        "body": {},
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "$ref": "#/definitions/1077714",
-                            "x-apifox-overrides": {}
-                        },
-                        "defaultEnable": true,
-                        "id": 68644493,
-                        "name": "成功",
-                        "apiDetailId": 29173734,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2022-07-13T07:28:35.000Z",
-                        "updatedAt": "2022-07-13T07:38:43.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 29173734,
-                        "httpApiCaseId": 32713059,
-                        "httpApiName": "MC0105 审核音乐",
-                        "httpApiPath": "/music/{id}/visibility",
-                        "httpApiMethod": "put",
-                        "httpApiCaseName": "MC0105 审核音乐"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "1dbebd09-9ee7-4d31-88b6-e73513ccd7a2",
-                    "name": "MC0104 获取音乐信息(MC0104 获取音乐信息)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music",
-                                "1"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            }
-                        ],
-                        "method": "GET",
-                        "body": {},
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {
-                                "music": {
-                                    "title": "字典music",
-                                    "description": "表music的所有字段,contributor为用户信息字典",
-                                    "$ref": "#/definitions/1077714",
-                                    "x-apifox-overrides": {}
-                                }
-                            },
-                            "required": [
-                                "music"
-                            ]
-                        },
-                        "defaultEnable": true,
-                        "id": 4260006,
-                        "name": "成功",
-                        "apiDetailId": 5340889,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-07-30T10:07:36.000Z",
-                        "updatedAt": "2022-08-13T09:36:19.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 5340889,
-                        "httpApiCaseId": 32696230,
-                        "httpApiName": "MC0104 获取音乐信息",
-                        "httpApiPath": "/music/{id}",
-                        "httpApiMethod": "get",
-                        "httpApiCaseName": "MC0104 获取音乐信息"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "849b77ef-9f07-4964-84d2-eb496e35c515",
-                    "name": "MC0301 给这音乐点赞(MC0301 给这音乐点赞)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music",
-                                "1",
-                                "like"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            }
-                        ],
-                        "method": "POST",
-                        "body": {},
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {},
-                            "description": "注：更新likes,like_user_list"
-                        },
-                        "defaultEnable": true,
-                        "id": 6666904,
-                        "name": "成功",
-                        "apiDetailId": 6267884,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-10-08T10:14:13.000Z",
-                        "updatedAt": "2021-10-08T10:14:13.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 6267884,
-                        "httpApiCaseId": 32696498,
-                        "httpApiName": "MC0301 给这音乐点赞",
-                        "httpApiPath": "/music/{id}/like",
-                        "httpApiMethod": "post",
-                        "httpApiCaseName": "MC0301 给这音乐点赞"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "1a9905bb-02bd-4476-beb1-2a3a7a872c3d",
-                    "name": "MC0302 取消这音乐点赞(MC0302 取消这音乐点赞)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music",
-                                "1",
-                                "like"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            }
-                        ],
-                        "method": "DELETE",
-                        "body": {},
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {},
-                            "description": "注：更新likes,like_user_list"
-                        },
-                        "defaultEnable": true,
-                        "id": 6666909,
-                        "name": "成功",
-                        "apiDetailId": 6267887,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-10-08T10:14:49.000Z",
-                        "updatedAt": "2021-10-08T10:14:49.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 6267887,
-                        "httpApiCaseId": 32696499,
-                        "httpApiName": "MC0302 取消这音乐点赞",
-                        "httpApiPath": "/music/{id}/like",
-                        "httpApiMethod": "delete",
-                        "httpApiCaseName": "MC0302 取消这音乐点赞"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "6dba6cda-39a3-4a8d-9713-61aba9690566",
-                    "name": "MC0103 更新音乐信息(MC0103 更新音乐信息)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music",
-                                "1"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            },
-                            {
-                                "key": "Content-Type",
-                                "value": "application/json"
-                            }
-                        ],
-                        "method": "PUT",
-                        "body": {
-                            "mode": "raw",
-                            "raw": "{\n    \"music\": {\n        \"artist\": \"周丽\",\n        \"title\": \"当即便达\",\n        \"source\": \"https://kngmyy.km/jnoqfexpf\",\n        \"cover\": \"http://dummyimage.com/720x300\"\n    }\n}"
-                        },
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {},
-                            "x-apifox-orders": [],
-                            "x-apifox-refs": {}
-                        },
-                        "defaultEnable": true,
-                        "id": 4260856,
-                        "name": "成功",
-                        "apiDetailId": 5341281,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-07-30T10:21:54.000Z",
-                        "updatedAt": "2022-07-13T17:08:31.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 5341281,
-                        "httpApiCaseId": 32700688,
-                        "httpApiName": "MC0103 更新音乐信息",
-                        "httpApiPath": "/music/{id}",
-                        "httpApiMethod": "put",
-                        "httpApiCaseName": "MC0103 更新音乐信息"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                },
-                {
-                    "id": "61529e20-bc63-47ec-9b11-3b5436981b0e",
-                    "name": "MC0102 删除音乐(MC0102 删除音乐)",
-                    "request": {
-                        "url": {
-                            "protocol": "http",
-                            "port": "8000",
-                            "path": [
-                                "music",
-                                "1"
-                            ],
-                            "host": [
-                                "127",
-                                "0",
-                                "0",
-                                "1"
-                            ],
-                            "query": [],
-                            "variable": []
-                        },
-                        "header": [
-                            {
-                                "key": "token",
-                                "value": "{{token}}"
-                            },
-                            {
-                                "key": "User-Agent",
-                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-                            }
-                        ],
-                        "method": "DELETE",
-                        "body": {},
-                        "type": "http"
-                    },
-                    "response": [],
-                    "event": [],
-                    "responseDefinition": {
-                        "jsonSchema": {
-                            "type": "object",
-                            "properties": {}
-                        },
-                        "defaultEnable": true,
-                        "id": 4260994,
-                        "name": "成功",
-                        "apiDetailId": 5341350,
-                        "projectId": 0,
-                        "code": 200,
-                        "contentType": "json",
-                        "ordering": 1,
-                        "createdAt": "2021-07-30T10:22:29.000Z",
-                        "updatedAt": "2021-07-30T10:22:29.000Z",
-                        "deletedAt": null
-                    },
-                    "metaInfo": {
-                        "httpApiId": 5341350,
-                        "httpApiCaseId": 32700849,
-                        "httpApiName": "MC0102 删除音乐",
-                        "httpApiPath": "/music/{id}",
-                        "httpApiMethod": "delete",
-                        "httpApiCaseName": "MC0102 删除音乐"
-                    },
-                    "type": "http",
-                    "protocolProfileBehavior": {
-                        "disableUrlEncoding": false
-                    }
-                }
-            ],
-            "name": "单音乐测试 理想情况"
-        }
-    ],
-    "info": {
-        "name": "单音乐测试 理想情况"
-    },
-    "dataSchemas": {
-        "1077714": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "title": "音乐编号"
-                },
-                "source": {
-                    "type": "string",
-                    "mock": {
-                        "mock": "@url('https')"
-                    },
-                    "title": "音乐源地址",
-                    "description": "url"
-                },
-                "artist": {
-                    "type": "string",
-                    "mock": {
-                        "mock": "@cname"
-                    },
-                    "title": "作者"
-                },
-                "cover": {
-                    "type": "string",
-                    "mock": {
-                        "mock": "@image"
-                    },
-                    "title": "音乐封面"
-                },
-                "likes": {
-                    "type": "integer",
-                    "title": "点赞数"
-                },
-                "contributor": {
-                    "title": "贡献者id",
-                    "description": "用户id",
-                    "$ref": "#/definitions/1097305"
-                },
-                "visibility": {
-                    "type": "boolean",
-                    "title": "是否可见"
-                },
-                "title": {
-                    "type": "string",
-                    "mock": {
-                        "mock": "@ctitle"
-                    },
-                    "title": "音乐标题"
-                }
+          "id": "f953615e-e284-4e52-b92a-d967e166cc1b",
+          "name": "LG0101 账号密码登录(登录用户admin)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
             },
-            "required": [
-                "id",
-                "source",
-                "cover",
-                "likes",
-                "contributor",
-                "visibility",
-                "title"
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
             ],
-            "title": "music_all"
-        },
-        "1097305": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "integer",
-                    "title": "user的id",
-                    "mock": {
-                        "mock": "@integer(10000)"
-                    }
-                },
-                "username": {
-                    "type": "string",
-                    "title": "用户名",
-                    "mock": {
-                        "mock": "@cname"
-                    }
-                },
-                "nickname": {
-                    "type": "string",
-                    "title": "昵称",
-                    "mock": {
-                        "mock": "@cname"
-                    }
-                },
-                "email": {
-                    "type": "string",
-                    "title": "邮箱",
-                    "mock": {
-                        "mock": "@email"
-                    }
-                },
-                "telephone": {
-                    "type": "string",
-                    "title": "电话"
-                },
-                "birthday": {
-                    "type": "string",
-                    "title": "生日",
-                    "mock": {
-                        "mock": "@date('yyyy-MM-dd')"
-                    }
-                },
-                "avatar": {
-                    "type": "string",
-                    "title": "头像",
-                    "description": "头像的url地址",
-                    "mock": {
-                        "mock": "@image"
-                    }
-                },
-                "is_admin": {
-                    "type": "boolean",
-                    "title": "是否管理员",
-                    "mock": {
-                        "mock": "@boolean"
-                    }
-                },
-                "county": {
-                    "type": "string",
-                    "title": "县区",
-                    "description": "用户所在县区",
-                    "mock": {
-                        "mock": "@county"
-                    }
-                },
-                "town": {
-                    "type": "string",
-                    "title": "乡镇",
-                    "description": "用户所在乡镇",
-                    "mock": {
-                        "mock": "@county"
-                    }
-                },
-                "registration_time": {
-                    "type": "string",
-                    "mock": {
-                        "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
-                    },
-                    "title": "注册时间"
-                },
-                "login_time": {
-                    "type": "string",
-                    "mock": {
-                        "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
-                    },
-                    "title": "登录时间"
-                },
-                "wechat": {
-                    "type": "boolean",
-                    "title": "绑定微信"
-                }
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
             },
-            "required": [
-                "id",
-                "email",
-                "username",
-                "is_admin",
-                "avatar",
-                "registration_time",
-                "login_time",
-                "nickname",
-                "telephone",
-                "birthday",
-                "county",
-                "town",
-                "wechat"
-            ],
-            "title": "user_all"
-        }
-    },
-    "environment": {
-        "id": 510825,
-        "name": "测试环境",
-        "baseUrls": {
-            "default": "http://127.0.0.1:8000"
-        },
-        "variable": {
-            "id": "3721c97e-e3d0-4d60-b9cc-aee422a14b61",
-            "name": "测试环境",
-            "values": [
-                {
-                    "type": "any",
-                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvY2siLCJpZCI6MywiZXhwIjoxNjU5NjM1MTYwLjM4MjI2M30.fOdrqFgw4qze3gpm9cAkjXZQRd95j1BlWljNPUum9f0",
-                    "key": "token"
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
                 },
-                {
-                    "type": "any",
-                    "value": "3",
-                    "key": "num"
-                },
-                {
-                    "type": "any",
-                    "value": "73",
-                    "key": "num_later"
-                },
-                {
-                    "type": "any",
-                    "value": 19,
-                    "key": "num_pre"
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
                 }
-            ]
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "id": 4183271,
+            "name": "成功",
+            "apiDetailId": 5318056,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 38502701,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户admin"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
         },
-        "type": "normal",
-        "parameter": {
-            "header": [],
-            "query": [],
-            "body": [],
-            "cookie": []
-        }
-    },
-    "globals": {
-        "variable": {
-            "id": "2a42b9bc-77b3-4d3c-9dcf-cc36edb5ef79",
-            "values": []
+        {
+          "id": "7cdaa4a5-0030-4080-8c7d-a50bff067eb2",
+          "name": "MC0101 上传新音乐(添加陈诺歌曲)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"source\": \"https://cos.edialect.top/website/新年到.mp3\",\r\n    \"title\": \"新年到\",\r\n    \"cover\": \"https://cos.edialect.top/website/陈诺《家乡》.jpg\",\r\n    \"artist\": \"陈诺\"\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "音乐id",
+                  "mock": {
+                    "mock": "@integer"
+                  }
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "id": 4257564,
+            "name": "成功",
+            "apiDetailId": 5340074,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-07-30T09:26:26.000Z",
+            "updatedAt": "2021-08-06T08:25:04.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 5340074,
+            "httpApiCaseId": 38480736,
+            "httpApiName": "MC0101 上传新音乐",
+            "httpApiPath": "/music",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "添加陈诺歌曲"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
         },
-        "parameter": {
-            "header": [],
-            "query": [],
-            "body": [],
-            "cookie": []
+        {
+          "id": "38346c9b-2797-497d-8651-b63b686f8b03",
+          "name": "MC0105 审核音乐(MC0105 审核音乐)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music",
+                "1",
+                "visibility"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "PUT",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "$ref": "#/definitions/1077714",
+              "x-apifox-overrides": {}
+            },
+            "defaultEnable": true,
+            "id": 68644493,
+            "name": "成功",
+            "apiDetailId": 29173734,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2022-07-13T07:28:35.000Z",
+            "updatedAt": "2022-07-13T07:38:43.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 29173734,
+            "httpApiCaseId": 32713059,
+            "httpApiName": "MC0105 审核音乐",
+            "httpApiPath": "/music/{id}/visibility",
+            "httpApiMethod": "put",
+            "httpApiCaseName": "MC0105 审核音乐"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "1dbebd09-9ee7-4d31-88b6-e73513ccd7a2",
+          "name": "MC0104 获取音乐信息(MC0104 获取音乐信息)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music",
+                "1"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "music": {
+                  "title": "字典music",
+                  "description": "表music的所有字段,contributor为用户信息字典",
+                  "$ref": "#/definitions/1077714",
+                  "x-apifox-overrides": {}
+                }
+              },
+              "required": [
+                "music"
+              ]
+            },
+            "defaultEnable": true,
+            "id": 4260006,
+            "name": "成功",
+            "apiDetailId": 5340889,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-07-30T10:07:36.000Z",
+            "updatedAt": "2022-08-13T09:36:19.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 5340889,
+            "httpApiCaseId": 32696230,
+            "httpApiName": "MC0104 获取音乐信息",
+            "httpApiPath": "/music/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "MC0104 获取音乐信息"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "849b77ef-9f07-4964-84d2-eb496e35c515",
+          "name": "MC0301 给这音乐点赞(MC0301 给这音乐点赞)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music",
+                "1",
+                "like"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "POST",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "description": "注：更新likes,like_user_list"
+            },
+            "defaultEnable": true,
+            "id": 6666904,
+            "name": "成功",
+            "apiDetailId": 6267884,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-10-08T10:14:13.000Z",
+            "updatedAt": "2021-10-08T10:14:13.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 6267884,
+            "httpApiCaseId": 32696498,
+            "httpApiName": "MC0301 给这音乐点赞",
+            "httpApiPath": "/music/{id}/like",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "MC0301 给这音乐点赞"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "1a9905bb-02bd-4476-beb1-2a3a7a872c3d",
+          "name": "MC0302 取消这音乐点赞(MC0302 取消这音乐点赞)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music",
+                "1",
+                "like"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "DELETE",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "description": "注：更新likes,like_user_list"
+            },
+            "defaultEnable": true,
+            "id": 6666909,
+            "name": "成功",
+            "apiDetailId": 6267887,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-10-08T10:14:49.000Z",
+            "updatedAt": "2021-10-08T10:14:49.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 6267887,
+            "httpApiCaseId": 32696499,
+            "httpApiName": "MC0302 取消这音乐点赞",
+            "httpApiPath": "/music/{id}/like",
+            "httpApiMethod": "delete",
+            "httpApiCaseName": "MC0302 取消这音乐点赞"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "6dba6cda-39a3-4a8d-9713-61aba9690566",
+          "name": "MC0103 更新音乐信息(MC0103 更新音乐信息)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music",
+                "1"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"music\": {\n        \"artist\": \"周丽\",\n        \"title\": \"当即便达\",\n        \"source\": \"https://kngmyy.km/jnoqfexpf\",\n        \"cover\": \"http://dummyimage.com/720x300\"\n    }\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "x-apifox-orders": [],
+              "x-apifox-refs": {}
+            },
+            "defaultEnable": true,
+            "id": 4260856,
+            "name": "成功",
+            "apiDetailId": 5341281,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-07-30T10:21:54.000Z",
+            "updatedAt": "2022-07-13T17:08:31.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 5341281,
+            "httpApiCaseId": 32700688,
+            "httpApiName": "MC0103 更新音乐信息",
+            "httpApiPath": "/music/{id}",
+            "httpApiMethod": "put",
+            "httpApiCaseName": "MC0103 更新音乐信息"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "61529e20-bc63-47ec-9b11-3b5436981b0e",
+          "name": "MC0102 删除音乐(MC0102 删除音乐)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "music",
+                "1"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "DELETE",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "defaultEnable": true,
+            "id": 4260994,
+            "name": "成功",
+            "apiDetailId": 5341350,
+            "projectId": 0,
+            "code": 200,
+            "contentType": "json",
+            "ordering": 1,
+            "createdAt": "2021-07-30T10:22:29.000Z",
+            "updatedAt": "2021-07-30T10:22:29.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 5341350,
+            "httpApiCaseId": 32700849,
+            "httpApiName": "MC0102 删除音乐",
+            "httpApiPath": "/music/{id}",
+            "httpApiMethod": "delete",
+            "httpApiCaseName": "MC0102 删除音乐"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
         }
+      ],
+      "name": "单音乐测试 理想情况"
+    }
+  ],
+  "info": {
+    "name": "单音乐测试 理想情况"
+  },
+  "dataSchemas": {
+    "1077714": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "音乐编号"
+        },
+        "source": {
+          "type": "string",
+          "mock": {
+            "mock": "@url('https')"
+          },
+          "title": "音乐源地址",
+          "description": "url"
+        },
+        "artist": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "作者"
+        },
+        "cover": {
+          "type": "string",
+          "mock": {
+            "mock": "@image"
+          },
+          "title": "音乐封面"
+        },
+        "likes": {
+          "type": "integer",
+          "title": "点赞数"
+        },
+        "contributor": {
+          "title": "贡献者id",
+          "description": "用户id",
+          "$ref": "#/definitions/1097305"
+        },
+        "visibility": {
+          "type": "boolean",
+          "title": "是否可见"
+        },
+        "title": {
+          "type": "string",
+          "mock": {
+            "mock": "@ctitle"
+          },
+          "title": "音乐标题"
+        }
+      },
+      "required": [
+        "id",
+        "source",
+        "cover",
+        "likes",
+        "contributor",
+        "visibility",
+        "title"
+      ],
+      "title": "music_all"
     },
-    "isServerBuild": false
+    "1097305": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "user的id",
+          "mock": {
+            "mock": "@integer(10000)"
+          }
+        },
+        "username": {
+          "type": "string",
+          "title": "用户名",
+          "mock": {
+            "mock": "@cname"
+          }
+        },
+        "nickname": {
+          "type": "string",
+          "title": "昵称",
+          "mock": {
+            "mock": "@cname"
+          }
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "mock": {
+            "mock": "@email"
+          }
+        },
+        "telephone": {
+          "type": "string",
+          "title": "电话"
+        },
+        "birthday": {
+          "type": "string",
+          "title": "生日",
+          "mock": {
+            "mock": "@date('yyyy-MM-dd')"
+          }
+        },
+        "avatar": {
+          "type": "string",
+          "title": "头像",
+          "description": "头像的url地址",
+          "mock": {
+            "mock": "@image"
+          }
+        },
+        "is_admin": {
+          "type": "boolean",
+          "title": "是否管理员",
+          "mock": {
+            "mock": "@boolean"
+          }
+        },
+        "county": {
+          "type": "string",
+          "title": "县区",
+          "description": "用户所在县区",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "town": {
+          "type": "string",
+          "title": "乡镇",
+          "description": "用户所在乡镇",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "registration_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "注册时间"
+        },
+        "login_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "登录时间"
+        },
+        "wechat": {
+          "type": "boolean",
+          "title": "绑定微信"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "username",
+        "is_admin",
+        "avatar",
+        "registration_time",
+        "login_time",
+        "nickname",
+        "telephone",
+        "birthday",
+        "county",
+        "town",
+        "wechat"
+      ],
+      "title": "user_all"
+    }
+  },
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
+    },
+    "variable": {
+      "id": "3721c97e-e3d0-4d60-b9cc-aee422a14b61",
+      "name": "测试环境",
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InJvY2siLCJpZCI6MywiZXhwIjoxNjU5NjM1MTYwLjM4MjI2M30.fOdrqFgw4qze3gpm9cAkjXZQRd95j1BlWljNPUum9f0",
+          "key": "token"
+        },
+        {
+          "type": "any",
+          "value": "3",
+          "key": "num"
+        },
+        {
+          "type": "any",
+          "value": "73",
+          "key": "num_later"
+        },
+        {
+          "type": "any",
+          "value": 19,
+          "key": "num_pre"
+        }
+      ]
+    },
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "variable": {
+      "id": "2a42b9bc-77b3-4d3c-9dcf-cc36edb5ef79",
+      "values": []
+    },
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false
 }

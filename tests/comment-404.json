@@ -4,8 +4,8 @@
     {
       "item": [
         {
-          "id": "3b2e5831-b2e7-4e2b-a983-3db04772d954",
-          "name": "LG0101 账号密码登录(登录用户)",
+          "id": "ab191c93-ad64-46ea-a9e5-1846c3a6e722",
+          "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
               "protocol": "http",
@@ -39,7 +39,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
             },
             "type": "http"
           },
@@ -118,11 +118,11 @@
           },
           "metaInfo": {
             "httpApiId": 5318056,
-            "httpApiCaseId": 36686342,
+            "httpApiCaseId": 46679563,
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户"
+            "httpApiCaseName": "登录用户admin"
           },
           "type": "http",
           "protocolProfileBehavior": {
@@ -130,16 +130,15 @@
           }
         },
         {
-          "id": "247a93b0-925d-45f9-9ac5-3addbc470d64",
-          "name": "QZ0105审核测试题(QZ0105审核测试题)",
+          "id": "8602fcbd-1fdd-4883-871a-0609dddb68e6",
+          "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "1",
-                "visibility"
+                "articles",
+                "comments"
               ],
               "host": [
                 "127",
@@ -167,7 +166,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"result\": true,\n    \"reason\": \"dolore culpa laboris\"\n}"
+              "raw": "{\r\n    \"comments\": [\r\n        1,2,3,4,5,6,7,8,9,10\r\n    ]\r\n}"
             },
             "type": "http"
           },
@@ -176,27 +175,37 @@
           "responseDefinition": {
             "jsonSchema": {
               "type": "object",
-              "properties": {}
+              "properties": {
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/1011867"
+                  }
+                }
+              },
+              "required": [
+                "comments"
+              ]
             },
-            "defaultEnable": false,
-            "id": 69812625,
-            "name": "无权限",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 403,
+            "defaultEnable": true,
+            "id": 5165180,
+            "name": "成功",
+            "apiDetailId": 5677424,
+            "projectId": 0,
+            "code": 200,
             "contentType": "json",
-            "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
+            "ordering": 1,
+            "createdAt": "2021-08-23T08:42:32.000Z",
+            "updatedAt": "2021-08-23T08:46:05.000Z",
             "deletedAt": null
           },
           "metaInfo": {
-            "httpApiId": 42646298,
-            "httpApiCaseId": 49792215,
-            "httpApiName": "QZ0105审核测试题",
-            "httpApiPath": "/quizzes/{id}/visibility",
+            "httpApiId": 5677424,
+            "httpApiCaseId": 46678560,
+            "httpApiName": "AT0403 评论内容批量获取",
+            "httpApiPath": "/articles/comments",
             "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0105审核测试题"
+            "httpApiCaseName": "AT0403 评论内容批量获取"
           },
           "type": "http",
           "protocolProfileBehavior": {
@@ -204,14 +213,16 @@
           }
         },
         {
-          "id": "9a90e974-568a-42d8-989a-606f18affc18",
-          "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
+          "id": "e1b54eaa-d166-4a23-8d12-93b4c343f707",
+          "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes"
+                "articles",
+                "10",
+                "comments"
               ],
               "host": [
                 "127",
@@ -234,151 +245,79 @@
               {
                 "key": "Content-Type",
                 "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"提为表重\",\n        \"options\": [\n            \"平越机现活或米约被取度小群名造采一。\",\n            \"一单理角严电低生很般示消为度带。\"\n        ],\n        \"answer\": 41,\n        \"explanation\": \"形张决统照影公克儿国断受作向较能。资严正形看声切去为动四品风适。积山色层四应革青无较无合完转向省后。水别适放京则上边记西王收五好志育。机白金少要所到六会是查名。定算之片及民之回界段等面北快。\"\n    }\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
-            "id": 69812625,
-            "name": "无权限",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 403,
-            "contentType": "json",
-            "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 29662986,
-            "httpApiCaseId": 36686343,
-            "httpApiName": "QZ0102 增加单个测试",
-            "httpApiPath": "/quizzes",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "QZ0102 增加单个测试"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "a016ab93-dfb8-480a-9f94-e658df28b9fe",
-          "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "quizzes",
-                "1"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"论劳市\",\n        \"options\": [\n            \"也设世满打派比严清查政作安此。\",\n            \"观老采手干度色强眼共流般理。\",\n            \"问一子维工非很单自三所采持外界派江。\",\n            \"形而素群话话南集头海主直又装。\"\n        ],\n        \"answer\": 45,\n        \"explanation\": \"命片飞局线片指土起书最需火口况发。入装气确声火任调话们把正来增。根节算农通会单看京青包分影思更认自科。细把率品极能米同断毛更持定斗才少。据单受花相出团工步就义始外决适次。\"\n    }\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
-            "id": 69812625,
-            "name": "无权限",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 403,
-            "contentType": "json",
-            "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 29663120,
-            "httpApiCaseId": 36686344,
-            "httpApiName": "QZ0103 修改单个测试",
-            "httpApiPath": "/quizzes/{id}",
-            "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0103 修改单个测试"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "4ae3bd6c-d46a-44c9-9840-377bb3b84853",
-          "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "quizzes",
-                "1"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"id\": \"2\"\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "defaultEnable": false,
+            "id": 69812670,
+            "name": "不存在",
+            "apiDetailId": 0,
+            "projectId": 404238,
+            "code": 404,
+            "contentType": "json",
+            "ordering": 30,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null
+          },
+          "metaInfo": {
+            "httpApiId": 5339227,
+            "httpApiCaseId": 46678559,
+            "httpApiName": "AT0402 删除文章评论（和子孙评论）",
+            "httpApiPath": "/articles/{id}/comments",
+            "httpApiMethod": "delete",
+            "httpApiCaseName": "AT0402 删除文章评论（和子孙评论）"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "9105f952-b87b-4e50-92ba-15dbb73e57c9",
+          "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "1",
+                "comments"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
             "body": {},
             "type": "http"
           },
@@ -390,24 +329,24 @@
               "properties": {}
             },
             "defaultEnable": false,
-            "id": 69812625,
-            "name": "无权限",
+            "id": 69812670,
+            "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
-            "code": 403,
+            "code": 404,
             "contentType": "json",
-            "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
+            "ordering": 30,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
             "deletedAt": null
           },
           "metaInfo": {
-            "httpApiId": 29663170,
-            "httpApiCaseId": 36686345,
-            "httpApiName": "QZ0104 删除单个测试",
-            "httpApiPath": "/quizzes/{id}",
-            "httpApiMethod": "delete",
-            "httpApiCaseName": "QZ0104 删除单个测试"
+            "httpApiId": 5337279,
+            "httpApiCaseId": 46678561,
+            "httpApiName": "AT0404 获取文章评论",
+            "httpApiPath": "/articles/{id}/comments",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0404 获取文章评论"
           },
           "type": "http",
           "protocolProfileBehavior": {
@@ -415,13 +354,98 @@
           }
         }
       ],
-      "name": "QZ模块 403测试"
+      "name": "评论操作 404测试"
     }
   ],
   "info": {
-    "name": "QZ模块 403测试"
+    "name": "评论操作 404测试"
   },
-  "dataSchemas": {},
+  "dataSchemas": {
+    "1011867": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "评论id"
+        },
+        "user": {
+          "title": "评论用户",
+          "description": "用户id",
+          "$ref": "#/definitions/1077996",
+          "x-apifox-overrides": {}
+        },
+        "content": {
+          "type": "string",
+          "title": "评论内容",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "评论时间"
+        },
+        "parent": {
+          "type": "integer",
+          "title": "父评论id",
+          "description": "评论id"
+        },
+        "article": {
+          "type": "integer",
+          "title": "评论文章",
+          "description": "文章id"
+        }
+      },
+      "required": [
+        "id",
+        "user",
+        "content",
+        "time",
+        "article"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "user",
+        "content",
+        "time",
+        "parent",
+        "article"
+      ],
+      "title": "comment_normal"
+    },
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple"
+    }
+  },
   "environment": {
     "id": 510825,
     "name": "测试环境",
@@ -429,12 +453,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "dfa7eec4-9845-4980-bab2-64ae5e86ea37",
+      "id": "753ba9d8-ae3f-4833-927a-ad98bf8c95f8",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzIiwiaWQiOjIsImV4cCI6MTY2Mzk5MTEyNC40MDgyMTF9.9SNlvRppW-Op9yykFgupHl4eKnLfLXmgmE0pw4xV450",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY2NzAzMjQ2Ny42MjMwNDV9.sGPGneEG3RBsr4756tPw07OY2lJBer2xekMJ9tUV2AY",
           "key": "token"
         },
         {
@@ -469,7 +493,7 @@
   },
   "globals": {
     "variable": {
-      "id": "bb6b07e0-94b5-43f5-9721-a8afe7e807b7",
+      "id": "fe402bc4-fb5e-401b-bf5d-3332321478b3",
       "values": []
     },
     "parameter": {
