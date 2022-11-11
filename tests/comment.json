@@ -1,606 +1,606 @@
 {
-  "apifoxCli": "1.1.0",
-  "item": [
-    {
-      "item": [
+    "apifoxCli": "1.1.0",
+    "item": [
         {
-          "id": "7f64b59c-a61d-4d4c-b92b-8bd383572b45",
-          "name": "LG0101 账号密码登录(登录用户cs)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "login"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
+            "item": [
+                {
+                    "id": "4cad7ea8-0cdb-4c03-8bbf-e175d5e03861",
+                    "name": "LG0101 账号密码登录()",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "login"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"username\": \"user_test\",\r\n    \"password\": \"123456\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [
+                        {
+                            "listen": "test",
+                            "script": {
+                                "id": "postProcessors.0.extractor",
+                                "type": "text/javascript",
+                                "exec": [
+                                    "",
+                                    "      try{",
+                                    "        ",
+                                    "          const expression = pm.variables.replaceIn(`$.token`);",
+                                    "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                                    "          const jsonData = pm.response.json();",
+                                    "          let value = JSONPath({",
+                                    "            json: jsonData,",
+                                    "            path: expression,",
+                                    "            wrap: false",
+                                    "          });",
+                                    "          ",
+                                    "        ",
+                                    "        switch (typeof value) {",
+                                    "          case 'object':",
+                                    "            value = JSON.stringify(value);",
+                                    "            break;",
+                                    "          default:",
+                                    "            value = String(value);",
+                                    "            break;",
+                                    "        }",
+                                    "      ",
+                                    "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                                    "      } catch(e) {",
+                                    "        e.message = '提取变量【token】出错：' + e.message;",
+                                    "        throw e;",
+                                    "      }",
+                                    "  "
+                                ]
+                            }
+                        }
+                    ],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "token": {
+                                    "type": "string",
+                                    "mock": {
+                                        "mock": "@string"
+                                    },
+                                    "title": "权"
+                                },
+                                "id": {
+                                    "type": "integer",
+                                    "title": "用户id"
+                                }
+                            },
+                            "required": [
+                                "token",
+                                "id"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4183271,
+                        "name": "成功",
+                        "apiDetailId": 5318056,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-29T14:43:37.000Z",
+                        "updatedAt": "2021-08-12T16:27:18.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5318056,
+                        "httpApiCaseId": 43457640,
+                        "httpApiName": "LG0101 账号密码登录",
+                        "httpApiPath": "/login",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": ""
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "aeda8bf4-9fc8-492a-88ff-b232fc1f9883",
+                    "name": "AT0401 发表文章评论(成功)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "articles",
+                                "2",
+                                "comments"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "POST",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"content\": \"自己给自己点赞就是个屑\",\r\n    \"parent\":0\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "id": {
+                                    "type": "integer",
+                                    "title": "评论id",
+                                    "mock": {
+                                        "mock": "@integer"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "id"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4254359,
+                        "name": "成功",
+                        "apiDetailId": 5339208,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-30T08:59:13.000Z",
+                        "updatedAt": "2021-08-06T03:40:58.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5339208,
+                        "httpApiCaseId": 43458062,
+                        "httpApiName": "AT0401 发表文章评论",
+                        "httpApiPath": "/articles/{id}/comments",
+                        "httpApiMethod": "post",
+                        "httpApiCaseName": "成功"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "079487d1-6c85-4ef9-bcbe-1318a9c25f81",
+                    "name": "AT0404 获取文章评论(成功)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "articles",
+                                "2",
+                                "comments"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            }
+                        ],
+                        "method": "GET",
+                        "body": {},
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "comments": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/1011867",
+                                        "x-apifox-overrides": {}
+                                    }
+                                }
+                            },
+                            "required": [
+                                "comments"
+                            ],
+                            "x-apifox-orders": [
+                                "comments"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 4245943,
+                        "name": "成功",
+                        "apiDetailId": 5337279,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-30T08:38:42.000Z",
+                        "updatedAt": "2022-07-14T05:38:21.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5337279,
+                        "httpApiCaseId": 43458063,
+                        "httpApiName": "AT0404 获取文章评论",
+                        "httpApiPath": "/articles/{id}/comments",
+                        "httpApiMethod": "get",
+                        "httpApiCaseName": "成功"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "a2fc53d8-ffff-433e-baba-13ffefe240e9",
+                    "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "articles",
+                                "2",
+                                "comments"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "DELETE",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"id\": \"1\"\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {}
+                        },
+                        "defaultEnable": true,
+                        "id": 4254385,
+                        "name": "成功",
+                        "apiDetailId": 5339227,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-07-30T09:01:48.000Z",
+                        "updatedAt": "2021-07-30T09:01:48.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5339227,
+                        "httpApiCaseId": 43458142,
+                        "httpApiName": "AT0402 删除文章评论（和子孙评论）",
+                        "httpApiPath": "/articles/{id}/comments",
+                        "httpApiMethod": "delete",
+                        "httpApiCaseName": "AT0402 删除文章评论（和子孙评论）"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                },
+                {
+                    "id": "c7446cb2-fe76-46e0-8f9a-56810011926f",
+                    "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
+                    "request": {
+                        "url": {
+                            "protocol": "http",
+                            "port": "8000",
+                            "path": [
+                                "articles",
+                                "comments"
+                            ],
+                            "host": [
+                                "127",
+                                "0",
+                                "0",
+                                "1"
+                            ],
+                            "query": [],
+                            "variable": []
+                        },
+                        "header": [
+                            {
+                                "key": "token",
+                                "value": "{{token}}"
+                            },
+                            {
+                                "key": "User-Agent",
+                                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                            },
+                            {
+                                "key": "Content-Type",
+                                "value": "application/json"
+                            }
+                        ],
+                        "method": "PUT",
+                        "body": {
+                            "mode": "raw",
+                            "raw": "{\r\n    \"comments\": [\r\n        0,1,2,3,4,5\r\n    ]\r\n}"
+                        },
+                        "type": "http"
+                    },
+                    "response": [],
+                    "event": [],
+                    "responseDefinition": {
+                        "jsonSchema": {
+                            "type": "object",
+                            "properties": {
+                                "comments": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/definitions/1011867"
+                                    }
+                                }
+                            },
+                            "required": [
+                                "comments"
+                            ]
+                        },
+                        "defaultEnable": true,
+                        "id": 5165180,
+                        "name": "成功",
+                        "apiDetailId": 5677424,
+                        "projectId": 0,
+                        "code": 200,
+                        "contentType": "json",
+                        "ordering": 1,
+                        "createdAt": "2021-08-23T08:42:32.000Z",
+                        "updatedAt": "2021-08-23T08:46:05.000Z",
+                        "deletedAt": null
+                    },
+                    "metaInfo": {
+                        "httpApiId": 5677424,
+                        "httpApiCaseId": 43458143,
+                        "httpApiName": "AT0403 评论内容批量获取",
+                        "httpApiPath": "/articles/comments",
+                        "httpApiMethod": "put",
+                        "httpApiCaseName": "AT0403 评论内容批量获取"
+                    },
+                    "type": "http",
+                    "protocolProfileBehavior": {
+                        "disableUrlEncoding": false
+                    }
+                }
             ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"username\": \"user_test\",\r\n    \"password\": \"123456\"\r\n}"
+            "name": "文章评论 理想情况"
+        }
+    ],
+    "info": {
+        "name": "文章评论 理想情况"
+    },
+    "dataSchemas": {
+        "1011867": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                },
+                "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                },
+                "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                        "mock": "@cparagraph"
+                    }
+                },
+                "time": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                },
+                "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                },
+                "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                }
             },
-            "type": "http"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "postProcessors.0.extractor",
-                "type": "text/javascript",
-                "exec": [
-                  "",
-                  "      try{",
-                  "        ",
-                  "          const expression = pm.variables.replaceIn(`$.token`);",
-                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                  "          const jsonData = pm.response.json();",
-                  "          let value = JSONPath({",
-                  "            json: jsonData,",
-                  "            path: expression,",
-                  "            wrap: false",
-                  "          });",
-                  "          ",
-                  "        ",
-                  "        switch (typeof value) {",
-                  "          case 'object':",
-                  "            value = JSON.stringify(value);",
-                  "            break;",
-                  "          default:",
-                  "            value = String(value);",
-                  "            break;",
-                  "        }",
-                  "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
-                  "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
-                  "        throw e;",
-                  "      }",
-                  "  "
-                ]
-              }
-            }
-          ],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string"
-                  },
-                  "title": "权"
+            "required": [
+                "id",
+                "user",
+                "content",
+                "time",
+                "article"
+            ],
+            "x-apifox-orders": [
+                "id",
+                "user",
+                "content",
+                "time",
+                "parent",
+                "article"
+            ],
+            "title": "comment_normal"
+        },
+        "1077996": {
+            "type": "object",
+            "properties": {
+                "nickname": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@cname"
+                    },
+                    "title": "用户名"
+                },
+                "avatar": {
+                    "type": "string",
+                    "mock": {
+                        "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
                 },
                 "id": {
-                  "type": "integer",
-                  "title": "用户id"
+                    "type": "integer",
+                    "title": "用户id"
                 }
-              },
-              "required": [
-                "token",
+            },
+            "required": [
+                "nickname",
+                "avatar",
                 "id"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 4183271,
-            "name": "成功",
-            "apiDetailId": 5318056,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5318056,
-            "httpApiCaseId": 43457640,
-            "httpApiName": "LG0101 账号密码登录",
-            "httpApiPath": "/login",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户cs"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "1c23c16c-0ab4-4c9f-a384-b9f38543a259",
-          "name": "AT0401 发表文章评论(成功)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "articles",
-                "2",
-                "comments"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
             ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"content\": \"自己给自己点赞就是个屑\",\r\n    \"parent\":0\r\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "id": {
-                  "type": "integer",
-                  "title": "评论id",
-                  "mock": {
-                    "mock": "@integer"
-                  }
+            "title": "user_simple"
+        }
+    },
+    "environment": {
+        "id": 510825,
+        "name": "测试环境",
+        "baseUrls": {
+            "default": "http://127.0.0.1:8000"
+        },
+        "variable": {
+            "id": "3ff3c624-54a1-445e-b137-6bdf76b87264",
+            "name": "测试环境",
+            "values": [
+                {
+                    "type": "any",
+                    "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY2NzAzMjQ2Ny42MjMwNDV9.sGPGneEG3RBsr4756tPw07OY2lJBer2xekMJ9tUV2AY",
+                    "key": "token"
+                },
+                {
+                    "type": "any",
+                    "value": "3",
+                    "key": "num"
+                },
+                {
+                    "type": "any",
+                    "value": "0",
+                    "key": "num_later"
+                },
+                {
+                    "type": "any",
+                    "value": 20,
+                    "key": "num_pre"
+                },
+                {
+                    "type": "any",
+                    "value": "true",
+                    "key": "quiz_new"
                 }
-              },
-              "required": [
-                "id"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 4254359,
-            "name": "成功",
-            "apiDetailId": 5339208,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-30T08:59:13.000Z",
-            "updatedAt": "2021-08-06T03:40:58.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5339208,
-            "httpApiCaseId": 43458062,
-            "httpApiName": "AT0401 发表文章评论",
-            "httpApiPath": "/articles/{id}/comments",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "成功"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
+            ]
         },
-        {
-          "id": "23967a99-ca3b-4867-a14b-064598ab03fc",
-          "name": "AT0404 获取文章评论(成功)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "articles",
-                "2",
-                "comments"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              }
-            ],
-            "method": "GET",
-            "body": {},
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "comments": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/1011867",
-                    "x-apifox-overrides": {}
-                  }
-                }
-              },
-              "required": [
-                "comments"
-              ],
-              "x-apifox-orders": [
-                "comments"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 4245943,
-            "name": "成功",
-            "apiDetailId": 5337279,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-30T08:38:42.000Z",
-            "updatedAt": "2022-07-14T05:38:21.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5337279,
-            "httpApiCaseId": 43458063,
-            "httpApiName": "AT0404 获取文章评论",
-            "httpApiPath": "/articles/{id}/comments",
-            "httpApiMethod": "get",
-            "httpApiCaseName": "成功"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "cfb78c43-f567-4d61-85ec-8017179b1848",
-          "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "articles",
-                "2",
-                "comments"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "DELETE",
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"id\": \"1\"\r\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": true,
-            "id": 4254385,
-            "name": "成功",
-            "apiDetailId": 5339227,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-30T09:01:48.000Z",
-            "updatedAt": "2021-07-30T09:01:48.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5339227,
-            "httpApiCaseId": 43458142,
-            "httpApiName": "AT0402 删除文章评论（和子孙评论）",
-            "httpApiPath": "/articles/{id}/comments",
-            "httpApiMethod": "delete",
-            "httpApiCaseName": "AT0402 删除文章评论（和子孙评论）"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "d5b7db1e-b59e-4d0e-bf92-e0596bca3bab",
-          "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "articles",
-                "comments"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"comments\": [\r\n        0,1,2,3,4,5\r\n    ]\r\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "comments": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/1011867"
-                  }
-                }
-              },
-              "required": [
-                "comments"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 5165180,
-            "name": "成功",
-            "apiDetailId": 5677424,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-08-23T08:42:32.000Z",
-            "updatedAt": "2021-08-23T08:46:05.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5677424,
-            "httpApiCaseId": 43458143,
-            "httpApiName": "AT0403 评论内容批量获取",
-            "httpApiPath": "/articles/comments",
-            "httpApiMethod": "put",
-            "httpApiCaseName": "AT0403 评论内容批量获取"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
+        "type": "normal",
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
         }
-      ],
-      "name": "文章评论 理想情况"
-    }
-  ],
-  "info": {
-    "name": "文章评论 理想情况"
-  },
-  "dataSchemas": {
-    "1011867": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "integer",
-          "title": "评论id"
+    },
+    "globals": {
+        "variable": {
+            "id": "97e5b281-8125-48de-9bff-30be9e88e114",
+            "values": []
         },
-        "user": {
-          "title": "评论用户",
-          "description": "用户id",
-          "$ref": "#/definitions/1077996",
-          "x-apifox-overrides": {}
-        },
-        "content": {
-          "type": "string",
-          "title": "评论内容",
-          "mock": {
-            "mock": "@cparagraph"
-          }
-        },
-        "time": {
-          "type": "string",
-          "mock": {
-            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
-          },
-          "title": "评论时间"
-        },
-        "parent": {
-          "type": "integer",
-          "title": "父评论id",
-          "description": "评论id"
-        },
-        "article": {
-          "type": "integer",
-          "title": "评论文章",
-          "description": "文章id"
+        "parameter": {
+            "header": [],
+            "query": [],
+            "body": [],
+            "cookie": []
         }
-      },
-      "required": [
-        "id",
-        "user",
-        "content",
-        "time",
-        "article"
-      ],
-      "x-apifox-orders": [
-        "id",
-        "user",
-        "content",
-        "time",
-        "parent",
-        "article"
-      ],
-      "title": "comment_normal"
     },
-    "1077996": {
-      "type": "object",
-      "properties": {
-        "nickname": {
-          "type": "string",
-          "mock": {
-            "mock": "@cname"
-          },
-          "title": "用户名"
-        },
-        "avatar": {
-          "type": "string",
-          "mock": {
-            "mock": "@image('100x100')"
-          },
-          "title": "头像"
-        },
-        "id": {
-          "type": "integer",
-          "title": "用户id"
-        }
-      },
-      "required": [
-        "nickname",
-        "avatar",
-        "id"
-      ],
-      "title": "user_simple"
-    }
-  },
-  "environment": {
-    "id": 510825,
-    "name": "测试环境",
-    "baseUrls": {
-      "default": "http://127.0.0.1:8000"
-    },
-    "variable": {
-      "id": "2ce99b65-f19e-42e5-918d-3ec5586fe39c",
-      "name": "测试环境",
-      "values": [
-        {
-          "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY2NzAzMjQ2Ny42MjMwNDV9.sGPGneEG3RBsr4756tPw07OY2lJBer2xekMJ9tUV2AY",
-          "key": "token"
-        },
-        {
-          "type": "any",
-          "value": "3",
-          "key": "num"
-        },
-        {
-          "type": "any",
-          "value": "0",
-          "key": "num_later"
-        },
-        {
-          "type": "any",
-          "value": 20,
-          "key": "num_pre"
-        },
-        {
-          "type": "any",
-          "value": "true",
-          "key": "quiz_new"
-        }
-      ]
-    },
-    "type": "normal",
-    "parameter": {
-      "header": [],
-      "query": [],
-      "body": [],
-      "cookie": []
-    }
-  },
-  "globals": {
-    "variable": {
-      "id": "fe402bc4-fb5e-401b-bf5d-3332321478b3",
-      "values": []
-    },
-    "parameter": {
-      "header": [],
-      "query": [],
-      "body": [],
-      "cookie": []
-    }
-  },
-  "isServerBuild": false
+    "isServerBuild": false
 }

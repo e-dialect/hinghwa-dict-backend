@@ -19,6 +19,7 @@ from .dto.comment_normal import comment_normal
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.not_found import ArticleNotFoundException
+from utils.exception.types.unauthorized import UnauthorizedException
 from utils.TokenCheking import token_pass, token_user
 
 
@@ -73,14 +74,15 @@ class SearchArticle(View):
 
     # AT0202 文章内容批量获取
     def put(self, request) -> JsonResponse:
-        token = token_pass(request.headers)
         body = demjson.decode(request.body)
         result = Article.objects.filter(id__in=body["articles"])
-        user = token_user(token)
-        if not user:
+        try:
+            token = token_pass(request.headers)
+            user = token_user(token)
+            if not user.is_superuser:
+                result = result.filter(visibility=True)
+        except UnauthorizedException:
             result = result.filter(visibility=True)
-        if not user.is_superuser:
-            result = result.filter(visibility=True) | (result & user.articles.all())
         result = filterInOrder(result, body["articles"])
         articles = []
         for article in result:
@@ -96,12 +98,22 @@ class SearchArticle(View):
 class ManageArticle(View):
     # AT0104 获取文章内容
     def get(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers)
-        user = token_user(token)
         article = Article.objects.filter(id=id)
         if not article.exists():
             raise ArticleNotFoundException()
         article = article[0]
+        try:
+            token = token_pass(request.headers)
+            user = token_user(token)
+        except UnauthorizedException:
+            if not article.visibility:
+                raise ArticleNotFoundException()
+            else:
+                article.views += 1
+                article.save()
+                article = article_all(article)
+                me = {"liked": False, "is_author": False}
+                return JsonResponse({"article": article, "me": me}, status=200)
         if (
             not article.visibility
             and not user.is_superuser
