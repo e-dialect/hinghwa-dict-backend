@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "55cd3742-6c08-4b15-9c68-b14f56003001",
+          "id": "dcb7ac5f-aea9-45db-9887-e9df82be4a68",
           "name": "AT0401 发表文章评论(AT0401 发表文章评论)",
           "request": {
             "url": {
@@ -78,7 +78,7 @@
           }
         },
         {
-          "id": "edf09f2b-b6b7-44db-ad14-ac789a450f96",
+          "id": "df77c697-6fef-43fe-a2b4-6497c3d7b269",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -152,7 +152,7 @@
           }
         },
         {
-          "id": "bf7f6956-7793-4f1b-aa2a-5fea09da3c28",
+          "id": "33a35438-7321-47e6-ab74-bcfa489d9942",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -235,7 +235,7 @@
           }
         },
         {
-          "id": "3be165a3-d649-4883-89d2-76d6fbe64c0c",
+          "id": "0df25d78-92e5-4c7e-a8e6-69469ebc2a85",
           "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
           "request": {
             "url": {
@@ -398,7 +398,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "77aaaba4-b6e5-4120-af7a-730e29680797",
+      "id": "3ccaed0e-7f7d-4326-acd5-044ee1120c18",
       "name": "测试环境",
       "values": [
         {
@@ -438,7 +438,7 @@
   },
   "globals": {
     "variable": {
-      "id": "fe402bc4-fb5e-401b-bf5d-3332321478b3",
+      "id": "97e5b281-8125-48de-9bff-30be9e88e114",
       "values": []
     },
     "parameter": {

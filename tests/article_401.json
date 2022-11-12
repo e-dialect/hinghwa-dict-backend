@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "eea2b24b-d58c-43c5-96cf-4b95b97d4356",
+          "id": "8c16b01d-8901-43d3-8032-c5c48ffded80",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -72,7 +72,7 @@
           }
         },
         {
-          "id": "92b92ef9-b4cb-4b8e-80f8-dbc02b85811e",
+          "id": "6859b0cb-f4da-4725-a70e-f1fa1fc23bbf",
           "name": "AT0104 获取文章内容(AT0104 获取文章内容)",
           "request": {
             "url": {
@@ -80,7 +80,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "3"
+                "2"
               ],
               "host": [
                 "127",
@@ -110,19 +110,55 @@
           "responseDefinition": {
             "jsonSchema": {
               "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
+              "properties": {
+                "article": {
+                  "title": "文章字典",
+                  "description": "含article表的所有字段",
+                  "$ref": "#/definitions/1077703",
+                  "x-apifox-overrides": {}
+                },
+                "me": {
+                  "type": "object",
+                  "properties": {
+                    "liked": {
+                      "type": "boolean",
+                      "title": "是否点赞"
+                    },
+                    "is_author": {
+                      "type": "boolean",
+                      "title": "是否文章作者"
+                    }
+                  },
+                  "description": "检测查询用户与该文章的关联",
+                  "required": [
+                    "liked",
+                    "is_author"
+                  ],
+                  "x-apifox-orders": [
+                    "liked",
+                    "is_author"
+                  ]
+                }
+              },
+              "required": [
+                "article",
+                "me"
+              ],
+              "x-apifox-orders": [
+                "article",
+                "me"
+              ]
             },
-            "defaultEnable": false,
-            "id": 69812493,
-            "name": "未登录",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 401,
+            "defaultEnable": true,
+            "id": 4233285,
+            "name": "成功",
+            "apiDetailId": 5333397,
+            "projectId": 0,
+            "code": 200,
             "contentType": "json",
-            "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "ordering": 1,
+            "createdAt": "2021-07-30T07:41:50.000Z",
+            "updatedAt": "2022-07-14T13:33:12.000Z",
             "deletedAt": null
           },
           "metaInfo": {
@@ -139,7 +175,7 @@
           }
         },
         {
-          "id": "dad24671-e7bf-44c2-823e-2e2e87ed9e87",
+          "id": "84330221-45d7-489d-aae0-70c29b29d56b",
           "name": "AT0201 搜索符合条件的文章(AT0201 搜索符合条件的文章)",
           "request": {
             "url": {
@@ -226,7 +262,7 @@
           }
         },
         {
-          "id": "31c76756-adf8-4123-88bb-cd514619cba2",
+          "id": "3cd71c41-fea7-4821-ab89-6c59abb3a7af",
           "name": "AT0202 文章内容批量获取(AT0202 文章内容批量获取)",
           "request": {
             "url": {
@@ -266,19 +302,44 @@
           "responseDefinition": {
             "jsonSchema": {
               "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
+              "properties": {
+                "articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "article": {
+                        "title": "文章",
+                        "description": "文章的内容",
+                        "$ref": "#/definitions/1070634"
+                      },
+                      "author": {
+                        "title": "作者信息",
+                        "$ref": "#/definitions/1077996"
+                      }
+                    },
+                    "required": [
+                      "article",
+                      "author"
+                    ]
+                  },
+                  "description": "注：访问量view不变"
+                }
+              },
+              "required": [
+                "articles"
+              ]
             },
-            "defaultEnable": false,
-            "id": 69812493,
-            "name": "未登录",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 401,
+            "defaultEnable": true,
+            "id": 4183578,
+            "name": "成功",
+            "apiDetailId": 5318170,
+            "projectId": 0,
+            "code": 200,
             "contentType": "json",
-            "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "ordering": 1,
+            "createdAt": "2021-07-29T16:04:38.000Z",
+            "updatedAt": "2021-08-06T13:34:48.000Z",
             "deletedAt": null
           },
           "metaInfo": {
@@ -295,7 +356,7 @@
           }
         },
         {
-          "id": "5c43e0a3-b2ed-4611-a7d0-75730d28eb7e",
+          "id": "cdd9a5d1-a940-4afb-addc-40d820fa197b",
           "name": "AT0103 更新文章内容(AT0103 更新文章内容)",
           "request": {
             "url": {
@@ -368,7 +429,7 @@
           }
         },
         {
-          "id": "53bf7ac4-5a88-47be-89bb-f9ab85ee9a85",
+          "id": "d0ef61e6-3e98-462b-8dac-4a6a08f34ff2",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -439,7 +500,7 @@
           }
         },
         {
-          "id": "46b41da6-c7e2-4e52-813d-780614c42d3f",
+          "id": "bd71d155-3cbf-447a-bd40-142a604be850",
           "name": "AT0301 给这篇文章点赞(AT0301 给这篇文章点赞)",
           "request": {
             "url": {
@@ -502,7 +563,7 @@
           }
         },
         {
-          "id": "f2fbf4d6-64ee-48b7-8a66-57ea6841e3fa",
+          "id": "71faf61c-c744-4cf2-8436-23e2d1a73fe4",
           "name": "AT0302 取消这篇文章点赞(AT0302 取消这篇文章点赞)",
           "request": {
             "url": {
@@ -569,7 +630,7 @@
           }
         },
         {
-          "id": "de34405e-bb4a-469c-9fd6-6447781b80ab",
+          "id": "80fd9e6a-fe3b-4da2-a61b-72306f615a03",
           "name": "AT0202 文章内容批量获取(AT0202 文章内容批量获取)",
           "request": {
             "url": {
@@ -609,19 +670,44 @@
           "responseDefinition": {
             "jsonSchema": {
               "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
+              "properties": {
+                "articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "article": {
+                        "title": "文章",
+                        "description": "文章的内容",
+                        "$ref": "#/definitions/1070634"
+                      },
+                      "author": {
+                        "title": "作者信息",
+                        "$ref": "#/definitions/1077996"
+                      }
+                    },
+                    "required": [
+                      "article",
+                      "author"
+                    ]
+                  },
+                  "description": "注：访问量view不变"
+                }
+              },
+              "required": [
+                "articles"
+              ]
             },
-            "defaultEnable": false,
-            "id": 69812493,
-            "name": "未登录",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 401,
+            "defaultEnable": true,
+            "id": 4183578,
+            "name": "成功",
+            "apiDetailId": 5318170,
+            "projectId": 0,
+            "code": 200,
             "contentType": "json",
-            "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "ordering": 1,
+            "createdAt": "2021-07-29T16:04:38.000Z",
+            "updatedAt": "2021-08-06T13:34:48.000Z",
             "deletedAt": null
           },
           "metaInfo": {
@@ -638,7 +724,7 @@
           }
         },
         {
-          "id": "8e193b3a-0840-4170-842b-e30164374d14",
+          "id": "958e0463-4db2-4333-9fcb-734c7b05d90c",
           "name": "AT0102 删除文章(AT0102 删除文章)",
           "request": {
             "url": {
@@ -710,7 +796,336 @@
   "info": {
     "name": "文章操作 401测试"
   },
-  "dataSchemas": {},
+  "dataSchemas": {
+    "1070634": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "文章的id"
+        },
+        "author": {
+          "type": "integer",
+          "title": "作者",
+          "description": "用户id"
+        },
+        "likes": {
+          "type": "integer",
+          "title": "点赞数"
+        },
+        "views": {
+          "type": "integer",
+          "title": "访问量"
+        },
+        "publish_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "发表时间"
+        },
+        "update_time": {
+          "type": "string",
+          "title": "更新时间",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          }
+        },
+        "title": {
+          "type": "string",
+          "mock": {
+            "mock": "@ctitle"
+          },
+          "title": "文章标题"
+        },
+        "description": {
+          "type": "string",
+          "title": "文章简介",
+          "mock": {
+            "mock": "@csentence"
+          }
+        },
+        "content": {
+          "type": "string",
+          "title": "文章内容",
+          "description": "markdown",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "cover": {
+          "type": "string",
+          "title": "文章封面",
+          "description": "url",
+          "mock": {
+            "mock": "@image"
+          }
+        },
+        "visibility": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "author",
+        "likes",
+        "views",
+        "publish_time",
+        "update_time",
+        "title",
+        "description",
+        "content",
+        "cover",
+        "visibility"
+      ],
+      "title": "article_normal"
+    },
+    "1077703": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "文章的id"
+        },
+        "author": {
+          "title": "作者",
+          "description": "用户id",
+          "$ref": "#/definitions/1097305",
+          "x-apifox-overrides": {}
+        },
+        "likes": {
+          "type": "integer",
+          "title": "点赞数"
+        },
+        "views": {
+          "type": "integer",
+          "title": "访问量"
+        },
+        "like_users": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "description": "用户id"
+          },
+          "title": "点赞用户列表"
+        },
+        "publish_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "发表时间"
+        },
+        "update_time": {
+          "type": "string",
+          "title": "更新时间",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          }
+        },
+        "title": {
+          "type": "string",
+          "mock": {
+            "mock": "@ctitle"
+          },
+          "title": "文章标题"
+        },
+        "description": {
+          "type": "string",
+          "title": "文章简介",
+          "mock": {
+            "mock": "@csentence"
+          }
+        },
+        "content": {
+          "type": "string",
+          "title": "文章内容",
+          "description": "markdown",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "cover": {
+          "type": "string",
+          "title": "文章封面",
+          "description": "url",
+          "mock": {
+            "mock": "@image"
+          }
+        },
+        "visibility": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "id",
+        "author",
+        "likes",
+        "views",
+        "like_users",
+        "publish_time",
+        "update_time",
+        "title",
+        "description",
+        "content",
+        "cover",
+        "visibility"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "author",
+        "likes",
+        "views",
+        "like_users",
+        "publish_time",
+        "update_time",
+        "title",
+        "description",
+        "content",
+        "cover",
+        "visibility"
+      ],
+      "title": "article_all"
+    },
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple"
+    },
+    "1097305": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "user的id",
+          "mock": {
+            "mock": "@integer(10000)"
+          }
+        },
+        "username": {
+          "type": "string",
+          "title": "用户名",
+          "mock": {
+            "mock": "@cname"
+          }
+        },
+        "nickname": {
+          "type": "string",
+          "title": "昵称",
+          "mock": {
+            "mock": "@cname"
+          }
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "mock": {
+            "mock": "@email"
+          }
+        },
+        "telephone": {
+          "type": "string",
+          "title": "电话"
+        },
+        "birthday": {
+          "type": "string",
+          "title": "生日",
+          "mock": {
+            "mock": "@date('yyyy-MM-dd')"
+          }
+        },
+        "avatar": {
+          "type": "string",
+          "title": "头像",
+          "description": "头像的url地址",
+          "mock": {
+            "mock": "@image"
+          }
+        },
+        "is_admin": {
+          "type": "boolean",
+          "title": "是否管理员",
+          "mock": {
+            "mock": "@boolean"
+          }
+        },
+        "county": {
+          "type": "string",
+          "title": "县区",
+          "description": "用户所在县区",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "town": {
+          "type": "string",
+          "title": "乡镇",
+          "description": "用户所在乡镇",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "registration_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "注册时间"
+        },
+        "login_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "登录时间"
+        },
+        "wechat": {
+          "type": "boolean",
+          "title": "绑定微信"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "username",
+        "is_admin",
+        "avatar",
+        "registration_time",
+        "login_time",
+        "nickname",
+        "telephone",
+        "birthday",
+        "county",
+        "town",
+        "wechat"
+      ],
+      "title": "user_all"
+    }
+  },
   "environment": {
     "id": 510825,
     "name": "测试环境",
@@ -718,7 +1133,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "432d9195-1a3a-44f3-bf02-6518b813967d",
+      "id": "cc4b5312-84c9-4832-b73c-837d2273836e",
       "name": "测试环境",
       "values": [
         {
@@ -758,7 +1173,7 @@
   },
   "globals": {
     "variable": {
-      "id": "fe402bc4-fb5e-401b-bf5d-3332321478b3",
+      "id": "97e5b281-8125-48de-9bff-30be9e88e114",
       "values": []
     },
     "parameter": {

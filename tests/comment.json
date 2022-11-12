@@ -4,8 +4,8 @@
     {
       "item": [
         {
-          "id": "7f64b59c-a61d-4d4c-b92b-8bd383572b45",
-          "name": "LG0101 账号密码登录(登录用户cs)",
+          "id": "4cad7ea8-0cdb-4c03-8bbf-e175d5e03861",
+          "name": "LG0101 账号密码登录()",
           "request": {
             "url": {
               "protocol": "http",
@@ -122,7 +122,7 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户cs"
+            "httpApiCaseName": ""
           },
           "type": "http",
           "protocolProfileBehavior": {
@@ -130,7 +130,7 @@
           }
         },
         {
-          "id": "1c23c16c-0ab4-4c9f-a384-b9f38543a259",
+          "id": "aeda8bf4-9fc8-492a-88ff-b232fc1f9883",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -215,7 +215,7 @@
           }
         },
         {
-          "id": "23967a99-ca3b-4867-a14b-064598ab03fc",
+          "id": "079487d1-6c85-4ef9-bcbe-1318a9c25f81",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -296,7 +296,7 @@
           }
         },
         {
-          "id": "cfb78c43-f567-4d61-85ec-8017179b1848",
+          "id": "a2fc53d8-ffff-433e-baba-13ffefe240e9",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -370,7 +370,7 @@
           }
         },
         {
-          "id": "d5b7db1e-b59e-4d0e-bf92-e0596bca3bab",
+          "id": "c7446cb2-fe76-46e0-8f9a-56810011926f",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -552,7 +552,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "2ce99b65-f19e-42e5-918d-3ec5586fe39c",
+      "id": "3ff3c624-54a1-445e-b137-6bdf76b87264",
       "name": "测试环境",
       "values": [
         {
@@ -592,7 +592,7 @@
   },
   "globals": {
     "variable": {
-      "id": "fe402bc4-fb5e-401b-bf5d-3332321478b3",
+      "id": "97e5b281-8125-48de-9bff-30be9e88e114",
       "values": []
     },
     "parameter": {
