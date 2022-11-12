@@ -18,32 +18,40 @@ from django.urls import path, include
 
 from user import views as user
 from website import views as website
-from word.word import views as word
+from word import word, pronunciation, character
 
 urlpatterns = [
-    path("admin", admin.site.urls),
+    path('admin', admin.site.urls),
     # path('home/',TemplateView.as_view(template_name="home.html"),name='home')
-    path("users/", include("user.urls", namespace="users")),
-    path("login/", include("user.urls", namespace="login")),
-    path("users", user.router_users),
-    path("login", user.login),
-    path("articles", include("article.urls", namespace="article")),
-    path("music", include("music.urls", namespace="music")),
-    path("website/", include("website.urls", namespace="website")),
-    path("quizzes", include("quiz.urls", namespace="quiz")),
-    path("files/<type>/<id>/<Y>/<M>/<D>/<X>", website.openUrl),
-    path("words", include("word.word.urls", namespace="word.word")),
-    path(
-        "words",
-        include("word.application.urls", namespace="word.application"),
-    ),
-    path(
-        "characters",
-        include("word.character.urls", namespace="word.character"),
-    ),
-    path(
-        "pronunciation",
-        include("word.pronunciation.urls", namespace="word.pronunciation"),
-    ),
-    path("record", word.record),  # PN0301GET
+    path('users/', include('user.urls', namespace='users')),
+    path('login/', include('user.urls', namespace='login')),
+    path('users', user.router_users),
+    path('login', user.login),
+    path('articles', include('article.urls', namespace='article')),
+    path('music', include('music.urls', namespace='music')),
+    path('website/', include('website.urls', namespace='website')),
+    path('files/<type>/<id>/<Y>/<M>/<D>/<X>', website.openUrl),
+
+    path('words', include([path('', word.searchWords),
+                           path('/<int:id>', word.manageWord),
+                           path('/add', word.load_word),
+                           path('/upload_standard', word.upload_standard),
+                           path('/applications', word.searchApplication),
+                           path('/applications/<int:id>', word.manageApplication),
+                           ])),
+    path('characters', include([path('', character.searchCharacters),
+                                path('/<int:id>', character.manageCharacter),
+                                path('/add', character.load_character),
+                                path('/words', character.searchEach),
+                                path('/words/v2', character.searchEachV2),
+                                path('/pinyin', character.searchCharactersPinyin)])),
+    path('pronunciation', include([path('', pronunciation.searchPronunciations),
+                                   path('/<int:id>', pronunciation.managePronunciation),
+                                   path('/combine', pronunciation.combinePronunciationV2),
+                                   path('/translate', pronunciation.translatePronunciation),
+                                   path('/<int:id>/visibility', pronunciation.managePronunciationVisibility),
+                                   path('/<int:id>/examine', pronunciation.managePronunciationVisibility),
+                                   path('/<str:ipa>', pronunciation.combinePronunciation),
+                                   ])),
+    path('record', word.record),
 ]
