@@ -221,9 +221,17 @@ class LikeArticle(View):
 class CommentArticle(View):
     # AT0404 获取文章评论
     def get(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers)
-        user = token_user(token)
         article = Article.objects.filter(id=id)
+        try:
+            token = token_pass(request.headers)
+            user = token_user(token)
+        except UnauthorizedException:
+            if not article.exists() or not article[0].visibility:
+                raise ArticleNotFoundException()
+            else:
+                article = article[0]
+                comments = [comment_normal(comment) for comment in article.comments.all()]
+                return JsonResponse({"comments": comments}, status=200)
         if not article.exists() or not (
             article[0].visibility or user.is_superuser or user == article[0].author
         ):
