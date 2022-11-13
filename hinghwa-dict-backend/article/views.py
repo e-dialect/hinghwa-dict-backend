@@ -230,7 +230,9 @@ class CommentArticle(View):
                 raise ArticleNotFoundException()
             else:
                 article = article[0]
-                comments = [comment_normal(comment) for comment in article.comments.all()]
+                comments = [
+                    comment_normal(comment) for comment in article.comments.all()
+                ]
                 return JsonResponse({"comments": comments}, status=200)
         if not article.exists() or not (
             article[0].visibility or user.is_superuser or user == article[0].author
