@@ -8,7 +8,7 @@ from .models import Quiz
 
 
 class QuizAdmin(admin.ModelAdmin):
-    list_display = ["id", "question", "answer","visibility"]
+    list_display = ["id", "question", "answer", "visibility"]
     list_filter = ["visibility"]
     search_fields = ["id", "question", "answer"]
     ordering = ["id", "question"]
