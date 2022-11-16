@@ -113,7 +113,7 @@ class SingleApplication(View):
         application.verifier = user
         feedback = None
         body = demjson.decode(request.body)  # body = 申请内容
-        if not body.has_key("result"):
+        if not "result" in body:
             raise BadRequestException("缺少result字段")
 
         if body["result"]:
