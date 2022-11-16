@@ -39,8 +39,7 @@ class MultiApplication(View):
         WD0401 申请更新
         """
         try:
-            token = token_pass(request.headers, 0)
-            user = token_user(token)  # user = 操作用户
+            user = token_user(token_pass(request.headers, 0))  # user = 操作用户
             body = demjson.decode(request.body)  # body = 申请内容
 
             # 检查申请修改的词语是否存在（为0表示新建词语）
@@ -63,6 +62,7 @@ class MultiApplication(View):
             if word.exists():
                 word = word[0]
                 application.word = word
+            application.save()
             for id in body["related_articles"]:
                 application.related_articles.add(Article.objects.get(id=id))
             for id in body["related_words"]:
@@ -72,8 +72,6 @@ class MultiApplication(View):
             return JsonResponse({"id": application.id}, status=200)
         except CommonException as e:
             raise e
-        except Exception as e:
-            raise BadRequestException(repr(e))
 
 
 @csrf_exempt
