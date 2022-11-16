@@ -27,6 +27,7 @@ class Article(models.Model):
 
     def like(self):
         return self.like_users.count()
+    like.short_description = "点赞数"
 
     class Meta:
         verbose_name_plural = "文章"
