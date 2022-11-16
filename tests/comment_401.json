@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "dcb7ac5f-aea9-45db-9887-e9df82be4a68",
+          "id": "c95684ed-dd3b-418d-b436-7bee162faf09",
           "name": "AT0401 发表文章评论(AT0401 发表文章评论)",
           "request": {
             "url": {
@@ -78,7 +78,7 @@
           }
         },
         {
-          "id": "df77c697-6fef-43fe-a2b4-6497c3d7b269",
+          "id": "a3f1852d-dbb6-403c-9dd6-fa6372b03d72",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -152,7 +152,7 @@
           }
         },
         {
-          "id": "33a35438-7321-47e6-ab74-bcfa489d9942",
+          "id": "67472f6e-d61d-46bc-97d6-103e9bd24eae",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -235,7 +235,7 @@
           }
         },
         {
-          "id": "0df25d78-92e5-4c7e-a8e6-69469ebc2a85",
+          "id": "03407a0c-38b4-456e-b7a1-18310f1ada95",
           "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
           "request": {
             "url": {
@@ -270,19 +270,32 @@
           "responseDefinition": {
             "jsonSchema": {
               "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
+              "properties": {
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/1011867",
+                    "x-apifox-overrides": {}
+                  }
+                }
+              },
+              "required": [
+                "comments"
+              ],
+              "x-apifox-orders": [
+                "comments"
+              ]
             },
-            "defaultEnable": false,
-            "id": 69812493,
-            "name": "未登录",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 401,
+            "defaultEnable": true,
+            "id": 4245943,
+            "name": "成功",
+            "apiDetailId": 5337279,
+            "projectId": 0,
+            "code": 200,
             "contentType": "json",
-            "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "ordering": 1,
+            "createdAt": "2021-07-30T08:38:42.000Z",
+            "updatedAt": "2022-07-14T05:38:21.000Z",
             "deletedAt": null
           },
           "metaInfo": {
@@ -398,7 +411,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "3ccaed0e-7f7d-4326-acd5-044ee1120c18",
+      "id": "216efa77-47ee-450a-9667-b9c73047e983",
       "name": "测试环境",
       "values": [
         {
@@ -438,7 +451,7 @@
   },
   "globals": {
     "variable": {
-      "id": "97e5b281-8125-48de-9bff-30be9e88e114",
+      "id": "ed558f4f-c4df-4b84-ad44-9097821d1da6",
       "values": []
     },
     "parameter": {
