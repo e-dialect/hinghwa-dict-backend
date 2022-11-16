@@ -2,6 +2,7 @@ import demjson
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
+from django.contrib.auth.models import User
 
 from website.views import (
     evaluate,
@@ -221,19 +222,14 @@ class LikeArticle(View):
 class CommentArticle(View):
     # AT0404 获取文章评论
     def get(self, request, id) -> JsonResponse:
-        article = Article.objects.filter(id=id)
+        user = User()
         try:
             token = token_pass(request.headers)
             user = token_user(token)
         except UnauthorizedException:
-            if not article.exists() or not article[0].visibility:
-                raise ArticleNotFoundException()
-            else:
-                article = article[0]
-                comments = [
-                    comment_normal(comment) for comment in article.comments.all()
-                ]
-                return JsonResponse({"comments": comments}, status=200)
+            pass
+
+        article = Article.objects.filter(id=id)
         if not article.exists() or not (
             article[0].visibility or user.is_superuser or user == article[0].author
         ):
