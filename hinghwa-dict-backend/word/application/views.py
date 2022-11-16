@@ -9,12 +9,12 @@ from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import (
     ApplicationNotFoundException,
+    ArticleNotFoundException,
     WordNotFoundException,
 )
 from utils.TypeCheking import islist
 from utils.TokenCheking import token_pass, token_user
 from website.views import (
-    token_check,
     sendNotification,
 )
 from ..forms import ApplicationForm
@@ -29,10 +29,8 @@ class MultiApplication(View):
         WD0403 查看多个申请
         """
         token_pass(request.headers, -1)  # 仅限管理员
-        print("okk")
         applications = Application.objects.filter(verifier__isnull=True)
         result = []
-        print("okk")
         for application in applications:
             result.append(application_simple(application))
         return JsonResponse({"applications": result}, status=200)
@@ -58,6 +56,16 @@ class MultiApplication(View):
             application_form = ApplicationForm(body)
             if not (application_form.is_valid() and islist(body["mandarin"])):
                 raise BadRequestException()
+            for id in body["related_articles"]:
+                try:
+                    Article.objects.get(id=id)
+                except Article.DoesNotExist:
+                    raise ArticleNotFoundException(id)
+            for id in body["related_words"]:
+                try:
+                    Word.objects.get(id=id)
+                except Word.DoesNotExist:
+                    raise WordNotFoundException(id)
 
             # 构建申请
             application = application_form.save(commit=False)
