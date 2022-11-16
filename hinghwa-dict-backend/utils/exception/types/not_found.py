@@ -70,6 +70,7 @@ class ArticleNotFoundException(NotFoundException):
         self.status = 404
         self.msg = "文章{}不存在！".format(id)
 
+
 class ApplicationNotFoundException(NotFoundException):
     """
     词条变更申请不存在异常
