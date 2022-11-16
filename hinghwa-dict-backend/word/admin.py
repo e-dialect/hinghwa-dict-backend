@@ -34,9 +34,9 @@ class WordAdmin(admin.ModelAdmin):
     raw_id_fields = ("contributor",)
 
     def pass_visibility(self, request, queryset):
-        for article in queryset:
-            article.visibility = True
-            article.save()
+        for item in queryset:
+            item.visibility = True
+            item.save()
         updated = len(queryset)
         self.message_user(
             request,
