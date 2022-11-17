@@ -69,3 +69,15 @@ class ArticleNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "文章{}不存在！".format(id)
+
+
+class ApplicationNotFoundException(NotFoundException):
+    """
+    词条变更申请不存在异常
+    :param id: 词条变更申请id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "词条变更申请{}不存在！".format(id)
