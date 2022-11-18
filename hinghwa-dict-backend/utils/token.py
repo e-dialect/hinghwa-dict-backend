@@ -78,9 +78,7 @@ def generate_token(user: User) -> string:
     payload = {
         "username": user.username,
         "id": user.id,
-        "exp": (
-            timezone.now() + datetime.timedelta(days=7)
-        ).timestamp(),
+        "exp": (timezone.now() + datetime.timedelta(days=7)).timestamp(),
     }
     # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
     token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")

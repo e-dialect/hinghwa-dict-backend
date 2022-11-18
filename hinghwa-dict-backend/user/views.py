@@ -95,14 +95,18 @@ def login(request):
             if user:
                 user.last_login = timezone.now()
                 user.save()
-                return JsonResponse({"token": generate_token(user), "id": user.id}, status=200)
+                return JsonResponse(
+                    {"token": generate_token(user), "id": user.id}, status=200
+                )
             else:
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY)
             if user:
-                return JsonResponse({"token": generate_token(user), "id": user.id}, status=200)
+                return JsonResponse(
+                    {"token": generate_token(user), "id": user.id}, status=200
+                )
             else:
                 return JsonResponse({}, status=401)
     except Exception as e:
@@ -139,7 +143,9 @@ def wxlogin(request):
             user = user_info[0].user
             user.last_login = timezone.now()
             user.save()
-            return JsonResponse({"token": generate_token(user), "id": user.id}, status=200)
+            return JsonResponse(
+                {"token": generate_token(user), "id": user.id}, status=200
+            )
         else:
             return JsonResponse({}, status=404)
     except Exception as e:
