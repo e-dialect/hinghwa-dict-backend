@@ -84,7 +84,4 @@ def generate_token(user: User) -> string:
     }
     # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
     token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
-    try:
-        token = token.decode("utf-8")
-    except Exception as e:
-        pass
+    return token
