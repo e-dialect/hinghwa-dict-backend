@@ -1,3 +1,4 @@
+import datetime
 import string
 import numbers
 import jwt
@@ -66,3 +67,24 @@ def token_user(token: string) -> User:
     info = jwt.decode(token, key, algorithms=["HS256"])
     user = User.objects.get(id=info["id"])
     return user
+
+
+def generate_token(user: User) -> string:
+    """
+    生成token
+    :param user: 用户
+    :return: token
+    """
+    payload = {
+        "username": user.username,
+        "id": user.id,
+        "exp": (
+            timezone.now() + datetime.timedelta(days=7)
+        ).timestamp(),
+    }
+    # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
+    token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
+    try:
+        token = token.decode("utf-8")
+    except Exception as e:
+        pass
