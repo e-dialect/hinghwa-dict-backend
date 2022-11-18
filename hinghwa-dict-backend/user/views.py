@@ -16,7 +16,7 @@ from django.views import View
 from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.exception.types.bad_request import BadRequestException
-from utils.TokenCheking import token_user, token_pass
+from utils.token import generate_token, token_user, token_pass
 
 from website.views import (
     random_str,
@@ -95,40 +95,18 @@ def login(request):
             if user:
                 user.last_login = timezone.now()
                 user.save()
-                payload = {
-                    "username": username,
-                    "id": user.id,
-                    "exp": (
-                        timezone.now() + datetime.timedelta(seconds=3600)
-                    ).timestamp(),
-                }
-                # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
-                token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
-                try:
-                    token = token.decode("utf-8")
-                except Exception as e:
-                    pass
-                return JsonResponse({"token": token, "id": user.id}, status=200)
+                return JsonResponse(
+                    {"token": generate_token(user), "id": user.id}, status=200
+                )
             else:
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY)
             if user:
-                payload = {
-                    "username": user.username,
-                    "id": user.id,
-                    "exp": (
-                        timezone.now() + datetime.timedelta(seconds=3600)
-                    ).timestamp(),
-                }
-                # 不知道为什么，本地显示jwt.encode是Object但是服务器显示是str
-                token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
-                try:
-                    token = token.decode("utf-8")
-                except Exception as e:
-                    pass
-                return JsonResponse({"token": token, "id": user.id}, status=200)
+                return JsonResponse(
+                    {"token": generate_token(user), "id": user.id}, status=200
+                )
             else:
                 return JsonResponse({}, status=401)
     except Exception as e:
@@ -165,17 +143,9 @@ def wxlogin(request):
             user = user_info[0].user
             user.last_login = timezone.now()
             user.save()
-            payload = {
-                "username": user.username,
-                "id": user.id,
-                "exp": (timezone.now() + datetime.timedelta(seconds=3600)).timestamp(),
-            }
-            token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
-            try:
-                token = token.decode("utf-8")
-            except Exception as e:
-                pass
-            return JsonResponse({"token": token, "id": user.id}, status=200)
+            return JsonResponse(
+                {"token": generate_token(user), "id": user.id}, status=200
+            )
         else:
             return JsonResponse({}, status=404)
     except Exception as e:
@@ -306,19 +276,7 @@ def manageInfo(request, id):
                                 user.user_info.avatar = url
                         user.save()
                         user.user_info.save()
-                        payload = {
-                            "username": user.username,
-                            "id": user.id,
-                            "exp": (
-                                timezone.now() + datetime.timedelta(seconds=3600)
-                            ).timestamp(),
-                        }
-                        token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
-                        try:
-                            token = token.decode("utf-8")
-                        except Exception as e:
-                            pass
-                        return JsonResponse({"token": token}, status=200)
+                        return JsonResponse({"token": generate_token(user)}, status=200)
                     else:
                         if (
                             not user_form.is_valid()

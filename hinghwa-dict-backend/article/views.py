@@ -21,7 +21,7 @@ from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.not_found import ArticleNotFoundException
 from utils.exception.types.unauthorized import UnauthorizedException
-from utils.TokenCheking import token_pass, token_user
+from utils.token import token_pass, token_user
 
 
 class SearchArticle(View):

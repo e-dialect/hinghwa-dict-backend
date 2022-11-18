@@ -10,7 +10,7 @@ from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import QuizNotFoundException
 from utils.exception.types.forbidden import ForbiddenException
-from utils.TokenCheking import token_pass, token_user
+from utils.token import token_pass, token_user
 
 
 class SingleQuiz(View):

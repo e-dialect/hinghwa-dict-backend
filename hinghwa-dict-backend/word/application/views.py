@@ -13,7 +13,7 @@ from utils.exception.types.not_found import (
     WordNotFoundException,
 )
 from utils.TypeCheking import islist
-from utils.TokenCheking import token_pass, token_user
+from utils.token import token_pass, token_user
 from website.views import (
     sendNotification,
 )
