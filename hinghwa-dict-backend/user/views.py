@@ -16,7 +16,7 @@ from django.views import View
 from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.exception.types.bad_request import BadRequestException
-from utils.TokenCheking import token_user, token_pass
+from utils.token import token_user, token_pass
 
 from website.views import (
     random_str,
