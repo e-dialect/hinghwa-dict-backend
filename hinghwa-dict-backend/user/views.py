@@ -160,9 +160,7 @@ class WechatOperation(View):
                 user = user_form.save(commit=False)
                 password_validator(user_form.cleaned_data["password"])
                 user.set_password(user_form.cleaned_data["password"])
-                user_info = UserInfo.objects.create(
-                    user=user, nickname=user.username
-                )
+                user_info = UserInfo.objects.create(user=user, nickname=user.username)
                 user_info.wechat = openid
                 if "avatar" in body:
                     uploadAvatar(user.id, body["avatar"], suffix="png")
