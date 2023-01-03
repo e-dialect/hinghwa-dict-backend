@@ -57,11 +57,11 @@ def router_users(request):
                     user.set_password(user_form.cleaned_data["password"])
                     user.save()
                     user_info = UserInfo.objects.create(
-                        user=user, nickname="用户{}".format(random_str())
+                        user=user, nickname=user.username
                     )
                     if "avatar" in body:
                         # 下载连接中图片
-                        uploadAvatar(user.id, body, suffix="png")
+                        uploadAvatar(user.id, body["avatar"], suffix="png")
                     if "nickname" in body:
                         user_info.nickname = body["nickname"]
                     user_info.save()
@@ -161,11 +161,11 @@ class WechatOperation(View):
                 password_validator(user_form.cleaned_data["password"])
                 user.set_password(user_form.cleaned_data["password"])
                 user_info = UserInfo.objects.create(
-                    user=user, nickname="用户{}".format(random_str())
+                    user=user, nickname=user.username
                 )
                 user_info.wechat = openid
                 if "avatar" in body:
-                    uploadAvatar(user.id, body, suffix="png")
+                    uploadAvatar(user.id, body["avatar"], suffix="png")
                 if "nickname" in body:
                     user_info.nickname = body["nickname"]
                 user.save()
