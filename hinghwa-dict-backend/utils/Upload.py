@@ -4,7 +4,7 @@ from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import NotFoundException
 
 
-def uploadAvatar(id, body, suffix="png"):
+def uploadAvatar(id, body, suffix):
     try:
         time = timezone.now().__format__("%Y_%m_%d")
         filename = time + "_" + random_str(15) + "." + suffix
