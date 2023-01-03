@@ -19,3 +19,9 @@ class UserForm(forms.ModelForm):
         if str(cd["email"]).find("@") == -1:
             raise forms.ValidationError("Invalid Email")
         return cd["email"]
+
+
+class UserFormByWechat(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("username", "password")

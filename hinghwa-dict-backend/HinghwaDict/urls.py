@@ -23,6 +23,7 @@ from word.word import views as word
 urlpatterns = [
     path("admin/", admin.site.urls),
     # path('home/',TemplateView.as_view(template_name="home.html"),name='home')
+    #   以下使用命名空间划分url
     path("users/", include("user.urls", namespace="users")),
     path("login/", include("user.urls", namespace="login")),
     path("users", user.router_users),

@@ -26,7 +26,7 @@ from website.views import (
     simpleUserInfo,
 )
 from word.pronunciation.dto.pronunciation_simple import pronunciation_simple
-from .forms import UserForm, UserInfoForm
+from .forms import UserForm, UserInfoForm, UserFormByWechat
 from .models import UserInfo, User
 
 # for '/users/'
@@ -148,6 +148,46 @@ def wxlogin(request):
             )
         else:
             return JsonResponse({}, status=404)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+@csrf_exempt
+def wxregister(request):
+    try:
+        body = demjson.decode(request.body)
+        user_form = UserFormByWechat(body)
+        jscode = body["jscode"]
+        #   获取微信信息
+        openid = OpenId(jscode).get_openid().strip()
+        user_info = UserInfo.objects.filter(wechat__contains=openid)
+        if user_info.exists():  # 微信号有记录了
+            return JsonResponse({}, status=409)
+        if user_form.is_valid():
+            user = user_form.save(commit=False)
+            password_validator(user_form.cleaned_data["password"])
+            user.set_password(user_form.cleaned_data["password"])
+            user.save()
+            user_info = UserInfo.objects.create(
+                user=user, nickname="用户{}".format(random_str())
+            )
+            user_info.wechat = openid
+            if "avatar" in body:
+                suffix = "png"
+                time = timezone.now().__format__("%Y_%m_%d")
+                filename = time + "_" + random_str(15) + "." + suffix
+                url = download_file(body["avatar"], "download", str(user.id), filename)
+                if url is not None:
+                    user_info.avatar = url
+            if "nickname" in body:
+                user_info.nickname = body["nickname"]
+            user_info.save()
+            return JsonResponse({}, status=200)
+        else:
+            if user_form["username"].errors:
+                return JsonResponse({}, status=409)
+            else:
+                return JsonResponse({}, status=400)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
 
@@ -360,8 +400,8 @@ def updateWechat(request, id):
         if user.exists():
             user = user[0]
             token = request.headers["token"]
-            body = demjson.decode(request.body)
             if request.method == "PUT":
+                body = demjson.decode(request.body)
                 if token_check(token, settings.JWT_KEY, id):
                     jscode = body["jscode"]
                     openid = OpenId(jscode).get_openid().strip()
