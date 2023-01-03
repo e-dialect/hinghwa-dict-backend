@@ -13,5 +13,5 @@ urlpatterns = [
     path("app", app),
     path("forget", forget),
     path("wechat", wxlogin),
-    path("wechat/register", wxregister),
+    path("wechat/register", csrf_exempt(WechatOperation.as_view())),
 ]

@@ -17,7 +17,7 @@ from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.exception.types.bad_request import BadRequestException
 from utils.token import generate_token, token_user, token_pass
-
+from utils.Upload import uploadAvatar
 from website.views import (
     random_str,
     email_check,
@@ -61,14 +61,7 @@ def router_users(request):
                     )
                     if "avatar" in body:
                         # 下载连接中图片
-                        suffix = "png"
-                        time = timezone.now().__format__("%Y_%m_%d")
-                        filename = time + "_" + random_str(15) + "." + suffix
-                        url = download_file(
-                            body["avatar"], "download", str(user.id), filename
-                        )
-                        if url is not None:
-                            user_info.avatar = url
+                        uploadAvatar(user.id, body)
                     if "nickname" in body:
                         user_info.nickname = body["nickname"]
                     user_info.save()
@@ -152,44 +145,39 @@ def wxlogin(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-@csrf_exempt
-def wxregister(request):
-    try:
-        body = demjson.decode(request.body)
-        user_form = UserFormByWechat(body)
-        jscode = body["jscode"]
-        #   获取微信信息
-        openid = OpenId(jscode).get_openid().strip()
-        user_info = UserInfo.objects.filter(wechat__contains=openid)
-        if user_info.exists():  # 微信号有记录了
-            return JsonResponse({}, status=409)
-        if user_form.is_valid():
-            user = user_form.save(commit=False)
-            password_validator(user_form.cleaned_data["password"])
-            user.set_password(user_form.cleaned_data["password"])
-            user.save()
-            user_info = UserInfo.objects.create(
-                user=user, nickname="用户{}".format(random_str())
-            )
-            user_info.wechat = openid
-            if "avatar" in body:
-                suffix = "png"
-                time = timezone.now().__format__("%Y_%m_%d")
-                filename = time + "_" + random_str(15) + "." + suffix
-                url = download_file(body["avatar"], "download", str(user.id), filename)
-                if url is not None:
-                    user_info.avatar = url
-            if "nickname" in body:
-                user_info.nickname = body["nickname"]
-            user_info.save()
-            return JsonResponse({}, status=200)
-        else:
-            if user_form["username"].errors:
-                return JsonResponse({}, status=409)
+class WechatOperation(View):
+    def post(self, request):
+        try:
+            body = demjson.decode(request.body)
+            user_form = UserFormByWechat(body)
+            jscode = body["jscode"]
+            #   获取微信信息
+            openid = OpenId(jscode).get_openid().strip()
+            user_info = UserInfo.objects.filter(wechat__contains=openid)
+            if user_info.exists():  # 微信号有记录了
+                return JsonResponse({"msg": "该微信已绑定账户"}, status=409)
+            if user_form.is_valid():
+                user = user_form.save(commit=False)
+                password_validator(user_form.cleaned_data["password"])
+                user.set_password(user_form.cleaned_data["password"])
+                user_info = UserInfo.objects.create(
+                    user=user, nickname="用户{}".format(random_str())
+                )
+                user_info.wechat = openid
+                if "avatar" in body:
+                    uploadAvatar(user.id, body)
+                if "nickname" in body:
+                    user_info.nickname = body["nickname"]
+                user.save()
+                user_info.save()
+                return JsonResponse({}, status=200)
             else:
-                return JsonResponse({}, status=400)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+                if user_form["username"].errors:
+                    return JsonResponse({"msg": "用户名重复"}, status=409)
+                else:
+                    return JsonResponse({"msg": "请求有误"}, status=400)
+        except Exception as e:
+            return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
