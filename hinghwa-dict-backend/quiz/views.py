@@ -9,7 +9,7 @@ from .dto.quiz_all import quiz_all
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import QuizNotFoundException
-from utils.exception.types.forbidden import ForbiddenException
+from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
 
 
@@ -62,13 +62,21 @@ class SingleQuiz(View):
 class MultiQuiz(View):
     # QZ0201 搜索测试题
     def get(self, request) -> JsonResponse:
+        result = []
         try:
             quizzes = Quiz.objects.all()
             # keywords此处默认对question进行模糊搜索
             if "keywords" in request.GET:
                 quizzes = quizzes.filter(question__contains=request.GET["keywords"])
             quizzes = list(quizzes)
+            result = [quiz for quiz in quizzes if quiz.visibility]
+            token = token_pass(request.headers)
+            user = token_user(token)
+            if not user.is_superuser:
+                return JsonResponse({"result": result}, status=200)
             result = [quiz_all(quiz) for quiz in quizzes]
+            return JsonResponse({"result": result}, status=200)
+        except UnauthorizedException:
             return JsonResponse({"result": result}, status=200)
         except CommonException as e:  # 500
             raise e
@@ -91,7 +99,7 @@ class RandomQuiz(View):
     # QZ0202 随机测试题
     def get(self, request) -> JsonResponse:
         try:
-            quiz = Quiz.objects.order_by("?")[:1]
+            quiz = Quiz.objects.filter(visibility=True).order_by("?")[:1]
             if quiz.count() == 0:
                 raise QuizNotFoundException()
             else:
