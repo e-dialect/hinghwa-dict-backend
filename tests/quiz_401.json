@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "c77713ae-eafa-4e07-81c5-769e0c792df4",
+          "id": "e53ef69e-9d97-4ffe-8a19-012801fff01a",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -39,7 +39,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"得果方口海适加\",\n        \"options\": [\n            \"角备何决专外无想达效回线感查了。\",\n            \"定指活平所思近养应她省型我放。\",\n            \"产为采么开种阶流么传米出。\",\n            \"件百满走少第进它多那团北情造合。\"\n        ],\n        \"answer\": 30,\n        \"explanation\": \"不明于更问记市离议下族际取则类。里并根劳劳例必步者意计存住。它导发那就自节低今几去决话还特交学。京表油准前平存会各被法问道你气听把。上构格争北也话之联花没因。铁使科百新话矿流周离层说识织近。\"\n    }\n}"
+              "raw": "{\n    \"question\": \"决物权律史增\",\n    \"options\": [\n        \"技目全指心为界亲她天专结农接阶心把。\",\n        \"年就里织当火六按此往该响被增。\"\n    ],\n    \"answer\": 18,\n    \"explanation\": \"标年交高之部回些们金转天做志始市。没县即级马阶采且其调方物称有目效正较。五验义选事厂对场构平现西响志水开。活白活现众三定无济实值程后三年。\",\n    \"voice_source\": \"http://gpd.bi/utjwpt\"\n}"
             },
             "type": "http"
           },
@@ -77,7 +77,7 @@
           }
         },
         {
-          "id": "895cbdb4-868a-4de2-a4d8-e00edf3c7183",
+          "id": "a5033227-35b2-46d3-a4b8-152736998b98",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -113,7 +113,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"权支物义\",\n        \"options\": [\n            \"济已线知任验交听子办油群长。\",\n            \"拉头治他育利备近声形水又可发。\"\n        ],\n        \"answer\": 45,\n        \"explanation\": \"式志新拉越四头世公度千四治半作万四。至音酸了电气属非六接族京分为公话后。品水听低当第或建率者须无己做公实不存。全当但离基文收场度世性三么件金斯。种学系且记格车合响类她应例如。\"\n    }\n}"
+              "raw": "{\n    \"quiz\": {\n        \"question\": \"然张具话手建\",\n        \"options\": [\n            \"反得该头性技很己量些物光却。\",\n            \"六况子众图入起标完积山老造路所况造。\",\n            \"积社热题里边品料什西验革反。\",\n            \"办两办高听群省全报因县千到第列张便识。\",\n            \"始装其史�����称代场产制元布我效世。\"\n        ],\n        \"answer\": 95,\n        \"explanation\": \"能却确而下部由新需目音造声离间。极文命油问交几问接写个设千。法带龙年分满飞众叫或但子石律方争。\",\n        \"voice_source\": \"http://ajqnwfwaf.io/fxgfddymr\"\n    }\n}"
             },
             "type": "http"
           },
@@ -151,7 +151,7 @@
           }
         },
         {
-          "id": "788f1c5c-8bed-4e1d-91c2-cdfb4ed05303",
+          "id": "99033cf1-90eb-4f05-ad2f-ad4e5dbd5ff2",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -232,12 +232,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "27d007c1-fcbf-45f7-8b1a-c716d6e9b94d",
+      "id": "2aa17207-3a79-40d1-b2a7-7c194258bdf2",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzIiwiaWQiOjIsImV4cCI6MTY2Mzk5MTEyNC40MDgyMTF9.9SNlvRppW-Op9yykFgupHl4eKnLfLXmgmE0pw4xV450",
+          "value": "undefined",
           "key": "token"
         },
         {
@@ -259,6 +259,16 @@
           "type": "any",
           "value": "true",
           "key": "quiz_new"
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id"
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "quiz_id"
         }
       ]
     },
@@ -272,7 +282,7 @@
   },
   "globals": {
     "variable": {
-      "id": "bb6b07e0-94b5-43f5-9721-a8afe7e807b7",
+      "id": "f7309e05-5c92-4719-9144-7a4605cc3719",
       "values": []
     },
     "parameter": {
