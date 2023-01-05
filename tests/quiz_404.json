@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "3aac097a-3e54-47ae-b161-40abc9f0e8ad",
+          "id": "6479437b-7ab3-4e0d-ba89-3d3d653c1299",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -84,6 +84,14 @@
             }
           ],
           "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -105,16 +113,8 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4183271,
-            "name": "成功",
-            "apiDetailId": 5318056,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null
+            "ordering": 1
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -122,7 +122,7 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
+            "httpApiCaseName": "登录用�������admin"
           },
           "type": "http",
           "protocolProfileBehavior": {
@@ -130,7 +130,7 @@
           }
         },
         {
-          "id": "2f15a6c2-d912-4936-a750-46fc1e4c5eba",
+          "id": "2a30ad97-afe8-486a-8972-42cf5356c3a4",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -196,7 +196,7 @@
           }
         },
         {
-          "id": "abb12c57-a4f0-459d-bba5-b4508dd21af5",
+          "id": "141254df-4b64-4b32-aac9-ef50db670013",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -232,7 +232,7 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"们属理统\",\n        \"options\": [\n            \"选影划格团交外任流题有月百米。\",\n            \"率将果却些快片酸识说候加起住。\",\n            \"装打面全头记叫属除它联并力。\",\n            \"级形什压其据位非使始家强工业据。\",\n            \"毛外步自二技老系二才高常然一。\"\n        ],\n        \"answer\": 70,\n        \"explanation\": \"音花自白切共集料己道边器太空采。群都九农口完单海且合记满持道调机。行又社全酸样那离会车到次五究青交直应。如用第并县处重方道成数中部权点种。\"\n    }\n}"
+              "raw": "{\n    \"quiz\": {\n        \"question\": \"整儿段民也\",\n        \"options\": [\n            \"例治技化系低理车这步去角真资。\",\n            \"期价毛平标火技市才两管保比而最场真。\"\n        ],\n        \"answer\": 55,\n        \"explanation\": \"例江理马上机具确实查么事多级按方先。重共那世战边往子只局做接流周想现后。结铁百米量全圆党导东持二红即世采。\",\n        \"voice_source\": \"http://vgndtyun.bs/ttoeevmbm\"\n    }\n}"
             },
             "type": "http"
           },
@@ -269,7 +269,7 @@
           }
         },
         {
-          "id": "54b9eee1-4455-4d4b-8fbd-6b7e4cea6069",
+          "id": "6f96c8c2-93dd-432b-9767-b9c601f77891",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -349,12 +349,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "140ccb0d-d37b-4328-a4a1-36b534115157",
+      "id": "af08e7af-b249-4c15-836b-fb516058cde9",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzIiwiaWQiOjIsImV4cCI6MTY2Mzk5MTEyNC40MDgyMTF9.9SNlvRppW-Op9yykFgupHl4eKnLfLXmgmE0pw4xV450",
+          "value": "undefined",
           "key": "token"
         },
         {
@@ -376,6 +376,16 @@
           "type": "any",
           "value": "true",
           "key": "quiz_new"
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id"
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "quiz_id"
         }
       ]
     },
@@ -389,7 +399,7 @@
   },
   "globals": {
     "variable": {
-      "id": "bb6b07e0-94b5-43f5-9721-a8afe7e807b7",
+      "id": "f7309e05-5c92-4719-9144-7a4605cc3719",
       "values": []
     },
     "parameter": {
