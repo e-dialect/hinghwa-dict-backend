@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "8c16b01d-8901-43d3-8032-c5c48ffded80",
+          "id": "513cac1b-d88d-40b4-857f-e250c89d4e65",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -42,21 +42,21 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4319880,
+            "createdAt": "2021-08-02T13:31:53.000Z",
+            "updatedAt": "2022-09-07T09:27:29.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318101,
+            "name": "未登录",
+            "code": 401,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {}
             },
             "defaultEnable": true,
-            "id": 4319880,
-            "name": "未登录",
-            "apiDetailId": 5318101,
             "projectId": 0,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 4,
-            "createdAt": "2021-08-02T13:31:53.000Z",
-            "updatedAt": "2022-09-07T09:27:29.000Z",
-            "deletedAt": null
+            "ordering": 4
           },
           "metaInfo": {
             "httpApiId": 5318101,
@@ -72,7 +72,401 @@
           }
         },
         {
-          "id": "6859b0cb-f4da-4725-a70e-f1fa1fc23bbf",
+          "id": "513f70a7-b613-4871-983b-7d5b629c21f7",
+          "name": "LG0101 账号密码登录(登录用户admin)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【'+ `user_id` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【user_id】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
+                },
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
+                }
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 56388530,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户admin"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "89848ed6-60e2-417c-80de-9f3cf57d253c",
+          "name": "AT0101 创建文章(创建文章)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"农此提\",\n    \"description\": \"府带术采交走但实空平马全果。\",\n    \"content\": \"月很单用式和即本头明史们知。即世育得率再见五济立心开离着满其就里。究活几里任明实动意治图外理有历术改。定管总人更电管做法重这断进难。前劳调县改更也果亲色支着争己带历。\",\n    \"cover\": \"http://dummyimage.com/125x125\"\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`article_id`, value);console.log('已设置环境变量【'+ `article_id` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【article_id】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183335,
+            "createdAt": "2021-07-29T15:25:08.000Z",
+            "updatedAt": "2021-07-29T15:25:08.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318101,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "文章的id",
+                  "description": "注：初始化publish_time,update_time"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5318101,
+            "httpApiCaseId": 56388341,
+            "httpApiName": "AT0101 创建文章",
+            "httpApiPath": "/articles",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "创建文章"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "2e4788dc-b3ba-4a68-b19e-7f1db5711332",
+          "name": "AT0105 审核文章(AT0105 审核文章)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "{{article_id}}",
+                "visibility"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"result\": true,\n    \"reason\": \"mollit minim sint exercitation laborum\"\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`\"123\"`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 27919786,
+            "createdAt": "2022-03-20T01:17:01.000Z",
+            "updatedAt": "2022-03-20T01:17:01.000Z",
+            "deletedAt": null,
+            "apiDetailId": 14440370,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 14440370,
+            "httpApiCaseId": 56393038,
+            "httpApiName": "AT0105 审核文章",
+            "httpApiPath": "/articles/{id}/visibility",
+            "httpApiMethod": "put",
+            "httpApiCaseName": "AT0105 审核文章"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "bf50b867-d51d-4887-a40f-9ca688ae6961",
           "name": "AT0104 获取文章内容(AT0104 获取文章内容)",
           "request": {
             "url": {
@@ -80,7 +474,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2"
+                "{{article_id}}"
               ],
               "host": [
                 "127",
@@ -108,6 +502,14 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4233285,
+            "createdAt": "2021-07-30T07:41:50.000Z",
+            "updatedAt": "2022-07-14T13:33:12.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5333397,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -150,16 +552,8 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4233285,
-            "name": "成功",
-            "apiDetailId": 5333397,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-30T07:41:50.000Z",
-            "updatedAt": "2022-07-14T13:33:12.000Z",
-            "deletedAt": null
+            "ordering": 1
           },
           "metaInfo": {
             "httpApiId": 5333397,
@@ -175,7 +569,7 @@
           }
         },
         {
-          "id": "84330221-45d7-489d-aae0-70c29b29d56b",
+          "id": "d0ea2bc4-c3ed-474e-825e-40095f20081b",
           "name": "AT0201 搜索符合条件的文章(AT0201 搜索符合条件的文章)",
           "request": {
             "url": {
@@ -220,6 +614,14 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4183327,
+            "createdAt": "2021-07-29T15:20:35.000Z",
+            "updatedAt": "2021-07-30T09:57:12.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318093,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -237,16 +639,8 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4183327,
-            "name": "成功",
-            "apiDetailId": 5318093,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T15:20:35.000Z",
-            "updatedAt": "2021-07-30T09:57:12.000Z",
-            "deletedAt": null
+            "ordering": 1
           },
           "metaInfo": {
             "httpApiId": 5318093,
@@ -262,7 +656,7 @@
           }
         },
         {
-          "id": "3cd71c41-fea7-4821-ab89-6c59abb3a7af",
+          "id": "6c8ec9fa-e674-45ae-a0a8-2f4c592f0ca9",
           "name": "AT0202 文章内容批量获取(AT0202 文章内容批量获取)",
           "request": {
             "url": {
@@ -293,13 +687,21 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"articles\": [\r\n        1,2,3,4\r\n    ]\r\n}"
+              "raw": "{\r\n    \"articles\": [\r\n        {{article_id}}\r\n    ]\r\n}"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4183578,
+            "createdAt": "2021-07-29T16:04:38.000Z",
+            "updatedAt": "2021-08-06T13:34:48.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318170,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -331,16 +733,8 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4183578,
-            "name": "成功",
-            "apiDetailId": 5318170,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T16:04:38.000Z",
-            "updatedAt": "2021-08-06T13:34:48.000Z",
-            "deletedAt": null
+            "ordering": 1
           },
           "metaInfo": {
             "httpApiId": 5318170,
@@ -356,7 +750,7 @@
           }
         },
         {
-          "id": "cdd9a5d1-a940-4afb-addc-40d820fa197b",
+          "id": "3799fccd-1f40-44dd-a329-120412ec4083",
           "name": "AT0103 更新文章内容(AT0103 更新文章内容)",
           "request": {
             "url": {
@@ -364,7 +758,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2"
+                "{{article_id}}"
               ],
               "host": [
                 "127",
@@ -399,21 +793,21 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4291125,
+            "createdAt": "2021-08-02T03:21:17.000Z",
+            "updatedAt": "2022-09-15T12:00:56.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5334202,
+            "name": "未登录",
+            "code": 401,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {}
             },
             "defaultEnable": true,
-            "id": 4291125,
-            "name": "未登录",
-            "apiDetailId": 5334202,
             "projectId": 0,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 2,
-            "createdAt": "2021-08-02T03:21:17.000Z",
-            "updatedAt": "2022-09-15T12:00:56.000Z",
-            "deletedAt": null
+            "ordering": 2
           },
           "metaInfo": {
             "httpApiId": 5334202,
@@ -429,7 +823,7 @@
           }
         },
         {
-          "id": "d0ef61e6-3e98-462b-8dac-4a6a08f34ff2",
+          "id": "1568b087-8b0e-4b0e-ba29-afa5a9037ada",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -437,7 +831,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2",
+                "{{article_id}}",
                 "visibility"
               ],
               "host": [
@@ -500,7 +894,7 @@
           }
         },
         {
-          "id": "bd71d155-3cbf-447a-bd40-142a604be850",
+          "id": "7682d9f2-10b4-4d85-9754-e37fb9e3a5ae",
           "name": "AT0301 给这篇文章点赞(AT0301 给这篇文章点赞)",
           "request": {
             "url": {
@@ -508,7 +902,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2",
+                "{{article_id}}",
                 "like"
               ],
               "host": [
@@ -533,21 +927,21 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4291205,
+            "createdAt": "2021-08-02T03:23:31.000Z",
+            "updatedAt": "2022-09-15T12:12:05.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5335759,
+            "name": "未登录",
+            "code": 401,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {}
             },
             "defaultEnable": true,
-            "id": 4291205,
-            "name": "未登录",
-            "apiDetailId": 5335759,
             "projectId": 0,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 2,
-            "createdAt": "2021-08-02T03:23:31.000Z",
-            "updatedAt": "2022-09-15T12:12:05.000Z",
-            "deletedAt": null
+            "ordering": 2
           },
           "metaInfo": {
             "httpApiId": 5335759,
@@ -563,7 +957,7 @@
           }
         },
         {
-          "id": "71faf61c-c744-4cf2-8436-23e2d1a73fe4",
+          "id": "ba35afd1-20cd-4ab8-8092-a0f146617702",
           "name": "AT0302 取消这篇文章点赞(AT0302 取消这篇文章点赞)",
           "request": {
             "url": {
@@ -571,7 +965,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2",
+                "{{article_id}}",
                 "like"
               ],
               "host": [
@@ -600,21 +994,21 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4291282,
+            "createdAt": "2021-08-02T03:25:21.000Z",
+            "updatedAt": "2022-09-15T12:12:23.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5335801,
+            "name": "未登录",
+            "code": 401,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {}
             },
             "defaultEnable": true,
-            "id": 4291282,
-            "name": "未登录",
-            "apiDetailId": 5335801,
             "projectId": 0,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 3,
-            "createdAt": "2021-08-02T03:25:21.000Z",
-            "updatedAt": "2022-09-15T12:12:23.000Z",
-            "deletedAt": null
+            "ordering": 3
           },
           "metaInfo": {
             "httpApiId": 5335801,
@@ -630,7 +1024,7 @@
           }
         },
         {
-          "id": "80fd9e6a-fe3b-4da2-a61b-72306f615a03",
+          "id": "dddee6ca-cea5-4090-8b58-d49f6d4e47e5",
           "name": "AT0202 文章内容批量获取(AT0202 文章内容批量获取)",
           "request": {
             "url": {
@@ -661,13 +1055,21 @@
             "method": "PUT",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"articles\": [\r\n       2\r\n    ]\r\n}"
+              "raw": "{\r\n    \"articles\": [\r\n       {{article_id}}\r\n    ]\r\n}"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4183578,
+            "createdAt": "2021-07-29T16:04:38.000Z",
+            "updatedAt": "2021-08-06T13:34:48.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318170,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -699,16 +1101,8 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4183578,
-            "name": "成功",
-            "apiDetailId": 5318170,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T16:04:38.000Z",
-            "updatedAt": "2021-08-06T13:34:48.000Z",
-            "deletedAt": null
+            "ordering": 1
           },
           "metaInfo": {
             "httpApiId": 5318170,
@@ -724,7 +1118,7 @@
           }
         },
         {
-          "id": "958e0463-4db2-4333-9fcb-734c7b05d90c",
+          "id": "9c26e19d-35d8-4126-ada2-2d0e2bedec7a",
           "name": "AT0102 删除文章(AT0102 删除文章)",
           "request": {
             "url": {
@@ -732,7 +1126,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2"
+                "{{article_id}}"
               ],
               "host": [
                 "127",
@@ -760,21 +1154,21 @@
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4291149,
+            "createdAt": "2021-08-02T03:22:20.000Z",
+            "updatedAt": "2022-09-15T12:06:43.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5334205,
+            "name": "未登录",
+            "code": 401,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {}
             },
             "defaultEnable": true,
-            "id": 4291149,
-            "name": "未登录",
-            "apiDetailId": 5334205,
             "projectId": 0,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 2,
-            "createdAt": "2021-08-02T03:22:20.000Z",
-            "updatedAt": "2022-09-15T12:06:43.000Z",
-            "deletedAt": null
+            "ordering": 2
           },
           "metaInfo": {
             "httpApiId": 5334205,
@@ -1133,12 +1527,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "cc4b5312-84c9-4832-b73c-837d2273836e",
+      "id": "bb1f1ee4-a682-4d49-8045-f4694ea4fbcc",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY2NzAzMjQ2Ny42MjMwNDV9.sGPGneEG3RBsr4756tPw07OY2lJBer2xekMJ9tUV2AY",
+          "value": "undefined",
           "key": "token"
         },
         {
@@ -1160,6 +1554,16 @@
           "type": "any",
           "value": "true",
           "key": "quiz_new"
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id"
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "quiz_id"
         }
       ]
     },
@@ -1173,7 +1577,7 @@
   },
   "globals": {
     "variable": {
-      "id": "97e5b281-8125-48de-9bff-30be9e88e114",
+      "id": "e8d3e5da-3d04-445a-874b-735af6e6e57b",
       "values": []
     },
     "parameter": {
