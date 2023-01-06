@@ -4,7 +4,392 @@
     {
       "item": [
         {
-          "id": "3d0f3a00-5ef1-49e6-8f09-5ec457a5e72b",
+          "id": "f9071582-b98b-419a-aa2e-3944a56c00d6",
+          "name": "LG0101 账号密码登录(登录用户admin)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【'+ `user_id` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【user_id】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
+                },
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
+                }
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 65564431,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户admin"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "d7a56a83-0b56-4cc3-8263-bd012f22a268",
+          "name": "AT0101 创建文章(AT0101 创建文章)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"title\": \"五则究亲看江\",\n    \"description\": \"回感万断持体周报今基消状群约九取采际。\",\n    \"content\": \"压习说院了变克眼建常强选要规重。算圆少程还东经市克作阶而求直声历事每。见与委严位象矿都进划方及军步参。的其儿而备律厂团铁土发放把格题第手则。而与该正达道名积图它况文选过对。\",\n    \"cover\": \"http://dummyimage.com/300x600\"\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`article_id`, value);console.log('已设置环境变量【'+ `article_id` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【article_id】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183335,
+            "createdAt": "2021-07-29T15:25:08.000Z",
+            "updatedAt": "2021-07-29T15:25:08.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318101,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "文章的id",
+                  "description": "注：初始化publish_time,update_time"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5318101,
+            "httpApiCaseId": 65564466,
+            "httpApiName": "AT0101 创建文章",
+            "httpApiPath": "/articles",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "AT0101 创建文章"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "196624a2-c3bb-45ea-bf19-4059c375ee29",
+          "name": "AT0104 获取文章内容(AT0104 获取文章内容)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "{{article_id}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4233285,
+            "createdAt": "2021-07-30T07:41:50.000Z",
+            "updatedAt": "2022-07-14T13:33:12.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5333397,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "title": "文章字典",
+                  "description": "含article表的所有字段",
+                  "$ref": "#/definitions/1077703",
+                  "x-apifox-overrides": {}
+                },
+                "me": {
+                  "type": "object",
+                  "properties": {
+                    "liked": {
+                      "type": "boolean",
+                      "title": "是否点赞"
+                    },
+                    "is_author": {
+                      "type": "boolean",
+                      "title": "是否文章���者"
+                    }
+                  },
+                  "description": "检测查询用户与该文章的关联",
+                  "required": [
+                    "liked",
+                    "is_author"
+                  ],
+                  "x-apifox-orders": [
+                    "liked",
+                    "is_author"
+                  ]
+                }
+              },
+              "required": [
+                "article",
+                "me"
+              ],
+              "x-apifox-orders": [
+                "article",
+                "me"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5333397,
+            "httpApiCaseId": 44058623,
+            "httpApiName": "AT0104 获取文章内容",
+            "httpApiPath": "/articles/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0104 获取文章内容"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "3452587f-3acb-4bd4-b4b9-6dc65abe9b45",
           "name": "LG0101 账号密码登录(登录用户cs)",
           "request": {
             "url": {
@@ -84,6 +469,14 @@
             }
           ],
           "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -105,16 +498,8 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4183271,
-            "name": "成功",
-            "apiDetailId": 5318056,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null
+            "ordering": 1
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -130,110 +515,7 @@
           }
         },
         {
-          "id": "98d35468-140c-4e28-9d14-7b97178760d4",
-          "name": "AT0104 获取文章内容(AT0104 获取文章内容)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "articles",
-                "2"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              }
-            ],
-            "method": "GET",
-            "body": {},
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "article": {
-                  "title": "文章字典",
-                  "description": "含article表的所有字段",
-                  "$ref": "#/definitions/1077703",
-                  "x-apifox-overrides": {}
-                },
-                "me": {
-                  "type": "object",
-                  "properties": {
-                    "liked": {
-                      "type": "boolean",
-                      "title": "是否点赞"
-                    },
-                    "is_author": {
-                      "type": "boolean",
-                      "title": "是否文章作者"
-                    }
-                  },
-                  "description": "检测查询用户与该文章的关联",
-                  "required": [
-                    "liked",
-                    "is_author"
-                  ],
-                  "x-apifox-orders": [
-                    "liked",
-                    "is_author"
-                  ]
-                }
-              },
-              "required": [
-                "article",
-                "me"
-              ],
-              "x-apifox-orders": [
-                "article",
-                "me"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 4233285,
-            "name": "成功",
-            "apiDetailId": 5333397,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-30T07:41:50.000Z",
-            "updatedAt": "2022-07-14T13:33:12.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5333397,
-            "httpApiCaseId": 44058623,
-            "httpApiName": "AT0104 获取文章内容",
-            "httpApiPath": "/articles/{id}",
-            "httpApiMethod": "get",
-            "httpApiCaseName": "AT0104 获取文章内容"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "77a9335f-1219-436c-8868-e98ee3906c22",
+          "id": "cb96c065-9e2e-43f8-a5a7-d71d2f599458",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -241,7 +523,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2",
+                "{{article_id}}",
                 "visibility"
               ],
               "host": [
@@ -307,7 +589,7 @@
           }
         },
         {
-          "id": "cd8d2eb5-4290-4cfb-b16b-4b0de007d4e3",
+          "id": "514bd616-82f0-47c3-90cb-322299a23751",
           "name": "AT0103 更新文章内容(AT0103 更新文章内容)",
           "request": {
             "url": {
@@ -315,7 +597,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2"
+                "{{article_id}}"
               ],
               "host": [
                 "127",
@@ -380,7 +662,7 @@
           }
         },
         {
-          "id": "ee356b92-581d-4d09-b9b2-4656088896ba",
+          "id": "eb5771ee-5380-45a3-a50d-ab7df92038f8",
           "name": "AT0102 删除文章(AT0102 删除文章)",
           "request": {
             "url": {
@@ -388,7 +670,7 @@
               "port": "8000",
               "path": [
                 "articles",
-                "2"
+                "{{article_id}}"
               ],
               "host": [
                 "127",
@@ -638,7 +920,7 @@
           "mock": {
             "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
           },
-          "title": "注册时间"
+          "title": "注册��间"
         },
         "login_time": {
           "type": "string",
@@ -677,12 +959,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "471e7d80-75fe-4752-aa81-abbf46d362ec",
+      "id": "4c816342-6f24-411f-85f8-337b58e9d0a5",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY2NzAzMjQ2Ny42MjMwNDV9.sGPGneEG3RBsr4756tPw07OY2lJBer2xekMJ9tUV2AY",
+          "value": "undefined",
           "key": "token"
         },
         {
@@ -704,6 +986,16 @@
           "type": "any",
           "value": "true",
           "key": "quiz_new"
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id"
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "quiz_id"
         }
       ]
     },
@@ -717,7 +1009,7 @@
   },
   "globals": {
     "variable": {
-      "id": "97e5b281-8125-48de-9bff-30be9e88e114",
+      "id": "e8d3e5da-3d04-445a-874b-735af6e6e57b",
       "values": []
     },
     "parameter": {
