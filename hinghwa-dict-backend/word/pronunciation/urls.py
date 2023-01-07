@@ -12,5 +12,5 @@ urlpatterns = [
     path("/<int:id>/visibility", managePronunciationVisibility),
     path("/<int:id>/examine", managePronunciationVisibility),
     path("/<str:ipa>", combinePronunciation),
-    path("/ranking",csrf_exempt(pronunciationRanking).as_view()),   # PN0205语音审核
+    path("/ranking", csrf_exempt(PronunciationRanking).as_view()),  # PN0205语音审核
 ]
