@@ -1,16 +1,28 @@
+from asyncio.windows_events import NULL
+from collections import UserList
+from functools import cache
 import os
 import random
 import shutil
 import subprocess
 import time
+from datetime import datetime
+from webbrowser import get
 
 import demjson
 import numpy as np
 import pydub
 from django.conf import settings
 from django.http import JsonResponse
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import caches
 from pydub import AudioSegment as audio
+
+from ...user.models import UserInfo
+
+from ...user.dto.user_all import user_all
+from ...utils.token import token_pass
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
 from ..forms import PronunciationForm
@@ -22,6 +34,7 @@ from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
+from ...user.dto.user_simple import user_simple
 
 
 @csrf_exempt
@@ -460,3 +473,54 @@ def translatePronunciation(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+class PronunciationRanking(View):
+    # PN0205 语音上传榜单
+    def get(self, request) -> JsonResponse:
+        token = token_pass(request.headers)
+        body = demjson.decode(request.body)
+        days = body["days"]  # 要多少天的榜单
+        cache_time = caches["pronunciation_ranking"].get("datetime")
+        if not cache_time or (cache_time != datetime.today()):
+            cache_ranking_table = []
+            cache_ranking_table = self.update_pronunciation_ranking(days)
+            # 把更新的表格录入到对应的数据库缓存中
+            caches["pronunciation_ranking"].set(str(days), cache_ranking_table)
+        else:
+            cache_ranking_table = caches["pronunciation_ranking"]
+        # 发送给前端
+        return JsonResponse({"ranking": cache_ranking_table}, status=200)
+
+    def update_pronunciation_ranking(days):  # 不包括存储在数据库中
+        ranking_count = {}
+        users = UserInfo.objects.all()
+        start_date = datetime.today() - days
+        # 查询上传时间不是空的并且上传时间在规定开始时间之后的
+        pronunciations = Pronunciation.objects.filter(
+            Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
+        )
+        for one_pronunciation in pronunciations:
+            # 在已有的ranking_count字典查不到的话将该贡献者的贡献次数设置为1
+            if not ranking_count.get(one_pronunciation.contributor.id):
+                ranking_count.update({one_pronunciation.contributor.id: 1})
+            # 查得到的话将该贡献者的贡献次数加1
+            else:
+                ranking_count[one_pronunciation.contributor.id] = (
+                    ranking_count[one_pronunciation.contributor.id] + 1
+                )
+        # 排序
+        ranking_sort1 = zip(ranking_count.keys(), ranking_count.values())
+        ranking_sort2 = sorted(
+            ranking_sort1
+        )  # 这是一个列表，列表的每一个元素是一个元组，每一个元组的第一个元素是用户id。第二个元素是规定时间内贡献次数
+        cache_ranking_table_format = []
+        for tuple_element in ranking_sort2:
+            cache_ranking_table_format.append(
+                {
+                    "contributer": {user_simple(users[tuple_element[0]])},
+                    "amount": {tuple_element[1]},
+                }
+            )
+        # 示例：cache_ranking_table_format=[{"contributer":{user_simple(users[ranking_sort2[i][0]])},"amount":{ranking_sort2[i][1]}},{},{},……]
+        return cache_ranking_table_format  # 返回的是一个列表
