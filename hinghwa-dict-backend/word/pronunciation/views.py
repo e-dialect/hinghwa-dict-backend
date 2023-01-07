@@ -1,13 +1,9 @@
-from asyncio.windows_events import NULL
-from collections import UserList
-from functools import cache
 import os
 import random
 import shutil
 import subprocess
 import time
 from datetime import datetime
-from webbrowser import get
 
 import demjson
 import numpy as np
@@ -20,9 +16,8 @@ from django.core.cache import caches
 from pydub import AudioSegment as audio
 
 from ...user.models import UserInfo
-
-from ...user.dto.user_all import user_all
 from ...utils.token import token_pass
+from ...user.dto.user_simple import user_simple
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
 from ..forms import PronunciationForm
@@ -34,7 +29,6 @@ from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
-from ...user.dto.user_simple import user_simple
 
 
 @csrf_exempt
