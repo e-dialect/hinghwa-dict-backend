@@ -24,5 +24,6 @@ def pronunciation_all(pronunciation: Pronunciation) -> dict:
         if pronunciation.verifier
         else None,
         "granted": pronunciation.granted(),
+        "upload_time": pronunciation.upload_time.__format__("%Y-%m-%d %H:%M:%S"),
     }
     return response
