@@ -15,6 +15,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import caches
 from pydub import AudioSegment as audio
 
+from ...utils.exception.types.common import CommonException
+
 from ...user.models import UserInfo
 from ...utils.token import token_pass
 from ...user.dto.user_simple import user_simple
@@ -472,28 +474,40 @@ def translatePronunciation(request):
 class PronunciationRanking(View):
     # PN0205 语音上传榜单
     def get(self, request) -> JsonResponse:
-        token = token_pass(request.headers)
-        body = demjson.decode(request.body)
-        days = body["days"]  # 要多少天的榜单
-        cache_time = caches["pronunciation_ranking"].get("datetime")
-        if not cache_time or (cache_time != datetime.today()):
-            cache_ranking_table = []
-            cache_ranking_table = self.update_pronunciation_ranking(days)
-            # 把更新的表格录入到对应的数据库缓存中
-            caches["pronunciation_ranking"].set(str(days), cache_ranking_table)
-        else:
-            cache_ranking_table = caches["pronunciation_ranking"]
-        # 发送给前端
-        return JsonResponse({"ranking": cache_ranking_table}, status=200)
+        try:
+            token = token_pass(request.headers)
+            body = demjson.decode(request.body)
+            days = body["days"]  # 要多少天的榜单
+            cache_time = caches["pronunciation_ranking"].get("updatetime")
+            if not cache_time or (cache_time != datetime.today()):
+                # 发现缓存时间不是今天，更新榜单,并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
+                cache_ranking_table_update = []
+                cache_ranking_table_update = self.update_pronunciation_ranking(7)
+                caches["pronunciation_ranking"].set("7", cache_ranking_table_update)
+                cache_ranking_table_update = self.update_pronunciation_ranking(30)
+                caches["pronunciation_ranking"].set("30", cache_ranking_table_update)
+                cache_ranking_table_update = self.update_pronunciation_ranking(0)
+                caches["pronunciation_ranking"].set("0", cache_ranking_table_update)
+                caches["pronunciation_ranking"].set("updatetime", datetime.today())
 
-    def update_pronunciation_ranking(days):  # 不包括存储在数据库中
+            cache_ranking_table = caches["pronunciation_ranking"].get(str(days))
+            # 发送给前端
+            return JsonResponse({"ranking": cache_ranking_table}, status=200)
+        except CommonException as e:
+            raise e
+
+    def update_pronunciation_ranking(search_days):  # 不包括存储在数据库中
         ranking_count = {}
         users = UserInfo.objects.all()
-        start_date = datetime.today() - days
-        # 查询上传时间不是空的并且上传时间在规定开始时间之后的
-        pronunciations = Pronunciation.objects.filter(
-            Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
-        )
+        if search_days != 0:
+            start_date = datetime.today() - datetime.timedelta(days=search_days)
+
+            # 查询上传时间不是空的并且上传时间在规定开始时间之后的
+            pronunciations = Pronunciation.objects.filter(
+                Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
+            )
+        else:
+            pronunciations = Pronunciation.objects.all()
         for one_pronunciation in pronunciations:
             # 在已有的ranking_count字典查不到的话将该贡献者的贡献次数设置为1
             if not ranking_count.get(one_pronunciation.contributor.id):
@@ -512,9 +526,9 @@ class PronunciationRanking(View):
         for tuple_element in ranking_sort2:
             cache_ranking_table_format.append(
                 {
-                    "contributer": {user_simple(users[tuple_element[0]])},
-                    "amount": {tuple_element[1]},
+                    "contributer": user_simple(users[tuple_element[0]]),
+                    "amount": tuple_element[1],
                 }
             )
-        # 示例：cache_ranking_table_format=[{"contributer":{user_simple(users[ranking_sort2[i][0]])},"amount":{ranking_sort2[i][1]}},{},{},……]
+        # 示例：cache_ranking_table_format=[{"contributer":user_simple(users[ranking_sort2[i][0]]),"amount":ranking_sort2[i][1]},{},{},……]
         return cache_ranking_table_format  # 返回的是一个列表
