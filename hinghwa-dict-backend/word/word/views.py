@@ -4,7 +4,6 @@ import os
 import demjson
 import xlrd
 import re
-import pygtrie
 from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
