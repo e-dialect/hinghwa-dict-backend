@@ -292,7 +292,7 @@ def upload_standard(request):
                         j += 1
                     if j < len(words) and words[j].id == infos[i][0]:
                         if conflict(
-                                words[j].standard_ipa, infos[i][1][1].value
+                            words[j].standard_ipa, infos[i][1][1].value
                         ) or conflict(words[j].standard_pinyin, infos[i][1][0].value):
                             conflicts.append(
                                 [
@@ -339,7 +339,7 @@ class Trie(object):
                 if word not in t:
                     t[word] = {}
                 t = t[word]
-            t['has_word'] = True
+            t["has_word"] = True
 
 
 class PhoneticOrdering(View):
@@ -369,47 +369,20 @@ class DictionarySearch(View):
     def get(self, request) -> JsonResponse:
         try:
             body = demjson.decode(request.body)
-            """
-            lb = ""
-            rb = ""
-            if body["phonetic_order"]:
-                for it in body["phonetic_order"]:
-                    lb += it + '1 '
-                    rb += it + '9 '
-            if lb:
-                lb = lb.rstrip()
-            if rb:
-                rb = rb.rstrip()
-            words = Word.objects.filter(standard_pinyin__gte=lb, standard_pinyin__lte=rb)
-            #    先筛大致范围和等长
-            temp = [word for word in words if len(word.standard_pinyin) == len(lb)]
-            result = []
-            for word in temp:
-                index = 0
-                judge = True
-                for it in body["phonetic_order"]:
-                    #   逐音序判断
-                    if word.standard_pinyin[index: index + len(it)] == it:
-                        print(index)
-                        index += len(it)+2
-                    else:
-                        judge = False
-                        break
-                if judge:
-                    result.append(word_all(word))
-            """
             query = ""
             length = 0
             if body["phonetic_order"]:
                 for it in body["phonetic_order"]:
-                    query += it + r'[0-9]\s'
-                    length += len(it)+2
+                    query += it + r"[0-9]\s"
+                    length += len(it) + 2
             if query:
                 query = query[:-2]
                 length -= 1
             print(query)
             words = Word.objects.filter(standard_pinyin__regex=query)
-            result = [word_all(word) for word in words if len(word.standard_pinyin) == length]
+            result = [
+                word_all(word) for word in words if len(word.standard_pinyin) == length
+            ]
             return JsonResponse({"msg": result}, status=200)
         except Exception as e:
             return JsonResponse({"msg": str(e)}, status=500)
