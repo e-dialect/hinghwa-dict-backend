@@ -328,26 +328,32 @@ def upload_standard(request):
 
 class Trie(object):
     def __init__(self):
-        self.trie = {}
-        self.has_word = False
+        self.trie = {"": {}}
+        for i in range(97, 123):
+            self.trie[str(chr(i))] = {}
 
     def build_trie(self, wordlist):
         for words in wordlist:
-            t = self.trie
+            t = self.trie[""]
+            if words:
+                t = self.trie[str(words[0][0])]
             for word in words:
                 if word not in t:
                     t[word] = {}
+                    if "has_word" not in t:
+                        t["has_word"] = False
                 t = t[word]
             t["has_word"] = True
 
 
 class PhoneticOrdering(View):
     root = Trie()
+    sign = True
 
     #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
     def get(self, request) -> JsonResponse:
         try:
-            if not self.root.trie:
+            if self.sign:
                 standard_pinyin = Word.objects.values_list("standard_pinyin").order_by(
                     "standard_pinyin"
                 )
@@ -358,6 +364,7 @@ class PhoneticOrdering(View):
                     item = [x for x in item if x]
                     temp.append(item)
                 self.root.build_trie(temp)
+                self.sign = False
                 return JsonResponse({"record": self.root.trie}, status=200)
             return JsonResponse({"record": self.root.trie}, status=200)
         except Exception as e:
