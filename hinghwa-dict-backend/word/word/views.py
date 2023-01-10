@@ -331,6 +331,7 @@ class Trie(object):
         self.trie = {"": {}}
         for i in range(97, 123):
             self.trie[str(chr(i))] = {}
+            self.trie[str(chr(i))]["has_word"] = False
 
     def build_trie(self, wordlist):
         for words in wordlist:
@@ -388,6 +389,22 @@ class DictionarySearch(View):
             words = Word.objects.filter(standard_pinyin__regex=query)
             result = [
                 word_all(word) for word in words if len(word.standard_pinyin) == length
+            ]
+            return JsonResponse({"msg": result}, status=200)
+        except Exception as e:
+            return JsonResponse({"msg": str(e)}, status=500)
+
+
+class DictionarySearchInitial(View):
+    def get(self, request):
+        try:
+            body = demjson.decode(request.body)
+            query = body["phonetic_order"]
+            words = Word.objects.filter(standard_pinyin__regex=query)
+            result = [
+                word_all(word)
+                for word in words
+                if word.standard_pinyin[: len(query)] == query
             ]
             return JsonResponse({"msg": result}, status=200)
         except Exception as e:
