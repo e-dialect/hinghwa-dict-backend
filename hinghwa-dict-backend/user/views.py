@@ -15,8 +15,8 @@ from utils.PasswordValidation import password_validator
 from django.views import View
 from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
-from utils.exception.types.bad_request import BadRequestException, NotBoundWechat
-from utils.exception.types.not_found import UserNotFoundException
+from utils.exception.types.bad_request import BadRequestException
+from utils.exception.types.not_found import UserNotFoundException, NotBoundWechat
 from utils.token import generate_token, token_user, token_pass
 from utils.Upload import uploadAvatar
 from website.views import (
@@ -384,7 +384,7 @@ class UpdateWechat(View):
     def put(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
         if not user.exists():
-            raise UserNotFoundException()
+            raise UserNotFoundException(id)
         user = user[0]
         body = demjson.decode(request.body)
         token_pass(request.headers, id)
@@ -393,7 +393,7 @@ class UpdateWechat(View):
         if UserInfo.objects.filter(wechat=openid).exists():
             return JsonResponse({"msg": "该微信已绑定其他账号"}, status=409)
         if len(user.user_info.wechat):
-            if body["overwrite"] == "true":
+            if not body["overwrite"]:
                 return JsonResponse({"msg": "该账户已绑定微信"}, status=409)
         user.user_info.wechat = openid
         user.user_info.save()
@@ -402,11 +402,11 @@ class UpdateWechat(View):
     def delete(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
         if not user.exists():
-            raise UserNotFoundException()
+            raise UserNotFoundException(id)
         user = user[0]
         token_pass(request.headers, id)
         if not len(user.user_info.wechat):
-            raise NotBoundWechat()
+            raise NotBoundWechat(id)
         if not len(user.email):
             return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=400)
         user.user_info.wechat = ""

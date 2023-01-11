@@ -30,10 +30,4 @@ class InsufficientQuiz(BadRequestException):
         super().__init__(msg)
 
 
-class NotBoundWechat(BadRequestException):
-    """
-    微信未绑定异常
-    """
 
-    def __init__(self, msg="微信未绑定"):
-        super().__init__(msg)
