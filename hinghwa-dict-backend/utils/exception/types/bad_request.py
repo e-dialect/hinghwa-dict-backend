@@ -28,6 +28,3 @@ class InsufficientQuiz(BadRequestException):
 
     def __init__(self, msg="可用测试题不足"):
         super().__init__(msg)
-
-
-
