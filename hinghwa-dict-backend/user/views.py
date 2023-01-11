@@ -383,37 +383,35 @@ def updateEmail(request, id):
 class UpdateWechat(View):
     def put(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            body = demjson.decode(request.body)
-            token = token_pass(request.headers, id)
-            jscode = body["jscode"]
-            openid = OpenId(jscode).get_openid().strip()
-            if UserInfo.objects.filter(wechat=openid).exists():
-                return JsonResponse({"msg0": "该微信已绑定其他账号"}, status=409)
-            if len(user.user_info.wechat):
-                if not body["overwrite"]:
-                    return JsonResponse({"msg0": "该账户已绑定微信"}, status=409)
-            user.user_info.wechat = openid
-            user.user_info.save()
-            return JsonResponse({}, status=200)
-        else:
+        if not user.exists():
             raise UserNotFoundException()
+            user = user[0]
+        body = demjson.decode(request.body)
+        token = token_pass(request.headers, id)
+        jscode = body["jscode"]
+        openid = OpenId(jscode).get_openid().strip()
+        if UserInfo.objects.filter(wechat=openid).exists():
+            return JsonResponse({"msg0": "该微信已绑定其他账号"}, status=409)
+        if len(user.user_info.wechat):
+            if not body["overwrite"]:
+                return JsonResponse({"msg0": "该账户已绑定微信"}, status=409)
+        user.user_info.wechat = openid
+        user.user_info.save()
+        return JsonResponse({}, status=200)
 
     def delete(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            token = token_pass(request.headers, id)
-            if not len(user.user_info.wechat):
-                raise NotBoundWechat()
-            if not len(user.email):
-                return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=409)
-            user.user_info.wechat = ""
-            user.user_info.save()
-            return JsonResponse({}, status=200)
-        else:
+        if not user.exists():
             raise UserNotFoundException()
+        user = user[0]
+        token = token_pass(request.headers, id)
+        if not len(user.user_info.wechat):
+            raise NotBoundWechat()
+        if not len(user.email):
+            return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=409)
+        user.user_info.wechat = ""
+        user.user_info.save()
+        return JsonResponse({}, status=200)
 
 
 # TODO 先暂时假定QQ操作完全同微信
