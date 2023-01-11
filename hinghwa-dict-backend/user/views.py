@@ -385,16 +385,16 @@ class UpdateWechat(View):
         user = User.objects.filter(id=id)
         if not user.exists():
             raise UserNotFoundException()
-            user = user[0]
+        user = user[0]
         body = demjson.decode(request.body)
-        token = token_pass(request.headers, id)
+        token_pass(request.headers, id)
         jscode = body["jscode"]
         openid = OpenId(jscode).get_openid().strip()
         if UserInfo.objects.filter(wechat=openid).exists():
-            return JsonResponse({"msg0": "该微信已绑定其他账号"}, status=409)
+            return JsonResponse({"msg": "该微信已绑定其他账号"}, status=409)
         if len(user.user_info.wechat):
-            if not body["overwrite"]:
-                return JsonResponse({"msg0": "该账户已绑定微信"}, status=409)
+            if body["overwrite"] == "true":
+                return JsonResponse({"msg": "该账户已绑定微信"}, status=409)
         user.user_info.wechat = openid
         user.user_info.save()
         return JsonResponse({}, status=200)
@@ -404,11 +404,11 @@ class UpdateWechat(View):
         if not user.exists():
             raise UserNotFoundException()
         user = user[0]
-        token = token_pass(request.headers, id)
+        token_pass(request.headers, id)
         if not len(user.user_info.wechat):
             raise NotBoundWechat()
         if not len(user.email):
-            return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=409)
+            return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=400)
         user.user_info.wechat = ""
         user.user_info.save()
         return JsonResponse({}, status=200)
