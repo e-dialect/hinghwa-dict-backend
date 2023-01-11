@@ -19,3 +19,12 @@ class InvalidPassword(BadRequestException):
 
     def __init__(self, msg="密码不符合规范异常"):
         super().__init__(msg)
+
+
+class InsufficientQuiz(BadRequestException):
+    """
+    可用Quiz不足异常
+    """
+
+    def __init__(self, msg="可用测试题不足"):
+        super().__init__(msg)

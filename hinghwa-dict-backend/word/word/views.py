@@ -353,59 +353,50 @@ class PhoneticOrdering(View):
 
     #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
     def get(self, request) -> JsonResponse:
-        try:
-            if self.sign:
-                standard_pinyin = Word.objects.values_list("standard_pinyin").order_by(
-                    "standard_pinyin"
-                )
-                standard_pinyin = list(standard_pinyin)
-                temp = []
-                for item in standard_pinyin:
-                    item = re.split("[^a-z]", str(item))  # 去括号引号
-                    item = [x for x in item if x]
-                    temp.append(item)
-                self.root.build_trie(temp)
-                self.sign = False
-                return JsonResponse({"record": self.root.trie}, status=200)
+        if self.sign:
+            standard_pinyin = Word.objects.values_list("standard_pinyin").order_by(
+                "standard_pinyin"
+            )
+            standard_pinyin = list(standard_pinyin)
+            temp = []
+            for item in standard_pinyin:
+                item = re.split("[^a-z]", str(item))  # 去括号引号
+                item = [x for x in item if x]
+                temp.append(item)
+            self.root.build_trie(temp)
+            self.sign = False
             return JsonResponse({"record": self.root.trie}, status=200)
-        except Exception as e:
-            return JsonResponse({"msg": str(e)}, status=500)
+        return JsonResponse({"record": self.root.trie}, status=200)
 
 
 class DictionarySearch(View):
     def get(self, request) -> JsonResponse:
-        try:
-            body = demjson.decode(request.body)
-            query = ""
-            length = 0
-            if body["phonetic_order"]:
-                for it in body["phonetic_order"]:
-                    query += it + r"[0-9]\s"
-                    length += len(it) + 2
-            if query:
-                query = query[:-2]
-                length -= 1
-            print(query)
-            words = Word.objects.filter(standard_pinyin__regex=query)
-            result = [
-                word_all(word) for word in words if len(word.standard_pinyin) == length
-            ]
-            return JsonResponse({"msg": result}, status=200)
-        except Exception as e:
-            return JsonResponse({"msg": str(e)}, status=500)
+        body = demjson.decode(request.body)
+        query = ""
+        length = 0
+        if body["phonetic_order"]:
+            for it in body["phonetic_order"]:
+                query += it + r"[0-9]\s"
+                length += len(it) + 2
+        if query:
+            query = query[:-2]
+            length -= 1
+        print(query)
+        words = Word.objects.filter(standard_pinyin__regex=query)
+        result = [
+            word_all(word) for word in words if len(word.standard_pinyin) == length
+        ]
+        return JsonResponse({"msg": result}, status=200)
 
 
 class DictionarySearchInitial(View):
     def get(self, request):
-        try:
-            body = demjson.decode(request.body)
-            query = body["phonetic_order"]
-            words = Word.objects.filter(standard_pinyin__regex=query)
-            result = [
-                word_all(word)
-                for word in words
-                if word.standard_pinyin[: len(query)] == query
-            ]
-            return JsonResponse({"msg": result}, status=200)
-        except Exception as e:
-            return JsonResponse({"msg": str(e)}, status=500)
+        body = demjson.decode(request.body)
+        query = body["phonetic_order"]
+        words = Word.objects.filter(standard_pinyin__regex=query)
+        result = [
+            word_all(word)
+            for word in words
+            if word.standard_pinyin[: len(query)] == query
+        ]
+        return JsonResponse({"msg": result}, status=200)
