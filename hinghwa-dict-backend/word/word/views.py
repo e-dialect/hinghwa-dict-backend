@@ -3,12 +3,13 @@ import os
 
 import demjson
 import xlrd
+import re
 from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
+from django.views import View
 from article.models import Article
 from website.views import (
     evaluate,
@@ -323,3 +324,88 @@ def upload_standard(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+class Trie(object):
+    def __init__(self):
+        self.trie = {"": {}}
+        for i in range(97, 123):
+            self.trie[str(chr(i))] = {}
+            self.trie[str(chr(i))]["has_word"] = False
+
+    def build_trie(self, wordlist):
+        for words in wordlist:
+            t = self.trie[""]
+            if words:
+                t = self.trie[str(words[0][0])]
+            for word in words:
+                if word not in t:
+                    t[word] = {}
+                    if "has_word" not in t:
+                        t["has_word"] = False
+                t = t[word]
+            t["has_word"] = True
+
+
+class PhoneticOrdering(View):
+    root = Trie()
+    sign = True
+
+    #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
+    def get(self, request) -> JsonResponse:
+        try:
+            if self.sign:
+                standard_pinyin = Word.objects.values_list("standard_pinyin").order_by(
+                    "standard_pinyin"
+                )
+                standard_pinyin = list(standard_pinyin)
+                temp = []
+                for item in standard_pinyin:
+                    item = re.split("[^a-z]", str(item))  # 去括号引号
+                    item = [x for x in item if x]
+                    temp.append(item)
+                self.root.build_trie(temp)
+                self.sign = False
+                return JsonResponse({"record": self.root.trie}, status=200)
+            return JsonResponse({"record": self.root.trie}, status=200)
+        except Exception as e:
+            return JsonResponse({"msg": str(e)}, status=500)
+
+
+class DictionarySearch(View):
+    def get(self, request) -> JsonResponse:
+        try:
+            body = demjson.decode(request.body)
+            query = ""
+            length = 0
+            if body["phonetic_order"]:
+                for it in body["phonetic_order"]:
+                    query += it + r"[0-9]\s"
+                    length += len(it) + 2
+            if query:
+                query = query[:-2]
+                length -= 1
+            print(query)
+            words = Word.objects.filter(standard_pinyin__regex=query)
+            result = [
+                word_all(word) for word in words if len(word.standard_pinyin) == length
+            ]
+            return JsonResponse({"msg": result}, status=200)
+        except Exception as e:
+            return JsonResponse({"msg": str(e)}, status=500)
+
+
+class DictionarySearchInitial(View):
+    def get(self, request):
+        try:
+            body = demjson.decode(request.body)
+            query = body["phonetic_order"]
+            words = Word.objects.filter(standard_pinyin__regex=query)
+            result = [
+                word_all(word)
+                for word in words
+                if word.standard_pinyin[: len(query)] == query
+            ]
+            return JsonResponse({"msg": result}, status=200)
+        except Exception as e:
+            return JsonResponse({"msg": str(e)}, status=500)
