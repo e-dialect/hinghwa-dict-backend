@@ -380,7 +380,6 @@ def updateEmail(request, id):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-
 class UpdateWechat(View):
     def put(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
