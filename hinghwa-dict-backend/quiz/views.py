@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 from .models import Quiz
 from .forms import QuizForm
 from .dto.quiz_all import quiz_all
-from utils.exception.types.bad_request import BadRequestException
+from utils.exception.types.bad_request import BadRequestException, InsufficientQuiz
 from utils.exception.types.common import CommonException
 from utils.exception.types.not_found import QuizNotFoundException
 from utils.exception.types.unauthorized import UnauthorizedException
@@ -148,3 +148,17 @@ class ManageVisibility(View):
             content = f"问题(id={id})审核状态变为不可见，理由是:\n\t{msg}"
         quiz.save()
         return JsonResponse({}, status=200)
+
+
+class QuizPaper(View):
+    def get(self, request) -> JsonResponse:
+        try:
+            token = token_pass(request.headers)
+            number = int(request.GET["number"])
+            quizzes = Quiz.objects.filter(visibility=True).order_by("?")[:number]
+            if len(quizzes) != number:
+                raise InsufficientQuiz()
+            paper = [quiz_all(quiz) for quiz in quizzes]
+            return JsonResponse({"paper": paper}, status=200)
+        except Exception as e:
+            raise e

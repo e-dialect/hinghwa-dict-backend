@@ -369,7 +369,7 @@ class PhoneticOrdering(View):
                 return JsonResponse({"record": self.root.trie}, status=200)
             return JsonResponse({"record": self.root.trie}, status=200)
         except Exception as e:
-            return JsonResponse({"msg": str(e)}, status=500)
+            raise e
 
 
 class DictionarySearch(View):
@@ -392,7 +392,7 @@ class DictionarySearch(View):
             ]
             return JsonResponse({"msg": result}, status=200)
         except Exception as e:
-            return JsonResponse({"msg": str(e)}, status=500)
+            raise e
 
 
 class DictionarySearchInitial(View):
@@ -408,4 +408,4 @@ class DictionarySearchInitial(View):
             ]
             return JsonResponse({"msg": result}, status=200)
         except Exception as e:
-            return JsonResponse({"msg": str(e)}, status=500)
+            raise e
