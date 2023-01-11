@@ -88,5 +88,7 @@ class NotBoundWechat(NotFoundException):
     微信未绑定异常
     """
 
-    def __init__(self, msg="微信未绑定"):
-        super().__init__(msg)
+    def __init__(self, username=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "账户 {}微信未绑定".format(username)

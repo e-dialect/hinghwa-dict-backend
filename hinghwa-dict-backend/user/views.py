@@ -406,7 +406,7 @@ class UpdateWechat(View):
         user = user[0]
         token_pass(request.headers, id)
         if not len(user.user_info.wechat):
-            raise NotBoundWechat(id)
+            raise NotBoundWechat(user.user_info.nickname)
         if not len(user.email):
             return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=400)
         user.user_info.wechat = ""
