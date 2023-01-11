@@ -152,13 +152,10 @@ class ManageVisibility(View):
 
 class QuizPaper(View):
     def get(self, request) -> JsonResponse:
-        try:
-            token = token_pass(request.headers)
-            number = int(request.GET["number"])
-            quizzes = Quiz.objects.filter(visibility=True).order_by("?")[:number]
-            if len(quizzes) != number:
-                raise InsufficientQuiz()
-            paper = [quiz_all(quiz) for quiz in quizzes]
-            return JsonResponse({"paper": paper}, status=200)
-        except Exception as e:
-            raise e
+        token = token_pass(request.headers)
+        number = int(request.GET["number"])
+        quizzes = Quiz.objects.filter(visibility=True).order_by("?")[:number]
+        if len(quizzes) != number:
+            raise InsufficientQuiz()
+        paper = [quiz_all(quiz) for quiz in quizzes]
+        return JsonResponse({"paper": paper}, status=200)
