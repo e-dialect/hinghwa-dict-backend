@@ -15,7 +15,8 @@ from utils.PasswordValidation import password_validator
 from django.views import View
 from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
-from utils.exception.types.bad_request import BadRequestException
+from utils.exception.types.bad_request import BadRequestException, NotBoundWechat
+from utils.exception.types.not_found import UserNotFoundException
 from utils.token import generate_token, token_user, token_pass
 from utils.Upload import uploadAvatar
 from website.views import (
@@ -379,41 +380,41 @@ def updateEmail(request, id):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-@csrf_exempt
-def updateWechat(request, id):
-    try:
+
+class UpdateWechat(View):
+    def put(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
         if user.exists():
             user = user[0]
-            token = request.headers["token"]
-            if request.method == "PUT":
-                body = demjson.decode(request.body)
-                if token_check(token, settings.JWT_KEY, id):
-                    jscode = body["jscode"]
-                    openid = OpenId(jscode).get_openid().strip()
-                    if not UserInfo.objects.filter(wechat=openid).exists():
-                        user.user_info.wechat = openid
-                        user.user_info.save()
-                        return JsonResponse({}, status=200)
-                    else:
-                        return JsonResponse({}, status=409)
-                else:
-                    return JsonResponse({}, status=401)
-            elif request.method == "DELETE":
-                if token_check(token, settings.JWT_KEY, id) and len(
-                    user.user_info.wechat
-                ):
-                    user.user_info.wechat = ""
-                    user.user_info.save()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
-            else:
-                return JsonResponse({}, status=405)
+            body = demjson.decode(request.body)
+            token = token_pass(request.headers, id)
+            jscode = body["jscode"]
+            openid = OpenId(jscode).get_openid().strip()
+            if UserInfo.objects.filter(wechat=openid).exists():
+                return JsonResponse({"msg0": "该微信已绑定其他账号"}, status=409)
+            if len(user.user_info.wechat):
+                if not body["overwrite"]:
+                    return JsonResponse({"msg0": "该账户已绑定微信"}, status=409)
+            user.user_info.wechat = openid
+            user.user_info.save()
+            return JsonResponse({}, status=200)
         else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+            raise UserNotFoundException()
+
+    def delete(self, request, id) -> JsonResponse:
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            token = token_pass(request.headers, id)
+            if not len(user.user_info.wechat):
+                raise NotBoundWechat()
+            if not len(user.email):
+                return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=409)
+            user.user_info.wechat = ""
+            user.user_info.save()
+            return JsonResponse({}, status=200)
+        else:
+            raise UserNotFoundException()
 
 
 # TODO 先暂时假定QQ操作完全同微信
