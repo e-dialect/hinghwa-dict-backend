@@ -349,8 +349,10 @@ class PhoneticOrdering(View):
     #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
     def get(self, request) -> JsonResponse:
         if self.sign:
-            standard_pinyin = Word.objects.values_list("standard_pinyin").order_by(
-                "standard_pinyin"
+            standard_pinyin = (
+                Word.objects.filter(visibility=True)
+                .values_list("standard_pinyin")
+                .order_by("standard_pinyin")
             )
             standard_pinyin = list(standard_pinyin)
             temp = []
