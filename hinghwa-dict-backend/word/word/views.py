@@ -373,14 +373,13 @@ class DictionarySearch(View):
             for it in body["order"]:
                 query += it + r"[0-9]\s"
                 length += len(it) + 2
-        if "recursion" in body and body["recursion"]:  # 递归返回后续结点
-            if "prefix" in body:
-                query += body["prefix"]
+        if "recursion" in body and body["recursion"] and "prefix" in body and body["prefix"]:  # 递归返回后续结点
+            query += body["prefix"]
         else:
             if query:
                 query = query[:-2]
                 length -= 1
-        words = Word.objects.filter(standard_pinyin__regex=query).order_by(
+        words = Word.objects.filter(standard_pinyin__regex=query, visibility=True).order_by(
             "standard_pinyin"
         )[:101]
         result = []
