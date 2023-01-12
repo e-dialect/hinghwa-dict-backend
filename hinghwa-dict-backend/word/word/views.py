@@ -380,10 +380,9 @@ class DictionarySearch(View):
             if query:
                 query = query[:-2]
                 length -= 1
-        print(query)
         words = Word.objects.filter(standard_pinyin__regex=query).order_by(
             "standard_pinyin"
-        )
+        )[:101]
         result = []
         if "recursion" in body and body["recursion"]:  # 递归返回后续结点
             result = [word_all(word) for word in words]
