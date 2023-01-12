@@ -367,31 +367,30 @@ class PhoneticOrdering(View):
 class DictionarySearch(View):
     def get(self, request) -> JsonResponse:
         body = demjson.decode(request.body)
-        query = ""
+        query = r"^"
         length = 0
-        if body["phonetic_order"]:
-            for it in body["phonetic_order"]:
+        if body["order"]:
+            for it in body["order"]:
                 query += it + r"[0-9]\s"
                 length += len(it) + 2
-        if query:
-            query = query[:-2]
-            length -= 1
-        print(query)
-        words = Word.objects.filter(standard_pinyin__regex=query)
-        result = [
-            word_all(word) for word in words if len(word.standard_pinyin) == length
-        ]
-        return JsonResponse({"msg": result}, status=200)
-
-
-class DictionarySearchInitial(View):
-    def get(self, request):
-        body = demjson.decode(request.body)
-        query = body["phonetic_order"]
-        words = Word.objects.filter(standard_pinyin__regex=query)
-        result = [
-            word_all(word)
-            for word in words
-            if word.standard_pinyin[: len(query)] == query
-        ]
-        return JsonResponse({"msg": result}, status=200)
+        if "recursion" in body and body["recursion"]:  # 递归返回后续结点
+            if "prefix" in body:
+                query += body["prefix"]
+        else:
+            if query:
+                query = query[:-2]
+                length -= 1
+        words = Word.objects.filter(standard_pinyin__regex=query).order_by(
+            "standard_pinyin"
+        )[:101]
+        result = []
+        if "recursion" in body and body["recursion"]:  # 递归返回后续结点
+            result = [word_all(word) for word in words]
+        else:
+            result = [
+                word_all(word) for word in words if len(word.standard_pinyin) == length
+            ]
+        if len(result) > 100:
+            result = result[:100]
+            return JsonResponse({"words": result, "msg": "请求的词语太多了，请更精确一些"}, status=400)
+        return JsonResponse({"words": result}, status=200)
