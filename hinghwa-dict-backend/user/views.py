@@ -16,7 +16,11 @@ from django.views import View
 from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.exception.types.bad_request import BadRequestException
-from utils.exception.types.not_found import UserNotFoundException, NotBoundWechat
+from utils.exception.types.not_found import (
+    UserNotFoundException,
+    NotBoundWechat,
+    NotBoundEmail,
+)
 from utils.token import generate_token, token_user, token_pass
 from utils.Upload import uploadAvatar
 from website.views import (
@@ -455,7 +459,12 @@ def forget(request):
             # 返回用户邮箱
             user = User.objects.filter(username=request.GET["username"])
             if user.exists():
-                return JsonResponse({"email": user[0].email}, status=200)
+                user = user[0]
+                email = user.email
+                if email:
+                    return JsonResponse({"email": email}, status=200)
+                else:
+                    raise NotBoundEmail(user.user_info.nickname)
             else:
                 return JsonResponse({}, status=404)
         elif request.method == "PUT":
