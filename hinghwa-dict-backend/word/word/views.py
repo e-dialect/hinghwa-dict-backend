@@ -365,7 +365,7 @@ class PhoneticOrdering(View):
 
 
 class DictionarySearch(View):
-    def get(self, request) -> JsonResponse:
+    def post(self, request) -> JsonResponse:
         body = demjson.decode(request.body)
         query = r"^"
         length = 0
