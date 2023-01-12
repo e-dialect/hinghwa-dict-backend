@@ -328,16 +328,11 @@ def upload_standard(request):
 
 class Trie(object):
     def __init__(self):
-        self.trie = {"": {}}
-        for i in range(97, 123):
-            self.trie[str(chr(i))] = {}
-            self.trie[str(chr(i))]["has_word"] = False
+        self.trie = {}
 
     def build_trie(self, wordlist):
         for words in wordlist:
-            t = self.trie[""]
-            if words:
-                t = self.trie[str(words[0][0])]
+            t = self.trie
             for word in words:
                 if word not in t:
                     t[word] = {}
