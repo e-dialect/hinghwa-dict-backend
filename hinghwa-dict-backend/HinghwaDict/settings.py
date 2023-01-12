@@ -291,7 +291,8 @@ REST_FRAMEWORK = {
 # 保存的拼音语料.mp3
 # 分为submit和combine两个文件夹
 SAVED_PINYIN = os.path.join(BASE_DIR, "material", "audio")
-CACHE = {
+
+CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "my_cache_table",

@@ -151,7 +151,7 @@ class Pronunciation(models.Model):
         editable=False,
     )
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
-    upload_time = models.DateTimeField(verbose_name="上传时间")
+    upload_time = models.DateTimeField(verbose_name="上传时间", blank=True)
 
     def granted(self):
         return self.verifier is not None
