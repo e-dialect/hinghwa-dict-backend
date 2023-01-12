@@ -32,6 +32,8 @@ from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
 
+from utils.exception.types.bad_request import PronunciationRankWithoutDays
+
 
 @csrf_exempt
 def searchPronunciations(request):
@@ -476,29 +478,28 @@ class PronunciationRanking(View):
     def get(self, request) -> JsonResponse:
         token = token_pass(request.headers)
         rank_cache = caches["pronunciation_ranking"]
-        try:
-            days = request.GET["days"]  # 要多少天的榜单
-        except Exception:
-            return JsonResponse({"msg": "请求有问题"}, status=407)  # 已经通过
+        days = request.GET["days"]  # 要多少天的榜单
+        if not days:
+            return PronunciationRankWithoutDays()
         cache_time = rank_cache.get("updatetime")
         if not cache_time or (cache_time != datetime.datetime.today()):
             # 发现缓存时间不是今天，更新榜单,并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
-            cache_ranking_table_update = []
-            cache_ranking_table_update = self.update_pronunciation_ranking(7)
-            rank_cache.set("7", cache_ranking_table_update)
-            cache_ranking_table_update = self.update_pronunciation_ranking(30)
-            rank_cache.set("30", cache_ranking_table_update)
-            cache_ranking_table_update = self.update_pronunciation_ranking(0)
-            rank_cache.set("0", cache_ranking_table_update)
+            rank_table_update = []
+            rank_table_update = self.update_rank(7)
+            rank_cache.set("7", rank_table_update)
+            rank_table_update = self.update_rank(30)
+            rank_cache.set("30", rank_table_update)
+            rank_table_update = self.update_rank(0)
+            rank_cache.set("0", rank_table_update)
             rank_cache.set("updatetime", datetime.datetime.today())
 
-        cache_ranking_table = caches["pronunciation_ranking"].get(str(days))
+        ranking_table = caches["pronunciation_ranking"].get(str(days))
         # 发送给前端
-        return JsonResponse({"ranking": cache_ranking_table}, status=200)
+        return JsonResponse({"ranking": ranking_table}, status=200)
 
     @classmethod
-    def update_pronunciation_ranking(cls, search_days):  # 不包括存储在数据库中
-        ranking_count = {}
+    def update_rank(cls, search_days):  # 不包括存储在数据库中
+        rank_count = {}
         users = User.objects.all()
         pronunciations = Pronunciation.objects.all()
         if search_days != 0:
@@ -512,19 +513,19 @@ class PronunciationRanking(View):
             )
         for one_pronunciation in pronunciations:
             # 在已有的ranking_count字典查不到的话将该贡献者的贡献次数设置为1
-            if not ranking_count.get(one_pronunciation.contributor.id):
-                ranking_count.update({one_pronunciation.contributor.id: 1})
+            if not rank_count.get(one_pronunciation.contributor.id):
+                rank_count.update({one_pronunciation.contributor.id: 1})
             # 查得到的话将该贡献者的贡献次数加1
             else:
-                ranking_count[one_pronunciation.contributor.id] = (
-                    ranking_count[one_pronunciation.contributor.id] + 1
+                rank_count[one_pronunciation.contributor.id] = (
+                    rank_count[one_pronunciation.contributor.id] + 1
                 )
         # 排序
-        ranking_sort = sorted(
-            ranking_count.items(), key=lambda x: x[1], reverse=False
+        rank_sorted = sorted(
+            rank_count.items(), key=lambda x: x[1], reverse=False
         )  # 这是一个列表，列表的每一个元素是一个元组，每一个元组的第一个元素是用户id。第二个元素是规定时间内贡献次数
         cache_ranking_table_format = []
-        for tuple_element in ranking_sort:
+        for tuple_element in rank_sorted:
             cache_ranking_table_format.append(
                 {
                     "contributer": user_simple(users[tuple_element[0]]),
