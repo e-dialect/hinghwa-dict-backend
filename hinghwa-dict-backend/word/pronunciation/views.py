@@ -480,7 +480,7 @@ class PronunciationRanking(View):
         rank_cache = caches["pronunciation_ranking"]
         days = request.GET["days"]  # 要多少天的榜单
         if not days:
-            return PronunciationRankWithoutDays()
+            raise PronunciationRankWithoutDays()
         cache_time = rank_cache.get("updatetime")
         if not cache_time or (cache_time != datetime.datetime.today()):
             # 发现缓存时间不是今天，更新榜单,并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
