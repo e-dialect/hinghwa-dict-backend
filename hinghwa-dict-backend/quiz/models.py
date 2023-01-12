@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 
 class Quiz(models.Model):
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="quizzes", verbose_name="作者"
+        User, null=True, on_delete=models.SET_NULL, related_name="quizzes", verbose_name="作者", default=2
     )
     question = models.CharField(max_length=100, verbose_name="问题")
     options = models.TextField(verbose_name="选项", blank=True, default="[]")
