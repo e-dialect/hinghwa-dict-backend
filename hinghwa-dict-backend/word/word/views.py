@@ -96,6 +96,9 @@ def searchWords(request):
                     for id in body["related_words"]:
                         wordx = Word.objects.get(id=id)
                         word.related_words.add(wordx)
+                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+                    item = [x for x in item if x]
+                    PhoneticOrdering.root.add(item)
                     return JsonResponse({"id": word.id}, status=200)
                 else:
                     return JsonResponse({}, status=400)
@@ -144,6 +147,9 @@ def manageWord(request, id):
                 if token_check(token, settings.JWT_KEY, word.contributor.id):
                     body = body["word"]
                     word_form = WordForm(body)
+                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+                    item = [x for x in item if x]
+                    PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)
                     for key in body:
                         if (key in word_form) and len(word_form[key].errors.data):
                             return JsonResponse({}, status=400)
@@ -164,6 +170,9 @@ def manageWord(request, id):
                             for id in body["related_articles"]:
                                 article = Article.objects.get(id=id)
                                 word.related_articles.add(article)
+                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+                    item = [x for x in item if x]
+                    PhoneticOrdering.root.add(item)
                     word.save()
                     return JsonResponse({}, status=200)
                 else:
@@ -172,6 +181,9 @@ def manageWord(request, id):
             elif request.method == "DELETE":
                 token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, word.contributor.id):
+                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+                    item = [x for x in item if x]
+                    PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)
                     word.delete()
                     return JsonResponse({}, status=200)
                 else:
@@ -209,6 +221,7 @@ def load_word(request):
                     print("load character {}".format(word.id))
             else:
                 raise Exception("add fail in {}".format(dic))
+        PhoneticOrdering.sign = True  #   词语批量上传，音序表需要重建
         return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
@@ -317,6 +330,7 @@ def upload_standard(request):
                 file = csv.writer(response)
                 file.writerow(title)
                 file.writerows(conflicts)
+                PhoneticOrdering.sign = True  # 标准拼音批量上传， 音序表需重建
                 return response
             else:
                 return JsonResponse({}, status=401)
@@ -336,19 +350,45 @@ class Trie(object):
             for word in words:
                 if word not in t:
                     t[word] = {}
-                    if "has_word" not in t:
-                        t["has_word"] = False
+                    if "word_count" not in t:
+                        t["word_count"] = 0
                 t = t[word]
-            t["has_word"] = True
+            if "word_count" not in t:
+                t["word_count"] = 0
+            t["word_count"] += 1
+
+    #   从空的叶子结点递归向上删除
+    def delete(self, words, t) -> bool:
+        #   还没查到结点
+        if len(words):
+            if self.delete(words[1:], t[words[0]]):
+                del t[words[0]]
+        else:
+            t["word_count"] -= 1
+        if t["word_count"] == 0 and len(t.keys()) == 1:
+            #   这个结点没有词语，这个结点没有子节点
+            return True
+        return False
+
+    def add(self, words):
+        t = self.trie
+        for word in words:
+            if word not in t:
+                t[word] = {}
+                if "word_count" not in t:
+                    t["word_count"] = 0
+            t = t[word]
+        if "word_count" not in t:
+            t["word_count"] = 0
+        t["word_count"] += 1
 
 
 class PhoneticOrdering(View):
     root = Trie()
-    sign = True
+    sign = True  # 标记变量，决定音序表是否需要重新建立
 
-    #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
     def get(self, request) -> JsonResponse:
-        if self.sign:
+        if PhoneticOrdering.sign:
             standard_pinyin = (
                 Word.objects.filter(visibility=True)
                 .values_list("standard_pinyin")
@@ -361,7 +401,7 @@ class PhoneticOrdering(View):
                 item = [x for x in item if x]
                 temp.append(item)
             self.root.build_trie(temp)
-            self.sign = False
+            PhoneticOrdering.sign = False
             return JsonResponse({"record": self.root.trie}, status=200)
         return JsonResponse({"record": self.root.trie}, status=200)
 
