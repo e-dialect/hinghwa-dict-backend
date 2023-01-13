@@ -381,6 +381,9 @@ def upload_file(path, key):
     response = client.upload_file(
         Bucket=settings.COS_BUCKET, LocalFilePath=path, Key=key
     )
+    # if bucket name contains 'test'
+    if settings.COS_BUCKET.find("test") != -1:
+        return f"https://cos.test.edialect.top/{key}"
     return f"https://cos.edialect.top/{key}"
 
 
