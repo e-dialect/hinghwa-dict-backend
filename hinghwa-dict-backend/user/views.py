@@ -69,7 +69,7 @@ def router_users(request):
                         user_info.nickname = body["nickname"]
                     if "avatar" in body:
                         user_info.avatar = uploadAvatar(
-                            user.id, body["avatar"], user_info.avatar, suffix="png"
+                            user.id, body["avatar"], suffix="png"
                         )
                     user_info.save()
                     return JsonResponse({"id": user.id}, status=200)
@@ -172,9 +172,7 @@ class WechatOperation(View):
             if "nickname" in body:
                 user_info.nickname = body["nickname"]
             if "avatar" in body:
-                user_info.avatar = uploadAvatar(
-                    user.id, body["avatar"], user_info.avatar, suffix="png"
-                )
+                user_info.avatar = uploadAvatar(user.id, body["avatar"], suffix="png")
             user_info.save()
             return JsonResponse({}, status=200)
         else:
