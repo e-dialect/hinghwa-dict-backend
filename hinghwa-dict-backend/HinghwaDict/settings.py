@@ -295,8 +295,8 @@ TIME_ZONE = "Asia/Shanghai"
 USE_TZ = True
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
-        "LOCATION": "my_cache_table",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "default_cache_table",
     },
     "pronunciation_ranking": {
         "TIMEOUT": 900,
