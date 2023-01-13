@@ -350,12 +350,9 @@ class Trie(object):
             for word in words:
                 if word not in t:
                     t[word] = {}
-                    if "has_word" not in t:
-                        t["has_word"] = False
                     if "word_count" not in t:
                         t["word_count"] = 0
                 t = t[word]
-            t["has_word"] = True
             if "word_count" not in t:
                 t["word_count"] = 0
             t["word_count"] += 1
@@ -368,12 +365,9 @@ class Trie(object):
                 del t[words[0]]
         else:
             t["word_count"] -= 1
-        #   这个结点没有词语
-        if t["word_count"] == 0:
-            t["has_word"] = False
-            #   这个结点没有子节点
-            if len(t.keys()) == 2:
-                return True
+        if t["word_count"] == 0 and len(t.keys()) == 1:
+            #   这个结点没有词语，这个结点没有子节点
+            return True
         return False
 
     def add(self, words):
@@ -381,10 +375,9 @@ class Trie(object):
         for word in words:
             if word not in t:
                 t[word] = {}
-                if "has_word" not in t:
-                    t["has_word"] = False
+                if "word_count" not in t:
+                    t["word_count"] = 0
             t = t[word]
-        t["has_word"] = True
         if "word_count" not in t:
             t["word_count"] = 0
         t["word_count"] += 1
