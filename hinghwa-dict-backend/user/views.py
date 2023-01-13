@@ -68,9 +68,11 @@ def router_users(request):
                     if "nickname" in body:
                         user_info.nickname = body["nickname"]
                     if "avatar" in body:
-                        user_info.avatar = uploadAvatar(
-                            user.id, body["avatar"], suffix="png"
-                        )
+                        # TODO 除了默认图片外，其他照片的重复性判断
+                        if body["avatar"] != user_info.avatar:
+                            user_info.avatar = uploadAvatar(
+                                user.id, body["avatar"], suffix="png"
+                            )
                     user_info.save()
                     return JsonResponse({"id": user.id}, status=200)
                 else:
