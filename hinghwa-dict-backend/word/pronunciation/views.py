@@ -497,28 +497,32 @@ class PronunciationRanking(View):
 
     @classmethod
     def update_rank(cls, search_days):  # 不包括存储在数据库中
-        rank_count = {}
         if search_days != 0:
             start_date = timezone.now() - datetime.timedelta(days=search_days)
             # 查询上传时间不是空的并且上传时间在规定开始时间之后的
-            pronunciations = Pronunciation.objects.filter(
-                Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
+            result = (
+                Pronunciation.objects.filter(
+                    Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
+                )
+                .values("contributor_id")
+                .annotate(pronunciation_count=Count("contributor_id"))
+                .order_by("-pronunciation_count")
             )
         else:
-            pronunciations = Pronunciation.objects.all()
-        cache_ranking_table_format = []
-        test_rank = (
-            pronunciations.values("contributor_id")
-            .annotate(pronunciation_count=Count("contributor_id"))
-            .order_by("-pronunciation_count")
-        )
-        for one_rank in test_rank:
-            cache_ranking_table_format.append(
+            result = (
+                Pronunciation.objects.values("contributor_id")
+                .annotate(pronunciation_count=Count("contributor_id"))
+                .order_by("-pronunciation_count")
+            )
+        resultJSONList = []
+
+        for res in result:
+            resultJSONList.append(
                 {
                     "contributor": user_simple(
-                        User.objects.filter(id=one_rank["contributor_id"])[0]
+                        User.objects.filter(id=res["contributor_id"])[0]
                     ),
-                    "amount": one_rank["pronunciation_count"],
+                    "amount": res["pronunciation_count"],
                 }
             )
-        return cache_ranking_table_format  # 返回的是一个列表
+        return resultJSONList  # 返回的是一个列表
