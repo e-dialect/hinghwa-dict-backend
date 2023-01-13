@@ -328,16 +328,11 @@ def upload_standard(request):
 
 class Trie(object):
     def __init__(self):
-        self.trie = {"": {}}
-        for i in range(97, 123):
-            self.trie[str(chr(i))] = {}
-            self.trie[str(chr(i))]["has_word"] = False
+        self.trie = {}
 
     def build_trie(self, wordlist):
         for words in wordlist:
-            t = self.trie[""]
-            if words:
-                t = self.trie[str(words[0][0])]
+            t = self.trie
             for word in words:
                 if word not in t:
                     t[word] = {}
@@ -354,8 +349,10 @@ class PhoneticOrdering(View):
     #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
     def get(self, request) -> JsonResponse:
         if self.sign:
-            standard_pinyin = Word.objects.values_list("standard_pinyin").order_by(
-                "standard_pinyin"
+            standard_pinyin = (
+                Word.objects.filter(visibility=True)
+                .values_list("standard_pinyin")
+                .order_by("standard_pinyin")
             )
             standard_pinyin = list(standard_pinyin)
             temp = []
@@ -370,33 +367,36 @@ class PhoneticOrdering(View):
 
 
 class DictionarySearch(View):
-    def get(self, request) -> JsonResponse:
+    def post(self, request) -> JsonResponse:
         body = demjson.decode(request.body)
-        query = ""
+        query = r"^"
         length = 0
-        if body["phonetic_order"]:
-            for it in body["phonetic_order"]:
+        if body["order"]:
+            for it in body["order"]:
                 query += it + r"[0-9]\s"
                 length += len(it) + 2
-        if query:
-            query = query[:-2]
-            length -= 1
-        print(query)
-        words = Word.objects.filter(standard_pinyin__regex=query)
-        result = [
-            word_all(word) for word in words if len(word.standard_pinyin) == length
-        ]
-        return JsonResponse({"msg": result}, status=200)
-
-
-class DictionarySearchInitial(View):
-    def get(self, request):
-        body = demjson.decode(request.body)
-        query = body["phonetic_order"]
-        words = Word.objects.filter(standard_pinyin__regex=query)
-        result = [
-            word_all(word)
-            for word in words
-            if word.standard_pinyin[: len(query)] == query
-        ]
-        return JsonResponse({"msg": result}, status=200)
+        if (
+            "recursion" in body
+            and body["recursion"]
+            and "prefix" in body
+            and body["prefix"]
+        ):  # 递归返回后续结点
+            query += body["prefix"]
+        else:
+            if query:
+                query = query[:-2]
+                length -= 1
+        words = Word.objects.filter(
+            standard_pinyin__regex=query, visibility=True
+        ).order_by("standard_pinyin")[:101]
+        result = []
+        if "recursion" in body and body["recursion"]:  # 递归返回后续结点
+            result = [word_all(word) for word in words]
+        else:
+            result = [
+                word_all(word) for word in words if len(word.standard_pinyin) == length
+            ]
+        if len(result) > 100:
+            result = result[:100]
+            return JsonResponse({"words": result, "msg": "请求的词语太多了，请更精确一些"}, status=400)
+        return JsonResponse({"words": result}, status=200)
