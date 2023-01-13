@@ -221,7 +221,7 @@ def load_word(request):
                     print("load character {}".format(word.id))
             else:
                 raise Exception("add fail in {}".format(dic))
-        PhoneticOrdering.sign = False
+        PhoneticOrdering.sign = True  #   词语批量上传，音序表需要重建
         return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
@@ -330,7 +330,7 @@ def upload_standard(request):
                 file = csv.writer(response)
                 file.writerow(title)
                 file.writerows(conflicts)
-                PhoneticOrdering.sign = False
+                PhoneticOrdering.sign = True  # 标准拼音批量上传， 音序表需重建
                 return response
             else:
                 return JsonResponse({}, status=401)
@@ -392,12 +392,10 @@ class Trie(object):
 
 class PhoneticOrdering(View):
     root = Trie()
-    sign = True
+    sign = True  # 标记变量，决定音序表是否需要重新建立
 
-    #   TODO 事实上后续得对词语添加操作进行修改，来更新音序表
     def get(self, request) -> JsonResponse:
         if PhoneticOrdering.sign:
-            print(1)
             standard_pinyin = (
                 Word.objects.filter(visibility=True)
                 .values_list("standard_pinyin")
