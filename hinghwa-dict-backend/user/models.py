@@ -18,8 +18,7 @@ class UserInfo(models.Model):
     birthday = models.DateField(blank=True, default="1970-1-1", verbose_name="生日")
     telephone = models.CharField(blank=True, max_length=50, verbose_name="电话")
     avatar = models.URLField(
-        default="https://cos.edialect.top/"
-        "files/image/1/2022/01/19/bMuzwU97XtBZHve.jpg",
+        default="https://cos.edialect.top/website/默认头像.jpg",
         blank=True,
         verbose_name="头像",
     )
