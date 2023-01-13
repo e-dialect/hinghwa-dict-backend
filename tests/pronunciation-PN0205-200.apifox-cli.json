@@ -1,0 +1,2378 @@
+{
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
+        {
+          "id": "75eaa245-645d-4f74-9a8c-7a2a9ee08d60",
+          "name": "LG0101 账号密码登录(登录用户admin)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.variables.set(`user_id_1`, value);console.log('已设置临时变量【'+ `user_id_1` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【user_id_1】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
+                },
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
+                }
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 66519209,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户admin"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "2b00fc17-8c2f-4f16-8880-56d7ecc48372",
+          "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "users",
+                "{{user_id_1}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4116009,
+            "createdAt": "2021-07-28T16:58:17.000Z",
+            "updatedAt": "2022-07-07T16:44:41.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5298312,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "title": "用户字典",
+                  "description": "除了password",
+                  "$ref": "#/definitions/1097305"
+                },
+                "publish_articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "发布文章"
+                },
+                "publish_comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "发布评论"
+                },
+                "like_articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "点赞文章"
+                },
+                "contribution": {
+                  "type": "object",
+                  "properties": {
+                    "pronunciation": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "语音",
+                      "description": "审核通过语音数量"
+                    },
+                    "pronunciation_uploaded": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "上传语音",
+                      "description": "上传语音数量"
+                    },
+                    "word": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "词",
+                      "description": "审核通过数量"
+                    },
+                    "word_uploaded": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "上传词语",
+                      "description": "上传词语数量"
+                    },
+                    "listened": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "听",
+                      "description": "上传语音被播放的量"
+                    }
+                  },
+                  "required": [
+                    "pronunciation",
+                    "pronunciation_uploaded",
+                    "word",
+                    "listened",
+                    "word_uploaded"
+                  ],
+                  "x-apifox-orders": [
+                    "pronunciation",
+                    "pronunciation_uploaded",
+                    "word",
+                    "word_uploaded",
+                    "listened"
+                  ]
+                },
+                "notification": {
+                  "title": "站内通知",
+                  "description": "token字段为用户自己或管理员时返回",
+                  "type": "object",
+                  "properties": {
+                    "statistics": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer"
+                        },
+                        "sent": {
+                          "type": "integer"
+                        },
+                        "received": {
+                          "type": "integer"
+                        },
+                        "unread": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "sent",
+                        "received",
+                        "unread"
+                      ],
+                      "x-apifox-orders": [
+                        "total",
+                        "sent",
+                        "received",
+                        "unread"
+                      ]
+                    },
+                    "sent": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "from": {
+                            "description": "寄信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "to": {
+                            "description": "收信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "time": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "from",
+                          "to",
+                          "time",
+                          "title",
+                          "id"
+                        ],
+                        "x-apifox-orders": [
+                          "id",
+                          "from",
+                          "to",
+                          "time",
+                          "title"
+                        ]
+                      },
+                      "description": "按照id倒序（其实就是按照时间）"
+                    },
+                    "received": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "from": {
+                            "description": "寄信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "to": {
+                            "description": "收信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "time": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "unread": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "from",
+                          "to",
+                          "time",
+                          "title",
+                          "unread",
+                          "id"
+                        ],
+                        "description": "按照id倒序（其实就是按照时间）",
+                        "type": "object",
+                        "x-apifox-orders": [
+                          "id",
+                          "from",
+                          "to",
+                          "time",
+                          "title",
+                          "unread"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "statistics",
+                    "sent",
+                    "received"
+                  ],
+                  "x-apifox-orders": [
+                    "statistics",
+                    "sent",
+                    "received"
+                  ]
+                }
+              },
+              "required": [
+                "user",
+                "publish_articles",
+                "publish_comments",
+                "like_articles",
+                "contribution",
+                "notification"
+              ],
+              "x-apifox-orders": [
+                "user",
+                "publish_articles",
+                "publish_comments",
+                "like_articles",
+                "contribution",
+                "notification"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5298312,
+            "httpApiCaseId": 66624001,
+            "httpApiName": "US0201 获取指定用户信息",
+            "httpApiPath": "/users/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "US0201 获取指定用户信息"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "5a4f6480-381e-48fc-9b00-9701ba8f311e",
+          "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "words"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"word\": {\r\n        \"standard_ipa\": \"elit Ut dolor\",\r\n        \"standard_pinyin\": \"amet et occaecat\",\r\n        \"related_words\": [],\r\n        \"related_articles\": [],\r\n        \"visibility\": true,\r\n        \"word\": \"因\",\r\n        \"annotation\": \"号设证社各战写们好什反万少物名发。条或增装只重经问改他满会片从识局属。新务用目听世电且作亲最用许外。备广方少路山就断向门见发光。矿关采交验水定有半位复六等术如明。\",\r\n        \"definition\": \"论权命确专速平流放严命题构认然始石。家文五行斗眼专管斗例通何步土必。界器段委和事具矿正机化导近已价心员。候从却系毛对很难立育写节。们争常产率西空习层次根论步至。\",\r\n        \"mandarin\": [\r\n            \"断\"\r\n        ]\r\n    }\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`word_id_1`, value);console.log('已设置环境变量【'+ `word_id_1` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【word_id_1】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4275786,
+            "createdAt": "2021-07-31T14:43:25.000Z",
+            "updatedAt": "2021-08-02T15:13:44.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5349877,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5349877,
+            "httpApiCaseId": 66565257,
+            "httpApiName": "WD0102 管理员上传新词语",
+            "httpApiPath": "/words",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "WD0102 管理员上传新词语"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "aa3c1d41-d10d-444b-86d0-a4cd26a23b22",
+          "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "words"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"word\": {\r\n        \"standard_ipa\": \"eu ut eiusmod\",\r\n        \"standard_pinyin\": \"ipsum Duis in\",\r\n        \"related_words\": [\r\n        ],\r\n        \"annotation\": \"千万须于建斗情头毛地改般交规据政。成存族集油根今便入起关难学影安适。水划属极连资手可素元阶长山头便照体。当究手人深候与基值花目府劳装需阶。\",\r\n        \"visibility\": false,\r\n        \"definition\": \"里管能月易被元长称且红方约。往节化许何支段派心组有去体会。工多学后群取铁增声始全务来己从指。风教放型前院识证八才王办眼。件近安之例度从今划方据二造分它近期。只与日查压通出今她军象造种书音。\",\r\n        \"related_articles\": [\r\n        ],\r\n        \"mandarin\": [\r\n        ],\r\n        \"word\": \"广\"\r\n    }\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`word_id_2`, value);console.log('已设置环境变量【'+ `word_id_2` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【word_id_2】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4275786,
+            "createdAt": "2021-07-31T14:43:25.000Z",
+            "updatedAt": "2021-08-02T15:13:44.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5349877,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5349877,
+            "httpApiCaseId": 66566332,
+            "httpApiName": "WD0102 管理员上传新词语",
+            "httpApiPath": "/words",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "WD0102 管理员上传新词语"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "9de4dcec-7f7f-4648-bd95-67df0bbfdbea",
+          "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "words"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"word\": {\r\n        \"standard_ipa\": \"anim est ut quis occaecat\",\r\n        \"standard_pinyin\": \"velit\",\r\n        \"related_words\": [\r\n        ],\r\n        \"visibility\": false,\r\n        \"definition\": \"加证它立处接件正共人就工想经究。进委转例名根并情拉将什三思。具行素信名打社极称准造定队从通件酸金。农听群子内直育第清场真广合火外属共你。\",\r\n        \"annotation\": \"身题眼员计低两书受看比至。间需元能她全改才调海界九放型。她七基今们石影儿党革对南造情公习参离。效你阶林制象去光参好想别马保候量工。即根要老色观它自府部立分设素百取受。\",\r\n        \"related_articles\": [\r\n        ],\r\n        \"mandarin\": [\r\n            \"严\",\r\n            \"参\",\r\n            \"学\",\r\n            \"农\",\r\n            \"思\"\r\n        ],\r\n        \"word\": \"完\"\r\n    }\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`word_id_3`, value);console.log('已设置环境变量【'+ `word_id_3` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【word_id_3】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4275786,
+            "createdAt": "2021-07-31T14:43:25.000Z",
+            "updatedAt": "2021-08-02T15:13:44.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5349877,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5349877,
+            "httpApiCaseId": 66624479,
+            "httpApiName": "WD0102 管理员上传新词语",
+            "httpApiPath": "/words",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "WD0102 管理员上传新词语"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "d78e2eda-a130-4395-be0b-72ccdc3c24a2",
+          "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"pronunciation\": {\n        \"source\": \"https://nyyr.lb/rfaflei\",\n        \"town\": \"望花区\",\n        \"county\": \"河西区\",\n        \"ipa\": \"gwn\",\n        \"word\": \"{{word_id_1}}\",\n        \"pinyin\": \"aqwp\"\n    }\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4281313,
+            "createdAt": "2021-08-01T14:30:48.000Z",
+            "updatedAt": "2021-08-04T15:16:39.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5352384,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "发音id"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5352384,
+            "httpApiCaseId": 66519248,
+            "httpApiName": "PN0102 增加一条语音",
+            "httpApiPath": "/pronunciation",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "PN0102 增加一条语音"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "2970ab50-8c16-4032-847b-18b70763d972",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "7"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 145978331,
+            "createdAt": "2023-01-06T13:56:14.000Z",
+            "updatedAt": "2023-01-06T13:58:49.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contributor": {
+                        "$ref": "#/definitions/1077996",
+                        "title": "贡献者",
+                        "x-apifox-overrides": {}
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "title": "贡献条数"
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "contributor",
+                      "amount"
+                    ],
+                    "required": [
+                      "contributor",
+                      "amount"
+                    ]
+                  }
+                }
+              },
+              "x-apifox-orders": [
+                "ranking"
+              ],
+              "required": [
+                "ranking"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66566432,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "dec59444-3f5e-43b7-821c-2a5a2dc89f99",
+          "name": "LG0101 账号密码登录(登录用户user_test)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"user_test\",\r\n    \"password\": \"123456\"\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token_2`, value);console.log('已设置环境变量【'+ `token_2` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token_2】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`user_id_2`, value);console.log('已设置环境变量【'+ `user_id_2` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【user_id_2】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
+                },
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
+                }
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 66630348,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户user_test"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "30a49444-9f15-4792-b312-5d97b603c97c",
+          "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "users",
+                "{{user_id_2}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token_2}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4116009,
+            "createdAt": "2021-07-28T16:58:17.000Z",
+            "updatedAt": "2022-07-07T16:44:41.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5298312,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "user": {
+                  "title": "用户字典",
+                  "description": "除了password",
+                  "$ref": "#/definitions/1097305"
+                },
+                "publish_articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "发布文章"
+                },
+                "publish_comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "发布评论"
+                },
+                "like_articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "点赞文章"
+                },
+                "contribution": {
+                  "type": "object",
+                  "properties": {
+                    "pronunciation": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "语音",
+                      "description": "审核通过语音数量"
+                    },
+                    "pronunciation_uploaded": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "上传语音",
+                      "description": "上传语音数量"
+                    },
+                    "word": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "词",
+                      "description": "审核通过数量"
+                    },
+                    "word_uploaded": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "上传词语",
+                      "description": "上传词语数量"
+                    },
+                    "listened": {
+                      "type": "integer",
+                      "mock": {
+                        "mock": "@integer"
+                      },
+                      "title": "听",
+                      "description": "上传语音被播放的量"
+                    }
+                  },
+                  "required": [
+                    "pronunciation",
+                    "pronunciation_uploaded",
+                    "word",
+                    "listened",
+                    "word_uploaded"
+                  ],
+                  "x-apifox-orders": [
+                    "pronunciation",
+                    "pronunciation_uploaded",
+                    "word",
+                    "word_uploaded",
+                    "listened"
+                  ]
+                },
+                "notification": {
+                  "title": "站内通知",
+                  "description": "token字段为用户自己或管理员时返回",
+                  "type": "object",
+                  "properties": {
+                    "statistics": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer"
+                        },
+                        "sent": {
+                          "type": "integer"
+                        },
+                        "received": {
+                          "type": "integer"
+                        },
+                        "unread": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "total",
+                        "sent",
+                        "received",
+                        "unread"
+                      ],
+                      "x-apifox-orders": [
+                        "total",
+                        "sent",
+                        "received",
+                        "unread"
+                      ]
+                    },
+                    "sent": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "from": {
+                            "description": "寄信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "to": {
+                            "description": "收信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "time": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          }
+                        },
+                        "required": [
+                          "from",
+                          "to",
+                          "time",
+                          "title",
+                          "id"
+                        ],
+                        "x-apifox-orders": [
+                          "id",
+                          "from",
+                          "to",
+                          "time",
+                          "title"
+                        ]
+                      },
+                      "description": "按照id倒序（其实就是按照时间）"
+                    },
+                    "received": {
+                      "type": "array",
+                      "items": {
+                        "properties": {
+                          "id": {
+                            "type": "integer"
+                          },
+                          "from": {
+                            "description": "寄信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "to": {
+                            "description": "收信人id",
+                            "$ref": "#/definitions/1077996"
+                          },
+                          "time": {
+                            "type": "string"
+                          },
+                          "title": {
+                            "type": "string"
+                          },
+                          "unread": {
+                            "type": "boolean"
+                          }
+                        },
+                        "required": [
+                          "from",
+                          "to",
+                          "time",
+                          "title",
+                          "unread",
+                          "id"
+                        ],
+                        "description": "按照id倒序（其实就是按照时间）",
+                        "type": "object",
+                        "x-apifox-orders": [
+                          "id",
+                          "from",
+                          "to",
+                          "time",
+                          "title",
+                          "unread"
+                        ]
+                      }
+                    }
+                  },
+                  "required": [
+                    "statistics",
+                    "sent",
+                    "received"
+                  ],
+                  "x-apifox-orders": [
+                    "statistics",
+                    "sent",
+                    "received"
+                  ]
+                }
+              },
+              "required": [
+                "user",
+                "publish_articles",
+                "publish_comments",
+                "like_articles",
+                "contribution",
+                "notification"
+              ],
+              "x-apifox-orders": [
+                "user",
+                "publish_articles",
+                "publish_comments",
+                "like_articles",
+                "contribution",
+                "notification"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5298312,
+            "httpApiCaseId": 66623436,
+            "httpApiName": "US0201 获取指定用户信息",
+            "httpApiPath": "/users/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "US0201 获取指定用户信息"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "ebe04d0b-8735-43f5-8ede-a20e62fe1842",
+          "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token_2}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pronunciation\": {\r\n        \"source\": \"https://fleuvwvy.gt/zrqtmrbgh\",\r\n        \"ipa\": \"xlm\",\r\n        \"county\": \"兰溪市\",\r\n        \"town\": \"舞阳县\",\r\n        \"word\": \"{{word_id_2}}\",\r\n        \"pinyin\": \"nwoo\"\r\n    }\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4281313,
+            "createdAt": "2021-08-01T14:30:48.000Z",
+            "updatedAt": "2021-08-04T15:16:39.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5352384,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "发音id"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5352384,
+            "httpApiCaseId": 66566349,
+            "httpApiName": "PN0102 增加一条语音",
+            "httpApiPath": "/pronunciation",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "PN0102 增加一条语音"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "71f3b4c8-8e56-443e-b798-305242817680",
+          "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"pronunciation\": {\r\n        \"town\": \"新野县\",\r\n        \"source\": \"https://gftxdwsn.hr/rjmhnni\",\r\n        \"pinyin\": \"olf\",\r\n        \"county\": \"杨浦区\",\r\n        \"word\": \"{{word_id_3}}\",\r\n        \"ipa\": \"smco\"\r\n    }\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4281313,
+            "createdAt": "2021-08-01T14:30:48.000Z",
+            "updatedAt": "2021-08-04T15:16:39.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5352384,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "发音id"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5352384,
+            "httpApiCaseId": 66625058,
+            "httpApiName": "PN0102 增加一条语音",
+            "httpApiPath": "/pronunciation",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "PN0102 增加一条语音"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "3f29a6c6-a040-4ff3-997d-69778c056bbd",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "0"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 145978331,
+            "createdAt": "2023-01-06T13:56:14.000Z",
+            "updatedAt": "2023-01-06T13:58:49.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contributor": {
+                        "$ref": "#/definitions/1077996",
+                        "title": "贡献者",
+                        "x-apifox-overrides": {}
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "title": "贡献条数"
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "contributor",
+                      "amount"
+                    ],
+                    "required": [
+                      "contributor",
+                      "amount"
+                    ]
+                  }
+                }
+              },
+              "x-apifox-orders": [
+                "ranking"
+              ],
+              "required": [
+                "ranking"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66631555,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "a8e50693-66ca-4286-9cab-45cd289bae0c",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "7"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 145978331,
+            "createdAt": "2023-01-06T13:56:14.000Z",
+            "updatedAt": "2023-01-06T13:58:49.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contributor": {
+                        "$ref": "#/definitions/1077996",
+                        "title": "贡献者",
+                        "x-apifox-overrides": {}
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "title": "贡献条数"
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "contributor",
+                      "amount"
+                    ],
+                    "required": [
+                      "contributor",
+                      "amount"
+                    ]
+                  }
+                }
+              },
+              "x-apifox-orders": [
+                "ranking"
+              ],
+              "required": [
+                "ranking"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66728024,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "40819967-0ae0-45af-b0cd-e3d206dc5bb0",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "7"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 145978331,
+            "createdAt": "2023-01-06T13:56:14.000Z",
+            "updatedAt": "2023-01-06T13:58:49.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contributor": {
+                        "$ref": "#/definitions/1077996",
+                        "title": "贡献者",
+                        "x-apifox-overrides": {}
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "title": "贡献条数"
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "contributor",
+                      "amount"
+                    ],
+                    "required": [
+                      "contributor",
+                      "amount"
+                    ]
+                  }
+                }
+              },
+              "x-apifox-orders": [
+                "ranking"
+              ],
+              "required": [
+                "ranking"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66728117,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "d68b67ba-8f7e-4a51-863a-c917951e98fd",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 145978331,
+            "createdAt": "2023-01-06T13:56:14.000Z",
+            "updatedAt": "2023-01-06T13:58:49.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contributor": {
+                        "$ref": "#/definitions/1077996",
+                        "title": "贡献者",
+                        "x-apifox-overrides": {}
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "title": "贡献条数"
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "contributor",
+                      "amount"
+                    ],
+                    "required": [
+                      "contributor",
+                      "amount"
+                    ]
+                  }
+                }
+              },
+              "x-apifox-orders": [
+                "ranking"
+              ],
+              "required": [
+                "ranking"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66733795,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "9bb771de-e598-4a4b-a548-ce23a3daa7ba",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": "30"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.delay",
+                "type": "text/javascript",
+                "exec": [
+                  "setTimeout(()=>{}, 10000);"
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 145978331,
+            "createdAt": "2023-01-06T13:56:14.000Z",
+            "updatedAt": "2023-01-06T13:58:49.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "ranking": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "contributor": {
+                        "$ref": "#/definitions/1077996",
+                        "title": "贡献者",
+                        "x-apifox-overrides": {}
+                      },
+                      "amount": {
+                        "type": "integer",
+                        "title": "贡献条数"
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "contributor",
+                      "amount"
+                    ],
+                    "required": [
+                      "contributor",
+                      "amount"
+                    ]
+                  }
+                }
+              },
+              "x-apifox-orders": [
+                "ranking"
+              ],
+              "required": [
+                "ranking"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66734321,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        }
+      ],
+      "name": "语音上传榜单-200"
+    }
+  ],
+  "info": {
+    "name": "语音上传榜单-200"
+  },
+  "dataSchemas": {
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple"
+    },
+    "1097305": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "user的id",
+          "mock": {
+            "mock": "@integer(10000)"
+          }
+        },
+        "username": {
+          "type": "string",
+          "title": "用户名",
+          "mock": {
+            "mock": "@cname"
+          }
+        },
+        "nickname": {
+          "type": "string",
+          "title": "昵称",
+          "mock": {
+            "mock": "@cname"
+          }
+        },
+        "email": {
+          "type": "string",
+          "title": "邮箱",
+          "mock": {
+            "mock": "@email"
+          }
+        },
+        "telephone": {
+          "type": "string",
+          "title": "电话"
+        },
+        "birthday": {
+          "type": "string",
+          "title": "生日",
+          "mock": {
+            "mock": "@date('yyyy-MM-dd')"
+          }
+        },
+        "avatar": {
+          "type": "string",
+          "title": "头像",
+          "description": "头像的url地址",
+          "mock": {
+            "mock": "@image"
+          }
+        },
+        "is_admin": {
+          "type": "boolean",
+          "title": "是否管理员",
+          "mock": {
+            "mock": "@boolean"
+          }
+        },
+        "county": {
+          "type": "string",
+          "title": "县区",
+          "description": "用户所在县区",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "town": {
+          "type": "string",
+          "title": "乡镇",
+          "description": "用户所在乡镇",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "registration_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "注册时间"
+        },
+        "login_time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "登录时间"
+        },
+        "wechat": {
+          "type": "boolean",
+          "title": "绑定微信"
+        }
+      },
+      "required": [
+        "id",
+        "email",
+        "username",
+        "is_admin",
+        "avatar",
+        "registration_time",
+        "login_time",
+        "nickname",
+        "telephone",
+        "birthday",
+        "county",
+        "town",
+        "wechat"
+      ],
+      "title": "user_all"
+    }
+  },
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
+    },
+    "variable": {
+      "id": "f10abf95-b6d9-4a10-992a-08288f019c95",
+      "name": "测试环境",
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY3NDIwMTEzMy41MjE5NjJ9.ix2mC4Hk_Rxxe_KxPzIFCroElidd-obkgNtFZCrSA1w",
+          "key": "token"
+        },
+        {
+          "type": "any",
+          "value": "6",
+          "key": "quiz_id"
+        },
+        {
+          "type": "any",
+          "value": "5",
+          "key": "word_id_2"
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "word_id_1"
+        },
+        {
+          "type": "any",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2NzQxODQ5MDguOTg5NDkxfQ.mAZql4GXkSPUJ97VWtfMylsB2JeKhDRNdXW2N9us404",
+          "key": "token_2"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "word_id_3"
+        }
+      ]
+    },
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "variable": {
+      "id": "b1bc74a9-ab22-4432-8d90-b8120c9a0010",
+      "values": []
+    },
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false
+}

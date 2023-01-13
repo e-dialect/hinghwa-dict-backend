@@ -3,14 +3,24 @@ import random
 import shutil
 import subprocess
 import time
+import datetime
 
 import demjson
 import numpy as np
 import pydub
 from django.conf import settings
 from django.http import JsonResponse
+from django.views import View
 from django.views.decorators.csrf import csrf_exempt
+from django.core.cache import caches
+from django.db.models import Q, Count
 from pydub import AudioSegment as audio
+
+from user.models import User
+from utils.token import token_pass
+from user.dto.user_simple import user_simple
+from utils.exception.types.bad_request import PronunciationRankWithoutDays
+from utils.exception.types.not_found import WordNotFoundException
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
 from ..forms import PronunciationForm
@@ -69,6 +79,7 @@ def searchPronunciations(request):
                     }
                 )
             return JsonResponse({"pronunciation": result, "total": total}, status=200)
+
         # PN0102 增加一条语音
         elif request.method == "POST":
             token = request.headers["token"]
@@ -79,7 +90,10 @@ def searchPronunciations(request):
                 pronunciation_form = PronunciationForm(body)
                 if pronunciation_form.is_valid():
                     pronunciation = pronunciation_form.save(commit=False)
-                    pronunciation.word = Word.objects.get(id=body["word"])
+                    try:
+                        pronunciation.word = Word.objects.get(id=body["word"])
+                    except Exception:
+                        raise WordNotFoundException(body["word"])
                     pronunciation.contributor = user
                     pronunciation.save()
                     return JsonResponse({"id": pronunciation.id}, status=200)
@@ -460,3 +474,55 @@ def translatePronunciation(request):
             return JsonResponse({}, status=405)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
+
+
+class PronunciationRanking(View):
+    # PN0205 语音上传榜单
+    def get(self, request) -> JsonResponse:
+        token = token_pass(request.headers)
+        rank_cache = caches["pronunciation_ranking"]
+        days = request.GET["days"]  # 要多少天的榜单
+        if not days:
+            raise PronunciationRankWithoutDays()
+        days = int(days)
+        cache_days = rank_cache.get(str(days))
+        if cache_days == None:
+            # 发现缓存时间没有要查询的天数的，更新榜单，并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
+            rank_table = []
+            rank_table = self.update_rank(days)
+            rank_cache.set(str(days), rank_table)
+        ranking_table = rank_cache.get(str(days))
+        # 发送给前端
+        return JsonResponse({"ranking": ranking_table}, status=200)
+
+    @classmethod
+    def update_rank(cls, search_days):  # 不包括存储在数据库中
+        if search_days != 0:
+            start_date = timezone.now() - datetime.timedelta(days=search_days)
+            # 查询上传时间不是空的并且上传时间在规定开始时间之后的
+            result = (
+                Pronunciation.objects.filter(
+                    Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
+                )
+                .values("contributor_id")
+                .annotate(pronunciation_count=Count("contributor_id"))
+                .order_by("-pronunciation_count")
+            )
+        else:
+            result = (
+                Pronunciation.objects.values("contributor_id")
+                .annotate(pronunciation_count=Count("contributor_id"))
+                .order_by("-pronunciation_count")
+            )
+        resultJSONList = []
+
+        for res in result:
+            resultJSONList.append(
+                {
+                    "contributor": user_simple(
+                        User.objects.filter(id=res["contributor_id"])[0]
+                    ),
+                    "amount": res["pronunciation_count"],
+                }
+            )
+        return resultJSONList  # 返回的是一个列表
