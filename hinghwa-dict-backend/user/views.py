@@ -67,7 +67,6 @@ def router_users(request):
                     )
                     if "nickname" in body:
                         user_info.nickname = body["nickname"]
-                    user_info.save()
                     if "avatar" in body:
                         user_info.avatar = uploadAvatar(
                             user.id, body["avatar"], suffix="png"
@@ -172,7 +171,6 @@ class WechatOperation(View):
             user_info.wechat = openid
             if "nickname" in body:
                 user_info.nickname = body["nickname"]
-            user_info.save()
             if "avatar" in body:
                 user_info.avatar = uploadAvatar(user.id, body["avatar"], suffix="png")
             user_info.save()
