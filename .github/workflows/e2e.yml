@@ -40,7 +40,8 @@ jobs:
           python3 manage.py runserver &
       - uses: actions/setup-node@v3
         with:
-          node-version: "16.x"
+          node-version: 16
+          cache: 'npm'
       - name: Install apifox cli
         run: |
           npm install -g apifox-cli
