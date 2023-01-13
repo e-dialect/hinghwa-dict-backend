@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import os
 import random
 import shutil
@@ -291,7 +290,7 @@ def managePronunciation(request, id):
         pronunciation = Pronunciation.objects.filter(id=id)
         if pronunciation.exists():
             pronunciation = pronunciation[0]
-            # PN0101 获取发音信息pro
+            # PN0101 获取发音信息
             if request.method == "GET":
                 pronunciation.views += 1
                 pronunciation.save()

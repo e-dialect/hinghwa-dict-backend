@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import logging
 import os
-from threading import TIMEOUT_MAX
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import time
