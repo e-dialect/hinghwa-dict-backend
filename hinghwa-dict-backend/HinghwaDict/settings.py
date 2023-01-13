@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 import logging
 import os
+from threading import TIMEOUT_MAX
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import time
@@ -291,13 +292,15 @@ REST_FRAMEWORK = {
 # 保存的拼音语料.mp3
 # 分为submit和combine两个文件夹
 SAVED_PINYIN = os.path.join(BASE_DIR, "material", "audio")
-
+TIME_ZONE = "Asia/Shanghai"
+USE_TZ = True
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "my_cache_table",
     },
     "pronunciation_ranking": {
+        "TIMEOUT": 900,
         "BACKEND": "django.core.cache.backends.db.DatabaseCache",
         "LOCATION": "pronunciation_ranking_cache_table",
     },

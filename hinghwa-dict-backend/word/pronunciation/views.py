@@ -20,6 +20,8 @@ from pydub import AudioSegment as audio
 from user.models import User
 from utils.token import token_pass
 from user.dto.user_simple import user_simple
+from utils.exception.types.bad_request import PronunciationRankWithoutDays
+from utils.exception.types.not_found import WordNotFoundException
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
 from ..forms import PronunciationForm
@@ -31,8 +33,6 @@ from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
-
-from utils.exception.types.bad_request import PronunciationRankWithoutDays
 
 
 @csrf_exempt
@@ -80,6 +80,7 @@ def searchPronunciations(request):
                     }
                 )
             return JsonResponse({"pronunciation": result, "total": total}, status=200)
+
         # PN0102 增加一条语音
         elif request.method == "POST":
             token = request.headers["token"]
@@ -90,7 +91,10 @@ def searchPronunciations(request):
                 pronunciation_form = PronunciationForm(body)
                 if pronunciation_form.is_valid():
                     pronunciation = pronunciation_form.save(commit=False)
-                    pronunciation.word = Word.objects.get(id=body["word"])
+                    try:
+                        pronunciation.word = Word.objects.get(id=body["word"])
+                    except Exception:
+                        raise WordNotFoundException(body["word"])
                     pronunciation.contributor = user
                     pronunciation.save()
                     return JsonResponse({"id": pronunciation.id}, status=200)
@@ -287,7 +291,7 @@ def managePronunciation(request, id):
         pronunciation = Pronunciation.objects.filter(id=id)
         if pronunciation.exists():
             pronunciation = pronunciation[0]
-            # PN0101 获取发音信息
+            # PN0101 获取发音信息pro
             if request.method == "GET":
                 pronunciation.views += 1
                 pronunciation.save()
@@ -481,36 +485,28 @@ class PronunciationRanking(View):
         days = request.GET["days"]  # 要多少天的榜单
         if not days:
             raise PronunciationRankWithoutDays()
-        cache_time = rank_cache.get("updatetime")
-        if not cache_time or (cache_time != datetime.datetime.today()):
-            # 发现缓存时间不是今天，更新榜单,并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
-            rank_table_update = []
-            rank_table_update = self.update_rank(7)
-            rank_cache.set("7", rank_table_update)
-            rank_table_update = self.update_rank(30)
-            rank_cache.set("30", rank_table_update)
-            rank_table_update = self.update_rank(0)
-            rank_cache.set("0", rank_table_update)
-            rank_cache.set("updatetime", datetime.datetime.today())
-
-        ranking_table = caches["pronunciation_ranking"].get(str(days))
+        days = int(days)
+        cache_days = rank_cache.get(str(days))
+        if cache_days == None:
+            # 发现缓存时间没有要查询的天数的，更新榜单，并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
+            rank_table = []
+            rank_table = self.update_rank(days)
+            rank_cache.set(str(days), rank_table)
+        ranking_table = rank_cache.get(str(days))
         # 发送给前端
         return JsonResponse({"ranking": ranking_table}, status=200)
 
     @classmethod
     def update_rank(cls, search_days):  # 不包括存储在数据库中
         rank_count = {}
-        users = User.objects.all()
-        pronunciations = Pronunciation.objects.all()
         if search_days != 0:
-            start_date = datetime.datetime.today() - datetime.timedelta(
-                days=search_days
-            )
-
+            start_date = timezone.now() - datetime.timedelta(days=search_days)
             # 查询上传时间不是空的并且上传时间在规定开始时间之后的
             pronunciations = Pronunciation.objects.filter(
                 Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
             )
+        else:
+            pronunciations = Pronunciation.objects.all()
         for one_pronunciation in pronunciations:
             # 在已有的ranking_count字典查不到的话将该贡献者的贡献次数设置为1
             if not rank_count.get(one_pronunciation.contributor.id):
@@ -520,17 +516,18 @@ class PronunciationRanking(View):
                 rank_count[one_pronunciation.contributor.id] = (
                     rank_count[one_pronunciation.contributor.id] + 1
                 )
-        # 排序
         rank_sorted = sorted(
-            rank_count.items(), key=lambda x: x[1], reverse=False
+            rank_count.items(), key=lambda x: x[1], reverse=True
         )  # 这是一个列表，列表的每一个元素是一个元组，每一个元组的第一个元素是用户id。第二个元素是规定时间内贡献次数
         cache_ranking_table_format = []
         for tuple_element in rank_sorted:
             cache_ranking_table_format.append(
                 {
-                    "contributer": user_simple(users[tuple_element[0]]),
+                    "contributor": user_simple(
+                        User.objects.filter(id=tuple_element[0])[0]
+                    ),
                     "amount": tuple_element[1],
                 }
             )
-        # 示例：cache_ranking_table_format=[{"contributer":user_simple(users[ranking_sort2[i][0]]),"amount":ranking_sort2[i][1]},{},{},……]
+        # 示例：cache_ranking_table_format=[{"contributor":user_simple(users[ranking_sort2[i][0]]),"amount":ranking_sort2[i][1]},{},{},……]
         return cache_ranking_table_format  # 返回的是一个列表

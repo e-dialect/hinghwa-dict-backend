@@ -1,0 +1,148 @@
+{
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
+        {
+          "id": "abf4825f-5e7e-4757-89c0-457f463ca899",
+          "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "pronunciation",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "key": "days",
+                  "value": ""
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 148140767,
+            "createdAt": "2023-01-12T09:32:52.000Z",
+            "updatedAt": "2023-01-12T09:32:52.000Z",
+            "deletedAt": null,
+            "apiDetailId": 57535259,
+            "name": "没有发送天数",
+            "code": 400,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 2
+          },
+          "metaInfo": {
+            "httpApiId": 57535259,
+            "httpApiCaseId": 66517710,
+            "httpApiName": "PN0205 语音上传榜单",
+            "httpApiPath": "/pronunciation/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "PN0205 语音上传榜单"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        }
+      ],
+      "name": "语音上传榜单-400未传天数"
+    }
+  ],
+  "info": {
+    "name": "语音上传榜单-400未传天数"
+  },
+  "dataSchemas": {},
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
+    },
+    "variable": {
+      "id": "0d581996-68f3-4e62-aa28-1b235993c736",
+      "name": "测试环境",
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY3NDIwMTEzMy41MjE5NjJ9.ix2mC4Hk_Rxxe_KxPzIFCroElidd-obkgNtFZCrSA1w",
+          "key": "token"
+        },
+        {
+          "type": "any",
+          "value": "6",
+          "key": "quiz_id"
+        },
+        {
+          "type": "any",
+          "value": "5",
+          "key": "word_id_2"
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "word_id_1"
+        },
+        {
+          "type": "any",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2NzQxODQ5MDguOTg5NDkxfQ.mAZql4GXkSPUJ97VWtfMylsB2JeKhDRNdXW2N9us404",
+          "key": "token_2"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "word_id_3"
+        }
+      ]
+    },
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "variable": {
+      "id": "b1bc74a9-ab22-4432-8d90-b8120c9a0010",
+      "values": []
+    },
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false
+}
