@@ -300,7 +300,7 @@ CACHES = {
     },
     "pronunciation_ranking": {
         "TIMEOUT": 900,
-        "BACKEND": "django.core.cache.backends.db.DatabaseCache",
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "pronunciation_ranking_cache_table",
     },
 }

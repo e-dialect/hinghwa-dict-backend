@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import caches
-from django.db.models import Q
+from django.db.models import Q, Count
 from pydub import AudioSegment as audio
 
 from user.models import User
@@ -506,27 +506,19 @@ class PronunciationRanking(View):
             )
         else:
             pronunciations = Pronunciation.objects.all()
-        for one_pronunciation in pronunciations:
-            # 在已有的ranking_count字典查不到的话将该贡献者的贡献次数设置为1
-            if not rank_count.get(one_pronunciation.contributor.id):
-                rank_count.update({one_pronunciation.contributor.id: 1})
-            # 查得到的话将该贡献者的贡献次数加1
-            else:
-                rank_count[one_pronunciation.contributor.id] = (
-                    rank_count[one_pronunciation.contributor.id] + 1
-                )
-        rank_sorted = sorted(
-            rank_count.items(), key=lambda x: x[1], reverse=True
-        )  # 这是一个列表，列表的每一个元素是一个元组，每一个元组的第一个元素是用户id。第二个元素是规定时间内贡献次数
         cache_ranking_table_format = []
-        for tuple_element in rank_sorted:
+        test_rank = (
+            pronunciations.values("contributor_id")
+            .annotate(pronunciation_count=Count("contributor_id"))
+            .order_by("-pronunciation_count")
+        )
+        for one_rank in test_rank:
             cache_ranking_table_format.append(
                 {
                     "contributor": user_simple(
-                        User.objects.filter(id=tuple_element[0])[0]
+                        User.objects.filter(id=one_rank["contributor_id"])[0]
                     ),
-                    "amount": tuple_element[1],
+                    "amount": one_rank["pronunciation_count"],
                 }
             )
-        # 示例：cache_ranking_table_format=[{"contributor":user_simple(users[ranking_sort2[i][0]]),"amount":ranking_sort2[i][1]},{},{},……]
         return cache_ranking_table_format  # 返回的是一个列表
