@@ -470,16 +470,14 @@ def translatePronunciation(request):
 class PronunciationRanking(View):
     # PN0205 语音上传榜单
     def get(self, request) -> JsonResponse:
-        token = token_pass(request.headers)
         rank_cache = caches["pronunciation_ranking"]
         days = request.GET["days"]  # 要多少天的榜单
         if not days:
             raise PronunciationRankWithoutDays()
         days = int(days)
         cache_days = rank_cache.get(str(days))
-        if cache_days == None:
+        if cache_days is None:
             # 发现缓存时间没有要查询的天数的，更新榜单，并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
-            rank_table = []
             rank_table = self.update_rank(days)
             rank_cache.set(str(days), rank_table)
         ranking_table = rank_cache.get(str(days))
@@ -505,10 +503,10 @@ class PronunciationRanking(View):
                 .annotate(pronunciation_count=Count("contributor_id"))
                 .order_by("-pronunciation_count")
             )
-        resultJSONList = []
+        result_json_list = []
 
         for res in result:
-            resultJSONList.append(
+            result_json_list.append(
                 {
                     "contributor": user_simple(
                         User.objects.filter(id=res["contributor_id"])[0]
@@ -516,4 +514,4 @@ class PronunciationRanking(View):
                     "amount": res["pronunciation_count"],
                 }
             )
-        return resultJSONList  # 返回的是一个列表
+        return result_json_list  # 返回的是一个列表
