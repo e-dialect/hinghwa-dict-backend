@@ -17,9 +17,12 @@ from django.db.models import Q, Count
 from pydub import AudioSegment as audio
 
 from user.models import User
-from utils.token import token_pass,token_user
+from utils.token import token_pass, token_user
 from user.dto.user_simple import user_simple
-from utils.exception.types.bad_request import PronunciationRankWithoutDays,InvalidPronunciation
+from utils.exception.types.bad_request import (
+    PronunciationRankWithoutDays,
+    InvalidPronunciation,
+)
 from utils.exception.types.not_found import WordNotFoundException
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
