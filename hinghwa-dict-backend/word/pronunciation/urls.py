@@ -5,7 +5,7 @@ from .views import *
 app_name = "word.pronunciation"
 
 urlpatterns = [
-    path("", searchPronunciations),
+    path("", csrf_exempt(SearchPronunciations.as_view())),
     path("/<int:id>", managePronunciation),
     path("/combine", combinePronunciationV2),
     path("/translate", translatePronunciation),

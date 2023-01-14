@@ -17,9 +17,9 @@ from django.db.models import Q, Count
 from pydub import AudioSegment as audio
 
 from user.models import User
-from utils.token import token_pass
+from utils.token import token_pass,token_user
 from user.dto.user_simple import user_simple
-from utils.exception.types.bad_request import PronunciationRankWithoutDays
+from utils.exception.types.bad_request import PronunciationRankWithoutDays,InvalidPronunciation
 from utils.exception.types.not_found import WordNotFoundException
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
@@ -34,77 +34,65 @@ from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
 
 
-@csrf_exempt
-def searchPronunciations(request):
-    try:
-        # PN0201 发音的批量获取
-        if request.method == "GET":
-            if ("token" in request.headers) and token_check(
-                request.headers["token"], settings.JWT_KEY, -1
-            ):
-                pronunciations = Pronunciation.objects.all()
-            else:
-                pronunciations = Pronunciation.objects.filter(visibility=True)
-            if "verifier" in request.GET:
-                pronunciations = pronunciations.filter(
-                    verifier__id=request.GET["verifier"]
-                )
-            if "granted" in request.GET:
-                pronunciations = pronunciations.filter(
-                    verifier__isnull=request.GET["granted"] != "true"
-                )
-            if "word" in request.GET:
-                pronunciations = pronunciations.filter(word__id=request.GET["word"])
-            if "contributor" in request.GET:
-                pronunciations = pronunciations.filter(
-                    contributor__id=request.GET["contributor"]
-                )
-            pronunciations = list(pronunciations)
-            pronunciations.sort(key=lambda item: item.id)
-            total = len(pronunciations)
-            if ("order" in request.GET) and request.GET["order"] == "1":
-                pronunciations.reverse()
-            if "pageSize" in request.GET:
-                pageSize = int(request.GET["pageSize"])
-                page = int(request.GET["page"])
-                r = min(len(pronunciations), page * pageSize)
-                l = min(len(pronunciations) + 1, (page - 1) * pageSize)
-                pronunciations = pronunciations[l:r]
-            result = []
-            for pronunciation in pronunciations:
-                result.append(
-                    {
-                        "pronunciation": pronunciation_normal(pronunciation),
-                        "contributor": simpleUserInfo(pronunciation.contributor),
-                    }
-                )
-            return JsonResponse({"pronunciation": result, "total": total}, status=200)
-
-        # PN0102 增加一条语音
-        elif request.method == "POST":
-            token = request.headers["token"]
-            user = token_check(token, settings.JWT_KEY)
-            if user:
-                body = demjson.decode(request.body)
-                body = body["pronunciation"]
-                pronunciation_form = PronunciationForm(body)
-                if pronunciation_form.is_valid():
-                    pronunciation = pronunciation_form.save(commit=False)
-                    try:
-                        pronunciation.word = Word.objects.get(id=body["word"])
-                    except Exception:
-                        raise WordNotFoundException(body["word"])
-                    pronunciation.contributor = user
-                    pronunciation.save()
-                    return JsonResponse({"id": pronunciation.id}, status=200)
-                else:
-                    return JsonResponse({}, status=400)
-            else:
-                return JsonResponse({}, status=401)
+class SearchPronunciations(View):
+    # PN0201 发音的批量获取
+    def get(self, request) -> JsonResponse:
+        if ("token" in request.headers) and token_check(
+            request.headers["token"], settings.JWT_KEY, -1
+        ):
+            pronunciations = Pronunciation.objects.all()
         else:
-            return JsonResponse({}, status=405)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+            pronunciations = Pronunciation.objects.filter(visibility=True)
+        if "verifier" in request.GET:
+            pronunciations = pronunciations.filter(verifier__id=request.GET["verifier"])
+        if "granted" in request.GET:
+            pronunciations = pronunciations.filter(
+                verifier__isnull=request.GET["granted"] != "true"
+            )
+        if "word" in request.GET:
+            pronunciations = pronunciations.filter(word__id=request.GET["word"])
+        if "contributor" in request.GET:
+            pronunciations = pronunciations.filter(
+                contributor__id=request.GET["contributor"]
+            )
+        pronunciations = list(pronunciations)
+        pronunciations.sort(key=lambda item: item.id)
+        total = len(pronunciations)
+        if ("order" in request.GET) and request.GET["order"] == "1":
+            pronunciations.reverse()
+        if "pageSize" in request.GET:
+            pageSize = int(request.GET["pageSize"])
+            page = int(request.GET["page"])
+            r = min(len(pronunciations), page * pageSize)
+            l = min(len(pronunciations) + 1, (page - 1) * pageSize)
+            pronunciations = pronunciations[l:r]
+        result = []
+        for pronunciation in pronunciations:
+            result.append(
+                {
+                    "pronunciation": pronunciation_normal(pronunciation),
+                    "contributor": simpleUserInfo(pronunciation.contributor),
+                }
+            )
+        return JsonResponse({"pronunciation": result, "total": total}, status=200)
+
+    # PN0102 增加一条语音
+    def post(self, request) -> JsonResponse:
+        token = token_pass(request.headers)
+        user = token_user(token)
+        body = demjson.decode(request.body)
+        body = body["pronunciation"]
+        pronunciation_form = PronunciationForm(body)
+        if not pronunciation_form.is_valid():
+            raise InvalidPronunciation()
+        pronunciation = pronunciation_form.save(commit=False)
+        try:
+            pronunciation.word = Word.objects.get(id=body["word"])
+        except:
+            raise WordNotFoundException(body["word"])
+        pronunciation.contributor = user
+        pronunciation.save()
+        return JsonResponse({"id": pronunciation.id}, status=200)
 
 
 @csrf_exempt

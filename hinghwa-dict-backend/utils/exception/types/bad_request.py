@@ -37,3 +37,12 @@ class PronunciationRankWithoutDays(BadRequestException):
 
     def __init__(self, msg="发音排名请求没有发送天数"):
         super().__init__(msg)
+
+
+class InvalidPronunciation(BadRequestException):
+    """
+    添加语音的请求不符合格式要求异常
+    """
+
+    def __init__(self, msg="添加的语音的请求不符合格式要求"):
+        super().__init__(msg)
