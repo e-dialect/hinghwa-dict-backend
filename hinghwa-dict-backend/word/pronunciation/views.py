@@ -491,7 +491,9 @@ class PronunciationRanking(View):
             # 查询上传时间不是空的并且上传时间在规定开始时间之后的
             result = (
                 Pronunciation.objects.filter(
-                    Q(upload_time__isnull=False) & Q(upload_time__gt=start_date)
+                    Q(upload_time__isnull=False)
+                    & Q(upload_time__gt=start_date)
+                    & Q(visibility=True)
                 )
                 .values("contributor_id")
                 .annotate(pronunciation_count=Count("contributor_id"))
@@ -499,7 +501,8 @@ class PronunciationRanking(View):
             )
         else:
             result = (
-                Pronunciation.objects.values("contributor_id")
+                Pronunciation.objects.filter(visibility=True)
+                .values("contributor_id")
                 .annotate(pronunciation_count=Count("contributor_id"))
                 .order_by("-pronunciation_count")
             )
