@@ -197,9 +197,9 @@ def manageInfo(request, id):
                     user.save()
 
                 # 获取用户信息
-                publish_articles = [article.id for article in user.articles.all()]
-                publish_comment = [comment.id for comment in user.comments.all()]
-                like_articles = [article.id for article in user.like_articles.all()]
+                publish_articles = [article.id for article in user.articles.all().order_by("-update_time")]
+                publish_comment = [comment.id for comment in user.comments.all().order_by("-time")]
+                like_articles = [article.id for article in user.like_articles.all().order_by("-update_time")]
                 contribute_listened = user.contribute_pronunciation.aggregate(
                     Sum("views")
                 )["views__sum"]
