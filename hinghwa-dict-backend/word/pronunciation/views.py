@@ -46,6 +46,10 @@ class SearchPronunciations(View):
             pronunciations = Pronunciation.objects.all()
         else:
             pronunciations = Pronunciation.objects.filter(visibility=True)
+        if "visibility" in request.GET:
+            pronunciations = pronunciations.filter(
+                visibility=request.GET["visibility"] == "true"
+            )
         if "verifier" in request.GET:
             pronunciations = pronunciations.filter(verifier__id=request.GET["verifier"])
         if "granted" in request.GET:
