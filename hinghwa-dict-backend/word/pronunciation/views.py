@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import caches
-from django.db.models import Q, Count
+from django.db.models import Q, Count, Max
 from pydub import AudioSegment as audio
 
 from user.models import User
@@ -470,19 +470,48 @@ def translatePronunciation(request):
 class PronunciationRanking(View):
     # PN0205 语音上传榜单
     def get(self, request) -> JsonResponse:
-        rank_cache = caches["pronunciation_ranking"]
         days = request.GET["days"]  # 要多少天的榜单
         if not days:
             raise PronunciationRankWithoutDays()
         days = int(days)
-        cache_days = rank_cache.get(str(days))
-        if cache_days is None:
-            # 发现缓存时间没有要查询的天数的，更新榜单，并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
-            rank_table = self.update_rank(days)
-            rank_cache.set(str(days), rank_table)
-        ranking_table = rank_cache.get(str(days))
+        try:
+            token = token_pass(request.headers)
+            user: User = token_user(token)
+            my_id = user.id
+        except:
+            my_id = 0
+        my_amount = 0
+        my_rank = 0
+        rank_count = 0
+        result_json_list = []
+        for rank_q in self.get_rank_queries(days):
+            con_id = rank_q["contributor_id"]
+            amount = rank_q["pronunciation_count"]
+            rank_count = rank_count + 1
+            if con_id == my_id:
+                my_amount = amount
+                my_rank = rank_count
+            result_json_list.append(
+                {
+                    "contributor": user_simple(User.objects.filter(id=con_id)[0]),
+                    "amount": amount,
+                }
+            )
         # 发送给前端
-        return JsonResponse({"ranking": ranking_table}, status=200)
+        return JsonResponse(
+            {"ranking": result_json_list, "me": {"amount": my_amount, "rank": my_rank}},
+            status=200,
+        )
+
+    @classmethod
+    def get_rank_queries(cls, days):
+        rank_cache = caches["pronunciation_ranking"]
+        rank_queries = rank_cache.get(str(days))
+        if rank_queries is None:
+            # 发现缓存中没有要查询的天数的榜单，更新榜单，并把更新的表格录入到数据库缓存中pronunciation_ranking表的对应位置
+            rank_queries = cls.update_rank(days)
+            rank_cache.set(str(days), rank_queries)
+        return rank_queries
 
     @classmethod
     def update_rank(cls, search_days):  # 不包括存储在数据库中
@@ -496,25 +525,20 @@ class PronunciationRanking(View):
                     & Q(visibility=True)
                 )
                 .values("contributor_id")
-                .annotate(pronunciation_count=Count("contributor_id"))
-                .order_by("-pronunciation_count")
+                .annotate(
+                    pronunciation_count=Count("contributor_id"),
+                    last_date=Max("upload_time"),
+                )
+                .order_by("-pronunciation_count", "-last_date")
             )
         else:
             result = (
                 Pronunciation.objects.filter(visibility=True)
                 .values("contributor_id")
-                .annotate(pronunciation_count=Count("contributor_id"))
-                .order_by("-pronunciation_count")
+                .annotate(
+                    pronunciation_count=Count("contributor_id"),
+                    last_date=Max("upload_time"),
+                )
+                .order_by("-pronunciation_count", "-last_date")
             )
-        result_json_list = []
-
-        for res in result:
-            result_json_list.append(
-                {
-                    "contributor": user_simple(
-                        User.objects.filter(id=res["contributor_id"])[0]
-                    ),
-                    "amount": res["pronunciation_count"],
-                }
-            )
-        return result_json_list  # 返回的是一个列表
+        return result  # 返回的是Queries
