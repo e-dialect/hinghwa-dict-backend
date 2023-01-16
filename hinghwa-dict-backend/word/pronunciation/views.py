@@ -13,7 +13,7 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import caches
-from django.db.models import Q, Count,Max
+from django.db.models import Q, Count, Max
 from pydub import AudioSegment as audio
 
 from user.models import User
@@ -476,10 +476,10 @@ class PronunciationRanking(View):
         days = int(days)
         try:
             token = token_pass(request.headers)
-            user:User = token_user(token)
+            user: User = token_user(token)
             my_id = user.id
         except:
-            my_id=0
+            my_id = 0
         my_amount = 0
         my_rank = 0
         rank_count = 0
@@ -494,12 +494,12 @@ class PronunciationRanking(View):
             result_json_list.append(
                 {
                     "contributor": user_simple(User.objects.filter(id=con_id)[0]),
-                    "amount": amount
+                    "amount": amount,
                 }
             )
         # 发送给前端
         return JsonResponse(
-            {"ranking": result_json_list, "me":{"amount": my_amount, "rank": my_rank}},
+            {"ranking": result_json_list, "me": {"amount": my_amount, "rank": my_rank}},
             status=200,
         )
 
@@ -525,14 +525,20 @@ class PronunciationRanking(View):
                     & Q(visibility=True)
                 )
                 .values("contributor_id")
-                .annotate(pronunciation_count=Count("contributor_id"),last_date=Max("upload_time"))
-                .order_by("-pronunciation_count","-last_date")
+                .annotate(
+                    pronunciation_count=Count("contributor_id"),
+                    last_date=Max("upload_time"),
+                )
+                .order_by("-pronunciation_count", "-last_date")
             )
         else:
             result = (
                 Pronunciation.objects.filter(visibility=True)
                 .values("contributor_id")
-                .annotate(pronunciation_count=Count("contributor_id"),last_date=Max("upload_time"))
-                .order_by("-pronunciation_count","-last_date")
+                .annotate(
+                    pronunciation_count=Count("contributor_id"),
+                    last_date=Max("upload_time"),
+                )
+                .order_by("-pronunciation_count", "-last_date")
             )
         return result  # 返回的是Queries
