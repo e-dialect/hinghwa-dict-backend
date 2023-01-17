@@ -4,7 +4,7 @@ from user.forms import UserForm, UserInfoForm
 from utils.Upload import uploadAvatar
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.forbidden import ForbiddenException
-from utils.token import get_request_user
+from utils.token import get_request_user, generate_token
 from user.models import UserInfo, User
 from django.db.models import Sum
 from user.utils import get_user_by_id
@@ -136,7 +136,13 @@ class Manage(View):
         user.user_info.save()
         user.save()
 
-        return JsonResponse({"user": user_all(user)}, status=200)
+        return JsonResponse(
+            {
+                "user": user_all(user),
+                "token": generate_token(user),
+            },
+            status=200,
+        )
 
 
 class ManagePassword(View):
@@ -151,7 +157,13 @@ class ManagePassword(View):
         password_validator(body["newpassword"])
         user.set_password(body["newpassword"])
         user.save()
-        return JsonResponse({"user": user_all(user)}, status=200)
+        return JsonResponse(
+            {
+                "user": user_all(user),
+                "token": generate_token(user),
+            },
+            status=200,
+        )
 
 
 class ManageEmail(View):
