@@ -14,6 +14,7 @@ from django.http import JsonResponse
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.PasswordValidation import password_validator
+from website.views import email_check
 
 
 class Manage(View):
@@ -153,5 +154,20 @@ class ManagePassword(View):
             raise BadRequestException()
         password_validator(request.POST["newpassword"])
         user.set_password(request.POST["newpassword"])
+        user.save()
+        return JsonResponse({"user": user_all(user)}, status=200)
+
+
+class ManageEmail(View):
+    # US0303 更新用户邮箱
+    def put(self, request, id) -> JsonResponse:
+        user = get_request_user(request)
+        if user.id != id:
+            raise ForbiddenException
+        if not request.POST["email"]:
+            raise BadRequestException()
+        if not email_check(request.POST["email"], request.POST["code"]):
+            raise BadRequestException("验证码错误")
+        user.email = request.POST["email"]
         user.save()
         return JsonResponse({"user": user_all(user)}, status=200)

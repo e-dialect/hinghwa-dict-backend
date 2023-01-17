@@ -191,31 +191,6 @@ def pronunciation(request, id):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-@csrf_exempt
-def updateEmail(request, id):
-    try:
-        user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            if request.method == "PUT":
-                body = demjson.decode(request.body)
-                token = request.headers["token"]
-                if token_check(token, settings.JWT_KEY, id) and email_check(
-                    body["email"], body["code"]
-                ):
-                    user.email = body["email"]
-                    user.save()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
-            else:
-                return JsonResponse({}, status=405)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
-
-
 class UpdateWechat(View):
     def put(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
