@@ -54,7 +54,7 @@ class Manage(View):
                 # TODO 去除播放量相关（需要确认前端全部删除）
                 "listened": user.contribute_pronunciation.aggregate(Sum("views")).get(
                     "views__sum"
-                ),
+                ) or 0,
             },
         }
 
