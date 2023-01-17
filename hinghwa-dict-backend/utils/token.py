@@ -86,7 +86,7 @@ def generate_token(user: User) -> string:
     return token
 
 
-def get_user(request: request) -> User:
+def get_request_user(request: request) -> User:
     """
     从request中判定当前用户
     :param request:
