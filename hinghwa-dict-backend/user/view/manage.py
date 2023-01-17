@@ -1,3 +1,4 @@
+import demjson
 from django.views import View
 from user.forms import UserForm, UserInfoForm
 from utils.Upload import uploadAvatar
@@ -148,12 +149,11 @@ class ManagePassword(View):
         user = get_request_user(request)
         if user.id != id:
             raise ForbiddenException
-        if not user.check_password(request.POST["oldpassword"]):
+        body = demjson.decode(request.body)
+        if not user.check_password(body["oldpassword"]):
             raise WrongPassword()
-        if not request.POST["newpassword"]:
-            raise BadRequestException()
-        password_validator(request.POST["newpassword"])
-        user.set_password(request.POST["newpassword"])
+        password_validator(body["newpassword"])
+        user.set_password(body["newpassword"])
         user.save()
         return JsonResponse({"user": user_all(user)}, status=200)
 
@@ -164,10 +164,9 @@ class ManageEmail(View):
         user = get_request_user(request)
         if user.id != id:
             raise ForbiddenException
-        if not request.POST["email"]:
-            raise BadRequestException()
-        if not email_check(request.POST["email"], request.POST["code"]):
+        body = demjson.decode(request.body)
+        if not email_check(body["email"], body["code"]):
             raise BadRequestException("验证码错误")
-        user.email = request.POST["email"]
+        user.email = body["email"]
         user.save()
         return JsonResponse({"user": user_all(user)}, status=200)
