@@ -25,17 +25,18 @@ class Manage(View):
 
         # 获取用户信息
         publish_articles = [
-            article.id
-            for article in user.articles.all().values("id").order_by("-update_time")
+            article.get("id")
+            for article in user.articles.all().order_by("-update_time").values("id")
         ]
         publish_comment = [
-            comment.id for comment in user.comments.all().values("id").order_by("-time")
+            comment.get("id")
+            for comment in user.comments.all().order_by("-time").values("id")
         ]
         like_articles = [
-            article.id
+            article.get("id")
             for article in user.like_articles.all()
-            .values("id")
             .order_by("-update_time")
+            .values("id")
         ]
 
         response = {
