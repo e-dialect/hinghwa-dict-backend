@@ -94,6 +94,11 @@ def login(request):
             user = authenticate(username=username, password=password)
             if user:
                 user.last_login = timezone.now()
+                # 超级管理员初始状况下没有 userinfo 字段
+                if not hasattr(user, "user_info"):
+                    user.userinfo = UserInfo.objects.create(
+                        user=user, nickname=user.username
+                    )
                 user.save()
                 return JsonResponse(
                     {"token": generate_token(user), "id": user.id}, status=200
@@ -189,10 +194,10 @@ def manageInfo(request, id):
         if user.exists():
             user = user[0]
             if request.method == "GET":
-                # 超级管理员初始状况下没有 userinfo 字段
+
                 if not hasattr(user, "user_info"):
                     user.userinfo = UserInfo.objects.create(
-                        user=user, nickname="用户{}".format(random_str())
+                        user=user, nickname=user.username
                     )
                     user.save()
 
