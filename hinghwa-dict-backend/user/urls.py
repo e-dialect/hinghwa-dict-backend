@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import *
-from .views.manage import *
+from user.view.manage import Manage
 
 app_name = "users"
 
