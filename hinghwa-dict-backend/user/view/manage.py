@@ -52,9 +52,9 @@ class Manage(View):
                 "word": user.contribute_words.filter(visibility=True).count(),
                 "word_uploaded": user.contribute_words.count(),
                 # TODO 去除播放量相关（需要确认前端全部删除）
-                "listened": user.contribute_pronunciation.aggregate(Sum("views"))[
+                "listened": user.contribute_pronunciation.aggregate(Sum("views")).get(
                     "views__sum"
-                ],
+                ),
             },
         }
 
