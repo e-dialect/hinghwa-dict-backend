@@ -20,6 +20,8 @@ from website.views import (
 from ..forms import WordForm
 from ..models import Word, User
 from .word2pronunciation import word2pronunciation
+from utils.exception.types.unauthorized import UnauthorizedException
+from utils.token import token_pass, token_user
 from .dto.word_all import word_all
 from .dto.word_simple import word_simple
 
@@ -134,6 +136,16 @@ def manageWord(request, id):
             word = word[0]
             # WD0101 获取字词的内容
             if request.method == "GET":
+                user = []
+                try:
+                    token = token_pass(request.headers)
+                    user = token_user(token)
+                except UnauthorizedException:
+                    if not word.visibility:
+                        return JsonResponse({}, status=403)
+                if not word.visibility:
+                    if not user.is_superuser and not user.id == word.contributor.id:
+                        return JsonResponse({}, status=403)
                 word.views = word.views + 1
                 word.save()
                 return JsonResponse(
