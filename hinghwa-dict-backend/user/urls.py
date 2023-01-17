@@ -1,11 +1,12 @@
 from django.urls import path
 
 from .views import *
+from .views.manage import *
 
 app_name = "users"
 
 urlpatterns = [
-    path("<int:id>", manageInfo),
+    path("<int:id>", csrf_exempt(Manage.as_view())),
     path("<int:id>/pronunciation", pronunciation),
     path("<int:id>/password", csrf_exempt(UpdatePassword.as_view())),  # US0302
     path("<int:id>/wechat", csrf_exempt(UpdateWechat.as_view())),  # US0304 US0305

@@ -1,38 +1,25 @@
-import datetime
 import demjson
-import jwt
 import requests
 from django.conf import settings
 from django.contrib.auth import authenticate
-from django.db.models import Sum
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.views.decorators.http import require_POST
-from notifications.models import Notification
 from user.dto.user_all import user_all
 from utils.PasswordValidation import password_validator
 from django.views import View
-from utils.exception.types.common import CommonException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.not_found import (
-    NotFoundException,
     UserNotFoundException,
     NotBoundWechat,
     NotBoundEmail,
 )
 from utils.token import generate_token, token_user, token_pass
 from utils.Upload import uploadAvatar
-from website.views import (
-    random_str,
-    email_check,
-    token_check,
-    download_file,
-    simpleUserInfo,
-)
+from website.views import email_check, token_check
 from word.pronunciation.dto.pronunciation_simple import pronunciation_simple
-from .forms import UserForm, UserInfoForm, UserFormByWechat
+from .forms import UserForm, UserFormByWechat
 from .models import UserInfo, User
 
 # for '/users/'
@@ -185,156 +172,6 @@ class WechatOperation(View):
                 return JsonResponse({"msg": "用户名重复"}, status=409)
             else:
                 return JsonResponse({"msg": "请求有误"}, status=400)
-
-
-@csrf_exempt
-def manageInfo(request, id):
-    try:
-        user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            if request.method == "GET":
-
-                if not hasattr(user, "user_info"):
-                    user.userinfo = UserInfo.objects.create(
-                        user=user, nickname=user.username
-                    )
-                    user.save()
-
-                # 获取用户信息
-                publish_articles = [
-                    article.id
-                    for article in user.articles.all().order_by("-update_time")
-                ]
-                publish_comment = [
-                    comment.id for comment in user.comments.all().order_by("-time")
-                ]
-                like_articles = [
-                    article.id
-                    for article in user.like_articles.all().order_by("-update_time")
-                ]
-                contribute_listened = user.contribute_pronunciation.aggregate(
-                    Sum("views")
-                )["views__sum"]
-                response = {
-                    "user": user_all(user),
-                    "publish_articles": publish_articles,
-                    "publish_comments": publish_comment,
-                    "like_articles": like_articles,
-                    "contribution": {
-                        "pronunciation": user.contribute_pronunciation.filter(
-                            visibility=True
-                        ).count(),
-                        "pronunciation_uploaded": user.contribute_pronunciation.count(),
-                        "word": user.contribute_words.filter(visibility=True).count(),
-                        "word_uploaded": user.contribute_words.count(),
-                        "listened": contribute_listened if contribute_listened else 0,
-                    },
-                }
-                if "token" in request.headers:
-                    token = request.headers["token"]
-                    if token_check(token, settings.JWT_KEY, id):
-                        sent = [
-                            {
-                                "id": note.id,
-                                "from": simpleUserInfo(
-                                    User.objects.get(id=note.actor_object_id)
-                                ),
-                                "to": simpleUserInfo(
-                                    User.objects.get(id=note.recipient_id)
-                                ),
-                                "time": note.timestamp.__format__("%Y-%m-%d %H:%M:%S"),
-                                "title": note.verb,
-                            }
-                            for note in Notification.objects.filter(
-                                actor_object_id=id
-                            ).order_by("-id")
-                        ]
-                        received = Notification.objects.filter(
-                            recipient_id=id
-                        ).order_by("-id")
-                        unread = received.filter(unread=True)
-                        received = [
-                            {
-                                "id": note.id,
-                                "from": simpleUserInfo(
-                                    User.objects.get(id=note.actor_object_id)
-                                ),
-                                "to": simpleUserInfo(
-                                    User.objects.get(id=note.recipient_id)
-                                ),
-                                "time": note.timestamp.__format__("%Y-%m-%d %H:%M:%S"),
-                                "title": note.verb,
-                                "unread": note.unread,
-                            }
-                            for note in received
-                        ]
-                        response.update(
-                            {
-                                "notification": {
-                                    "statistics": {
-                                        "total": len(sent) + len(received),
-                                        "sent": len(sent),
-                                        "received": len(received),
-                                        "unread": unread.count(),
-                                    },
-                                    "sent": sent,
-                                    "received": received,
-                                }
-                            }
-                        )
-
-                return JsonResponse(response, status=200)
-            elif request.method == "PUT":
-                # 更新用户信息
-                body = demjson.decode(request.body)
-                token = request.headers["token"]
-                if token_check(token, settings.JWT_KEY, id):
-                    info = body["user"]
-                    user_form = UserForm(info)
-                    user_info_form = UserInfoForm(info)
-                    if (
-                        not (
-                            ("username" in info)
-                            and len(user_form["username"].errors.data)
-                            and info["username"] != user.username
-                        )
-                        and user_info_form.is_valid()
-                    ):
-                        if "username" in info:
-                            user.username = info["username"]
-                        for key in info:
-                            if key != "username":
-                                setattr(user.user_info, key, info[key])
-                        if ("avatar" in info) and info["avatar"].split("/", 3)[
-                            2
-                        ] not in ["api.pxm.edialect.top", "cos.edialect.top"]:
-                            suffix = "png"
-                            time = timezone.now().__format__("%Y_%m_%d")
-                            filename = time + "_" + random_str(15) + "." + suffix
-                            url = download_file(
-                                info["avatar"], "download", str(user.id), filename
-                            )
-                            if url is not None:
-                                user.user_info.avatar = url
-                        user.save()
-                        user.user_info.save()
-                        return JsonResponse({"token": generate_token(user)}, status=200)
-                    else:
-                        if (
-                            not user_form.is_valid()
-                        ) and "username" in user_form.errors:
-                            return JsonResponse({}, status=409)
-                        else:
-                            return JsonResponse({}, status=400)
-                else:
-                    return JsonResponse({}, status=401)
-            else:
-                return JsonResponse({}, status=405)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
 
 
 @csrf_exempt
