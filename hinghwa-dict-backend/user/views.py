@@ -8,14 +8,12 @@ from django.views.decorators.csrf import csrf_exempt
 from user.dto.user_all import user_all
 from utils.PasswordValidation import password_validator
 from django.views import View
-from utils.exception.types.unauthorized import WrongPassword
-from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.not_found import (
     UserNotFoundException,
     NotBoundWechat,
     NotBoundEmail,
 )
-from utils.token import generate_token, token_user, token_pass
+from utils.token import generate_token, token_pass
 from utils.Upload import uploadAvatar
 from website.views import email_check, token_check
 from word.pronunciation.dto.pronunciation_simple import pronunciation_simple
@@ -191,21 +189,6 @@ def pronunciation(request, id):
             return JsonResponse({}, status=404)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
-
-
-class UpdatePassword(View):
-    # US0302 更新用户密码
-    def put(self, request, id) -> JsonResponse:
-        user = token_user(request.headers["token"])
-        body = demjson.decode(request.body)
-        if not user.check_password(body["oldpassword"]):
-            raise WrongPassword()  # 401
-        if not body["newpassword"]:
-            raise BadRequestException()  # 400
-        password_validator(body["newpassword"])
-        user.set_password(body["newpassword"])
-        user.save()
-        return JsonResponse({}, status=200)
 
 
 @csrf_exempt

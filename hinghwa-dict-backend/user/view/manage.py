@@ -11,6 +11,9 @@ from user.dto.user_all import user_all
 from user.dto.user_simple import user_simple
 from notifications.models import Notification
 from django.http import JsonResponse
+from utils.exception.types.bad_request import BadRequestException
+from utils.exception.types.unauthorized import WrongPassword
+from utils.PasswordValidation import password_validator
 
 
 class Manage(View):
@@ -135,4 +138,20 @@ class Manage(View):
             raise BadRequestException("字段不合法")
         except ValueError:
             raise BadRequestException("值不合法")
+        return JsonResponse({"user": user_all(user)}, status=200)
+
+
+class ManagePassword(View):
+    # US0302 更新用户密码
+    def put(self, request, id) -> JsonResponse:
+        user = get_request_user(request)
+        if user.id != id:
+            raise ForbiddenException
+        if not user.check_password(request.POST["oldpassword"]):
+            raise WrongPassword()
+        if not request.POST["newpassword"]:
+            raise BadRequestException()
+        password_validator(request.POST["newpassword"])
+        user.set_password(request.POST["newpassword"])
+        user.save()
         return JsonResponse({"user": user_all(user)}, status=200)
