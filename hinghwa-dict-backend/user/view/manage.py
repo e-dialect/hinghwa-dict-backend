@@ -95,16 +95,13 @@ class Manage(View):
         info = body["user"]
         user_form = UserForm(info)
         user_info_form = UserInfoForm(info)
-        user_info_form.cleaned_data.pop("user")
         if not user_form.is_valid or not user_info_form.is_valid:
             raise ValueError
-        # forbid to change username
-        user_form.cleaned_data.pop("username")
-        # update fileds
-        for key, value in user_form.cleaned_data.items():
-            setattr(user, key, value)
-        for key, value in user_info_form.cleaned_data.items():
-            setattr(user.user_info, key, value)
+        # update fields
+        for key in ["password", "email"]:
+            setattr(user, key, user_form[key])
+        for key in user_info_form.fields:
+            setattr(user.user_info, key, user_form[key])
         # special fields
         if "avatar" in info:
             user.user_info.avatar = uploadAvatar(user.id, info["avatar"])
