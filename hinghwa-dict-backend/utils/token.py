@@ -108,3 +108,16 @@ def get_request_user(request: request) -> User:
         return user
     except:
         return AnonymousUser()
+
+
+def check_request_user(request: request, id: numbers, message="无权操作！") -> User:
+    """
+    从request中判定当前用户
+    :param request
+    :param id
+    :param message
+    :return User:
+    """
+    user = get_request_user(request)
+    if user.id != id and not user.is_superuser:
+        raise ForbiddenException(message)
