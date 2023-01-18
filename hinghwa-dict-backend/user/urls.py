@@ -2,14 +2,15 @@ from django.urls import path
 
 from .view.wechat import WechatLogin, WechatRegister, BindWechat
 from .views import *
-from user.view.manage import *
+from .view.manage import *
+from .view.forget import *
 
 app_name = "users"
 
 urlpatterns = [
     path("<int:id>/pronunciation", pronunciation),
     path("app", app),
-    path("forget", forget),
+    path("forget", csrf_exempt(Forget.as_view())),  # get LG0201 put LG0202
 ]
 
 # 用户信息管理
