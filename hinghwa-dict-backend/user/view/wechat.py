@@ -34,7 +34,8 @@ class OpenId:
 class WechatLogin(View):
     # LG0102 微信登录
     def post(self, request):
-        jscode = request.POST["jscode"]
+        body = demjson.decode(request.body)
+        jscode = body["jscode"]
         openid = OpenId(jscode).get_openid()
         user_info = UserInfo.objects.filter(wechat__contains=openid)
         if not user_info.exists():

@@ -91,8 +91,8 @@ class Manage(View):
         if request_user.id != id:
             raise ForbiddenException
         user = get_user_by_id(id)
-
-        info = request.POST["user"]
+        body = demjson.decode(request.body)
+        info = body["user"]
         user_form = UserForm(info)
         user_info_form = UserInfoForm(info)
         user_info_form.cleaned_data.pop("user")
