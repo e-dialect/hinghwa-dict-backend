@@ -23,5 +23,7 @@ urlpatterns += [
 urlpatterns += [
     path("wechat", csrf_exempt(WechatLogin.as_view())),  # post LG0102
     path("wechat/register", csrf_exempt(WechatRegister.as_view())),  # post LG0103
-    path("<int:id>/wechat", csrf_exempt(BindWechat.as_view())),  # put US0304 delete US0305
+    path(
+        "<int:id>/wechat", csrf_exempt(BindWechat.as_view())
+    ),  # put US0304 delete US0305
 ]
