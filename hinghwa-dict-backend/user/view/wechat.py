@@ -27,12 +27,12 @@ class OpenId:
         res = requests.get(url)
         openid = res.json()["openid"]
         # session_key = res.json()["session_key"]
-        return openid
+        return openid.strip()
 
 
-@csrf_exempt
-def wxlogin(request):
-    try:
+class WechatLogin(View):
+    # LG0102 微信登录
+    def post(self, request):
         body = demjson.decode(request.body)
         jscode = body["jscode"]
         openid = OpenId(jscode).get_openid().strip()
@@ -46,11 +46,10 @@ def wxlogin(request):
             )
         else:
             return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
 
 
-class WechatOperation(View):
+class WechatRegister(View):
+    # US0102 新建用户（微信）
     def post(self, request):
         body = demjson.decode(request.body)
         user_form = UserFormByWechat(body)
@@ -80,7 +79,8 @@ class WechatOperation(View):
                 return JsonResponse({"msg": "请求有误"}, status=400)
 
 
-class UpdateWechat(View):
+class BindWechat(View):
+    # US0304 绑定微信
     def put(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
         if not user.exists():
@@ -99,6 +99,7 @@ class UpdateWechat(View):
         user.user_info.save()
         return JsonResponse({}, status=200)
 
+    # US0305 取消绑定微信
     def delete(self, request, id) -> JsonResponse:
         user = User.objects.filter(id=id)
         if not user.exists():
