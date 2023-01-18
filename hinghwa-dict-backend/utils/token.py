@@ -121,3 +121,4 @@ def check_request_user(request: request, id: numbers, message="无权操作！")
     user = get_request_user(request)
     if user.id != id and not user.is_superuser:
         raise ForbiddenException(message)
+    return user
