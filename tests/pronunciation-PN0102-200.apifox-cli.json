@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "cdf02149-823a-4720-9f86-411112cc1e77",
+          "id": "6b9ec744-fdf3-4ec7-9832-1fc5c8fe1531",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -167,7 +167,7 @@
           }
         },
         {
-          "id": "7122504e-6417-43b3-b0a8-2944ebe29f13",
+          "id": "8cf899be-00af-46f9-8167-66f70beb568d",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -205,7 +205,7 @@
           "responseDefinition": {
             "id": 4116009,
             "createdAt": "2021-07-28T16:58:17.000Z",
-            "updatedAt": "2022-07-07T16:44:41.000Z",
+            "updatedAt": "2023-01-18T09:37:05.000Z",
             "deletedAt": null,
             "apiDetailId": 5298312,
             "name": "成功",
@@ -341,102 +341,13 @@
                         "received",
                         "unread"
                       ]
-                    },
-                    "sent": {
-                      "type": "array",
-                      "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "from": {
-                            "description": "寄信人id",
-                            "$ref": "#/definitions/1077996"
-                          },
-                          "to": {
-                            "description": "收信人id",
-                            "$ref": "#/definitions/1077996"
-                          },
-                          "time": {
-                            "type": "string"
-                          },
-                          "title": {
-                            "type": "string"
-                          }
-                        },
-                        "required": [
-                          "from",
-                          "to",
-                          "time",
-                          "title",
-                          "id"
-                        ],
-                        "x-apifox-orders": [
-                          "id",
-                          "from",
-                          "to",
-                          "time",
-                          "title"
-                        ]
-                      },
-                      "description": "按照id倒序（其实就是按照时间）"
-                    },
-                    "received": {
-                      "type": "array",
-                      "items": {
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "from": {
-                            "description": "寄信人id",
-                            "$ref": "#/definitions/1077996"
-                          },
-                          "to": {
-                            "description": "收信人id",
-                            "$ref": "#/definitions/1077996"
-                          },
-                          "time": {
-                            "type": "string"
-                          },
-                          "title": {
-                            "type": "string"
-                          },
-                          "unread": {
-                            "type": "boolean"
-                          }
-                        },
-                        "required": [
-                          "from",
-                          "to",
-                          "time",
-                          "title",
-                          "unread",
-                          "id"
-                        ],
-                        "description": "按照id倒序（其实就是按照时间）",
-                        "type": "object",
-                        "x-apifox-orders": [
-                          "id",
-                          "from",
-                          "to",
-                          "time",
-                          "title",
-                          "unread"
-                        ]
-                      }
                     }
                   },
                   "required": [
-                    "statistics",
-                    "sent",
-                    "received"
+                    "statistics"
                   ],
                   "x-apifox-orders": [
-                    "statistics",
-                    "sent",
-                    "received"
+                    "statistics"
                   ]
                 }
               },
@@ -445,8 +356,7 @@
                 "publish_articles",
                 "publish_comments",
                 "like_articles",
-                "contribution",
-                "notification"
+                "contribution"
               ],
               "x-apifox-orders": [
                 "user",
@@ -475,7 +385,7 @@
           }
         },
         {
-          "id": "c8b26857-6601-4ae4-8871-0d7e156900b4",
+          "id": "3c5ebe7e-4626-49f6-b0e5-763c896555bc",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -592,7 +502,7 @@
           }
         },
         {
-          "id": "75275f1a-398e-40ee-8011-cf7a92bebcda",
+          "id": "eb9d0b52-d1cb-47d2-9ba6-dca3215a9938",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -679,35 +589,6 @@
     "name": "PN0102-增加一条语音-200"
   },
   "dataSchemas": {
-    "1077996": {
-      "type": "object",
-      "properties": {
-        "nickname": {
-          "type": "string",
-          "mock": {
-            "mock": "@cname"
-          },
-          "title": "用户名"
-        },
-        "avatar": {
-          "type": "string",
-          "mock": {
-            "mock": "@image('100x100')"
-          },
-          "title": "头像"
-        },
-        "id": {
-          "type": "integer",
-          "title": "用户id"
-        }
-      },
-      "required": [
-        "nickname",
-        "avatar",
-        "id"
-      ],
-      "title": "user_simple"
-    },
     "1097305": {
       "type": "object",
       "properties": {
@@ -825,43 +706,13 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "b25785a8-f096-418c-973d-887771f19ca8",
+      "id": "d02d6a91-ae69-4bbd-bfed-f4658e736778",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2NzQyODE4NzMuMzIzMDQ3fQ.TKL9NrdSfa8dOph0R8301vmROUqeaEEgIuYJ5gzLgiQ",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImNzIiwiaWQiOjUsImV4cCI6MTY3NDU4NzU4Ni41MDYxMjJ9.N1t0oOQB6rOkcEgNqACeq7D_mmkXY062XgWnIq-3GNY",
           "key": "token"
-        },
-        {
-          "type": "any",
-          "value": "6",
-          "key": "quiz_id"
-        },
-        {
-          "type": "any",
-          "value": "5",
-          "key": "word_id_2"
-        },
-        {
-          "type": "any",
-          "value": "10",
-          "key": "word_id_1"
-        },
-        {
-          "type": "any",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2NzQxODQ5MDguOTg5NDkxfQ.mAZql4GXkSPUJ97VWtfMylsB2JeKhDRNdXW2N9us404",
-          "key": "token_2"
-        },
-        {
-          "type": "any",
-          "value": "undefined",
-          "key": "word_id_3"
-        },
-        {
-          "type": "any",
-          "value": "2",
-          "key": "user_id"
         }
       ]
     },
@@ -875,7 +726,7 @@
   },
   "globals": {
     "variable": {
-      "id": "fff62796-6c1d-41d9-92d4-25a501a91bfc",
+      "id": "a04d4136-071b-4a65-995a-409a62ed9618",
       "values": []
     },
     "parameter": {
