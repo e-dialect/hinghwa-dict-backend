@@ -11,7 +11,11 @@ from user.forms import UserFormByWechat
 from user.models import UserInfo
 from utils.PasswordValidation import password_validator
 from utils.Upload import uploadAvatar
-from utils.exception.types.not_found import UserNotFoundException, NotBoundWechat
+from utils.exception.types.not_found import (
+    UserNotFoundException,
+    NotBoundWechat,
+    NotFoundException,
+)
 from utils.token import generate_token, token_pass
 
 
@@ -33,19 +37,15 @@ class OpenId:
 class WechatLogin(View):
     # LG0102 微信登录
     def post(self, request):
-        body = demjson.decode(request.body)
-        jscode = body["jscode"]
-        openid = OpenId(jscode).get_openid().strip()
+        jscode = request.POST["jscode"]
+        openid = OpenId(jscode).get_openid()
         user_info = UserInfo.objects.filter(wechat__contains=openid)
-        if user_info.exists():
-            user = user_info[0].user
-            user.last_login = timezone.now()
-            user.save()
-            return JsonResponse(
-                {"token": generate_token(user), "id": user.id}, status=200
-            )
-        else:
-            return JsonResponse({}, status=404)
+        if not user_info.exists():
+            raise NotFoundException("当前微信未绑定账号")
+        user = user_info[0].user
+        user.last_login = timezone.now()
+        user.save()
+        return JsonResponse({"token": generate_token(user), "id": user.id}, status=200)
 
 
 class WechatRegister(View):
