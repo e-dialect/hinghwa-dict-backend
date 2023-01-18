@@ -1,5 +1,6 @@
 from django.urls import path
 
+from .view.wechat import wxlogin, WechatOperation, UpdateWechat
 from .views import *
 from user.view.manage import *
 
