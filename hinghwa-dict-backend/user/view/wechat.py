@@ -24,7 +24,10 @@ class OpenId:
         self.jscode = jscode
 
     def get_openid(self) -> str:
-        url = f"{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}&grant_type=authorization_code"
+        url = (
+            f"{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}"
+            f"&grant_type=authorization_code"
+        )
         res = requests.get(url)
         openid = res.json()["openid"]
         # session_key = res.json()["session_key"]
