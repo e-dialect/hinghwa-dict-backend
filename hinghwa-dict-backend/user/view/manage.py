@@ -5,9 +5,8 @@ from django.views import View
 from notifications.models import Notification
 
 from user.dto.user_all import user_all
-from user.dto.user_simple import user_simple
 from user.forms import UserForm, UserInfoForm
-from user.models import UserInfo, User
+from user.models import UserInfo
 from user.utils import get_user_by_id
 from utils.PasswordValidation import password_validator
 from utils.Upload import uploadAvatar

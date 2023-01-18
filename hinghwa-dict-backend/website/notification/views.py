@@ -1,5 +1,6 @@
 import demjson
 from django.contrib.auth.models import User
+from django.core.paginator import Paginator
 from django.http import JsonResponse
 from django.views import View
 from notifications.models import Notification
@@ -9,7 +10,6 @@ from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import get_request_user
 from website.notification.dto import notification_normal
 from website.views import sendNotification
-from django.core.paginator import Paginator
 
 
 class Notifications(View):
