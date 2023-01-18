@@ -65,46 +65,20 @@ class Manage(View):
         }
 
         request_user = get_request_user(request)
-        # 如果是本人额外返回邮件 TODO 独立邮件接口
+        # 如果是本人额外返回邮件
         if request_user.id == id:
-            sent = [
-                {
-                    "id": note.id,
-                    "from": user_simple(User.objects.get(id=note.actor_object_id)),
-                    "to": user_simple(User.objects.get(id=note.recipient_id)),
-                    "time": note.timestamp.__format__("%Y-%m-%d %H:%M:%S"),
-                    "title": note.verb,
-                }
-                for note in Notification.objects.filter(actor_object_id=id).order_by(
-                    "-timestamp"
-                )
-            ]
-            received = Notification.objects.filter(recipient_id=id).order_by(
-                "-timestamp"
-            )
+            sent = Notification.objects.filter(actor_object_id=id)
+            received = Notification.objects.filter(recipient_id=id)
             unread = received.filter(unread=True)
-            received = [
-                {
-                    "id": note.id,
-                    "from": user_simple(User.objects.get(id=note.actor_object_id)),
-                    "to": user_simple(User.objects.get(id=note.recipient_id)),
-                    "time": note.timestamp.__format__("%Y-%m-%d %H:%M:%S"),
-                    "title": note.verb,
-                    "unread": note.unread,
-                }
-                for note in received
-            ]
             response.update(
                 {
                     "notification": {
                         "statistics": {
-                            "total": len(sent) + len(received),
-                            "sent": len(sent),
-                            "received": len(received),
+                            "total": sent.count() + received.count(),
+                            "sent": sent.count(),
+                            "received": received.count(),
                             "unread": unread.count(),
                         },
-                        "sent": sent,
-                        "received": received,
                     }
                 }
             )
