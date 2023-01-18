@@ -1,20 +1,20 @@
 import demjson
+from django.db.models import Sum
+from django.http import JsonResponse
 from django.views import View
+from notifications.models import Notification
+
+from user.dto.user_all import user_all
+from user.dto.user_simple import user_simple
 from user.forms import UserForm, UserInfoForm
+from user.models import UserInfo, User
+from user.utils import get_user_by_id
+from utils.PasswordValidation import password_validator
 from utils.Upload import uploadAvatar
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.forbidden import ForbiddenException
-from utils.token import get_request_user, generate_token
-from user.models import UserInfo, User
-from django.db.models import Sum
-from user.utils import get_user_by_id
-from user.dto.user_all import user_all
-from user.dto.user_simple import user_simple
-from notifications.models import Notification
-from django.http import JsonResponse
-from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.unauthorized import WrongPassword
-from utils.PasswordValidation import password_validator
+from utils.token import get_request_user, generate_token
 from website.views import email_check
 
 
