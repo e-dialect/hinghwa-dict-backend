@@ -24,6 +24,7 @@ from article.models import Article
 from word.models import Word
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
+from .notification.dto import notification_normal
 
 
 def simpleUserInfo(user: User):
@@ -675,31 +676,6 @@ def readNotification(notification):
 
 
 @csrf_exempt
-def Notifications(request):
-    try:
-        token = request.headers["token"]
-        user = token_check(token, settings.JWT_KEY)
-        if request.method == "POST":
-            body = demjson.decode(request.body)
-            if user:
-                if len(body["recipients"]) == 1 and body["recipients"][0] == -1:
-                    recipients = None
-                else:
-                    recipients = User.objects.filter(id__in=body["recipients"])
-                title = body["title"] if "title" in body else None
-                notifications = sendNotification(
-                    user, recipients, body["content"], title=title
-                )
-                return JsonResponse({"notifications": notifications}, status=200)
-            else:
-                return JsonResponse({}, status=401)
-        else:
-            return JsonResponse({}, status=405)
-    except Exception as msg:
-        return JsonResponse({"msg": str(msg)}, status=500)
-
-
-@csrf_exempt
 def manageNotification(request, id):
     try:
         notification = Notification.objects.filter(id=id)
@@ -714,23 +690,7 @@ def manageNotification(request, id):
                 if user1 or user2:
                     if user2 and user2.id == notification.recipient_id:
                         readNotification(notification)
-                    return JsonResponse(
-                        {
-                            "from": simpleUserInfo(
-                                User.objects.get(id=notification.actor_object_id)
-                            ),
-                            "to": simpleUserInfo(
-                                User.objects.get(id=notification.recipient_id)
-                            ),
-                            "time": notification.timestamp.__format__(
-                                "%Y-%m-%d %H:%M:%S"
-                            ),
-                            "title": notification.verb,
-                            "content": notification.description,
-                            "public": notification.public,
-                        },
-                        status=200,
-                    )
+                    return JsonResponse(notification_normal(notification), status=200)
                 else:
                     return JsonResponse({}, status=401)
             else:
