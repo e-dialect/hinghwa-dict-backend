@@ -1,22 +1,19 @@
 import demjson
 import requests
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views import View
-from django.views.decorators.csrf import csrf_exempt
 
 from user.forms import UserFormByWechat
 from user.models import UserInfo
 from utils.PasswordValidation import password_validator
 from utils.Upload import uploadAvatar
 from utils.exception.types.not_found import (
-    UserNotFoundException,
     NotBoundWechat,
     NotFoundException,
 )
-from utils.token import generate_token, token_pass
+from utils.token import generate_token, check_request_user
 
 
 class OpenId:
@@ -55,7 +52,7 @@ class WechatRegister(View):
         user_form = UserFormByWechat(body)
         jscode = body["jscode"]
         #   获取微信信息
-        openid = OpenId(jscode).get_openid().strip()
+        openid = OpenId(jscode).get_openid()
         user_info = UserInfo.objects.filter(wechat__contains=openid)
         if user_info.exists():  # 微信号有记录了
             return JsonResponse({"msg": "该微信已绑定账户"}, status=409)
@@ -82,14 +79,10 @@ class WechatRegister(View):
 class BindWechat(View):
     # US0304 绑定微信
     def put(self, request, id) -> JsonResponse:
-        user = User.objects.filter(id=id)
-        if not user.exists():
-            raise UserNotFoundException(id)
-        user = user[0]
+        user = check_request_user(request, id)
         body = demjson.decode(request.body)
-        token_pass(request.headers, id)
         jscode = body["jscode"]
-        openid = OpenId(jscode).get_openid().strip()
+        openid = OpenId(jscode).get_openid()
         if UserInfo.objects.filter(wechat=openid).exists():
             return JsonResponse({"msg": "该微信已绑定其他账号"}, status=409)
         if len(user.user_info.wechat):
@@ -101,15 +94,11 @@ class BindWechat(View):
 
     # US0305 取消绑定微信
     def delete(self, request, id) -> JsonResponse:
-        user = User.objects.filter(id=id)
-        if not user.exists():
-            raise UserNotFoundException(id)
-        user = user[0]
-        token_pass(request.headers, id)
+        user = check_request_user(request, id)
         if not len(user.user_info.wechat):
             raise NotBoundWechat(user.user_info.nickname)
         if not len(user.email):
-            return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=400)
+            return JsonResponse({"msg": "未绑定邮箱，无法解绑微信"}, status=403)
         user.user_info.wechat = ""
         user.user_info.save()
         return JsonResponse({}, status=200)
