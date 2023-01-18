@@ -1,3 +1,4 @@
+from django.core.paginator import EmptyPage
 from django.http import JsonResponse
 from django.middleware.common import MiddlewareMixin
 
@@ -15,6 +16,8 @@ class ExceptionMiddleware(MiddlewareMixin):
         :param exception: 异常对象
         :return:
         """
+        if isinstance(exception, EmptyPage):
+            return BadRequestException(str(exception)).response()
         if isinstance(exception, KeyError):
             return BadRequestException("缺少必要参数").response()
         if isinstance(exception, ValueError):

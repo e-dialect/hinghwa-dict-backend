@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .views import *
 from .notification.views import Notifications
+from .views import *
 
 app_name = "website"
 

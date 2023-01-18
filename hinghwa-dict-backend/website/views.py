@@ -24,6 +24,7 @@ from article.models import Article
 from word.models import Word
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
+from .notification.dto import notification_normal
 
 
 def simpleUserInfo(user: User):
@@ -689,23 +690,7 @@ def manageNotification(request, id):
                 if user1 or user2:
                     if user2 and user2.id == notification.recipient_id:
                         readNotification(notification)
-                    return JsonResponse(
-                        {
-                            "from": simpleUserInfo(
-                                User.objects.get(id=notification.actor_object_id)
-                            ),
-                            "to": simpleUserInfo(
-                                User.objects.get(id=notification.recipient_id)
-                            ),
-                            "time": notification.timestamp.__format__(
-                                "%Y-%m-%d %H:%M:%S"
-                            ),
-                            "title": notification.verb,
-                            "content": notification.description,
-                            "public": notification.public,
-                        },
-                        status=200,
-                    )
+                    return JsonResponse(notification_normal(notification), status=200)
                 else:
                     return JsonResponse({}, status=401)
             else:
