@@ -12,7 +12,9 @@ def user_all(user: User) -> dict:
         "nickname": info.nickname,
         "email": user.email,
         "telephone": info.telephone,
-        "registration_time": localtime(user.date_joined).__format__("%Y-%m-%d %H:%M:%S"),
+        "registration_time": localtime(user.date_joined).__format__(
+            "%Y-%m-%d %H:%M:%S"
+        ),
         "birthday": info.birthday,
         "avatar": info.avatar,
         "county": info.county,
