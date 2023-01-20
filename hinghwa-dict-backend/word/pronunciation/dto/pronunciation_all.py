@@ -1,3 +1,4 @@
+from django.utils.timezone import localtime
 from word.models import Pronunciation
 from user.dto.user_all import user_all
 
@@ -24,6 +25,8 @@ def pronunciation_all(pronunciation: Pronunciation) -> dict:
         if pronunciation.verifier
         else None,
         "granted": pronunciation.granted(),
-        "upload_time": pronunciation.upload_time.strftime("%Y-%m-%d %H:%M:%S"),
+        "upload_time": localtime(pronunciation.upload_time).strftime(
+            "%Y-%m-%d %H:%M:%S"
+        ),
     }
     return response
