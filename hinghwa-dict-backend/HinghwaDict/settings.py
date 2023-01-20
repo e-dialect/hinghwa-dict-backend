@@ -292,7 +292,7 @@ REST_FRAMEWORK = {
 # 分为submit和combine两个文件夹
 SAVED_PINYIN = os.path.join(BASE_DIR, "material", "audio")
 TIME_ZONE = "Asia/Shanghai"
-USE_TZ = True
+USE_TZ = False
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
