@@ -93,15 +93,12 @@ class Manage(View):
         user = get_user_by_id(id)
         body = demjson.decode(request.body)
         info = body["user"]
-        user_form = UserForm(info)
         user_info_form = UserInfoForm(info)
-        if not user_form.is_valid or not user_info_form.is_valid:
+        if not user_info_form.is_valid:
             raise ValueError
         # update fields
-        for key in ["password", "email"]:
-            setattr(user, key, user_form[key])
         for key in user_info_form.fields:
-            setattr(user.user_info, key, user_form[key])
+            setattr(user.user_info, key, body["user"][key])
         # special fields
         if "avatar" in info:
             user.user_info.avatar = uploadAvatar(user.id, info["avatar"])
