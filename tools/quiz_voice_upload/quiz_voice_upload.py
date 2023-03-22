@@ -31,8 +31,8 @@ for f in files:
         result["quiz"][
             "voice_source"
         ] = f"https://cos.test.edialect.top/quizzes/{id}{suffix}"
-        print(url + "\\" + f)
-        upload_file(url + "\\" + f, result["quiz"]["voice_source"])
+        #   print(url + "\\" + f)
+        #   upload_file(url + "\\" + f, result["quiz"]["voice_source"])
         http.put(
             f"/quizzes/{id}",
             data=json.dumps(result),
