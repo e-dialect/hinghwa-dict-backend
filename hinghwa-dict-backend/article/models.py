@@ -62,6 +62,13 @@ class Comment(models.Model):
     article = models.ForeignKey(
         Article, on_delete=models.CASCADE, related_name="comments", verbose_name="评论文章"
     )
+    like_users = models.ManyToManyField(
+        User,
+        related_name="like_comments",
+        verbose_name="评论点赞用户",
+        editable=False,
+        blank=True,
+    )
 
     def __str__(self):
         return str(self.id)
@@ -77,3 +84,8 @@ class Comment(models.Model):
     def save(self, *args, **kwargs):
         self.clean()
         return super(Comment, self).save(*args, **kwargs)
+
+    def like(self):
+        return self.like_users.count()
+
+    like.short_description = "评论点赞数"

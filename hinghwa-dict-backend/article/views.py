@@ -19,7 +19,10 @@ from .dto.article_normal import article_normal
 from .dto.comment_normal import comment_normal
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
-from utils.exception.types.not_found import ArticleNotFoundException
+from utils.exception.types.not_found import (
+    ArticleNotFoundException,
+    CommentNotFoundException,
+)
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
 
@@ -289,3 +292,28 @@ class SearchComment(View):
         for comment in result:
             comments.append(comment_normal(comment))
         return JsonResponse({"comments": comments}, status=200)
+
+
+class LikeComment(View):
+    # AT0406 给文章评论点赞
+    def post(self, request, id) -> JsonResponse:
+        token = token_pass(request.headers)
+        user = token_user(token)
+        comment = Comment.objects.filter(id=id)
+        if not comment.exists():
+            raise CommentNotFoundException()
+        comment = comment[0]
+        comment.like_users.add(user)
+        return JsonResponse({}, status=200)
+
+    # AT0407 取消文章评论点赞
+    def delete(self, request, id) -> JsonResponse:
+        token = token_pass(request.headers)
+        user = token_user(token)
+        comment = Comment.objects.filter(id=id)
+        if not comment.exists():
+            raise CommentNotFoundException()
+        if not len(comment.like_users.filter(id=id)):
+            raise BadRequestException()
+        comment.like_users.remove(user)
+        return JsonResponse({}, status=200)

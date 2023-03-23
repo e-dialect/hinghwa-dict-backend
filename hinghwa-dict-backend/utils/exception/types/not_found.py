@@ -83,6 +83,17 @@ class ApplicationNotFoundException(NotFoundException):
         self.msg = "词条变更申请{}不存在！".format(id)
 
 
+class CommentNotFoundException(NotFoundException):
+    """
+    评论不存在异常
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "评论{}不存在！".format(id)
+
+
 class NotBoundWechat(NotFoundException):
     """
     微信未绑定异常

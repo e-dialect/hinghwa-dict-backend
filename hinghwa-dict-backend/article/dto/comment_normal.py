@@ -13,5 +13,6 @@ def comment_normal(comment: Comment) -> dict:
         "time": localtime(comment.time).__format__("%Y-%m-%d %H:%M:%S"),
         "parent": comment.parent_id if comment.parent else 0,
         "article": comment.article.id,
+        "likes": comment.like(),
     }
     return response
