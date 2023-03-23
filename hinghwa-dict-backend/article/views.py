@@ -304,7 +304,7 @@ class LikeComment(View):
             raise CommentNotFoundException(id)
         comment = comment[0]
         comment.like_users.add(user)
-        return JsonResponse({}, status=200)
+        return JsonResponse({"comments": comment_normal(comment)}, status=200)
 
     # AT0407 取消文章评论点赞
     def delete(self, request, id) -> JsonResponse:
@@ -317,4 +317,4 @@ class LikeComment(View):
         if not len(comment.like_users.filter(id=user.id)):
             raise BadRequestException("你还没有点赞过，不能取消文章评论点赞")
         comment.like_users.remove(user)
-        return JsonResponse({}, status=200)
+        return JsonResponse({"删除成功"}, status=200)
