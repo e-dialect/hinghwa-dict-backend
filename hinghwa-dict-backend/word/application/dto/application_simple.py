@@ -5,7 +5,6 @@ from user.dto.user_simple import user_simple
 
 
 def application_simple(application: Application) -> dict:
-
     response = {
         "content": application_simple_content(application),
         "word": application.word.id if application.word else 0,

@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "defeeb2a-fe4e-49ae-a468-b529487a135d",
+          "id": "23402256-fe94-40d8-947a-ae38c23894ed",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -130,7 +130,7 @@
           }
         },
         {
-          "id": "7b3bfaf6-4eca-4488-84c1-61469f7c3fb5",
+          "id": "6178f017-3b67-4b47-b2d4-3559f6505acf",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -249,7 +249,7 @@
           }
         },
         {
-          "id": "2972bccb-0bcc-4869-bae7-642352a2cb6a",
+          "id": "bc2687b3-8f14-4b79-95c4-b381694b8864",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -323,7 +323,211 @@
           }
         },
         {
-          "id": "5c751fd4-d5ea-4c45-9aee-3c367e3c85d6",
+          "id": "7147fe55-f042-42ba-aad1-133df9af7731",
+          "name": "AT0401 发表文章评论(AT0401 发表文章评论)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "{{article_id}}",
+                "comments"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"content\": \"长规青干实权作广难几府己。九气持听心县石角压军去门部装新构。叫后高产术空想定就四级且。历间林我术无众能议部影织近则王安意设。严间这次问观专龙得标段建都多。\",\r\n    \"parent\": 0\r\n}"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`comment_id`, value);console.log('已设置环境变量【'+ `comment_id` + '】，值为【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【comment_id】出错：' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4254359,
+            "createdAt": "2021-07-30T08:59:13.000Z",
+            "updatedAt": "2021-08-06T03:40:58.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5339208,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer",
+                  "title": "评论id",
+                  "mock": {
+                    "mock": "@integer"
+                  }
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5339208,
+            "httpApiCaseId": 77536087,
+            "httpApiName": "AT0401 发表文章评论",
+            "httpApiPath": "/articles/{id}/comments",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "AT0401 发表文章评论"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "04abad1c-aee4-409e-afd8-404968c0f6cd",
+          "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "{{article_id}}",
+                "comments"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4245943,
+            "createdAt": "2021-07-30T08:38:42.000Z",
+            "updatedAt": "2022-07-14T05:38:21.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5337279,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/1011867",
+                    "x-apifox-overrides": {}
+                  }
+                }
+              },
+              "required": [
+                "comments"
+              ],
+              "x-apifox-orders": [
+                "comments"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1
+          },
+          "metaInfo": {
+            "httpApiId": 5337279,
+            "httpApiCaseId": 77536147,
+            "httpApiName": "AT0404 获取文章评论",
+            "httpApiPath": "/articles/{id}/comments",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0404 获取文章评论"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "f715af93-8d2a-4762-84e1-1093a368de7d",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -406,7 +610,7 @@
           }
         },
         {
-          "id": "cefb5267-43d5-4d23-9aa9-1e0739813631",
+          "id": "a163b835-0937-4350-bf42-dae0ae4bd098",
           "name": "AT0102 删除文章(AT0102 删除文章)",
           "request": {
             "url": {
@@ -473,7 +677,7 @@
           }
         },
         {
-          "id": "e03ddecc-e3df-4e11-926b-2f39855af7f4",
+          "id": "9a1057eb-86ec-49af-bdd2-29ccadebb9cc",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -510,7 +714,7 @@
             "method": "DELETE",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"id\": \"2\"\r\n}"
+              "raw": "{\r\n    \"id\": \"{{comment_id}}\"\r\n}"
             },
             "type": "http"
           },
@@ -547,7 +751,7 @@
           }
         },
         {
-          "id": "9dce9ec6-3331-4356-9ed3-5d95fa21aa93",
+          "id": "09c85960-2fbd-4413-b135-d61e859c8303",
           "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
           "request": {
             "url": {
@@ -614,7 +818,7 @@
           }
         },
         {
-          "id": "18cf9575-e85a-4df3-b9d1-07721886b549",
+          "id": "f85c896c-6775-4af2-bac0-f6ebd7336816",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -623,7 +827,7 @@
               "path": [
                 "articles",
                 "comments",
-                "2",
+                "{{comment_id}}",
                 "like"
               ],
               "host": [
@@ -692,7 +896,7 @@
           }
         },
         {
-          "id": "5d8de4ec-a03e-4bb0-b96f-0936a6913b62",
+          "id": "e8c62491-b80f-4f4b-b077-0b2499d9abb6",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -701,7 +905,7 @@
               "path": [
                 "articles",
                 "comments",
-                "2",
+                "{{comment_id}}",
                 "like"
               ],
               "host": [
@@ -874,7 +1078,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "a76bbad3-0c97-435b-baca-0a93a7505794",
+      "id": "2c4bb290-2b17-4c76-95da-7269d496f1ca",
       "name": "测试环境",
       "values": [
         {
@@ -924,7 +1128,7 @@
   },
   "globals": {
     "variable": {
-      "id": "a272bd17-0f5d-4091-a7e0-631be0a8aa16",
+      "id": "1b462f33-b871-4a54-9915-75bbbe3ba081",
       "values": []
     },
     "parameter": {

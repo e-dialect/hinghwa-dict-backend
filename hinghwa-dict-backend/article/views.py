@@ -301,7 +301,7 @@ class LikeComment(View):
         user = token_user(token)
         comment = Comment.objects.filter(id=id)
         if not comment.exists():
-            raise CommentNotFoundException()
+            raise CommentNotFoundException(id)
         comment = comment[0]
         comment.like_users.add(user)
         return JsonResponse({}, status=200)
@@ -312,9 +312,9 @@ class LikeComment(View):
         user = token_user(token)
         comment = Comment.objects.filter(id=id)
         if not comment.exists():
-            raise CommentNotFoundException()
+            raise CommentNotFoundException(id)
         comment = comment[0]
         if not len(comment.like_users.filter(id=user.id)):
-            raise BadRequestException()
+            raise BadRequestException("你还没有点赞过，不能取消文章评论点赞")
         comment.like_users.remove(user)
         return JsonResponse({}, status=200)

@@ -6,9 +6,7 @@ from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from user.dto.user_all import user_all
 from utils.PasswordValidation import password_validator
-from utils.exception.types.not_found import (
-    NotBoundEmail,
-)
+from utils.exception.types.not_found import NotBoundEmail
 from utils.token import generate_token
 from utils.Upload import uploadAvatar
 from website.views import email_check, token_check
