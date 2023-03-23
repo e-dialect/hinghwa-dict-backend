@@ -313,7 +313,8 @@ class LikeComment(View):
         comment = Comment.objects.filter(id=id)
         if not comment.exists():
             raise CommentNotFoundException()
-        if not len(comment.like_users.filter(id=id)):
+        comment = comment[0]
+        if not len(comment.like_users.filter(id=user.id)):
             raise BadRequestException()
         comment.like_users.remove(user)
         return JsonResponse({}, status=200)
