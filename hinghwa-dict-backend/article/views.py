@@ -17,11 +17,13 @@ from django.conf import settings
 from .dto.article_all import article_all
 from .dto.article_normal import article_normal
 from .dto.comment_normal import comment_normal
+from .dto.comment_likes import comment_likes
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.not_found import (
     ArticleNotFoundException,
     CommentNotFoundException,
+    NotFoundException,
 )
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
@@ -217,9 +219,9 @@ class LikeArticle(View):
         token = token_pass(request.headers)
         user = token_user(token)
         if not len(article.like_users.filter(id=user.id)):
-            raise BadRequestException()
+            raise NotFoundException("你还没有给文章点赞过，不能取消点赞")
         article.like_users.remove(user)
-        return JsonResponse({}, status=200)
+        return JsonResponse({"msg": "取消文章点赞成功"}, status=200)
 
 
 class CommentArticle(View):
@@ -302,9 +304,10 @@ class LikeComment(View):
         comment = Comment.objects.filter(id=id)
         if not comment.exists():
             raise CommentNotFoundException(id)
+        # 可能这边可以写一个已经点赞过来防范攻击？
         comment = comment[0]
         comment.like_users.add(user)
-        return JsonResponse({"comments": comment_normal(comment)}, status=200)
+        return JsonResponse(comment_likes(comment), status=200)
 
     # AT0407 取消文章评论点赞
     def delete(self, request, id) -> JsonResponse:
@@ -315,6 +318,6 @@ class LikeComment(View):
             raise CommentNotFoundException(id)
         comment = comment[0]
         if not len(comment.like_users.filter(id=user.id)):
-            raise BadRequestException("你还没有点赞过，不能取消文章评论点赞")
+            raise NotFoundException("你还没有给评论点赞过，不能取消文章评论点赞")
         comment.like_users.remove(user)
-        return JsonResponse({"删除成功"}, status=200)
+        return JsonResponse({}, status=200)
