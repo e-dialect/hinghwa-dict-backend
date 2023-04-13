@@ -320,4 +320,4 @@ class LikeComment(View):
         if not len(comment.like_users.filter(id=user.id)):
             raise NotFoundException("你还没有给评论点赞过，不能取消文章评论点赞")
         comment.like_users.remove(user)
-        return JsonResponse({}, status=200)
+        return JsonResponse(comment_likes(comment), status=200)

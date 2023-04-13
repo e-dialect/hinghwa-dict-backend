@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "74db8d9b-d9b8-44fe-98e6-e0630edf254a",
+          "id": "409b7b3b-219a-4952-99a2-c81ef07b0016",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,9 +37,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -52,6 +54,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -62,6 +68,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -73,12 +88,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             },
@@ -89,6 +105,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.id`);",
@@ -99,6 +119,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -110,12 +139,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【'+ `user_id` + '】，值为【' + value + '】')",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【user_id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【user_id】出错：' + e.message;",
+                  "        e.message = '提取变量【user_id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -151,7 +181,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -159,15 +215,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
+            "httpApiCaseName": "登录用户admin",
+            "id": "7b53608b-ace7-4764-ac95-c5091f6a05ef",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "c1eb4529-2a6e-4202-a72c-eed48af53e9c",
+          "id": "6fd49038-ef39-426b-a566-e89b1280fb81",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -192,7 +251,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -200,9 +259,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"title\": \"车市参\",\n    \"description\": \"满林就子极济住群十认电很。\",\n    \"content\": \"文山习传对处广众备西到长。时定张律采铁影电铁后地周。共关解放多世议金布常世细公原只。元习物内根战教外样义口十它。\",\n    \"cover\": \"http://dummyimage.com/240x400\"\n}"
+              "raw": "{\n    \"title\": \"车市参\",\n    \"description\": \"满林就子极济住群十认电很。\",\n    \"content\": \"文山习传对处广众备西到长。时定张律采铁影电铁后地周。共关解放多世议金布常世细公原只。元习物内根战教外样义口十它。\",\n    \"cover\": \"http://dummyimage.com/240x400\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -215,6 +276,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.id`);",
@@ -225,6 +290,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -236,12 +310,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`article_id`, value);console.log('已设置环境变量【'+ `article_id` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`article_id`, value);console.log('已设置环境变量【article_id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【article_id】出错：' + e.message;",
+                  "        e.message = '提取变量【article_id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -270,7 +345,51 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@ctitle"
+                  },
+                  "title": "文章标题"
+                },
+                "description": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@csentence"
+                  },
+                  "title": "文章简介"
+                },
+                "content": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cparagraph"
+                  },
+                  "title": "文章内容",
+                  "description": "markdown"
+                },
+                "cover": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@image"
+                  },
+                  "title": "文章封面",
+                  "description": "url"
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "content",
+                "cover"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318101,
@@ -278,15 +397,18 @@
             "httpApiName": "AT0101 创建文章",
             "httpApiPath": "/articles",
             "httpApiMethod": "post",
-            "httpApiCaseName": "AT0101 创建文章"
+            "httpApiCaseName": "AT0101 创建文章",
+            "id": "1f8d1c64-d58c-430a-97d7-04e2ed4d5ce4",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "72c0cf2f-5304-43c1-9760-74ad24a89aab",
+          "id": "48321afa-bcbd-4625-9463-0035002121b3",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -313,7 +435,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -321,9 +443,11 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"result\": true,\n    \"reason\": \"ad in velit\"\n}"
+              "raw": "{\n    \"result\": true,\n    \"reason\": \"ad in velit\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -344,7 +468,27 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean",
+                  "title": "审核结果"
+                },
+                "reason": {
+                  "type": "string",
+                  "title": "理由"
+                }
+              },
+              "required": [
+                "result",
+                "reason"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 14440370,
@@ -352,15 +496,18 @@
             "httpApiName": "AT0105 审核文章",
             "httpApiPath": "/articles/{id}/visibility",
             "httpApiMethod": "put",
-            "httpApiCaseName": "AT0105 审核文章"
+            "httpApiCaseName": "AT0105 审核文章",
+            "id": "a75ef419-2bb0-4a17-b650-9d0827e7f97a",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "c319002c-0907-4463-9fe1-ae84959af97d",
+          "id": "7f8adc8c-047d-4f9c-892a-8cbe40ec2597",
           "name": "AT0401 发表文章评论(AT0401 发表文章评论)",
           "request": {
             "url": {
@@ -382,12 +529,13 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -395,9 +543,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"content\": \"二许称消为大照其林消们连构电京手。就信严证价争理经任到来正出精收目去。民物温期家明场天消被入这劳切改光。声素生达有时原部家单期参感温。须育战治江题极形流比要往效加家式。并每算量系连适代压带决非交员后来具。\",\n    \"parent\": 45\n}"
+              "raw": "{\n    \"content\": \"二许称消为大照其林消们连构电京手。就信严证价争理经任到来正出精收目去。民物温期家明场天消被入这劳切改光。声素生达有时原部家单期参感温。须育战治江题极形流比要往效加家式。并每算量系连适代压带决非交员后来具。\",\n    \"parent\": 45\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -418,7 +568,30 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 3
+            "ordering": 3,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "content": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cparagraph"
+                  },
+                  "title": "评论内容"
+                },
+                "parent": {
+                  "type": "integer",
+                  "title": "父评论id，无父评论则为0",
+                  "description": "评论id"
+                }
+              },
+              "required": [
+                "content"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5339208,
@@ -426,15 +599,18 @@
             "httpApiName": "AT0401 发表文章评论",
             "httpApiPath": "/articles/{id}/comments",
             "httpApiMethod": "post",
-            "httpApiCaseName": "AT0401 发表文章评论"
+            "httpApiCaseName": "AT0401 发表文章评论",
+            "id": "bf10e95a-7a07-4f96-ba26-ba85d6b08b6a",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "24eab89c-1f83-4283-9923-aae94a6b647e",
+          "id": "86b063ec-c377-499d-8060-abb63340cb2f",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -462,10 +638,11 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -496,7 +673,11 @@
             },
             "defaultEnable": true,
             "projectId": 404238,
-            "ordering": 2
+            "ordering": 2,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 70221319,
@@ -504,15 +685,18 @@
             "httpApiName": "AT0406 给文章评论点赞",
             "httpApiPath": "/articles/comments/{id}/like",
             "httpApiMethod": "post",
-            "httpApiCaseName": "AT0406 给文章评论点赞"
+            "httpApiCaseName": "AT0406 给文章评论点赞",
+            "id": "11f27ab2-a68c-4b5a-8dee-b78a02a77ec0",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "9a1bbc34-ebf9-4def-b36c-e8b0140a8d1f",
+          "id": "ffc10524-899e-4fbc-abec-153cadc16a06",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -535,15 +719,17 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -574,7 +760,11 @@
             },
             "defaultEnable": true,
             "projectId": 404238,
-            "ordering": 3
+            "ordering": 3,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 70221337,
@@ -582,15 +772,18 @@
             "httpApiName": "AT0407 取消文章评论点赞",
             "httpApiPath": "/articles/comments/{id}/like",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "AT0407 取消文章评论点赞"
+            "httpApiCaseName": "AT0407 取消文章评论点赞",
+            "id": "ee958268-c2db-4aa5-a946-4802275bbf71",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "699aab70-175a-4b49-b301-ed37daf1c8b1",
+          "id": "226e7df7-4f82-41cd-bf92-4b9e2f8db9c2",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -612,12 +805,13 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -625,9 +819,11 @@
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": ""
+              "raw": "",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -648,7 +844,25 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 2
+            "ordering": 2,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@integer"
+                  },
+                  "title": "评论id"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5339227,
@@ -656,15 +870,18 @@
             "httpApiName": "AT0402 删除文章评论（和子孙评论）",
             "httpApiPath": "/articles/{id}/comments",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "AT0402 删除文章评论（和子孙评论）"
+            "httpApiCaseName": "AT0402 删除文章评论（和子孙评论）",
+            "id": "6d66dcad-219a-4adb-9227-0e17484e7c23",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "c053563a-da56-4324-9123-b599756f239b",
+          "id": "5b4a9b8c-c771-42ce-a782-65f28d87709b",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -690,7 +907,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -698,9 +915,11 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"comments\": [\n        1,2,3,4,5,6,7,8,9,10\n    ]\n}"
+              "raw": "{\n    \"comments\": [\n        1,2,3,4,5,6,7,8,9,10\n    ]\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -731,7 +950,118 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1011867": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "likes"
+                ],
+                "title": "comment_normal",
+                "name": "comment_normal"
+              },
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "comments": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer"
+                  },
+                  "title": "评论数组",
+                  "description": "内含id"
+                }
+              },
+              "required": [
+                "comments"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5677424,
@@ -739,15 +1069,18 @@
             "httpApiName": "AT0403 评论内容批量获取",
             "httpApiPath": "/articles/comments",
             "httpApiMethod": "put",
-            "httpApiCaseName": "AT0403 评论内容批量获取"
+            "httpApiCaseName": "AT0403 评论内容批量获取",
+            "id": "15e96b32-6fd2-40ae-b201-24423d3f8181",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "8a9ae8c0-4ee2-48d0-aa0e-a98acd705ca6",
+          "id": "11524833-58d4-4a00-b7e4-79fb803fb1f4",
           "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
           "request": {
             "url": {
@@ -770,10 +1103,11 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -808,7 +1142,103 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1011867": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "likes"
+                ],
+                "title": "comment_normal",
+                "name": "comment_normal"
+              },
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 5337279,
@@ -816,10 +1246,13 @@
             "httpApiName": "AT0404 获取文章评论",
             "httpApiPath": "/articles/{id}/comments",
             "httpApiMethod": "get",
-            "httpApiCaseName": "AT0404 获取文章评论"
+            "httpApiCaseName": "AT0404 获取文章评论",
+            "id": "18a01ef9-0e29-4b84-9ffb-7ac3b3a8bea9",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
@@ -889,7 +1322,8 @@
         "article",
         "likes"
       ],
-      "title": "comment_normal"
+      "title": "comment_normal",
+      "name": "comment_normal"
     },
     "1077996": {
       "type": "object",
@@ -918,53 +1352,126 @@
         "avatar",
         "id"
       ],
-      "title": "user_simple"
+      "title": "user_simple",
+      "name": "user_simple"
     }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
   },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "0e8b69b4-8281-4a2e-8a3d-1f31c8a5ec2d",
+      "id": "7cd115a4-c017-4330-8280-5f5397fe8f9f",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2ODAxMzg4NjQuMTM3ODkzfQ.QqrrYToeTw6SLJXelwH1gBlgO_-8ZJ2OBgSYAi9-lZQ",
-          "key": "token"
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY4MjAwNTUyNS4wOTIyMjJ9.2Et1bMHTwRBAPoHT4412VuZ7h9WaO5VZsVGRLoGzYb0",
+          "key": "token",
+          "isBindInitial": false,
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "6",
-          "key": "quiz_id"
+          "key": "quiz_id",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "5",
-          "key": "word_id_2"
+          "key": "word_id_2",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "10",
-          "key": "word_id_1"
+          "key": "word_id_1",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2NzQxODQ5MDguOTg5NDkxfQ.mAZql4GXkSPUJ97VWtfMylsB2JeKhDRNdXW2N9us404",
-          "key": "token_2"
+          "key": "token_2",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "undefined",
-          "key": "word_id_3"
+          "key": "word_id_3",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "2",
-          "key": "user_id"
+          "key": "user_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "98",
+          "key": "article_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "121",
+          "key": "comment_id_1",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "122",
+          "key": "comment_id_2",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "like_num_2",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 25,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "24",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "1",
+          "key": "like_num_1",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "1",
+          "key": "recent_likes",
+          "isBindInitial": false,
+          "initialValue": ""
         }
       ]
     },
@@ -977,8 +1484,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "a272bd17-0f5d-4091-a7e0-631be0a8aa16",
+      "id": "57823523-a200-46de-aa14-37273470848e",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -988,5 +1499,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }
