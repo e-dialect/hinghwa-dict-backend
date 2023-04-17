@@ -309,18 +309,9 @@ class LikeComment(View):
             raise CommentNotFoundException(id)
         # 可能这边可以写一个已经点赞过来防范攻击？
         comment = comment[0]
-        if "return_users_num" in request.GET:
-            if not request.GET["return_users_num"]:
-                raise ReturnUsersNumException()
-            request_num = int(request.GET["return_users_num"])
-            if request_num < 0:
-                raise ReturnUsersNumException()
-            comment.like_users.add(user)
-            return JsonResponse(
-                comment_likes(comment, int(request.GET["return_users_num"])), status=200
-            )
+        return_num = self.return_users_num_pass(request)  # 返回None或者整型数字
         comment.like_users.add(user)
-        return JsonResponse(comment_likes(comment), status=200)
+        return JsonResponse(comment_likes(comment, return_num), status=200)
 
     # AT0407 取消文章评论点赞
     def delete(self, request, id) -> JsonResponse:
@@ -332,15 +323,17 @@ class LikeComment(View):
         comment = comment[0]
         if not len(comment.like_users.filter(id=user.id)):
             raise NotFoundException("你还没有给评论点赞过，不能取消文章评论点赞")
+        return_num = self.return_users_num_pass(request)  # 返回None或者整型数字
+        comment.like_users.remove(user)
+        return JsonResponse(comment_likes(comment, return_num), status=200)
+
+    @classmethod
+    def return_users_num_pass(self, request):
         if "return_users_num" in request.GET:
             if not request.GET["return_users_num"]:
                 raise ReturnUsersNumException()
             request_num = int(request.GET["return_users_num"])
             if request_num < 0:
                 raise ReturnUsersNumException()
-            comment.like_users.remove(user)
-            return JsonResponse(
-                comment_likes(comment, int(request.GET["return_users_num"])), status=200
-            )
-        comment.like_users.remove(user)
-        return JsonResponse(comment_likes(comment), status=200)
+            return int(request.GET["return_users_num"])
+        return None

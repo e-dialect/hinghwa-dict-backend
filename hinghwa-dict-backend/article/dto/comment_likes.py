@@ -3,7 +3,9 @@ from ..models import Comment
 
 
 # 返回评论点赞信息
-def comment_likes(comment: Comment, res_num: int = 5) -> dict:
+def comment_likes(comment: Comment, res_num=None) -> dict:
+    if res_num is None:
+        res_num = 5
     # 找到对应的评论
     comment_like_users = comment.like_users.filter()
     user_list = []
