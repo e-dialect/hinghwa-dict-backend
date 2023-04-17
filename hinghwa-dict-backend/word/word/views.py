@@ -24,6 +24,8 @@ from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
 from .dto.word_all import word_all
 from .dto.word_simple import word_simple
+from utils.exception.types.not_found import WordNotFoundException
+from utils.exception.types.forbidden import ForbiddenException
 
 
 @csrf_exempt
@@ -128,84 +130,81 @@ def searchWords(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-@csrf_exempt
-def manageWord(request, id):
-    try:
+class ManageWord(View):
+    #   WD0101 获取字词内容
+    def get(self, request, id) -> JsonResponse:
         word = Word.objects.filter(id=id)
-        if word.exists():
-            word = word[0]
-            # WD0101 获取字词的内容
-            if request.method == "GET":
-                user = []
-                try:
-                    token = token_pass(request.headers)
-                    user = token_user(token)
-                except UnauthorizedException:
-                    if not word.visibility:
-                        return JsonResponse({}, status=403)
-                if not word.visibility:
-                    if not user.is_superuser and not user.id == word.contributor.id:
-                        return JsonResponse({}, status=403)
-                word.views = word.views + 1
-                word.save()
-                return JsonResponse(
-                    {"word": word_all(word)},
-                    status=200,
-                )
-            # WD0103 管理员更改字词的内容
-            elif request.method == "PUT":
-                body = demjson.decode(request.body)
-                token = request.headers["token"]
-                if token_check(token, settings.JWT_KEY, word.contributor.id):
-                    body = body["word"]
-                    word_form = WordForm(body)
-                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
-                    item = [x for x in item if x]
-                    PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)
-                    for key in body:
-                        if (key in word_form) and len(word_form[key].errors.data):
-                            return JsonResponse({}, status=400)
-                    for key in body:
-                        if key != "related_words" and key != "related_articles":
-                            setattr(word, key, body[key])
-                        elif key == "related_words":
-                            for id in body["related_words"]:
-                                Word.objects.get(id=id)
-                            word.related_words.clear()
-                            for id in body["related_words"]:
-                                wordx = Word.objects.get(id=id)
-                                word.related_words.add(wordx)
-                        elif key == "related_articles":
-                            for id in body["related_articles"]:
-                                Article.objects.get(id=id)
-                            word.related_articles.clear()
-                            for id in body["related_articles"]:
-                                article = Article.objects.get(id=id)
-                                word.related_articles.add(article)
-                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
-                    item = [x for x in item if x]
-                    PhoneticOrdering.root.add(item)
-                    word.save()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
-            # WD0104 删除词语
-            elif request.method == "DELETE":
-                token = request.headers["token"]
-                if token_check(token, settings.JWT_KEY, word.contributor.id):
-                    item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
-                    item = [x for x in item if x]
-                    PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)
-                    word.delete()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
-            else:
-                return JsonResponse({}, status=405)
-        else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+        if not word.exists:
+            raise WordNotFoundException()
+        word = word[0]
+        user = []
+        try:
+            token = token_pass(request.headers)
+            user = token_user(token)
+        except UnauthorizedException:
+            if not word.visibility:
+                raise ForbiddenException()
+        if not word.visibility:
+            if not user.is_superuser and not user.id == word.contributor.id:
+                raise ForbiddenException()
+        word.views = word.views + 1
+        word.save()
+        return JsonResponse(
+            {"word": word_all(word)},
+            status=200,
+        )
+
+    #   WD0103  管理员更改字词内容
+    def put(self, request, id):
+        word = Word.objects.filter(id=id)
+        if not word.exists:
+            raise WordNotFoundException()
+        word = word[0]
+        token = token_pass(request.headers, word.contributor.id)
+        body = demjson.decode(request.body)
+        body = body["word"]
+        word_form = WordForm(body)
+        item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+        item = [x for x in item if x]
+        PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)
+        for key in body:
+            if (key in word_form) and len(word_form[key].errors.data):
+                return JsonResponse({}, status=400)
+        for key in body:
+            if key != "related_words" and key != "related_articles":
+                setattr(word, key, body[key])
+            elif key == "related_words":
+                for id in body["related_words"]:
+                    Word.objects.get(id=id)
+                word.related_words.clear()
+                for id in body["related_words"]:
+                    wordx = Word.objects.get(id=id)
+                    word.related_words.add(wordx)
+            elif key == "related_articles":
+                for id in body["related_articles"]:
+                    Article.objects.get(id=id)
+                word.related_articles.clear()
+                for id in body["related_articles"]:
+                    article = Article.objects.get(id=id)
+                    word.related_articles.add(article)
+        item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+        item = [x for x in item if x]
+        PhoneticOrdering.root.add(item)
+        word.save()
+        return JsonResponse({}, status=200)
+
+    #   WD0104  删除词语
+    def delete(self, request, id):
+        word = Word.objects.filter(id=id)
+        if not word.exists:
+            raise WordNotFoundException()
+        word = word[0]
+        token = token_pass(request.headers, word.contributor.id)
+        item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
+        item = [x for x in item if x]
+        PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)
+        word.delete()
+        return JsonResponse({}, status=200)
 
 
 @require_POST
