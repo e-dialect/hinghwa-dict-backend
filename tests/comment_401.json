@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "409b7b3b-219a-4952-99a2-c81ef07b0016",
+          "id": "9cd0a136-5caa-4afb-9948-9541cca76016",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "6fd49038-ef39-426b-a566-e89b1280fb81",
+          "id": "0690817a-cc5a-46f3-91e9-e0bca7869011",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -408,7 +408,7 @@
           }
         },
         {
-          "id": "48321afa-bcbd-4625-9463-0035002121b3",
+          "id": "38b44eec-d380-4ccc-9f0e-29fe09f16f4f",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -507,7 +507,7 @@
           }
         },
         {
-          "id": "7f8adc8c-047d-4f9c-892a-8cbe40ec2597",
+          "id": "ae4b23a6-5dbd-46f8-8718-b3d76fc54daa",
           "name": "AT0401 发表文章评论(AT0401 发表文章评论)",
           "request": {
             "url": {
@@ -610,7 +610,7 @@
           }
         },
         {
-          "id": "86b063ec-c377-499d-8060-abb63340cb2f",
+          "id": "f5ae8098-ab93-4614-ab6d-d33b0ddad3bc",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -628,7 +628,13 @@
                 "0",
                 "1"
               ],
-              "query": [],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "return_users_num",
+                  "value": ""
+                }
+              ],
               "variable": []
             },
             "header": [
@@ -696,7 +702,7 @@
           }
         },
         {
-          "id": "ffc10524-899e-4fbc-abec-153cadc16a06",
+          "id": "25df6328-6e68-4e22-8dac-54705d61c7ba",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -714,12 +720,17 @@
                 "0",
                 "1"
               ],
-              "query": [],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "return_users_num",
+                  "value": ""
+                }
+              ],
               "variable": []
             },
             "header": [
               {
-                "disabled": false,
                 "key": "token",
                 "value": ""
               },
@@ -783,7 +794,7 @@
           }
         },
         {
-          "id": "226e7df7-4f82-41cd-bf92-4b9e2f8db9c2",
+          "id": "6152853c-541d-4596-a5a8-1144800006b0",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -881,7 +892,7 @@
           }
         },
         {
-          "id": "5b4a9b8c-c771-42ce-a782-65f28d87709b",
+          "id": "dde6fae3-d914-4511-9774-57a350b5bd8d",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -1080,7 +1091,7 @@
           }
         },
         {
-          "id": "11524833-58d4-4a00-b7e4-79fb803fb1f4",
+          "id": "d4cb1aa6-a7f8-4e5b-b250-aa0aab7e7a68",
           "name": "AT0404 获取文章评论(AT0404 获取文章评论)",
           "request": {
             "url": {
@@ -1368,7 +1379,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "7cd115a4-c017-4330-8280-5f5397fe8f9f",
+      "id": "4c7c5aa2-2f73-484a-b943-f3df312b72e2",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -1377,7 +1388,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY4MjAwNTUyNS4wOTIyMjJ9.2Et1bMHTwRBAPoHT4412VuZ7h9WaO5VZsVGRLoGzYb0",
+          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2ODIzMjU5ODYuMDMxODc2fQ.V09i-cNoscSd7JtjsZ3Rp2YZD-oZ5UDtscSw89wKTdQ",
           "key": "token",
           "isBindInitial": false,
           "initialValue": ""
@@ -1423,28 +1434,24 @@
           "type": "any",
           "value": "98",
           "key": "article_id",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "121",
           "key": "comment_id_1",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "122",
           "key": "comment_id_2",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "2",
           "key": "like_num_2",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1463,15 +1470,13 @@
           "type": "any",
           "value": "1",
           "key": "like_num_1",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "1"
         },
         {
           "type": "any",
           "value": "1",
           "key": "recent_likes",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "1"
         }
       ]
     },
@@ -1487,7 +1492,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "57823523-a200-46de-aa14-37273470848e",
+      "id": "3530b3eb-2699-4064-be20-6f2b804f77a5",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

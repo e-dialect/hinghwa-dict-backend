@@ -19,7 +19,10 @@ from .dto.article_normal import article_normal
 from .dto.comment_normal import comment_normal
 from .dto.comment_likes import comment_likes
 from django.views import View
-from utils.exception.types.bad_request import BadRequestException
+from utils.exception.types.bad_request import (
+    BadRequestException,
+    ReturnUsersNumException,
+)
 from utils.exception.types.not_found import (
     ArticleNotFoundException,
     CommentNotFoundException,
@@ -306,6 +309,16 @@ class LikeComment(View):
             raise CommentNotFoundException(id)
         # 可能这边可以写一个已经点赞过来防范攻击？
         comment = comment[0]
+        if "return_users_num" in request.GET:
+            if not request.GET["return_users_num"]:
+                raise ReturnUsersNumException()
+            request_num = int(request.GET["return_users_num"])
+            if request_num < 0:
+                raise ReturnUsersNumException()
+            comment.like_users.add(user)
+            return JsonResponse(
+                comment_likes(comment, int(request.GET["return_users_num"])), status=200
+            )
         comment.like_users.add(user)
         return JsonResponse(comment_likes(comment), status=200)
 
@@ -319,5 +332,15 @@ class LikeComment(View):
         comment = comment[0]
         if not len(comment.like_users.filter(id=user.id)):
             raise NotFoundException("你还没有给评论点赞过，不能取消文章评论点赞")
+        if "return_users_num" in request.GET:
+            if not request.GET["return_users_num"]:
+                raise ReturnUsersNumException()
+            request_num = int(request.GET["return_users_num"])
+            if request_num < 0:
+                raise ReturnUsersNumException()
+            comment.like_users.remove(user)
+            return JsonResponse(
+                comment_likes(comment, int(request.GET["return_users_num"])), status=200
+            )
         comment.like_users.remove(user)
         return JsonResponse(comment_likes(comment), status=200)
