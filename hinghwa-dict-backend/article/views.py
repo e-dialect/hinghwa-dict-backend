@@ -307,7 +307,7 @@ class CommentDetail(View):
             comment = Comment.objects.get(id=id)
         except:
             raise CommentNotFoundException(id)
-        return JsonResponse(comment_all(comment), status=200)
+        return JsonResponse({"comment": comment_all(comment)}, status=200)
 
 
 class LikeComment(View):

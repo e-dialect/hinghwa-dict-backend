@@ -17,16 +17,14 @@ def comment_all(comment: Comment) -> dict:
         children_list.append(comment_normal(one_comment))
 
     response = {
-        "comment": {
-            "id": comment.id,
-            "user": user_simple(user),
-            "content": comment.content,
-            "time": localtime(comment.time).__format__("%Y-%m-%d %H:%M:%S"),
-            "parent": comment.parent_id if comment.parent else 0,
-            "children": children_list,
-            "article": comment.article.id,
-            "likes": comment.like(),
-            "like_users": user_list,
-        }
+        "id": comment.id,
+        "user": user_simple(user),
+        "content": comment.content,
+        "time": localtime(comment.time).__format__("%Y-%m-%d %H:%M:%S"),
+        "parent": comment.parent_id if comment.parent else 0,
+        "children": children_list,
+        "article": comment.article.id,
+        "likes": comment.like(),
+        "like_users": user_list,
     }
     return response
