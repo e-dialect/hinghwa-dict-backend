@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "945afe09-6c41-463e-9d64-ffcfaf34cf6c",
+          "id": "4c4a4522-4bf2-476b-b137-ff75153d8f74",
           "name": "LG0101 账号密码登录()",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "bcbd69ab-d506-4cc5-a37a-dc2383350234",
+          "id": "744128f5-7528-4a56-9c60-42a09f553691",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -357,7 +357,7 @@
           }
         },
         {
-          "id": "fb9d86d4-7cf9-44d4-99c9-bacfbc3d3f92",
+          "id": "caba08f6-29fa-49e9-8eac-7986819c9317",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -579,7 +579,7 @@
           }
         },
         {
-          "id": "ea05fe13-a3b7-40d7-9ded-9073449036d0",
+          "id": "08ca2be0-2f1b-4331-a261-f17928e29631",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -678,7 +678,7 @@
           }
         },
         {
-          "id": "7402997f-978e-41a8-a539-b3e9c321dd39",
+          "id": "fcfb31dc-ef22-4de2-9eea-7aab5f4a3768",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -900,7 +900,7 @@
           }
         },
         {
-          "id": "0a970ecf-3987-4177-bdd1-8ba6b90cf6db",
+          "id": "ace7b873-0379-4e08-a7ec-f67357a9e108",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -1066,7 +1066,7 @@
           }
         },
         {
-          "id": "7bbda18d-6052-4f91-b25a-3690abb787e3",
+          "id": "4f21c2a1-bd28-47b3-b471-56bc86d613ba",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -1232,7 +1232,7 @@
           }
         },
         {
-          "id": "1a3f8204-fb36-4542-a374-a5c296bc7b2d",
+          "id": "9f2bdb17-a687-4f7f-9d6d-b52599504575",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -1253,10 +1253,6 @@
               "variable": []
             },
             "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
               {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
@@ -1516,7 +1512,422 @@
           }
         },
         {
-          "id": "152d89c4-bfe1-4d10-8b62-f202b8c04e25",
+          "id": "94574576-ea07-4059-982c-01ef97e7aa0a",
+          "name": "AT0405 获取评论详情(AT0405 获取评论详情)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "comments",
+                "{{comment_id_1}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "commonScript.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "  ____string2Array = function(value) {",
+                  "    if(typeof value === 'object'){",
+                  "      return value;",
+                  "    }",
+                  "    try {",
+                  "      return JSON.parse(value);",
+                  "    } catch (e) {",
+                  "      return value;",
+                  "    }",
+                  "  }",
+                  "  ____string2Number = function(value, errorMsg) {",
+                  "   if(typeof value !== 'string'){",
+                  "     return value;",
+                  "   }",
+                  "   if (/^\\-?\\d+$/.test(value)) {",
+                  "       return parseInt(value);",
+                  "   } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                  "       return parseFloat(value);",
+                  "   } else {",
+                  "       throw new Error(errorMsg || '数据类型不匹配')",
+                  "   }",
+                  " }",
+                  "",
+                  "  ____formatValues = function(value, stringCompareValue, comparison) {",
+                  "   try{",
+                  "     const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                  "     const isCollectionComparisons = ['isOneOf', 'notOneOf'].includes(comparison);",
+                  "     let compareValue;",
+                  "     switch (typeof value) {",
+                  "         case 'string':",
+                  "             if (isNumberComparisons) {",
+                  "                 value = ____string2Number(value);",
+                  "                 compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "             }",
+                  "              else {",
+                  "                 compareValue = stringCompareValue;",
+                  "             }",
+                  "             break;",
+                  "         case 'object':",
+                  "             const isArray = value instanceof Array;",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             } else if (isCollectionComparisons && isArray) {",
+                  "              throw new Error('array 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "            } else if (",
+                  "              isArray &&",
+                  "              comparison === 'include' &&",
+                  "              value.includes(stringCompareValue)",
+                  "            ) {",
+                  "              compareValue = stringCompareValue;",
+                  "            } else {",
+                  "              try {",
+                  "                  compareValue = JSON.parse(stringCompareValue);",
+                  "              } catch (e) {",
+                  "                  compareValue = stringCompareValue;",
+                  "              }",
+                  "            }",
+                  "             break;",
+                  "         case 'boolean':",
+                  "             if (isNumberComparisons || isCollectionComparisons) {",
+                  "                 throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                  "             break;",
+                  "           case 'bigint':",
+                  "           case 'number':",
+                  "             if (isNumberComparisons) {",
+                  "               compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "              value = '' + value;",
+                  "            } else {",
+                  "               compareValue = stringCompareValue;",
+                  "               value = '' + value;",
+                  "             }",
+                  "             break;",
+                  "         case 'null':",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('null 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                  "             break;",
+                  "         default:",
+                  "            if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "            } else {",
+                  "              compareValue = stringCompareValue;",
+                  "            }",
+                  "            break;",
+                  "     }",
+                  "     return { compareValue, value };",
+                  "   } catch(e) {",
+                  "     console.log(e);",
+                  "     throw e;",
+                  "   }",
+                  " }",
+                  " "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        pm.test(pm.variables.replaceIn(`检验子评论数目`), function() {",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.comment.children.length`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          let jsonData;",
+                  "          try {",
+                  "            jsonData = pm.response.json();",
+                  "          } catch(e) {",
+                  "            let text = pm.response.text();",
+                  "            const xml2js = require('xml2js');",
+                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            let json;",
+                  "            let xmlParseOptions = {",
+                  "                explicitArray: false,",
+                  "                trim: true,",
+                  "                ignoreAttrs: true,",
+                  "            };",
+                  "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                  "                jsonData = result;",
+                  "            });",
+                  "          }",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "",
+                  "          ",
+                  "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`1`), 'equal');",
+                  "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                  "      });",
+                  "      "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 150511494,
+            "createdAt": "2023-01-29T08:57:37.000Z",
+            "updatedAt": "2023-01-29T08:57:37.000Z",
+            "deletedAt": null,
+            "apiDetailId": 59289042,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "$ref": "#/definitions/29104515"
+                }
+              },
+              "x-apifox-orders": [
+                "comment"
+              ],
+              "required": [
+                "comment"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1011867": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "likes"
+                ],
+                "title": "comment_normal",
+                "name": "comment_normal"
+              },
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "29104515": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/1011867"
+                    }
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  },
+                  "like_users": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/1077996"
+                    },
+                    "title": "点赞用户列表"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article",
+                  "children",
+                  "likes",
+                  "like_users"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "children",
+                  "likes",
+                  "like_users"
+                ],
+                "title": "comment_all",
+                "name": "comment_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
+          },
+          "metaInfo": {
+            "httpApiId": 59289042,
+            "httpApiCaseId": 81978205,
+            "httpApiName": "AT0405 获取评论详情",
+            "httpApiPath": "/articles/comments/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0405 获取评论详情",
+            "id": "31efc97d-2158-45b7-b464-dc45343beeda",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "be1e9fc5-fc8f-4e15-961e-70183020dab8",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -1715,7 +2126,7 @@
           }
         },
         {
-          "id": "c24bb119-f1fe-46b8-8968-4df920697ba0",
+          "id": "cb257677-f390-4811-9418-78dce69ea5a8",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -1937,7 +2348,7 @@
           }
         },
         {
-          "id": "b767ea1f-fe3d-4a70-a2a2-32674576aed9",
+          "id": "d6653aef-fa0e-4937-9612-30636ec46d5c",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -1958,10 +2369,6 @@
               "variable": []
             },
             "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
               {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
@@ -2221,7 +2628,7 @@
           }
         },
         {
-          "id": "4ebf67a9-e629-449f-9174-a5a7d621125e",
+          "id": "60d7da63-c241-4438-af19-1dcc72a47d88",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2559,7 +2966,7 @@
           }
         },
         {
-          "id": "12d8dcbc-a679-4cc3-8f95-724999da345b",
+          "id": "46f817c3-3419-42b4-9fa7-6355dc951b67",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2897,7 +3304,7 @@
           }
         },
         {
-          "id": "1538ec4d-a267-4ccd-8adb-6694cb4cb63d",
+          "id": "e2a1a734-9f69-406b-8ed2-f21b4aa5219c",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -3271,7 +3678,7 @@
           }
         },
         {
-          "id": "a1d2ff5d-7e1b-48d3-bf71-e7097be6df5f",
+          "id": "a4aa8d55-4b1d-448d-afc6-2643df4372ff",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -3660,7 +4067,7 @@
           }
         },
         {
-          "id": "2e79acb9-c7ae-4de1-bb1d-ac0c4130302e",
+          "id": "9e361d1d-ad54-4f84-8b16-51dffc775e27",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -3681,10 +4088,6 @@
               "variable": []
             },
             "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
               {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
@@ -4004,7 +4407,475 @@
           }
         },
         {
-          "id": "067ba3fd-6cd1-4f09-9ffd-e0a7b33053e9",
+          "id": "1f8eec87-1d43-408c-957d-a76378c067f7",
+          "name": "AT0405 获取评论详情(AT0405 获取评论详情)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "comments",
+                "{{comment_id_1}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "commonScript.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "  ____string2Array = function(value) {",
+                  "    if(typeof value === 'object'){",
+                  "      return value;",
+                  "    }",
+                  "    try {",
+                  "      return JSON.parse(value);",
+                  "    } catch (e) {",
+                  "      return value;",
+                  "    }",
+                  "  }",
+                  "  ____string2Number = function(value, errorMsg) {",
+                  "   if(typeof value !== 'string'){",
+                  "     return value;",
+                  "   }",
+                  "   if (/^\\-?\\d+$/.test(value)) {",
+                  "       return parseInt(value);",
+                  "   } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                  "       return parseFloat(value);",
+                  "   } else {",
+                  "       throw new Error(errorMsg || '数据类型不匹配')",
+                  "   }",
+                  " }",
+                  "",
+                  "  ____formatValues = function(value, stringCompareValue, comparison) {",
+                  "   try{",
+                  "     const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                  "     const isCollectionComparisons = ['isOneOf', 'notOneOf'].includes(comparison);",
+                  "     let compareValue;",
+                  "     switch (typeof value) {",
+                  "         case 'string':",
+                  "             if (isNumberComparisons) {",
+                  "                 value = ____string2Number(value);",
+                  "                 compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "             }",
+                  "              else {",
+                  "                 compareValue = stringCompareValue;",
+                  "             }",
+                  "             break;",
+                  "         case 'object':",
+                  "             const isArray = value instanceof Array;",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             } else if (isCollectionComparisons && isArray) {",
+                  "              throw new Error('array 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "            } else if (",
+                  "              isArray &&",
+                  "              comparison === 'include' &&",
+                  "              value.includes(stringCompareValue)",
+                  "            ) {",
+                  "              compareValue = stringCompareValue;",
+                  "            } else {",
+                  "              try {",
+                  "                  compareValue = JSON.parse(stringCompareValue);",
+                  "              } catch (e) {",
+                  "                  compareValue = stringCompareValue;",
+                  "              }",
+                  "            }",
+                  "             break;",
+                  "         case 'boolean':",
+                  "             if (isNumberComparisons || isCollectionComparisons) {",
+                  "                 throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                  "             break;",
+                  "           case 'bigint':",
+                  "           case 'number':",
+                  "             if (isNumberComparisons) {",
+                  "               compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "              value = '' + value;",
+                  "            } else {",
+                  "               compareValue = stringCompareValue;",
+                  "               value = '' + value;",
+                  "             }",
+                  "             break;",
+                  "         case 'null':",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('null 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                  "             break;",
+                  "         default:",
+                  "            if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "            } else {",
+                  "              compareValue = stringCompareValue;",
+                  "            }",
+                  "            break;",
+                  "     }",
+                  "     return { compareValue, value };",
+                  "   } catch(e) {",
+                  "     console.log(e);",
+                  "     throw e;",
+                  "   }",
+                  " }",
+                  " "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        pm.test(pm.variables.replaceIn(`检测点赞人数`), function() {",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.comment.likes`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          let jsonData;",
+                  "          try {",
+                  "            jsonData = pm.response.json();",
+                  "          } catch(e) {",
+                  "            let text = pm.response.text();",
+                  "            const xml2js = require('xml2js');",
+                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            let json;",
+                  "            let xmlParseOptions = {",
+                  "                explicitArray: false,",
+                  "                trim: true,",
+                  "                ignoreAttrs: true,",
+                  "            };",
+                  "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                  "                jsonData = result;",
+                  "            });",
+                  "          }",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "",
+                  "          ",
+                  "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`1`), 'equal');",
+                  "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                  "      });",
+                  "      "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        pm.test(pm.variables.replaceIn(`检测点赞的人的数量`), function() {",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.comment.like_users.length`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          let jsonData;",
+                  "          try {",
+                  "            jsonData = pm.response.json();",
+                  "          } catch(e) {",
+                  "            let text = pm.response.text();",
+                  "            const xml2js = require('xml2js');",
+                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            let json;",
+                  "            let xmlParseOptions = {",
+                  "                explicitArray: false,",
+                  "                trim: true,",
+                  "                ignoreAttrs: true,",
+                  "            };",
+                  "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                  "                jsonData = result;",
+                  "            });",
+                  "          }",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "",
+                  "          ",
+                  "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`1`), 'equal');",
+                  "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                  "      });",
+                  "      "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 150511494,
+            "createdAt": "2023-01-29T08:57:37.000Z",
+            "updatedAt": "2023-01-29T08:57:37.000Z",
+            "deletedAt": null,
+            "apiDetailId": 59289042,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "$ref": "#/definitions/29104515"
+                }
+              },
+              "x-apifox-orders": [
+                "comment"
+              ],
+              "required": [
+                "comment"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1011867": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "likes"
+                ],
+                "title": "comment_normal",
+                "name": "comment_normal"
+              },
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "29104515": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/1011867"
+                    }
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  },
+                  "like_users": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/1077996"
+                    },
+                    "title": "点赞用户列表"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article",
+                  "children",
+                  "likes",
+                  "like_users"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "children",
+                  "likes",
+                  "like_users"
+                ],
+                "title": "comment_all",
+                "name": "comment_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
+          },
+          "metaInfo": {
+            "httpApiId": 59289042,
+            "httpApiCaseId": 81981980,
+            "httpApiName": "AT0405 获取评论详情",
+            "httpApiPath": "/articles/comments/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0405 获取评论详情",
+            "id": "80b7fd6b-1d6b-478b-8680-c927c58d9737",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "b3573049-4bbd-4fc5-b543-44f9a1dd0eca",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -4026,10 +4897,6 @@
             },
             "header": [
               {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
@@ -4040,7 +4907,170 @@
             "type": "http"
           },
           "response": [],
-          "event": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "commonScript.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "  ____string2Array = function(value) {",
+                  "    if(typeof value === 'object'){",
+                  "      return value;",
+                  "    }",
+                  "    try {",
+                  "      return JSON.parse(value);",
+                  "    } catch (e) {",
+                  "      return value;",
+                  "    }",
+                  "  }",
+                  "  ____string2Number = function(value, errorMsg) {",
+                  "   if(typeof value !== 'string'){",
+                  "     return value;",
+                  "   }",
+                  "   if (/^\\-?\\d+$/.test(value)) {",
+                  "       return parseInt(value);",
+                  "   } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                  "       return parseFloat(value);",
+                  "   } else {",
+                  "       throw new Error(errorMsg || '数据类型不匹配')",
+                  "   }",
+                  " }",
+                  "",
+                  "  ____formatValues = function(value, stringCompareValue, comparison) {",
+                  "   try{",
+                  "     const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                  "     const isCollectionComparisons = ['isOneOf', 'notOneOf'].includes(comparison);",
+                  "     let compareValue;",
+                  "     switch (typeof value) {",
+                  "         case 'string':",
+                  "             if (isNumberComparisons) {",
+                  "                 value = ____string2Number(value);",
+                  "                 compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "             }",
+                  "              else {",
+                  "                 compareValue = stringCompareValue;",
+                  "             }",
+                  "             break;",
+                  "         case 'object':",
+                  "             const isArray = value instanceof Array;",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             } else if (isCollectionComparisons && isArray) {",
+                  "              throw new Error('array 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "            } else if (",
+                  "              isArray &&",
+                  "              comparison === 'include' &&",
+                  "              value.includes(stringCompareValue)",
+                  "            ) {",
+                  "              compareValue = stringCompareValue;",
+                  "            } else {",
+                  "              try {",
+                  "                  compareValue = JSON.parse(stringCompareValue);",
+                  "              } catch (e) {",
+                  "                  compareValue = stringCompareValue;",
+                  "              }",
+                  "            }",
+                  "             break;",
+                  "         case 'boolean':",
+                  "             if (isNumberComparisons || isCollectionComparisons) {",
+                  "                 throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                  "             break;",
+                  "           case 'bigint':",
+                  "           case 'number':",
+                  "             if (isNumberComparisons) {",
+                  "               compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "              value = '' + value;",
+                  "            } else {",
+                  "               compareValue = stringCompareValue;",
+                  "               value = '' + value;",
+                  "             }",
+                  "             break;",
+                  "         case 'null':",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('null 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                  "             break;",
+                  "         default:",
+                  "            if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "            } else {",
+                  "              compareValue = stringCompareValue;",
+                  "            }",
+                  "            break;",
+                  "     }",
+                  "     return { compareValue, value };",
+                  "   } catch(e) {",
+                  "     console.log(e);",
+                  "     throw e;",
+                  "   }",
+                  " }",
+                  " "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        pm.test(pm.variables.replaceIn(`$.comments[?(@.id=={{comment_id_2}})].likes 等于 {{like_num_2}}`), function() {",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.comments[?(@.id=={{comment_id_2}})].likes`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          let jsonData;",
+                  "          try {",
+                  "            jsonData = pm.response.json();",
+                  "          } catch(e) {",
+                  "            let text = pm.response.text();",
+                  "            const xml2js = require('xml2js');",
+                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            let json;",
+                  "            let xmlParseOptions = {",
+                  "                explicitArray: false,",
+                  "                trim: true,",
+                  "                ignoreAttrs: true,",
+                  "            };",
+                  "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                  "                jsonData = result;",
+                  "            });",
+                  "          }",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          if (true && 0 !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(0) >= 0 ? value[0] : value[value.length + Number(0)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "",
+                  "          ",
+                  "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`{{like_num_2}}`), 'equal');",
+                  "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                  "      });",
+                  "      "
+                ]
+              }
+            }
+          ],
           "responseDefinition": {
             "id": 4245943,
             "createdAt": "2021-07-30T08:38:42.000Z",
@@ -4185,7 +5215,475 @@
           }
         },
         {
-          "id": "2ae88f57-0aa6-4771-865c-71e09ca000bb",
+          "id": "a52ac92d-e7e1-4c2f-8b00-5cc5f39167a3",
+          "name": "AT0405 获取评论详情(AT0405 获取评论详情)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "comments",
+                "{{comment_id_2}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "id": "commonScript.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "  ____string2Array = function(value) {",
+                  "    if(typeof value === 'object'){",
+                  "      return value;",
+                  "    }",
+                  "    try {",
+                  "      return JSON.parse(value);",
+                  "    } catch (e) {",
+                  "      return value;",
+                  "    }",
+                  "  }",
+                  "  ____string2Number = function(value, errorMsg) {",
+                  "   if(typeof value !== 'string'){",
+                  "     return value;",
+                  "   }",
+                  "   if (/^\\-?\\d+$/.test(value)) {",
+                  "       return parseInt(value);",
+                  "   } else if (/^\\-?\\d+\\.\\d+$/.test(value)) {",
+                  "       return parseFloat(value);",
+                  "   } else {",
+                  "       throw new Error(errorMsg || '数据类型不匹配')",
+                  "   }",
+                  " }",
+                  "",
+                  "  ____formatValues = function(value, stringCompareValue, comparison) {",
+                  "   try{",
+                  "     const isNumberComparisons = ['isBelow', 'isAtMost', 'isAbove', 'isAtLeast'].includes(comparison);",
+                  "     const isCollectionComparisons = ['isOneOf', 'notOneOf'].includes(comparison);",
+                  "     let compareValue;",
+                  "     switch (typeof value) {",
+                  "         case 'string':",
+                  "             if (isNumberComparisons) {",
+                  "                 value = ____string2Number(value);",
+                  "                 compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "             }",
+                  "              else {",
+                  "                 compareValue = stringCompareValue;",
+                  "             }",
+                  "             break;",
+                  "         case 'object':",
+                  "             const isArray = value instanceof Array;",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('object 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             } else if (isCollectionComparisons && isArray) {",
+                  "              throw new Error('array 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "            } else if (",
+                  "              isArray &&",
+                  "              comparison === 'include' &&",
+                  "              value.includes(stringCompareValue)",
+                  "            ) {",
+                  "              compareValue = stringCompareValue;",
+                  "            } else {",
+                  "              try {",
+                  "                  compareValue = JSON.parse(stringCompareValue);",
+                  "              } catch (e) {",
+                  "                  compareValue = stringCompareValue;",
+                  "              }",
+                  "            }",
+                  "             break;",
+                  "         case 'boolean':",
+                  "             if (isNumberComparisons || isCollectionComparisons) {",
+                  "                 throw new Error('boolean 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'true' ? true : (stringCompareValue === 'false' ? false : stringCompareValue);",
+                  "             break;",
+                  "           case 'bigint':",
+                  "           case 'number':",
+                  "             if (isNumberComparisons) {",
+                  "               compareValue = ____string2Number(stringCompareValue);",
+                  "             } else if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "              value = '' + value;",
+                  "            } else {",
+                  "               compareValue = stringCompareValue;",
+                  "               value = '' + value;",
+                  "             }",
+                  "             break;",
+                  "         case 'null':",
+                  "             if (isNumberComparisons) {",
+                  "                 throw new Error('null 类型的值不能使用 ' + comparison + ' 方式比较')",
+                  "             }",
+                  "             compareValue = stringCompareValue === 'null' ? null : stringCompareValue;",
+                  "             break;",
+                  "         default:",
+                  "            if (isCollectionComparisons) {",
+                  "              compareValue = ____string2Array(stringCompareValue);",
+                  "            } else {",
+                  "              compareValue = stringCompareValue;",
+                  "            }",
+                  "            break;",
+                  "     }",
+                  "     return { compareValue, value };",
+                  "   } catch(e) {",
+                  "     console.log(e);",
+                  "     throw e;",
+                  "   }",
+                  " }",
+                  " "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        pm.test(pm.variables.replaceIn(`检测点赞人数`), function() {",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.comment.likes`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          let jsonData;",
+                  "          try {",
+                  "            jsonData = pm.response.json();",
+                  "          } catch(e) {",
+                  "            let text = pm.response.text();",
+                  "            const xml2js = require('xml2js');",
+                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            let json;",
+                  "            let xmlParseOptions = {",
+                  "                explicitArray: false,",
+                  "                trim: true,",
+                  "                ignoreAttrs: true,",
+                  "            };",
+                  "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                  "                jsonData = result;",
+                  "            });",
+                  "          }",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "",
+                  "          ",
+                  "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`0`), 'equal');",
+                  "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                  "      });",
+                  "      "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.assertion",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        pm.test(pm.variables.replaceIn(`检测点赞的人的数量`), function() {",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.comment.like_users.length`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          let jsonData;",
+                  "          try {",
+                  "            jsonData = pm.response.json();",
+                  "          } catch(e) {",
+                  "            let text = pm.response.text();",
+                  "            const xml2js = require('xml2js');",
+                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            let json;",
+                  "            let xmlParseOptions = {",
+                  "                explicitArray: false,",
+                  "                trim: true,",
+                  "                ignoreAttrs: true,",
+                  "            };",
+                  "            xml2js.parseString(text, xmlParseOptions, function (_, result) {",
+                  "                jsonData = result;",
+                  "            });",
+                  "          }",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "",
+                  "          ",
+                  "        const formattedValues = ____formatValues(value, pm.variables.replaceIn(`0`), 'equal');",
+                  "        pm.expect(formattedValues.value).to.eql(formattedValues.compareValue);",
+                  "      });",
+                  "      "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 150511494,
+            "createdAt": "2023-01-29T08:57:37.000Z",
+            "updatedAt": "2023-01-29T08:57:37.000Z",
+            "deletedAt": null,
+            "apiDetailId": 59289042,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "comment": {
+                  "$ref": "#/definitions/29104515"
+                }
+              },
+              "x-apifox-orders": [
+                "comment"
+              ],
+              "required": [
+                "comment"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1011867": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "likes"
+                ],
+                "title": "comment_normal",
+                "name": "comment_normal"
+              },
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "29104515": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "评论id"
+                  },
+                  "user": {
+                    "title": "评论用户",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996",
+                    "x-apifox-overrides": {}
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "评论内容",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "评论时间"
+                  },
+                  "parent": {
+                    "type": "integer",
+                    "title": "父评论id",
+                    "description": "评论id"
+                  },
+                  "article": {
+                    "type": "integer",
+                    "title": "评论文章",
+                    "description": "文章id"
+                  },
+                  "children": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/1011867"
+                    }
+                  },
+                  "likes": {
+                    "title": "点赞数",
+                    "type": "integer"
+                  },
+                  "like_users": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/definitions/1077996"
+                    },
+                    "title": "点赞用户列表"
+                  }
+                },
+                "required": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "article",
+                  "children",
+                  "likes",
+                  "like_users"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "content",
+                  "time",
+                  "parent",
+                  "article",
+                  "children",
+                  "likes",
+                  "like_users"
+                ],
+                "title": "comment_all",
+                "name": "comment_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
+          },
+          "metaInfo": {
+            "httpApiId": 59289042,
+            "httpApiCaseId": 81983827,
+            "httpApiName": "AT0405 获取评论详情",
+            "httpApiPath": "/articles/comments/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0405 获取评论详情",
+            "id": "4892e6b2-486a-42e0-b78f-b285e04f743b",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "7baa163f-bb04-42a1-9c71-7a4fdf31085e",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -4382,6 +5880,85 @@
       "title": "user_simple",
       "name": "user_simple"
     },
+    "29104515": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "评论id"
+        },
+        "user": {
+          "title": "评论用户",
+          "description": "用户id",
+          "$ref": "#/definitions/1077996",
+          "x-apifox-overrides": {}
+        },
+        "content": {
+          "type": "string",
+          "title": "评论内容",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "time": {
+          "type": "string",
+          "mock": {
+            "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+          },
+          "title": "评论时间"
+        },
+        "parent": {
+          "type": "integer",
+          "title": "父评论id",
+          "description": "评论id"
+        },
+        "article": {
+          "type": "integer",
+          "title": "评论文章",
+          "description": "文章id"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/1011867"
+          }
+        },
+        "likes": {
+          "title": "点赞数",
+          "type": "integer"
+        },
+        "like_users": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/1077996"
+          },
+          "title": "点赞用户列表"
+        }
+      },
+      "required": [
+        "id",
+        "user",
+        "content",
+        "time",
+        "article",
+        "children",
+        "likes",
+        "like_users"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "user",
+        "content",
+        "time",
+        "parent",
+        "article",
+        "children",
+        "likes",
+        "like_users"
+      ],
+      "title": "comment_all",
+      "name": "comment_all"
+    },
     "40169241": {
       "type": "object",
       "properties": {
@@ -4429,7 +6006,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "ef6351f9-1eb6-445a-aedd-3be5c8a30810",
+      "id": "85671f68-7fe2-4b58-8994-c5160ae4a0a7",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -4440,7 +6017,6 @@
           "type": "any",
           "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2ODIzMjU5ODYuMDMxODc2fQ.V09i-cNoscSd7JtjsZ3Rp2YZD-oZ5UDtscSw89wKTdQ",
           "key": "token",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -4477,7 +6053,6 @@
           "type": "any",
           "value": "2",
           "key": "user_id",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -4542,7 +6117,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "3530b3eb-2699-4064-be20-6f2b804f77a5",
+      "id": "fd8a3deb-2844-4c6c-92ab-5c36bd456b39",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

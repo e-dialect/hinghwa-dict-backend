@@ -18,6 +18,7 @@ from .dto.article_all import article_all
 from .dto.article_normal import article_normal
 from .dto.comment_normal import comment_normal
 from .dto.comment_likes import comment_likes
+from .dto.comment_all import comment_all
 from django.views import View
 from utils.exception.types.bad_request import (
     BadRequestException,
@@ -297,6 +298,16 @@ class SearchComment(View):
         for comment in result:
             comments.append(comment_normal(comment))
         return JsonResponse({"comments": comments}, status=200)
+
+
+class CommentDetail(View):
+    # AT0405 获取评论详情
+    def get(self, request, id) -> JsonResponse:  # 注意没有使用request，位置也是需要保留着的
+        try:
+            comment = Comment.objects.get(id=id)
+        except:
+            raise CommentNotFoundException(id)
+        return JsonResponse(comment_all(comment), status=200)
 
 
 class LikeComment(View):
