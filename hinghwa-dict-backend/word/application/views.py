@@ -14,9 +14,7 @@ from utils.exception.types.not_found import (
 )
 from utils.TypeCheking import islist
 from utils.token import token_pass, token_user
-from website.views import (
-    sendNotification,
-)
+from website.views import sendNotification
 from ..forms import ApplicationForm
 from ..models import Word, Application
 from word.application.dto.application_simple import application_simple

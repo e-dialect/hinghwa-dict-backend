@@ -17,9 +17,18 @@ from django.conf import settings
 from .dto.article_all import article_all
 from .dto.article_normal import article_normal
 from .dto.comment_normal import comment_normal
+from .dto.comment_likes import comment_likes
+from .dto.comment_all import comment_all
 from django.views import View
-from utils.exception.types.bad_request import BadRequestException
-from utils.exception.types.not_found import ArticleNotFoundException
+from utils.exception.types.bad_request import (
+    BadRequestException,
+    ReturnUsersNumException,
+)
+from utils.exception.types.not_found import (
+    ArticleNotFoundException,
+    CommentNotFoundException,
+    NotFoundException,
+)
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
 
@@ -214,9 +223,9 @@ class LikeArticle(View):
         token = token_pass(request.headers)
         user = token_user(token)
         if not len(article.like_users.filter(id=user.id)):
-            raise BadRequestException()
+            raise NotFoundException("你还没有给文章点赞过，不能取消点赞")
         article.like_users.remove(user)
-        return JsonResponse({}, status=200)
+        return JsonResponse({"msg": "取消文章点赞成功"}, status=200)
 
 
 class CommentArticle(View):
@@ -289,3 +298,53 @@ class SearchComment(View):
         for comment in result:
             comments.append(comment_normal(comment))
         return JsonResponse({"comments": comments}, status=200)
+
+
+class CommentDetail(View):
+    # AT0405 获取评论详情
+    def get(self, request, id) -> JsonResponse:  # 注意没有使用request，位置也是需要保留着的
+        try:
+            comment = Comment.objects.get(id=id)
+        except:
+            raise CommentNotFoundException(id)
+        return JsonResponse({"comment": comment_all(comment)}, status=200)
+
+
+class LikeComment(View):
+    # AT0406 给文章评论点赞
+    def post(self, request, id) -> JsonResponse:
+        token = token_pass(request.headers)
+        user = token_user(token)
+        comment = Comment.objects.filter(id=id)
+        if not comment.exists():
+            raise CommentNotFoundException(id)
+        # 可能这边可以写一个已经点赞过来防范攻击？
+        comment = comment[0]
+        return_num = self.return_users_num_pass(request)  # 返回None或者整型数字
+        comment.like_users.add(user)
+        return JsonResponse(comment_likes(comment, return_num), status=200)
+
+    # AT0407 取消文章评论点赞
+    def delete(self, request, id) -> JsonResponse:
+        token = token_pass(request.headers)
+        user = token_user(token)
+        comment = Comment.objects.filter(id=id)
+        if not comment.exists():
+            raise CommentNotFoundException(id)
+        comment = comment[0]
+        if not len(comment.like_users.filter(id=user.id)):
+            raise NotFoundException("你还没有给评论点赞过，不能取消文章评论点赞")
+        return_num = self.return_users_num_pass(request)  # 返回None或者整型数字
+        comment.like_users.remove(user)
+        return JsonResponse(comment_likes(comment, return_num), status=200)
+
+    @classmethod
+    def return_users_num_pass(self, request):
+        if "return_users_num" in request.GET:
+            if not request.GET["return_users_num"]:
+                raise ReturnUsersNumException()
+            request_num = int(request.GET["return_users_num"])
+            if request_num < 0:
+                raise ReturnUsersNumException()
+            return int(request.GET["return_users_num"])
+        return None

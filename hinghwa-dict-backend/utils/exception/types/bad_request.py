@@ -46,3 +46,14 @@ class InvalidPronunciation(BadRequestException):
 
     def __init__(self, msg="添加的语音的请求不符合格式要求"):
         super().__init__(msg)
+
+
+class ReturnUsersNumException(BadRequestException):
+    """
+    在点赞时请求发送的返回前多少个点赞人数这一项为空
+    """
+
+    def __init__(
+        self, msg="请在return_users_num字段中加入请求的点赞人数，要求为正整数，或者不发送return_users_num字段"
+    ):
+        super().__init__(msg)

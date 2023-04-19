@@ -72,7 +72,6 @@ class InputFile:
 
     @staticmethod
     def __is_wave_file(file):
-
         if not InputFile.__check_riff_format(file):
             return False
         if not InputFile.__check_wave_id(file):
