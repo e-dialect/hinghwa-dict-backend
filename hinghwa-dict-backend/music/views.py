@@ -82,7 +82,7 @@ class ManageMusic(View):
         for key in body:
             setattr(music, key, body[key])
         music.save()
-        return JsonResponse({}, status=200)
+        return JsonResponse({"music": music_all(music)}, status=200)
 
     # MC0102 删除音乐
     def delete(self, request, id) -> JsonResponse:
