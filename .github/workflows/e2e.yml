@@ -26,7 +26,8 @@ jobs:
       - name: Install dependencies
         run: |
           cd hinghwa-dict-backend
-          pip install setuptools==57.5.0
+          pip install "setuptools<58.0"
+          pip3 install "setuptools<58.0"
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Start django service
         run: |
