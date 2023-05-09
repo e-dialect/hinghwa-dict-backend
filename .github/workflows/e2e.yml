@@ -15,19 +15,18 @@ jobs:
     runs-on: ubuntu-20.04
     steps:
       - uses: actions/checkout@v3
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v3
-        with:
-          python-version: "3.8"
       - name: Install ffmpeg
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
            packages: ffmpeg
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+          cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: |
           cd hinghwa-dict-backend
-          pip install "setuptools<58.0"
-          pip3 install "setuptools<58.0"
           if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
       - name: Start django service
         run: |
