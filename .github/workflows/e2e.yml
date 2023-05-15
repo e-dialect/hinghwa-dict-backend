@@ -19,16 +19,10 @@ jobs:
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
            packages: ffmpeg
-      - name: Set up Python 3.8
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.8.0'
-          cache: 'pip' # caching pip dependencies
       - name: Install dependencies
         run: |
           cd hinghwa-dict-backend
-          pip3 install --upgrade setuptools==57.5.0
-          if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+          if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
       - name: Start django service
         run: |
           cd hinghwa-dict-backend
