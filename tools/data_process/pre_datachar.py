@@ -18,7 +18,7 @@ for row in range(num_rows):
     pinyin_list = pinyin.split(" ")
     ipa_list = ipa.split(" ")
     for i in range(len(pinyin_list)):
-        if (pinyin_list[i] == ""):
+        if pinyin_list[i] == "":
             continue
         out.write(cnt, 0, char)
         out.write(cnt, 1, pinyin_list[i])

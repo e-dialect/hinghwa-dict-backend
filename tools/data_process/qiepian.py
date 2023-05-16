@@ -4,7 +4,7 @@ import re
 
 def IPA_to_tone(pinyin):
     try:
-        matchObj = re.match(r'([^0-9]+)([0-9]*)$', pinyin, re.M | re.I)
+        matchObj = re.match(r"([^0-9]+)([0-9]*)$", pinyin, re.M | re.I)
         return matchObj.group(2)
     except Exception:
         print("[寻找声调]这不是一个合法的IPA: ", pinyin)
@@ -13,9 +13,9 @@ def IPA_to_tone(pinyin):
 
 def IPA_to_shengmu(pinyin):
     try:
-        matchObj = re.match(r'([^0-9]+)([0-9]*)$', pinyin, re.M | re.I)
+        matchObj = re.match(r"([^0-9]+)([0-9]*)$", pinyin, re.M | re.I)
         line = matchObj.group(1)  # 获取非声调部分
-        matchObj = re.match(r'([^aeiouyɛøɒɔœ]+)(.*)$', line, re.M | re.I)
+        matchObj = re.match(r"([^aeiouyɛøɒɔœ]+)(.*)$", line, re.M | re.I)
         sheng = matchObj.group(1)
         if line == "Ǿŋ":
             sheng = "Ǿ"
@@ -27,9 +27,9 @@ def IPA_to_shengmu(pinyin):
 
 def IPA_to_yunmu(pinyin):
     try:
-        matchObj = re.match(r'([^0-9]+)([0-9]*)$', pinyin, re.M | re.I)
+        matchObj = re.match(r"([^0-9]+)([0-9]*)$", pinyin, re.M | re.I)
         line = matchObj.group(1)  # 获取非声调部分
-        matchObj = re.match(r'(ng?|[^aeiouyɛøɒɔœ]+)(.*)$', line, re.M | re.I)
+        matchObj = re.match(r"(ng?|[^aeiouyɛøɒɔœ]+)(.*)$", line, re.M | re.I)
         yun = matchObj.group(2)
         if line == "Ǿŋ":
             yun = "ŋ"
@@ -44,7 +44,7 @@ def IPA_to_pinyin(IPA):
         sheng = IPA_to_shengmu(IPA)  # 声母
         yun = IPA_to_yunmu(IPA)  # 韵母
         tone = IPA_to_tone(IPA)  # 声调
-        matchObj = re.match(r'(.*?)(ŋ?|n?|ʔ?)$', yun, re.M | re.I)
+        matchObj = re.match(r"(.*?)(ŋ?|n?|ʔ?)$", yun, re.M | re.I)
         yun1 = matchObj.group(1)  # 韵母元音
         yun2 = matchObj.group(2)  # 韵尾
         # 声母的处理
@@ -131,10 +131,10 @@ def IPA_to_pinyin(IPA):
         return None
 
 
-for filename in os.listdir(path='..'):
+for filename in os.listdir(path=".."):
     if filename == "translate.py":
         continue
-    matchObj = re.match(r'(.*).mp3$', filename, re.M | re.I)
+    matchObj = re.match(r"(.*).mp3$", filename, re.M | re.I)
     s = matchObj.group(1)  # 获取非声调部分
     os.rename(filename, IPA_to_pinyin(s) + ".mp3")
 

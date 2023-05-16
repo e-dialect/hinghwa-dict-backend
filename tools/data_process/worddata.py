@@ -1,14 +1,14 @@
-#coding=utf-8
+# coding=utf-8
 from tools.data_process import translate
 import xlrd
 import xlwt
 
-#打开一个workbook
-workbook = xlrd.open_workbook('./3.xls')
+# 打开一个workbook
+workbook = xlrd.open_workbook("./3.xls")
 worksheet1 = workbook.sheets()[0]
 
-outbook = xlwt.Workbook()  #注意Workbook的开头W要大写
-out = outbook.add_sheet('sheet1', cell_overwrite_ok=True)
+outbook = xlwt.Workbook()  # 注意Workbook的开头W要大写
+out = outbook.add_sheet("sheet1", cell_overwrite_ok=True)
 
 import re
 
@@ -22,7 +22,7 @@ def fenpinyin(pinyin):
         pinyin = str(pinyin)
 
         if pinyin.find("…") or pinyin.find("（") or pinyin.find("）"):
-            fuhao = re.split('([…（）])', pinyin)
+            fuhao = re.split("([…（）])", pinyin)
         else:
             fuhao = {pinyin}
         ss = ""
@@ -31,7 +31,7 @@ def fenpinyin(pinyin):
                 ss = ss + sss + " "
                 continue
 
-            s = re.split('(\d)', sss)
+            s = re.split("(\d)", sss)
 
             for i in range(0, len(s) - 1, 2):
                 p = list(translate.mohuyin(s[i] + s[i + 1]))
@@ -64,7 +64,7 @@ def fenIPA(pinyin):
         pinyin = str(pinyin)
 
         if pinyin.find("…") or pinyin.find("（") or pinyin.find("）"):
-            fuhao = re.split('([…（）])', pinyin)
+            fuhao = re.split("([…（）])", pinyin)
         else:
             fuhao = {pinyin}
         ss = ""
@@ -73,7 +73,7 @@ def fenIPA(pinyin):
                 ss = ss + sss + " "
                 continue
 
-            s = re.split('(\d+)', sss)
+            s = re.split("(\d+)", sss)
 
             for i in range(0, len(s) - 1, 2):
                 ss = ss + s[i] + s[i + 1] + " "
@@ -83,7 +83,7 @@ def fenIPA(pinyin):
         print(pinyin)
 
 
-#遍历sheet1中所有行row
+# 遍历sheet1中所有行row
 num_rows = worksheet1.nrows
 for row in range(num_rows):
     out.write(row, 0, worksheet1.cell_value(row, 0))
@@ -93,5 +93,5 @@ for row in range(num_rows):
     out.write(row, 1, fenpinyin(pinyin))
     out.write(row, 2, fenIPA(IPA))
 
-#保存该excel文件,有同名文件时直接覆盖
-outbook.save('./4.xls')
+# 保存该excel文件,有同名文件时直接覆盖
+outbook.save("./4.xls")

@@ -3,7 +3,7 @@ import re
 
 def pinyin_to_tone(pinyin):
     try:
-        matchObj = re.match(r'([a-z|ⁿ]+)([0-9]*)$', pinyin, re.M | re.I)
+        matchObj = re.match(r"([a-z|ⁿ]+)([0-9]*)$", pinyin, re.M | re.I)
         return matchObj.group(2)
     except Exception:
         print("[寻找声调]这不是一个合法的拼音: ", pinyin)
@@ -12,9 +12,9 @@ def pinyin_to_tone(pinyin):
 
 def pinyin_to_shengmu(pinyin):
     try:
-        matchObj = re.match(r'([a-z|ⁿ]+)([0-9]*)$', pinyin, re.M | re.I)
+        matchObj = re.match(r"([a-z|ⁿ]+)([0-9]*)$", pinyin, re.M | re.I)
         line = matchObj.group(1)  # 获取非声调部分
-        matchObj = re.match(r'(ng?|[^aeiouy]?)(.*)$', line, re.M | re.I)
+        matchObj = re.match(r"(ng?|[^aeiouy]?)(.*)$", line, re.M | re.I)
         sheng = matchObj.group(1)
         if line == "ng":
             sheng = ""  # 特殊情况
@@ -26,9 +26,9 @@ def pinyin_to_shengmu(pinyin):
 
 def pinyin_to_yunmu(pinyin):
     try:
-        matchObj = re.match(r'([a-z|ⁿ]+)([0-9]*)$', pinyin, re.M | re.I)
+        matchObj = re.match(r"([a-z|ⁿ]+)([0-9]*)$", pinyin, re.M | re.I)
         line = matchObj.group(1)  # 获取非声调部分
-        matchObj = re.match(r'(ng?|[^aeiouy]?)(.*)$', line, re.M | re.I)
+        matchObj = re.match(r"(ng?|[^aeiouy]?)(.*)$", line, re.M | re.I)
         yun = matchObj.group(2)
         if line == "ng":
             yun = "ng"  # 特殊情况
@@ -43,7 +43,7 @@ def pinyin_to_IPA(pinyin):
         sheng = pinyin_to_shengmu(pinyin)  # 声母
         yun = pinyin_to_yunmu(pinyin)  # 韵母
         tone = pinyin_to_tone(pinyin)  # 声调
-        matchObj = re.match(r'(.*?)(ng?|n?|h?|ⁿ?)$', yun, re.M | re.I)
+        matchObj = re.match(r"(.*?)(ng?|n?|h?|ⁿ?)$", yun, re.M | re.I)
         yun1 = matchObj.group(1)  # 韵母元音
         yun2 = matchObj.group(2)  # 韵尾
 
@@ -123,7 +123,7 @@ def pinyin_to_IPA(pinyin):
         elif tone == "7":
             tone = "4"
 
-        return str(sheng+yun1+yun2+tone)
+        return str(sheng + yun1 + yun2 + tone)
     except Exception:
         print("[翻译IPA]这不是一个合法的拼音: ", pinyin)
         return None
@@ -148,7 +148,7 @@ def mohuyin(pinyin):
 
         # 对于声调的处理
         if tone == "":
-            if yun[-1] == 'h':
+            if yun[-1] == "h":
                 tone = {"6", "7"}
             else:
                 tone = {"1", "2", "3", "4", "5"}
@@ -186,7 +186,7 @@ def mohuyin(pinyin):
         for s in sheng:
             for y in yun:
                 for t in tone:
-                    result.add(str(s+y+t))
+                    result.add(str(s + y + t))
 
     except Exception as e:
         print(e.with_traceback)
@@ -196,8 +196,27 @@ def mohuyin(pinyin):
 
 
 # 一些测试数据
-pinyin = ["buai1","dei3", "lyorng2", "nguai1", "a4", "loe2", "ng2", "heng2", "meh3",
-          "tatfd", "ah7", "sing2", "ngorng5", "gyorng2", "leh6", "ki4", "nang1", "gerng1", "keh"]
+pinyin = [
+    "buai1",
+    "dei3",
+    "lyorng2",
+    "nguai1",
+    "a4",
+    "loe2",
+    "ng2",
+    "heng2",
+    "meh3",
+    "tatfd",
+    "ah7",
+    "sing2",
+    "ngorng5",
+    "gyorng2",
+    "leh6",
+    "ki4",
+    "nang1",
+    "gerng1",
+    "keh",
+]
 for s in pinyin:
     print("拼音： ", s)
     m = mohuyin(s)
