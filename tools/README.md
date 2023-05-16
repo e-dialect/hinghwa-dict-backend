@@ -13,3 +13,23 @@
     .env文件示例：
         user=123456
         password=123456
+##  2.data_process
+
+    数据处理工具
+### 2.1 add_tradition.py
+    将简体中文转换为繁体中文，根据参考文件对目标文件进行繁体生成
+
+### 2.2 datachar.py
+    单字文件处理，根据字符、拼音、ipa,生成对应声母、韵母、声调信息
+
+### 2.3 worddata.py
+    单词文件处理，生成对应切片信息
+
+### 2.4 qiepian.py
+    根据IPA信息生成对应声母、韵母、声调信息，生成.mp3文件，worddata.py的基础
+
+### 2.5 translate.py
+    拼音信息翻译文件，datachar.py 的基础
+
+### 2.6 pre_datachar.py
+    单字文件预处理脚本，将多音字进行拆分
