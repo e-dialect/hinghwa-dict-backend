@@ -117,11 +117,6 @@ def searchCharactersPinyin(request):
                 result1[pinyin]["characters"].append(
                     {"character": character, "word": word, "traditional": traditional}
                 )
-            filterate = []
-            for i in result1[pinyin]["characters"]:
-                if i not in filterate:
-                    filterate.append(i)
-            result1[pinyin]["characters"] = filterate
             return JsonResponse({"result": list(result1.values())}, status=200)
         else:
             return JsonResponse({}, status=405)
