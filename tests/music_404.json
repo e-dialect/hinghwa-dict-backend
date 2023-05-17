@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "5b7f5aff-2a90-41f0-b636-0c4a9f16201e",
+          "id": "51198335-3b10-4bdd-a5fb-fe50ead993b4",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "5b594085-f93f-42cf-9bd9-0e4cece63b52",
+          "id": "b9b46241-ed53-48c0-ac78-2c01c4ffe8d0",
           "name": "MC0101 上传新音乐(添加陈诺歌曲)",
           "request": {
             "url": {
@@ -212,12 +212,65 @@
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"source\": \"https://cos.edialect.top/website/新年到.mp3\",\r\n    \"title\": \"新年到\",\r\n    \"cover\": \"https://cos.edialect.top/website/陈诺《家乡》.jpg\",\r\n    \"artist\": \"陈诺\"\r\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
-          "event": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`music_id`, value);console.log('已设置环境变量【music_id】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【music_id】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            }
+          ],
           "responseDefinition": {
             "id": 4257564,
             "createdAt": "2021-07-30T09:26:26.000Z",
@@ -305,7 +358,7 @@
           }
         },
         {
-          "id": "d98855b2-97e2-43ff-91ee-91d6ae5dd64f",
+          "id": "cac4331a-27a2-4904-8b4f-fa68b8bed3a4",
           "name": "MC0105 审核音乐(MC0105 审核音乐)",
           "request": {
             "url": {
@@ -313,7 +366,7 @@
               "port": "8000",
               "path": [
                 "music",
-                "3",
+                "{{music_id}}",
                 "visibility"
               ],
               "host": [
@@ -563,7 +616,7 @@
           }
         },
         {
-          "id": "f2dd1524-535e-49be-b8cf-d91981cb1c11",
+          "id": "601a3290-2334-47a7-920a-ffd7781cfc86",
           "name": "MC0102 删除音乐(MC0102 删除音乐)",
           "request": {
             "url": {
@@ -571,7 +624,7 @@
               "port": "8000",
               "path": [
                 "music",
-                "3"
+                "{{music_id}}"
               ],
               "host": [
                 "127",
@@ -637,7 +690,7 @@
           }
         },
         {
-          "id": "1aa01759-1773-42d1-b895-af560b495455",
+          "id": "ae87e237-9774-40f8-9e9e-1be2c5c38d98",
           "name": "MC0103 更新音乐信息(MC0103 更新音乐信息)",
           "request": {
             "url": {
@@ -645,7 +698,7 @@
               "port": "8000",
               "path": [
                 "music",
-                "3"
+                "{{music_id}}"
               ],
               "host": [
                 "127",
@@ -675,6 +728,7 @@
             "body": {
               "mode": "raw",
               "raw": "",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -730,7 +784,7 @@
           }
         },
         {
-          "id": "7b8e7e00-3465-41be-bfd5-90b973277594",
+          "id": "0fc4f229-ecf7-40a0-86cc-200d1fa74943",
           "name": "MC0104 获取音乐信息(MC0104 获取音乐信息)",
           "request": {
             "url": {
@@ -738,7 +792,7 @@
               "port": "8000",
               "path": [
                 "music",
-                "3"
+                "{{music_id}}"
               ],
               "host": [
                 "127",
@@ -804,7 +858,7 @@
           }
         },
         {
-          "id": "a5f8ca48-dcf6-4eec-9b46-29a1cd94e986",
+          "id": "8a828b8b-633c-48ee-a755-27df08caaea6",
           "name": "MC0301 给这音乐点赞(MC0301 给这音乐点赞)",
           "request": {
             "url": {
@@ -879,7 +933,7 @@
           }
         },
         {
-          "id": "ae43e5c3-87ee-41e1-b321-6e92f67dc46f",
+          "id": "5a250831-6fd0-4380-a1f3-d8674a531cff",
           "name": "MC0302 取消这音乐点赞(MC0302 取消这音乐点赞)",
           "request": {
             "url": {
@@ -887,7 +941,7 @@
               "port": "8000",
               "path": [
                 "music",
-                "3",
+                "{{music_id}}",
                 "like"
               ],
               "host": [
@@ -1192,7 +1246,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "bff613bd-8ae2-4d55-9220-f259c2930288",
+      "id": "e4d13791-a968-4629-adef-85f1ad0fc538",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -1201,7 +1255,7 @@
       "values": [
         {
           "type": "any",
-          "value": "undefined",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY4NDgyNjUyMy40OTM3Nzd9.nWn2HxaDm7fYUGP3aB9WjE3AqXBaxT7-hkO8R22HGNA",
           "key": "token",
           "initialValue": ""
         },
@@ -1276,6 +1330,20 @@
           "value": "",
           "key": "num_later",
           "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "{\"id\":5}",
+          "key": "id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "isBindInitial": false,
+          "initialValue": ""
         }
       ]
     },
@@ -1291,7 +1359,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "576693f4-023c-4858-9c86-f22dc0f5104c",
+      "id": "d536991d-876f-40e9-90c3-0ebba5a60170",
       "baseUrl": "",
       "baseUrls": {},
       "values": []
