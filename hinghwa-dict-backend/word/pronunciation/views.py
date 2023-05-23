@@ -14,6 +14,7 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.core.cache import caches
 from django.db.models import Q, Count, Max
+from django.core.paginator import Paginator
 from pydub import AudioSegment as audio
 
 from user.models import User
@@ -475,6 +476,8 @@ class PronunciationRanking(View):
     # PN0205 语音上传榜单
     def get(self, request) -> JsonResponse:
         days = request.GET["days"]  # 要多少天的榜单
+        page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
+        pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
         if not days:
             raise PronunciationRankWithoutDays()
         days = int(days)
@@ -488,6 +491,12 @@ class PronunciationRanking(View):
         my_rank = 0
         rank_count = 0
         result_json_list = []
+        paginator = Pages(self.get_rank_queries(days), pagesize)
+        current_page = paginator.get_page(page)
+        adjacent_pages = list(
+            paginator.get_adjacent_pages(current_page, adjancent_pages=3)
+        )
+
         for rank_q in self.get_rank_queries(days):
             con_id = rank_q["contributor_id"]
             amount = rank_q["pronunciation_count"]
@@ -503,7 +512,18 @@ class PronunciationRanking(View):
             )
         # 发送给前端
         return JsonResponse(
-            {"ranking": result_json_list, "me": {"amount": my_amount, "rank": my_rank}},
+            {
+                "ranking": result_json_list,
+                "me": {"amount": my_amount, "rank": my_rank},
+                "pagination": {
+                    "total_pages": paginator.num_pages,
+                    "current_page": current_page.number,
+                    "page_size": pagesize,
+                    "previous_page": current_page.has_previous(),
+                    "next_page": current_page.has_next(),
+                    "adjacent_pages": adjacent_pages,
+                },
+            },
             status=200,
         )
 
@@ -546,3 +566,12 @@ class PronunciationRanking(View):
                 .order_by("-pronunciation_count", "-last_date")
             )
         return result  # 返回的是Queries
+
+
+class Pages(Paginator):
+    # 对原有的Paginator类进行扩展，获取当前页的相邻页面
+    def get_adjacent_pages(self, current_page, adjancent_pages=3):
+        current_page = current_page.number
+        start_page = max(current_page - adjancent_pages, 1)  # 前面的页码数
+        end_page = min(current_page + adjancent_pages, self.num_pages)  # 后面的页码数
+        return range(start_page, end_page + 1)
