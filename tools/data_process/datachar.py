@@ -4,7 +4,9 @@ import xlrd
 import xlwt
 
 # 打开一个workbook
-workbook = xlrd.open_workbook("11.xls")
+workbook = xlrd.open_workbook(
+    "reference.xls",  # todo 自定义
+)
 worksheet1 = workbook.sheets()[0]
 
 outbook = xlwt.Workbook()  # 注意Workbook的开头W要大写
@@ -41,4 +43,4 @@ for row in range(num_rows):
     cnt = cnt + 1
 
 # 保存该excel文件,有同名文件时直接覆盖
-outbook.save("./2.xls")
+outbook.save("./target.xls")

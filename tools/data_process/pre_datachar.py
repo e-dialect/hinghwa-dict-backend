@@ -2,7 +2,10 @@
 import xlrd
 import xlwt
 
-workbook = xlrd.open_workbook("1.xls")
+workbook = xlrd.open_workbook(
+    "source.xls",  # todo 自定义
+    encoding_override="gbk",
+)
 worksheet = workbook.sheets()[0]
 
 outbook = xlwt.Workbook()
@@ -25,4 +28,4 @@ for row in range(num_rows):
         out.write(cnt, 2, ipa_list[i])
         cnt = cnt + 1
 
-outbook.save("./11.xls")
+outbook.save("./target.xls")

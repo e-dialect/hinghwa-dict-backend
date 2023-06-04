@@ -16,20 +16,30 @@
 ##  2.data_process
 
     数据处理工具
-### 2.1 add_tradition.py
+### 2.1 add_tradition.py、re_add_tradition.py
     将简体中文转换为繁体中文，根据参考文件对目标文件进行繁体生成
+    数据集格式为 xls,字段顺序可以自行调整
 
 ### 2.2 datachar.py
     单字文件处理，根据字符、拼音、ipa,生成对应声母、韵母、声调信息
+    数据集格式为 xls,字段顺序可以自行调整
 
 ### 2.3 worddata.py
     单词文件处理，生成对应切片信息
+    数据集格式为 xls,字段顺序可以自行调整
 
 ### 2.4 qiepian.py
     根据IPA信息生成对应声母、韵母、声调信息，生成.mp3文件，worddata.py的基础
+    数据集格式为 xls,字段顺序可以自行调整
 
 ### 2.5 translate.py
     拼音信息翻译文件，datachar.py 的基础
+    数据集格式为 xls,字段顺序可以自行调整
 
 ### 2.6 pre_datachar.py
     单字文件预处理脚本，将多音字进行拆分
+    数据集格式为 xls,字段顺序可以自行调整
+
+### 2.7 tradition_to_simple.py
+    繁体字转换简体字
+    数据集格式为 xls,字段顺序可以自行调整
