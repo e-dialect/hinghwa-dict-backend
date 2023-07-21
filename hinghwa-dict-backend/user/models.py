@@ -24,6 +24,28 @@ class UserInfo(models.Model):
     )
     county = models.CharField(blank=True, max_length=100, verbose_name="县区")
     town = models.CharField(blank=True, max_length=100, verbose_name="乡镇")
+    points_sum = models.IntegerField(default=0, verbose_name="总积分")
+    points_now = models.IntegerField(default=0, verbose_name="当前积分")
+    reasons = models.TextField(blank=True, verbose_name="积分变动原因")
+    timestamps = models.TextField(blank=True, verbose_name="积分变动时间戳")
+    title = models.CharField(blank=True, max_length=50, verbose_name="头衔")
+    color = models.CharField(
+        blank=True, max_length=7, default="#000000", verbose_name="字体颜色"
+    )
+
+    def add(self, reason, timestamp):
+        if not self.reasons:
+            self.reasons = reason
+            self.timestamps = timestamp
+        else:
+            self.reasons += f"\n{reason}"
+            self.timestamps += f"\n{timestamp}"
+        self.save()
+
+    def combine(self):
+        reasons = self.reasons.splitlines() if self.reasons else []
+        timestamps = self.timestamps.splitlines() if self.timestamps else []
+        return list(zip(reasons, timestamps))
 
     def __str__(self):
         return self.user.username

@@ -18,6 +18,8 @@ urlpatterns += [
     path("<int:id>", csrf_exempt(Manage.as_view())),  # get US0201 put US0301
     path("<int:id>/password", csrf_exempt(ManagePassword.as_view())),  # put US0302
     path("<int:id>/email", csrf_exempt(ManageEmail.as_view())),  # put US0303
+    path("<int:id>/points", csrf_exempt(ManagePoints.as_view())),
+    path("<int:id>/points/change", csrf_exempt(SearchPoints.as_view())),
 ]
 
 # 微信相关操作

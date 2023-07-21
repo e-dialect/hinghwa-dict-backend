@@ -19,6 +19,8 @@ from django.urls import path, include
 from user import views as user
 from website import views as website
 from word.word import views as word
+from rewards import views as rewards
+
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -47,4 +49,5 @@ urlpatterns = [
         include("word.pronunciation.urls", namespace="word.pronunciation"),
     ),
     path("record", word.record),  # PN0301GET
+    path("rewards", include("rewards.urls", namespace="rewards")),
 ]

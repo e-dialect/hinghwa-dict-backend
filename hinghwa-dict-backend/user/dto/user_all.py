@@ -21,7 +21,14 @@ def user_all(user: User) -> dict:
         "town": info.town,
         "is_admin": user.is_superuser,
         "wechat": True if len(info.wechat) else False,
+        "points_sum": info.points_sum,
+        "points_now": info.points_now,
+        "title": {
+            "name": info.title,
+            "color": info.color,
+        },
     }
+
     response.update(
         {
             "login_time": localtime(user.last_login).__format__("%Y-%m-%d %H:%M:%S")
@@ -29,4 +36,19 @@ def user_all(user: User) -> dict:
             else "",
         }
     )
+    return response
+
+
+def user_pointts_change(user: User) -> dict:
+    # 获取用户积分变动信息
+    info = user.user_info
+    response = {"points_change": []}
+    if info.reasons and info.timestamps:
+        reasons_and_timestamps = info.combine()
+        points_change = [
+            {"reason": info.reasons, "timestamp": info.timestamps}
+            for info.reasons, info.timestamps in reasons_and_timestamps
+        ]
+        response["points_change"] = points_change
+
     return response

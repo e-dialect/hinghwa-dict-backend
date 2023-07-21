@@ -4,9 +4,8 @@ from django.http import JsonResponse
 from django.views import View
 from notifications.models import Notification
 
-from user.dto.user_all import user_all
+from user.dto.user_all import user_all, user_pointts_change
 from user.forms import UserForm, UserInfoForm
-from user.models import UserInfo
 from user.utils import get_user_by_id
 from utils.PasswordValidation import password_validator
 from utils.Upload import uploadAvatar
@@ -15,6 +14,8 @@ from utils.exception.types.forbidden import ForbiddenException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.token import get_request_user, generate_token
 from website.views import email_check
+from utils.exception.types.not_found import UserNotFoundException
+from user.models import UserInfo, User
 
 
 class Manage(View):
@@ -147,3 +148,52 @@ class ManageEmail(View):
         user.email = body["email"]
         user.save()
         return JsonResponse({"user": user_all(user)}, status=200)
+
+
+class ManagePoints(View):
+    # US0204 获取用户积分信息
+    def get(self, request, id) -> JsonResponse:
+        user = get_user_by_id(id)
+        points_sum = int(user_all(user)["points_sum"])
+        points_now = int(user_all(user)["points_now"])
+        return JsonResponse(
+            {
+                "points_sum": points_sum,
+                "points_now": points_now,
+            },
+            status=200,
+        )
+
+    # US0306 增减用户积分
+    def put(self, request, id):
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            body = demjson.decode(request.body)
+            action = body["action"]
+            points = int(body["points"])
+            if action == "add":
+                user.user_info.points_sum += points
+                user.user_info.points_now += points
+            elif action == "sub":
+                if user.user_info.points_now >= points:
+                    user.user_info.points_now -= points
+                else:
+                    return JsonResponse({"msg": "您的积分不足"})
+            else:
+                return JsonResponse({"msg": "Invalid action"})
+            user.user_info.save()
+            return JsonResponse({"user": user_all(user)}, status=200)
+        else:
+            raise UserNotFoundException()
+
+
+class SearchPoints(View):
+    # US0205获取用户积分更改记录
+    def get(self, request, id):
+        user = User.objects.filter(id=id)
+        if user.exists():
+            user = user[0]
+            return JsonResponse(user_pointts_change(user), status=200)
+        else:
+            raise UserNotFoundException()
