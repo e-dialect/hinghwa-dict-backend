@@ -422,8 +422,8 @@ class DictionarySearch(View):
         body = demjson.decode(request.body)
         query = r"^"
         length = 0
-        if body["order"]:
-            for it in body["order"]:
+        if body["orders"]:
+            for it in body["orders"]:
                 query += it + r"[0-9]\s"
                 length += len(it) + 2
         if (

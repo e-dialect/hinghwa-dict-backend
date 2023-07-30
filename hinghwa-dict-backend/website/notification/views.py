@@ -23,7 +23,7 @@ class Notifications(View):
             recipients = None
         else:
             recipients = User.objects.filter(id__in=body["recipients"])
-        title = body["title"] if "title" in body else None
+        title = body["titles"] if "titles" in body else None
         notifications = sendNotification(user, recipients, body["content"], title=title)
         return JsonResponse({"notifications": notifications}, status=200)
 

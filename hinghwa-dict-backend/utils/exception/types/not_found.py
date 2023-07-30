@@ -116,7 +116,7 @@ class NotBoundEmail(NotFoundException):
         self.msg = "账户 {}邮箱未绑定, 请通过微信进行操作".format(username)
 
 
-class RewardsNotFoundException(NotFoundException):
+class ProductsNotFoundException(NotFoundException):
     """
     商品不存在
     param id:商品id
@@ -138,3 +138,27 @@ class TitleNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "头衔{}不存在".format(id)
+
+
+class TransactionsNotFoundException(NotFoundException):
+    """
+    积分记录不存在
+    param id:积分记录id
+    """
+
+    def __init__(self, id=0):
+        super().__init__()
+        self.status = 404
+        self.msg = "积分记录{}不存在".format(id)
+
+
+class OrdersNotFoundException(NotFoundException):
+    """
+    订单不存在
+    param id:订单id
+    """
+
+    def __init__(self, id=0):
+        super().__init__()
+        self.status = 404
+        self.msg = "订单{}不存在".format(id)

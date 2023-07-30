@@ -16,7 +16,7 @@ from utils.token import get_request_user, generate_token
 from website.views import email_check
 from utils.exception.types.not_found import UserNotFoundException
 from user.models import UserInfo, User
-
+from utils.token import token_pass, token_user
 
 class Manage(View):
     # US0201 获取用户信息
@@ -94,6 +94,9 @@ class Manage(View):
         user = get_user_by_id(id)
         body = demjson.decode(request.body)
         info = body["user"]
+        print(info)
+        print(info["town"])
+        print(info["county"])
         user_info_form = UserInfoForm(info)
         if not user_info_form.is_valid:
             raise ValueError
@@ -164,36 +167,4 @@ class ManagePoints(View):
             status=200,
         )
 
-    # US0306 增减用户积分
-    def put(self, request, id):
-        user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            body = demjson.decode(request.body)
-            action = body["action"]
-            points = int(body["points"])
-            if action == "add":
-                user.user_info.points_sum += points
-                user.user_info.points_now += points
-            elif action == "sub":
-                if user.user_info.points_now >= points:
-                    user.user_info.points_now -= points
-                else:
-                    return JsonResponse({"msg": "您的积分不足"})
-            else:
-                return JsonResponse({"msg": "Invalid action"})
-            user.user_info.save()
-            return JsonResponse({"user": user_all(user)}, status=200)
-        else:
-            raise UserNotFoundException()
 
-
-class SearchPoints(View):
-    # US0205获取用户积分更改记录
-    def get(self, request, id):
-        user = User.objects.filter(id=id)
-        if user.exists():
-            user = user[0]
-            return JsonResponse(user_pointts_change(user), status=200)
-        else:
-            raise UserNotFoundException()

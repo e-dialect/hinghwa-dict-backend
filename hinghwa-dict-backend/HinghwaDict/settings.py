@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     "django_apscheduler",
     "corsheaders",
     "notifications",
-    "rewards"
+    "rewards",
+
     # 'rest_framework'
 ]
 

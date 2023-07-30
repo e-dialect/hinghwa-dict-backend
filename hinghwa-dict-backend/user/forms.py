@@ -13,8 +13,6 @@ class UserInfoForm(forms.ModelForm):
             "avatar",
             "county",
             "town",
-            "points_sum",
-            "points_now",
         )
 
 

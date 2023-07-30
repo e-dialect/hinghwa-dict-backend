@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "577015fb-b741-4195-88ca-1eaf9425a4ff",
+          "id": "b56caca2-ff7b-4fa1-a381-d71ebd8b3a63",
           "name": "LG0101 账号密码登录()",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "3d0270bc-b483-4a71-81f5-4f8c1456f93e",
+          "id": "1f1edc3b-184b-454a-8b04-e740e9972b7f",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -357,7 +357,7 @@
           }
         },
         {
-          "id": "d5b9385c-e336-4597-8ce7-ac2be1ca349a",
+          "id": "880a544c-7454-4197-a018-d2740fdc5b2e",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -579,7 +579,7 @@
           }
         },
         {
-          "id": "1f520ee9-c3e8-47be-b007-1a03854a3447",
+          "id": "e2ac820d-a8e7-4603-bf84-c76eb3bbd67c",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -627,7 +627,7 @@
           "responseDefinition": {
             "id": 27919786,
             "createdAt": "2022-03-20T01:17:01.000Z",
-            "updatedAt": "2022-03-20T01:17:01.000Z",
+            "updatedAt": "2023-07-30T11:03:34.000Z",
             "deletedAt": null,
             "apiDetailId": 14440370,
             "name": "成功",
@@ -635,7 +635,17 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {}
+              "properties": {
+                "transaction_id": {
+                  "type": "string"
+                }
+              },
+              "x-apifox-orders": [
+                "transaction_id"
+              ],
+              "required": [
+                "transaction_id"
+              ]
             },
             "defaultEnable": true,
             "projectId": 0,
@@ -678,7 +688,7 @@
           }
         },
         {
-          "id": "346ebd43-62a3-4958-929e-8c3ed1070363",
+          "id": "0efe04c7-5b1e-4c1f-b10a-2bcf8ba27b6c",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -900,7 +910,7 @@
           }
         },
         {
-          "id": "1e386d2b-0f8d-4789-a2b2-08921efb9be4",
+          "id": "34d2b179-0df0-4e1e-a9a9-71b8bf2808bd",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -1066,7 +1076,7 @@
           }
         },
         {
-          "id": "1751e8e2-9c19-4cdb-af93-43a7b75c5b9a",
+          "id": "c8f2e42b-2c76-4a76-83c2-e73b71115e99",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -1232,7 +1242,7 @@
           }
         },
         {
-          "id": "b11c1c6e-ef9e-448c-a612-b7c3b4d12ded",
+          "id": "b8ceaf52-2af6-4ce2-a693-5c705e05675a",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -1253,10 +1263,6 @@
               "variable": []
             },
             "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
               {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
@@ -1413,7 +1419,7 @@
           }
         },
         {
-          "id": "1c32330e-dd52-459a-9eed-68b4e37bc12a",
+          "id": "449590e1-50dc-4cae-929a-ac7d0a5f8c2d",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -1612,7 +1618,7 @@
           }
         },
         {
-          "id": "f2f23aee-5dcd-4881-9e22-d9ec6ddacc99",
+          "id": "5bffa264-dbc4-4d37-bbe3-7ad26f217bea",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -1834,7 +1840,7 @@
           }
         },
         {
-          "id": "aa1a5f30-a4a4-44d7-a84f-a93a20d22491",
+          "id": "2dafadb7-2da8-452e-af24-1e53282bef65",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -1855,10 +1861,6 @@
               "variable": []
             },
             "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
               {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
@@ -2015,7 +2017,7 @@
           }
         },
         {
-          "id": "a009dc74-cbd6-4a07-8b33-2b8e304efe5a",
+          "id": "b15693d8-13da-4aab-b2e5-544a4fda3d0b",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2107,7 +2109,7 @@
           }
         },
         {
-          "id": "9ebb5cc5-1d5b-4c84-b83f-1832d86c9b5d",
+          "id": "5ec447aa-a0a4-43c1-a7a5-2118cca7d112",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2199,7 +2201,7 @@
           }
         },
         {
-          "id": "627cf17b-ae61-4c3b-a223-1db2104905d6",
+          "id": "78ed84cf-26db-49c8-a286-e34bc7a260f5",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2357,7 +2359,7 @@
           }
         },
         {
-          "id": "8a722dbf-0db6-4c14-b655-7e04461f4fcf",
+          "id": "96325306-8858-4884-82f6-9eec13bc6e7c",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -2449,7 +2451,7 @@
           }
         },
         {
-          "id": "3c26412d-d311-4cb0-a1da-777a981483e5",
+          "id": "39dd0901-e7fe-4b01-95e3-ab286ec2b907",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -2541,7 +2543,7 @@
           }
         },
         {
-          "id": "276a261a-93e0-4299-998e-10e281f992fd",
+          "id": "218c7f50-3194-428c-a550-bc57a2bbb4cb",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -2785,7 +2787,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "6fcaba87-29c4-41ac-8197-b17fdc18aded",
+      "id": "3002bc09-9f3a-4573-985e-836555c6e9d6",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -2794,38 +2796,37 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2ODIzMjU5ODYuMDMxODc2fQ.V09i-cNoscSd7JtjsZ3Rp2YZD-oZ5UDtscSw89wKTdQ",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMxNjU5OS42ODg3Mzh9.oG-svgx-zShqtWkDqZxuYisRLrITl4Zd82yU2ik-lms",
           "key": "token",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "6",
+          "value": "",
           "key": "quiz_id",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "5",
+          "value": "",
           "key": "word_id_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "10",
+          "value": "",
           "key": "word_id_1",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE2NzQxODQ5MDguOTg5NDkxfQ.mAZql4GXkSPUJ97VWtfMylsB2JeKhDRNdXW2N9us404",
+          "value": "",
           "key": "token_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "undefined",
+          "value": "",
           "key": "word_id_3",
           "initialValue": ""
         },
@@ -2833,56 +2834,86 @@
           "type": "any",
           "value": "2",
           "key": "user_id",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "98",
+          "value": "17",
           "key": "article_id",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "121",
+          "value": "",
           "key": "comment_id_1",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "122",
+          "value": "",
           "key": "comment_id_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "2",
+          "value": "",
           "key": "like_num_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": 25,
+          "value": "4",
           "key": "num_pre",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "24",
+          "value": "",
           "key": "num_later",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "1",
-          "key": "like_num_1",
-          "initialValue": "1"
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
         },
         {
           "type": "any",
-          "value": "1",
-          "key": "recent_likes",
-          "initialValue": "1"
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "order_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "isBindInitial": false,
+          "initialValue": ""
         }
       ]
     },
@@ -2898,7 +2929,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "3530b3eb-2699-4064-be20-6f2b804f77a5",
+      "id": "46a99207-ee6d-4749-8079-f88b2d928f2e",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

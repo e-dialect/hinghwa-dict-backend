@@ -19,7 +19,9 @@ from django.urls import path, include
 from user import views as user
 from website import views as website
 from word.word import views as word
-from rewards import views as rewards
+from rewards.transactions import view as transactions
+from rewards.products import view as products
+from rewards.titles import view as titles
 
 
 urlpatterns = [
@@ -49,5 +51,8 @@ urlpatterns = [
         include("word.pronunciation.urls", namespace="word.pronunciation"),
     ),
     path("record", word.record),  # PN0301GET
-    path("rewards", include("rewards.urls", namespace="rewards")),
+    path("products", include("rewards.products.urls", namespace="rewards.products")),
+    path("titles", include("rewards.titles.urls", namespace="rewards.titles")),
+    path("transactions", include("rewards.transactions.urls", namespace="rewards.transactions")),
+    path("orders", include("rewards.orders.urls", namespace="rewards.orders"))
 ]

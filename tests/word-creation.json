@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "f75a43fe-c6bd-495b-a37e-05b0ace3d742",
+          "id": "4e0a6bd7-6d95-4976-bff8-bc2d504a952f",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,9 +37,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -52,6 +54,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -62,6 +68,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -73,17 +88,26 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
           ],
           "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -105,16 +129,34 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4183271,
-            "name": "成功",
-            "apiDetailId": 5318056,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
             "ordering": 1,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -122,15 +164,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
+            "httpApiCaseName": "登录用户admin",
+            "id": "92188925-d283-4d07-8900-401b3592006d",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "2207f8b4-ec3b-4ddf-80e3-c43354597297",
+          "id": "9379c321-bcc6-455f-b314-8996fd266676",
           "name": "WD0401 申请更新(WD0401 申请更新)",
           "request": {
             "url": {
@@ -156,7 +201,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -164,9 +209,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"consequat et aliquip eu\",\n        \"standard_pinyin\": \"ut proident laboris\",\n        \"related_words\": [\n        ],\n        \"mandarin\": [\n            \"议\",\n            \"它\",\n            \"织\",\n            \"提\"\n        ],\n        \"word\": \"生\",\n        \"related_articles\": [\n\n        ],\n        \"definition\": \"照少资状外受影出两强派约调音强。心山市的青求社什部三术许。导决合从门目新很斗约反龙么决后。军派单局代酸目收干科选圆书派示。员级义层系七方持有型九音手阶。林十率由程不无技出活两义。\",\n        \"visibility\": false,\n        \"annotation\": \"和头海易近东度基据海严里生共。直段没向象所亲发管米走七火。北便响采儿流出公相则打社况它产。业人命人原般查快最系除王花选现号二。江节证新社才般议政场清加交他权价力。\"\n    },\n    \"word\": 0,\n    \"reason\": \"in\"\n}"
+              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"consequat et aliquip eu\",\n        \"standard_pinyin\": \"ut proident laboris\",\n        \"related_words\": [\n        ],\n        \"mandarin\": [\n            \"议\",\n            \"它\",\n            \"织\",\n            \"提\"\n        ],\n        \"word\": \"生\",\n        \"related_articles\": [\n\n        ],\n        \"definition\": \"照少资状外受影出两强派约调音强。心山市的青求社什部三术许。导决合从门目新很斗约反龙么决后。军派单局代酸目收干科选圆书派示。员级义层系七方持有型九音手阶。林十率由程不无技出活两义。\",\n        \"visibility\": false,\n        \"annotation\": \"和头海易近东度基据海严里生共。直段没向象所亲发管米走七火。北便响采儿流出公相则打社况它产。业人命人原般查快最系除王花选现号二。江节证新社才般议政场清加交他权价力。\"\n    },\n    \"word\": 0,\n    \"reason\": \"in\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -179,6 +226,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.id`);",
@@ -189,6 +240,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -200,17 +260,26 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`id`, value);console.log('已设置临时变量【'+ `id` + '】，值为【' + value + '】')",
+                  "        pm.variables.set(`id`, value);console.log('已设置临时变量【id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【id】出错：' + e.message;",
+                  "        e.message = '提取变量【id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
           ],
           "responseDefinition": {
+            "id": 25794940,
+            "createdAt": "2022-03-10T09:51:45.000Z",
+            "updatedAt": "2022-03-17T11:33:33.000Z",
+            "deletedAt": null,
+            "apiDetailId": 13560281,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -224,16 +293,15 @@
               ]
             },
             "defaultEnable": true,
-            "id": 25794940,
-            "name": "成功",
-            "apiDetailId": 13560281,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
             "ordering": 1,
-            "createdAt": "2022-03-10T09:51:45.000Z",
-            "updatedAt": "2022-03-17T11:33:33.000Z",
-            "deletedAt": null
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "$ref": "#/definitions/4729647",
+              "x-apifox-overrides": {}
+            }
           },
           "metaInfo": {
             "httpApiId": 13560281,
@@ -241,15 +309,18 @@
             "httpApiName": "WD0401 申请更新",
             "httpApiPath": "/words/applications",
             "httpApiMethod": "post",
-            "httpApiCaseName": "WD0401 申请更新"
+            "httpApiCaseName": "WD0401 申请更新",
+            "id": "f19d5cf6-75c2-43ff-b38d-3eb602341043",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "48e68d87-6a13-49f0-bce2-aa1070dc09b1",
+          "id": "dda722ca-71b5-4415-8b37-7def9b6f4289",
           "name": "WD0402 查看单个申请内容(WD0402 查看单个申请内容)",
           "request": {
             "url": {
@@ -276,16 +347,25 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 25800538,
+            "createdAt": "2022-03-10T10:01:48.000Z",
+            "updatedAt": "2022-07-17T02:47:41.000Z",
+            "deletedAt": null,
+            "apiDetailId": 13562145,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -302,16 +382,224 @@
               ]
             },
             "defaultEnable": true,
-            "id": 25800538,
-            "name": "成功",
-            "apiDetailId": 13562145,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
             "ordering": 1,
-            "createdAt": "2022-03-10T10:01:48.000Z",
-            "updatedAt": "2022-07-17T02:47:41.000Z",
-            "deletedAt": null
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "7392060": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "title": "更新内容",
+                    "$ref": "#/definitions/13123781",
+                    "x-apifox-overrides": {}
+                  },
+                  "word": {
+                    "type": "number",
+                    "title": "更新词条编号"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "更改理由"
+                  },
+                  "application": {
+                    "type": "integer",
+                    "title": "更改申请的编号"
+                  },
+                  "contributor": {
+                    "$ref": "#/definitions/1077996",
+                    "title": "更改人"
+                  },
+                  "granted": {
+                    "type": "boolean",
+                    "title": "审核状态"
+                  },
+                  "verifier": {
+                    "title": "审核人",
+                    "description": "没有则返回null",
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/1077996"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "content",
+                  "reason",
+                  "word",
+                  "application",
+                  "contributor",
+                  "granted",
+                  "verifier"
+                ],
+                "x-apifox-orders": [
+                  "content",
+                  "word",
+                  "reason",
+                  "application",
+                  "contributor",
+                  "granted",
+                  "verifier"
+                ],
+                "title": "application_all",
+                "name": "application_all"
+              },
+              "13123781": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cword"
+                    },
+                    "title": "词语",
+                    "description": "方言词汇"
+                  },
+                  "definition": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "释义",
+                    "description": "特定格式"
+                  },
+                  "annotation": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "附注",
+                    "description": "markdown"
+                  },
+                  "mandarin": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "mock": {
+                        "mock": "@cword"
+                      }
+                    },
+                    "title": "普通话词汇"
+                  },
+                  "related_articles": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "title": "文章id"
+                        },
+                        "word": {
+                          "type": "string",
+                          "title": "词语标题"
+                        }
+                      },
+                      "x-apifox-orders": [
+                        "id",
+                        "word"
+                      ],
+                      "required": [
+                        "id",
+                        "word"
+                      ]
+                    },
+                    "title": "相关文章id列表"
+                  },
+                  "standard_ipa": {
+                    "type": "string"
+                  },
+                  "standard_pinyin": {
+                    "type": "string"
+                  },
+                  "related_words": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "title": "词语id"
+                        },
+                        "word": {
+                          "type": "string",
+                          "title": "词语标题"
+                        }
+                      },
+                      "x-apifox-orders": [
+                        "id",
+                        "word"
+                      ],
+                      "required": [
+                        "id",
+                        "word"
+                      ]
+                    },
+                    "title": "相关词语id列表"
+                  }
+                },
+                "x-apifox-orders": [
+                  "word",
+                  "definition",
+                  "annotation",
+                  "mandarin",
+                  "related_words",
+                  "related_articles",
+                  "standard_ipa",
+                  "standard_pinyin"
+                ],
+                "required": [
+                  "word",
+                  "definition",
+                  "annotation",
+                  "mandarin",
+                  "related_words",
+                  "related_articles",
+                  "standard_ipa",
+                  "standard_pinyin"
+                ],
+                "title": "application_all_content",
+                "name": "application_all_content"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "$ref": "#/definitions/4729815"
+            }
           },
           "metaInfo": {
             "httpApiId": 13562145,
@@ -319,15 +607,18 @@
             "httpApiName": "WD0402 查看单个申请内容",
             "httpApiPath": "/words/applications/{id}",
             "httpApiMethod": "get",
-            "httpApiCaseName": "WD0402 查看单个申请内容"
+            "httpApiCaseName": "WD0402 查看单个申请内容",
+            "id": "50155165-4ba1-4e46-9e5c-fb60c534dfb4",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "e11308b5-aa76-4eed-a576-cab073edd3cc",
+          "id": "5e876e34-126c-46c3-9f31-3cdaf9d73e6c",
           "name": "WD0403 查看多个申请(WD0403 查看多个申请)",
           "request": {
             "url": {
@@ -353,16 +644,25 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 25801174,
+            "createdAt": "2022-03-10T10:04:45.000Z",
+            "updatedAt": "2022-03-10T10:04:45.000Z",
+            "deletedAt": null,
+            "apiDetailId": 13562708,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -378,16 +678,167 @@
               ]
             },
             "defaultEnable": true,
-            "id": 25801174,
-            "name": "成功",
-            "apiDetailId": 13562708,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
             "ordering": 1,
-            "createdAt": "2022-03-10T10:04:45.000Z",
-            "updatedAt": "2022-03-10T10:04:45.000Z",
-            "deletedAt": null
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "4729815": {
+                "type": "object",
+                "properties": {
+                  "content": {
+                    "title": "更新内容",
+                    "$ref": "#/definitions/4731060"
+                  },
+                  "word": {
+                    "type": "number",
+                    "title": "更新词条编号"
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "更改理由"
+                  },
+                  "application": {
+                    "type": "integer",
+                    "title": "更改申请的编号"
+                  },
+                  "contributor": {
+                    "$ref": "#/definitions/1077996",
+                    "title": "更改人"
+                  },
+                  "granted": {
+                    "type": "boolean",
+                    "title": "审核状态"
+                  },
+                  "verifier": {
+                    "title": "审核人",
+                    "description": "没有则返回null",
+                    "oneOf": [
+                      {
+                        "$ref": "#/definitions/1077996"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                },
+                "required": [
+                  "content",
+                  "reason",
+                  "word",
+                  "application",
+                  "contributor",
+                  "granted",
+                  "verifier"
+                ],
+                "x-apifox-orders": [
+                  "content",
+                  "word",
+                  "reason",
+                  "application",
+                  "contributor",
+                  "granted",
+                  "verifier"
+                ],
+                "title": "application_simple",
+                "name": "application_simple"
+              },
+              "4731060": {
+                "type": "object",
+                "properties": {
+                  "word": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cword"
+                    },
+                    "title": "词语",
+                    "description": "方言词汇"
+                  },
+                  "definition": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "释义",
+                    "description": "特定格式"
+                  },
+                  "annotation": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "附注",
+                    "description": "markdown"
+                  },
+                  "mandarin": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "mock": {
+                        "mock": "@cword"
+                      },
+                      "description": "普通话词汇"
+                    }
+                  },
+                  "standard_ipa": {
+                    "type": "string"
+                  },
+                  "standard_pinyin": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "word",
+                  "definition",
+                  "annotation",
+                  "mandarin",
+                  "standard_ipa",
+                  "standard_pinyin"
+                ],
+                "x-apifox-orders": [
+                  "word",
+                  "definition",
+                  "annotation",
+                  "standard_ipa",
+                  "standard_pinyin",
+                  "mandarin"
+                ],
+                "title": "application_simple_content",
+                "name": "application_simple_content"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 13562708,
@@ -395,15 +846,18 @@
             "httpApiName": "WD0403 查看多个申请",
             "httpApiPath": "/words/applications",
             "httpApiMethod": "get",
-            "httpApiCaseName": "WD0403 查看多个申请"
+            "httpApiCaseName": "WD0403 查看多个申请",
+            "id": "99d077e3-b7f8-466f-ba04-04154bb69228",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "338b13bf-937c-4e2f-ba87-72181ac8044e",
+          "id": "40e3485d-13e7-448a-af62-f74a9c4dc968",
           "name": "WD0404 审核申请(WD0404 审核申请)",
           "request": {
             "url": {
@@ -430,7 +884,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -438,9 +892,11 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"result\": true,\n    \"reason\": \"dolor dolore enim\"\n}"
+              "raw": "{\n    \"result\": true,\n    \"reason\": \"dolor dolore enim\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -453,6 +909,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.word`);",
@@ -463,6 +923,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -474,17 +943,26 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`word`, value);console.log('已设置临时变量【'+ `word` + '】，值为【' + value + '】')",
+                  "        pm.variables.set(`word`, value);console.log('已设置临时变量【word】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【word】出错：' + e.message;",
+                  "        e.message = '提取变量【word】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
           ],
           "responseDefinition": {
+            "id": 25804150,
+            "createdAt": "2022-03-10T10:09:50.000Z",
+            "updatedAt": "2022-04-22T03:53:00.000Z",
+            "deletedAt": null,
+            "apiDetailId": 13563705,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -498,16 +976,28 @@
               ]
             },
             "defaultEnable": true,
-            "id": 25804150,
-            "name": "成功",
-            "apiDetailId": 13563705,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
             "ordering": 1,
-            "createdAt": "2022-03-10T10:09:50.000Z",
-            "updatedAt": "2022-04-22T03:53:00.000Z",
-            "deletedAt": null
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean",
+                  "title": "审核结果"
+                },
+                "reason": {
+                  "type": "string",
+                  "title": "理由"
+                }
+              },
+              "required": [
+                "result",
+                "reason"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 13563705,
@@ -515,15 +1005,18 @@
             "httpApiName": "WD0404 审核申请",
             "httpApiPath": "/words/applications/{id}",
             "httpApiMethod": "put",
-            "httpApiCaseName": "WD0404 审核申请"
+            "httpApiCaseName": "WD0404 审核申请",
+            "id": "2f94f91d-865b-4b21-9783-ddefa42a4754",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "12f8db43-a80e-4e14-aa5d-fae9d9762319",
+          "id": "5df8f3d9-ae55-43ef-af50-6e3ab1e68f01",
           "name": "WD0101 获取字词的内容(WD0101 获取字词的内容)",
           "request": {
             "url": {
@@ -549,16 +1042,25 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
+            "id": 4275808,
+            "createdAt": "2021-07-31T14:51:29.000Z",
+            "updatedAt": "2022-07-15T15:41:46.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5349889,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
@@ -573,16 +1075,169 @@
               ]
             },
             "defaultEnable": true,
-            "id": 4275808,
-            "name": "成功",
-            "apiDetailId": 5349889,
             "projectId": 0,
-            "code": 200,
-            "contentType": "json",
             "ordering": 1,
-            "createdAt": "2021-07-31T14:51:29.000Z",
-            "updatedAt": "2022-07-15T15:41:46.000Z",
-            "deletedAt": null
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "1078053": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "词语id"
+                  },
+                  "word": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cword"
+                    },
+                    "title": "词语",
+                    "description": "方言词汇"
+                  },
+                  "definition": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "释义",
+                    "description": "特定格式"
+                  },
+                  "contributor": {
+                    "title": "贡献者id",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "annotation": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "附注",
+                    "description": "markdown"
+                  },
+                  "mandarin": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "mock": {
+                        "mock": "@cword"
+                      }
+                    },
+                    "title": "普通话词汇"
+                  },
+                  "related_words": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "title": "词语id"
+                        },
+                        "word": {
+                          "type": "string",
+                          "title": "词语标题"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "word"
+                      ]
+                    },
+                    "title": "相关词语id列表"
+                  },
+                  "related_articles": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer",
+                          "title": "文章id"
+                        },
+                        "title": {
+                          "type": "string",
+                          "title": "文章标题"
+                        }
+                      },
+                      "required": [
+                        "id",
+                        "title"
+                      ]
+                    },
+                    "title": "相关文章id列表"
+                  },
+                  "views": {
+                    "type": "integer",
+                    "title": "访问量"
+                  },
+                  "standard_ipa": {
+                    "type": "string"
+                  },
+                  "standard_pinyin": {
+                    "type": "string"
+                  },
+                  "source": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "title": "ipa对应语音"
+                  }
+                },
+                "required": [
+                  "id",
+                  "word",
+                  "definition",
+                  "contributor",
+                  "annotation",
+                  "mandarin",
+                  "related_words",
+                  "related_articles",
+                  "standard_ipa",
+                  "standard_pinyin",
+                  "views",
+                  "source"
+                ],
+                "title": "word_all",
+                "name": "word_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            }
           },
           "metaInfo": {
             "httpApiId": 5349889,
@@ -590,594 +1245,18 @@
             "httpApiName": "WD0101 获取字词的内容",
             "httpApiPath": "/words/{id}",
             "httpApiMethod": "get",
-            "httpApiCaseName": "WD0101 获取字词的内容"
+            "httpApiCaseName": "WD0101 获取字词的内容",
+            "id": "ebf613c3-a59c-4510-906b-03360b256246",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
       ],
       "name": "词语创建"
-    },
-    {
-      "item": [
-        {
-          "id": "9b8473ee-4cf6-4f25-aa4e-5246c9b21500",
-          "name": "WD0401 申请更新(WD0401 申请更新)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "words",
-                "applications"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"qui\",\n        \"standard_pinyin\": \"sunt est non\",\n        \"annotation\": \"点育本个义计很空条常行市专流外它。始连天群容所路几称月音思代。好机史今须层分记强年非须然。\",\n        \"mandarin\": [\n            \"着\",\n            \"活\",\n            \"科\",\n            \"地\"\n        ],\n        \"related_articles\": [\n            67,\n            4,\n            18,\n            4\n        ],\n        \"visibility\": true,\n        \"related_words\": [\n            74,\n            62,\n            37,\n            96,\n            19\n        ],\n        \"word\": \"表\",\n        \"definition\": \"线队价加解到教族维般且长间圆说。保林义组务深京南周市运学又到和。计广立消级党何做少队从为车题。\"\n    },\n    \"word\": 14,\n    \"reason\": \"proident ad dolor ut labore\"\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "prerequest",
-              "script": {
-                "id": "preProcessors.0.customScript",
-                "type": "text/javascript",
-                "exec": [
-                  "pm.environment.set(\"token\", \"\");"
-                ]
-              }
-            }
-          ],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
-            },
-            "defaultEnable": false,
-            "id": 69812493,
-            "name": "未登录",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 13560281,
-            "httpApiCaseId": 34650774,
-            "httpApiName": "WD0401 申请更新",
-            "httpApiPath": "/words/applications",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "WD0401 申请更新"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "3484f19a-9700-4b05-ad58-49e4d7daf5d9",
-          "name": "WD0401 申请更新(WD0401 申请更新)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "words",
-                "applications"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"ullamco tempor commodo\",\n        \"standard_pinyin\": \"et sunt quis aliquip aliqua\",\n        \"visibility\": false,\n        \"related_words\": [],\n        \"word\": \"强\",\n        \"related_articles\": [],\n        \"mandarin\": [\n            \"满\"\n        ],\n        \"annotation\": \"数就快但场府得约何单山自造。都被只列队消交立问部公式里线。书因直容备制争期点向产走别九斯论拉。白次时京明只细根委去很构型想。料此种目什二家从史调办联受实历边而选。和加统包其也数阶分入九需品道没论天。音火期作海元然群基法根金。\",\n        \"definition\": \"西属深么较合济在周始矿质同儿得取。式里都八采记矿性了克算等。感三接除织须先成声五般持。照四她马能流管术度平花较养求精。统精算常流圆下天海酸转响处历例治。\"\n    },\n    \"word\": 0,\n    \"reason\": \"proident sint\"\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
-            },
-            "defaultEnable": false,
-            "id": 69812493,
-            "name": "未登录",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 401,
-            "contentType": "json",
-            "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 13560281,
-            "httpApiCaseId": 34666000,
-            "httpApiName": "WD0401 申请更新",
-            "httpApiPath": "/words/applications",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "WD0401 申请更新"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        }
-      ],
-      "name": "词语创建-未登录"
-    },
-    {
-      "item": [
-        {
-          "id": "8fc184d1-be94-4272-abef-82a8bd2b27e8",
-          "name": "LG0101 账号密码登录(登录用户admin)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "login"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "postProcessors.0.extractor",
-                "type": "text/javascript",
-                "exec": [
-                  "",
-                  "      try{",
-                  "        ",
-                  "          const expression = pm.variables.replaceIn(`$.token`);",
-                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                  "          const jsonData = pm.response.json();",
-                  "          let value = JSONPath({",
-                  "            json: jsonData,",
-                  "            path: expression,",
-                  "            wrap: false",
-                  "          });",
-                  "          ",
-                  "        ",
-                  "        switch (typeof value) {",
-                  "          case 'object':",
-                  "            value = JSON.stringify(value);",
-                  "            break;",
-                  "          default:",
-                  "            value = String(value);",
-                  "            break;",
-                  "        }",
-                  "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
-                  "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
-                  "        throw e;",
-                  "      }",
-                  "  "
-                ]
-              }
-            }
-          ],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string"
-                  },
-                  "title": "权"
-                },
-                "id": {
-                  "type": "integer",
-                  "title": "用户id"
-                }
-              },
-              "required": [
-                "token",
-                "id"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 4183271,
-            "name": "成功",
-            "apiDetailId": 5318056,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5318056,
-            "httpApiCaseId": 34651736,
-            "httpApiName": "LG0101 账号密码登录",
-            "httpApiPath": "/login",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "80f2290f-c6d3-4ac3-8e77-7713e15bb11b",
-          "name": "WD0401 申请更新(WD0401 申请更新)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "words",
-                "applications"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"incididunt cupidatat mollit dolor\",\n        \"standard_pinyin\": \"quis\",\n        \"related_words\": [\n            17,\n            1,\n            72,\n            8\n        ],\n        \"mandarin\": [\n            \"划\",\n            \"越\",\n            \"准\"\n        ],\n        \"visibility\": false,\n        \"word\": \"育\",\n        \"related_articles\": [\n            69\n        ],\n        \"definition\": \"路际外带市候前省然基厂集时圆记步直温。拉特离加求专起究以完济报非格。单法用也公其空难场红按定力美给厂金后。片些素还体月公要据张集角争况按。还他始书特子再别场办回和解基族。条亲志这子己候教认连行样总公。思山同战参图更江圆工传程识么等装支。\",\n        \"annotation\": \"验看解先形如起近精阶路示受三量。向因路各边九安力导我长条你少义去。传来量变点数九美根存向安府。石程始所能等律东认格重准际民住队铁教。\"\n    },\n    \"word\": 0,\n    \"reason\": \"adipisicing\"\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "title": "",
-              "type": "object",
-              "properties": {
-                "msg": {
-                  "type": "string"
-                }
-              },
-              "x-apifox-orders": [
-                "msg"
-              ],
-              "required": [
-                "msg"
-              ]
-            },
-            "defaultEnable": false,
-            "id": 73275463,
-            "name": "请求有误",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 400,
-            "contentType": "json",
-            "ordering": 50,
-            "createdAt": "2022-07-24T10:43:07.000Z",
-            "updatedAt": "2022-07-24T10:43:07.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 13560281,
-            "httpApiCaseId": 34651780,
-            "httpApiName": "WD0401 申请更新",
-            "httpApiPath": "/words/applications",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "WD0401 申请更新"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        }
-      ],
-      "name": "词语创建-400测试"
-    },
-    {
-      "item": [
-        {
-          "id": "e72c2658-2a10-4201-b824-fff573993b46",
-          "name": "LG0101 账号密码登录(登录用户admin)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "login"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "postProcessors.0.extractor",
-                "type": "text/javascript",
-                "exec": [
-                  "",
-                  "      try{",
-                  "        ",
-                  "          const expression = pm.variables.replaceIn(`$.token`);",
-                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                  "          const jsonData = pm.response.json();",
-                  "          let value = JSONPath({",
-                  "            json: jsonData,",
-                  "            path: expression,",
-                  "            wrap: false",
-                  "          });",
-                  "          ",
-                  "        ",
-                  "        switch (typeof value) {",
-                  "          case 'object':",
-                  "            value = JSON.stringify(value);",
-                  "            break;",
-                  "          default:",
-                  "            value = String(value);",
-                  "            break;",
-                  "        }",
-                  "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
-                  "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
-                  "        throw e;",
-                  "      }",
-                  "  "
-                ]
-              }
-            }
-          ],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string"
-                  },
-                  "title": "权"
-                },
-                "id": {
-                  "type": "integer",
-                  "title": "用户id"
-                }
-              },
-              "required": [
-                "token",
-                "id"
-              ]
-            },
-            "defaultEnable": true,
-            "id": 4183271,
-            "name": "成功",
-            "apiDetailId": 5318056,
-            "projectId": 0,
-            "code": 200,
-            "contentType": "json",
-            "ordering": 1,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 5318056,
-            "httpApiCaseId": 34651890,
-            "httpApiName": "LG0101 账号密码登录",
-            "httpApiPath": "/login",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "ed44bd8a-05c1-4a55-aac2-6ac89ca640b8",
-          "name": "WD0401 申请更新(WD0401 申请更新)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "words",
-                "applications"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"commodo\",\n        \"standard_pinyin\": \"nostrud amet\",\n        \"visibility\": false,\n        \"definition\": \"低斗满导本先么但几作系青二改清你应。打算组量有查战六还议主然制清去联。什民已传照加给教交路气名。力联育上便做并便到备门身问量公。\",\n        \"related_articles\": [\n            58,\n            16\n        ],\n        \"related_words\": [\n            99,\n            52,\n            26,\n            46,\n            89\n        ],\n        \"annotation\": \"选称任要程为量根正情上少铁收设。包今况根值号存方叫科指约八没矿院争当。理温即上明律理图千门效温志般约。林线照织七生原并业改身严本来。公家性以与派经决离得空太况全响院线。目主根放难美报克感队影期号效力采。务写得八方来之用想就说亲交。\",\n        \"word\": \"真\",\n        \"mandarin\": [\n            \"争\"\n        ]\n    },\n    \"word\": 26,\n    \"reason\": \"quis adipisicing tempor aute laboris\"\n}"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
-            "id": 69812670,
-            "name": "不存在",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 404,
-            "contentType": "json",
-            "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
-          },
-          "metaInfo": {
-            "httpApiId": 13560281,
-            "httpApiCaseId": 34651891,
-            "httpApiName": "WD0401 申请更新",
-            "httpApiPath": "/words/applications",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "WD0401 申请更新"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "disableUrlEncoding": false
-          }
-        }
-      ],
-      "name": "词语创建-404测试"
     }
   ],
   "info": {
@@ -1211,7 +1290,8 @@
         "avatar",
         "id"
       ],
-      "title": "user_simple"
+      "title": "user_simple",
+      "name": "user_simple"
     },
     "1078053": {
       "type": "object",
@@ -1333,7 +1413,105 @@
         "views",
         "source"
       ],
-      "title": "word_all"
+      "title": "word_all",
+      "name": "word_all"
+    },
+    "1078257": {
+      "type": "object",
+      "properties": {
+        "word": {
+          "type": "string",
+          "mock": {
+            "mock": "@cword"
+          },
+          "title": "词语",
+          "description": "方言词汇"
+        },
+        "definition": {
+          "type": "string",
+          "mock": {
+            "mock": "@cparagraph"
+          },
+          "title": "释义",
+          "description": "特定格式"
+        },
+        "annotation": {
+          "type": "string",
+          "mock": {
+            "mock": "@cparagraph"
+          },
+          "title": "附注",
+          "description": "markdown"
+        },
+        "mandarin": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "mock": {
+              "mock": "@cword"
+            },
+            "description": "普通话词汇"
+          }
+        },
+        "related_words": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "description": "词语id"
+          },
+          "title": "相关词语id列表"
+        },
+        "related_articles": {
+          "type": "array",
+          "items": {
+            "type": "integer",
+            "description": "文章id"
+          },
+          "title": "相关文章id列表"
+        },
+        "visibility": {
+          "type": "boolean",
+          "title": "是否可见",
+          "description": "用以审核"
+        },
+        "standard_ipa": {
+          "type": "string"
+        },
+        "standard_pinyin": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "standard_ipa",
+        "standard_pinyin"
+      ],
+      "title": "[入] word_update",
+      "name": "[入] word_update"
+    },
+    "4729647": {
+      "type": "object",
+      "properties": {
+        "content": {
+          "$ref": "#/definitions/1078257",
+          "title": "更新内容"
+        },
+        "word": {
+          "type": "number",
+          "title": "更新词条编号",
+          "description": "为0表示创建新词条"
+        },
+        "reason": {
+          "type": "string",
+          "title": "更改理由"
+        }
+      },
+      "required": [
+        "content",
+        "reason",
+        "word"
+      ],
+      "title": "[入] application_update",
+      "name": "[入] application_update"
     },
     "4729815": {
       "type": "object",
@@ -1393,7 +1571,8 @@
         "granted",
         "verifier"
       ],
-      "title": "application_simple"
+      "title": "application_simple",
+      "name": "application_simple"
     },
     "4731060": {
       "type": "object",
@@ -1455,7 +1634,8 @@
         "standard_pinyin",
         "mandarin"
       ],
-      "title": "application_simple_content"
+      "title": "application_simple_content",
+      "name": "application_simple_content"
     },
     "7392060": {
       "type": "object",
@@ -1516,7 +1696,8 @@
         "granted",
         "verifier"
       ],
-      "title": "application_all"
+      "title": "application_all",
+      "name": "application_all"
     },
     "13123781": {
       "type": "object",
@@ -1632,23 +1813,149 @@
         "standard_ipa",
         "standard_pinyin"
       ],
-      "title": "application_all_content"
+      "title": "application_all_content",
+      "name": "application_all_content"
     }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
   },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "a5f90061-fa67-4241-a6ef-469264f060d8",
+      "id": "329436d6-3c6f-4c96-9f0b-2517d277c58b",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "key": "token",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
           "value": "",
-          "key": "token"
+          "key": "word_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "17",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "DD000024",
+          "key": "order_id",
+          "isBindInitial": false,
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -1661,8 +1968,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "b719722a-95e5-4a4a-872b-49f57549f10e",
+      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -1672,5 +1983,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }

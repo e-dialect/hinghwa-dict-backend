@@ -1,13 +1,11 @@
-from ..models import Title
+from ...models import Title
 
 
 def title_all(title: Title) -> dict:
     response = {
         "name": title.name,
-        "point": title.point,
+        "points": title.points,
         "id": title.id,
         "color": title.color,
-        "owned": title.owned,
     }
-
     return response

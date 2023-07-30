@@ -120,3 +120,5 @@ def pronunciation(request, id):
 @csrf_exempt
 def app(request):
     pass
+
+

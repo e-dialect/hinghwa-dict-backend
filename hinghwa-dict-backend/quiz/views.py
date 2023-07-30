@@ -12,6 +12,10 @@ from utils.exception.types.not_found import QuizNotFoundException
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.exception.types.forbidden import ForbiddenException
 from utils.token import token_pass, token_user
+import json
+from django.test import RequestFactory
+from user.view.manage import ManagePoints
+from utils.Rewards_action import points_change, create_transaction
 
 
 class SingleQuiz(View):
@@ -143,11 +147,16 @@ class ManageVisibility(View):
         quiz.visibility = body["result"]
         if quiz.visibility:
             content = f"问题(id={id})已通过审核"
+            user_id = quiz.author.id
+            points = 30
+            action = "earn"
+            points_change(action=action, points=points, user_id=user_id)
+            transaction_id = create_transaction(action=action, points=points, reason="贡献文章", user_id=user_id)
         else:
             msg = body["reason"]
             content = f"问题(id={id})审核状态变为不可见，理由是:\n\t{msg}"
         quiz.save()
-        return JsonResponse({}, status=200)
+        return JsonResponse({"transaction_id": transaction_id}, status=200)
 
 
 class QuizPaper(View):

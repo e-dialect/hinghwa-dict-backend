@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "7f44dadd-4005-4174-ae3a-7c3fc2f15e37",
+          "id": "38435418-5541-46a4-82ac-bd96c468f83c",
           "name": "LG0101 账号密码登录(登录用户)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,9 +37,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}"
+              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -52,6 +54,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -62,6 +68,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -73,12 +88,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -114,7 +130,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -122,15 +164,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户"
+            "httpApiCaseName": "登录用户",
+            "id": "017b2bf3-7a42-4267-b3b8-d19048ccb513",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "a48a565e-0805-491c-b7a7-d3b5119a7aa6",
+          "id": "f49b2130-bc72-4215-afb6-bcdcd70814f8",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -157,7 +202,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -165,30 +210,55 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"result\": true,\n    \"reason\": \"dolore culpa laboris\"\n}"
+              "raw": "{\n    \"result\": true,\n    \"reason\": \"dolore culpa laboris\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812625,
+            "createdAt": "2022-07-15T06:52:17.000Z",
+            "updatedAt": "2022-07-15T06:52:26.000Z",
+            "deletedAt": null,
             "name": "无权限",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 403,
             "contentType": "json",
             "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean",
+                  "title": "审核结果"
+                },
+                "reason": {
+                  "type": "string",
+                  "title": "原因"
+                }
+              },
+              "x-apifox-orders": [
+                "result",
+                "reason"
+              ],
+              "required": [
+                "result",
+                "reason"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 42646298,
@@ -196,15 +266,18 @@
             "httpApiName": "QZ0105 审核测试题",
             "httpApiPath": "/quizzes/{id}/visibility",
             "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0105审核测试题"
+            "httpApiCaseName": "QZ0105审核测试题",
+            "id": "29af34b0-5d23-41de-8d3b-23f7c66dba0f",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "d29e3e38-b747-4a24-8d63-f314260a7dd6",
+          "id": "b8c81321-36ca-4a3f-9ab9-7549ecec5e45",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -229,7 +302,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -237,9 +310,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -252,6 +327,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -262,6 +341,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -273,12 +361,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             },
@@ -289,6 +378,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.id`);",
@@ -299,6 +392,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -310,12 +412,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【'+ `user_id` + '】，值为【' + value + '】')",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【user_id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【user_id】出错：' + e.message;",
+                  "        e.message = '提取变量【user_id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -351,7 +454,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -359,15 +488,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
+            "httpApiCaseName": "登录用户admin",
+            "id": "bbdef29b-63e6-4e0b-9b9a-78a00f1d3925",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "d815ebb1-2c67-4633-9b61-43087ed24108",
+          "id": "08faf383-6cd5-4ea7-825c-8a7030788445",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -392,7 +524,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -400,9 +532,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"列题些外如引林\",\n    \"options\": [\n        \"设验段律形儿具越内话听说越产。\",\n        \"合车产记示深江更装备日不华金。\"\n    ],\n    \"answer\": 47,\n    \"explanation\": \"南国年而该比没义济复样音水每数金。政由记院里马定拉维有儿着京。办派料引清主证经生界运确间因安个参。对始争发动查还委须毛式济业。江重江越常之身手是造种你消准支。就定还统更那其大文你区了正来层实。事员你了空边素好准活用革取打。\",\n    \"voice_source\": \"http://lkthye.pn/rcfkmvvrwv\"\n}"
+              "raw": "{\n    \"question\": \"列题些外如引林\",\n    \"options\": [\n        \"设验段律形儿具越内话听说越产。\",\n        \"合车产记示深江更装备日不华金。\"\n    ],\n    \"answer\": 47,\n    \"explanation\": \"南国年而该比没义济复样音水每数金。政由记院里马定拉维有儿着京。办派料引清主证经生界运确间因安个参。对始争发动查还委须毛式济业。江重江越常之身手是造种你消准支。就定还统更那其大文你区了正来层实。事员你了空边素好准活用革取打。\",\n    \"voice_source\": \"http://lkthye.pn/rcfkmvvrwv\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -415,6 +549,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.quiz.id`);",
@@ -425,6 +563,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -436,12 +583,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`quiz_id`, value);console.log('已设置环境变量【'+ `quiz_id` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`quiz_id`, value);console.log('已设置环境变量【quiz_id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【quiz_id】出错：' + e.message;",
+                  "        e.message = '提取变量【quiz_id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -474,7 +622,269 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1097305": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "user的id",
+                    "mock": {
+                      "mock": "@integer(10000)"
+                    }
+                  },
+                  "username": {
+                    "type": "string",
+                    "title": "用户名",
+                    "mock": {
+                      "mock": "@cname"
+                    }
+                  },
+                  "nickname": {
+                    "type": "string",
+                    "title": "昵称",
+                    "mock": {
+                      "mock": "@cname"
+                    }
+                  },
+                  "email": {
+                    "type": "string",
+                    "title": "邮箱",
+                    "mock": {
+                      "mock": "@email"
+                    }
+                  },
+                  "telephone": {
+                    "type": "string",
+                    "title": "电话"
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "title": "生日",
+                    "mock": {
+                      "mock": "@date('yyyy-MM-dd')"
+                    }
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "title": "头像",
+                    "description": "头像的url地址",
+                    "mock": {
+                      "mock": "@image"
+                    }
+                  },
+                  "is_admin": {
+                    "type": "boolean",
+                    "title": "是否管理员",
+                    "mock": {
+                      "mock": "@boolean"
+                    }
+                  },
+                  "county": {
+                    "type": "string",
+                    "title": "县区",
+                    "description": "用户所在县区",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "town": {
+                    "type": "string",
+                    "title": "乡镇",
+                    "description": "用户所在乡镇",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "registration_time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "注册时间"
+                  },
+                  "login_time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "登录时间"
+                  },
+                  "wechat": {
+                    "type": "boolean",
+                    "title": "绑定微信"
+                  },
+                  "points_sum": {
+                    "type": "integer",
+                    "title": "总分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    },
+                    "minimum": 0
+                  },
+                  "points_now": {
+                    "type": "integer",
+                    "title": "现有分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    },
+                    "minimum": 0
+                  },
+                  "title": {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "mock": {
+                          "mock": "@color"
+                        },
+                        "title": "颜色"
+                      },
+                      "title": {
+                        "type": "string",
+                        "mock": {
+                          "mock": "@cword"
+                        },
+                        "title": "称号"
+                      }
+                    },
+                    "title": "标题",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "x-apifox-orders": [
+                      "title",
+                      "color"
+                    ],
+                    "required": [
+                      "title",
+                      "color"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "username",
+                  "is_admin",
+                  "avatar",
+                  "registration_time",
+                  "login_time",
+                  "nickname",
+                  "telephone",
+                  "birthday",
+                  "county",
+                  "town",
+                  "wechat",
+                  "points_sum",
+                  "points_now",
+                  "title"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "username",
+                  "nickname",
+                  "email",
+                  "telephone",
+                  "birthday",
+                  "avatar",
+                  "is_admin",
+                  "county",
+                  "town",
+                  "points_sum",
+                  "points_now",
+                  "title",
+                  "registration_time",
+                  "login_time",
+                  "wechat"
+                ],
+                "title": "user_all",
+                "name": "user_all"
+              },
+              "13080595": {
+                "type": "object",
+                "properties": {
+                  "question": {
+                    "type": "string",
+                    "title": "问题",
+                    "mock": {
+                      "mock": "@ctitle"
+                    }
+                  },
+                  "options": {
+                    "type": "array",
+                    "items": {
+                      "type": "string",
+                      "mock": {
+                        "mock": "@csentence"
+                      }
+                    },
+                    "title": "选项"
+                  },
+                  "explanation": {
+                    "type": "string",
+                    "title": "答案解析",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "answer": {
+                    "type": "integer",
+                    "title": "答案序号",
+                    "description": "options数组下标"
+                  },
+                  "id": {
+                    "type": "integer"
+                  },
+                  "visibility": {
+                    "type": "boolean",
+                    "title": ""
+                  },
+                  "author": {
+                    "$ref": "#/definitions/1097305"
+                  },
+                  "voice_source": {
+                    "title": "播报语音链接",
+                    "mock": {
+                      "mock": "@url(\"http\")"
+                    },
+                    "type": [
+                      "string",
+                      "null"
+                    ]
+                  }
+                },
+                "x-apifox-orders": [
+                  "question",
+                  "options",
+                  "answer",
+                  "explanation",
+                  "id",
+                  "author",
+                  "visibility",
+                  "voice_source"
+                ],
+                "required": [
+                  "question",
+                  "answer",
+                  "options",
+                  "explanation",
+                  "id",
+                  "visibility",
+                  "author",
+                  "voice_source"
+                ],
+                "title": "quiz_all",
+                "name": "quiz_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "$ref": "#/definitions/13080737",
+              "x-apifox-overrides": {}
+            }
           },
           "metaInfo": {
             "httpApiId": 29662986,
@@ -482,15 +892,18 @@
             "httpApiName": "QZ0102 增加单个测试",
             "httpApiPath": "/quizzes",
             "httpApiMethod": "post",
-            "httpApiCaseName": "QZ0102 增加单个测试"
+            "httpApiCaseName": "QZ0102 增加单个测试",
+            "id": "ad59ec61-e491-4bba-b82a-a23bc328d7bd",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "9c0143d3-4622-46d9-ae14-3ed54c7e6e83",
+          "id": "5752eb29-0831-4454-bb5d-e8c9d806ac24",
           "name": "LG0101 账号密码登录(登录用户)",
           "request": {
             "url": {
@@ -515,7 +928,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -523,9 +936,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}"
+              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -538,6 +953,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -548,6 +967,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -559,12 +987,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -600,7 +1029,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -608,15 +1063,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户"
+            "httpApiCaseName": "登录用户",
+            "id": "dcd62988-2072-497f-bbb1-69908eaf5dfc",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "470039a5-1da1-4d38-8c9a-e9e2a77455d8",
+          "id": "9aaa1aa4-9c9d-48f6-8ae2-532c26414525",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -642,7 +1100,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -650,30 +1108,51 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"规文则制总间水\",\n        \"options\": [\n            \"县际制对认门每事石属委感识人证回求。\",\n            \"两今强三马自生从起华研色当。\",\n            \"并在节加局点办易及无复么区。\",\n            \"及最候整别线层表识性明行积正打确。\",\n            \"实深精采入历号来带们并选通半天。\"\n        ],\n        \"answer\": 87,\n        \"explanation\": \"任深红研价除王使节委高门完。严物题门作元参争做须式界身验消的。家求断制商做省素心起之格家手状进根。书深角导自开记身科头将动金反太持听。当存步布干且越受以市阶用规果率且。才加方不了民导得京须于四重流问。\",\n        \"voice_source\": \"http://hcrlxrrdtx.il/ocmqkpb\"\n    }\n}"
+              "raw": "{\n    \"quiz\": {\n        \"question\": \"规文则制总间水\",\n        \"options\": [\n            \"县际制对认门每事石属委感识人证回求。\",\n            \"两今强三马自生从起华研色当。\",\n            \"并在节加局点办易及无复么区。\",\n            \"及最候整别线层表识性明行积正打确。\",\n            \"实深精采入历号来带们并选通半天。\"\n        ],\n        \"answer\": 87,\n        \"explanation\": \"任深红研价除王使节委高门完。严物题门作元参争做须式界身验消的。家求断制商做省素心起之格家手状进根。书深角导自开记身科头将动金反太持听。当存步布干且越受以市阶用规果率且。才加方不了民导得京须于四重流问。\",\n        \"voice_source\": \"http://hcrlxrrdtx.il/ocmqkpb\"\n    }\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812625,
+            "createdAt": "2022-07-15T06:52:17.000Z",
+            "updatedAt": "2022-07-15T06:52:26.000Z",
+            "deletedAt": null,
             "name": "无权限",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 403,
             "contentType": "json",
             "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "x-apifox-overrides": {},
+              "type": "object",
+              "x-apifox-refs": {},
+              "properties": {
+                "quiz": {
+                  "$ref": "#/definitions/13080737",
+                  "x-apifox-overrides": {}
+                }
+              },
+              "required": [
+                "quiz"
+              ],
+              "x-apifox-orders": [
+                "quiz"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 29663120,
@@ -681,15 +1160,18 @@
             "httpApiName": "QZ0103 修改单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0103 修改单个测试"
+            "httpApiCaseName": "QZ0103 修改单个测试",
+            "id": "cb147d0d-6802-4529-a655-0b8246a61bec",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "156bf42c-aff1-470e-ac5b-61c3f90df3c5",
+          "id": "6c9b9727-330e-438e-aacf-9729d4c621f2",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -715,31 +1197,35 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812625,
+            "createdAt": "2022-07-15T06:52:17.000Z",
+            "updatedAt": "2022-07-15T06:52:26.000Z",
+            "deletedAt": null,
             "name": "无权限",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 403,
             "contentType": "json",
             "ordering": 20,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 29663170,
@@ -747,10 +1233,13 @@
             "httpApiName": "QZ0104 删除单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "QZ0104 删除单个测试"
+            "httpApiCaseName": "QZ0104 删除单个测试",
+            "id": "aeabdaca-8f07-4e0f-9bc8-3be5e79a8651",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
@@ -852,6 +1341,53 @@
         "wechat": {
           "type": "boolean",
           "title": "绑定微信"
+        },
+        "points_sum": {
+          "type": "integer",
+          "title": "总分数",
+          "mock": {
+            "mock": "@integer(0)"
+          },
+          "minimum": 0
+        },
+        "points_now": {
+          "type": "integer",
+          "title": "现有分数",
+          "mock": {
+            "mock": "@integer(0)"
+          },
+          "minimum": 0
+        },
+        "title": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "mock": {
+                "mock": "@color"
+              },
+              "title": "颜色"
+            },
+            "title": {
+              "type": "string",
+              "mock": {
+                "mock": "@cword"
+              },
+              "title": "称号"
+            }
+          },
+          "title": "标题",
+          "mock": {
+            "mock": "@cname"
+          },
+          "x-apifox-orders": [
+            "title",
+            "color"
+          ],
+          "required": [
+            "title",
+            "color"
+          ]
         }
       },
       "required": [
@@ -867,9 +1403,31 @@
         "birthday",
         "county",
         "town",
+        "wechat",
+        "points_sum",
+        "points_now",
+        "title"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "username",
+        "nickname",
+        "email",
+        "telephone",
+        "birthday",
+        "avatar",
+        "is_admin",
+        "county",
+        "town",
+        "points_sum",
+        "points_now",
+        "title",
+        "registration_time",
+        "login_time",
         "wechat"
       ],
-      "title": "user_all"
+      "title": "user_all",
+      "name": "user_all"
     },
     "13080595": {
       "type": "object",
@@ -914,11 +1472,14 @@
           "$ref": "#/definitions/1097305"
         },
         "voice_source": {
-          "type": "string",
+          "title": "播报语音链接",
           "mock": {
             "mock": "@url(\"http\")"
           },
-          "title": "播报语音链接"
+          "type": [
+            "string",
+            "null"
+          ]
         }
       },
       "x-apifox-orders": [
@@ -938,56 +1499,207 @@
         "explanation",
         "id",
         "visibility",
-        "voice_source",
-        "author"
+        "author",
+        "voice_source"
       ],
-      "title": "quiz_all"
+      "title": "quiz_all",
+      "name": "quiz_all"
+    },
+    "13080737": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "title": "问题",
+          "mock": {
+            "mock": "@ctitle"
+          }
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "mock": {
+              "mock": "@csentence"
+            }
+          },
+          "title": "选项"
+        },
+        "explanation": {
+          "type": "string",
+          "title": "答案解析",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "answer": {
+          "type": "integer",
+          "title": "答案序号"
+        },
+        "voice_source": {
+          "type": "string",
+          "mock": {
+            "mock": "@url(\"http\")"
+          },
+          "title": "播报语音链接"
+        }
+      },
+      "x-apifox-orders": [
+        "question",
+        "options",
+        "answer",
+        "explanation",
+        "voice_source"
+      ],
+      "required": [
+        "question",
+        "answer",
+        "options",
+        "explanation"
+      ],
+      "title": "[入] quiz_update",
+      "name": "[入] quiz_update"
     }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
   },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "6386c56b-0a02-44ff-802d-4d7111f42529",
+      "id": "8a276939-daf6-4d45-be12-2e73575d0138",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
-          "value": "undefined",
-          "key": "token"
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "key": "token",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "3",
-          "key": "num"
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "0",
-          "key": "num_later"
+          "value": "",
+          "key": "word_id_2",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": 20,
-          "key": "num_pre"
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "true",
-          "key": "quiz_new"
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "2",
-          "key": "user_id"
+          "key": "user_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "10",
-          "key": "quiz_id"
+          "value": "17",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "DD000024",
+          "key": "order_id",
+          "isBindInitial": false,
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -1000,8 +1712,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "f7309e05-5c92-4719-9144-7a4605cc3719",
+      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -1011,5 +1727,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }

@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "cbaad411-4fc7-4c3b-beec-e6dd5999ff2b",
+          "id": "9cf3fb81-d4a1-4888-b93b-e524242b6630",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,9 +37,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -52,6 +54,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -62,6 +68,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -73,12 +88,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             },
@@ -89,6 +105,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.id`);",
@@ -99,6 +119,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -110,12 +139,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【'+ `user_id` + '】，值为【' + value + '】')",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【user_id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【user_id】出错：' + e.message;",
+                  "        e.message = '提取变量【user_id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -151,7 +181,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -159,15 +215,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
+            "httpApiCaseName": "登录用户admin",
+            "id": "89a22006-4811-48b5-b8d9-14bdb8f51fa3",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "7fe5bfa8-ecfe-480d-801d-0b865f39dcdb",
+          "id": "7e8e24ec-b0d3-484d-b2e4-6d12a7bfea01",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -192,7 +251,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -200,9 +259,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"pronunciation\": {\r\n        \"town\": \"凌河区\",\r\n        \"source\": \"https://pji.ge/xxthmorn\",\r\n        \"word\": 50000,\r\n        \"county\": \"南县\",\r\n        \"pinyin\": \"plzj\",\r\n        \"ipa\": \"dnci\"\r\n    }\r\n}"
+              "raw": "{\r\n    \"pronunciation\": {\r\n        \"town\": \"凌河区\",\r\n        \"source\": \"https://pji.ge/xxthmorn\",\r\n        \"word\": 50000,\r\n        \"county\": \"南县\",\r\n        \"pinyin\": \"plzj\",\r\n        \"ipa\": \"dnci\"\r\n    }\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -223,7 +284,21 @@
             },
             "defaultEnable": true,
             "projectId": 404238,
-            "ordering": 4
+            "ordering": 4,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "pronunciation": {
+                  "$ref": "#/definitions/1078258"
+                }
+              },
+              "required": [
+                "pronunciation"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5352384,
@@ -231,10 +306,13 @@
             "httpApiName": "PN0102 增加一条语音",
             "httpApiPath": "/pronunciation",
             "httpApiMethod": "post",
-            "httpApiCaseName": "PN0102 增加一条语音"
+            "httpApiCaseName": "PN0102 增加一条语音",
+            "id": "955054dc-9ec2-48ff-ac71-81003a79fa67",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
@@ -245,21 +323,203 @@
   "info": {
     "name": "PN0102-增加一条语音-404没有找到要加语音的词"
   },
-  "dataSchemas": {},
+  "dataSchemas": {
+    "1078258": {
+      "type": "object",
+      "properties": {
+        "word": {
+          "type": "integer",
+          "title": "对应词语",
+          "description": "词语id"
+        },
+        "source": {
+          "type": "string",
+          "description": "url",
+          "title": "语音来源",
+          "mock": {
+            "mock": "@url('https')"
+          }
+        },
+        "ipa": {
+          "type": "string",
+          "title": "国际音标",
+          "mock": {
+            "mock": "@string('lower',3,5)"
+          }
+        },
+        "pinyin": {
+          "type": "string",
+          "title": "拼音",
+          "mock": {
+            "mock": "@string('lower',3,5)"
+          }
+        },
+        "county": {
+          "type": "string",
+          "mock": {
+            "mock": "@county"
+          },
+          "title": "县区"
+        },
+        "town": {
+          "type": "string",
+          "mock": {
+            "mock": "@county"
+          },
+          "title": "乡镇"
+        }
+      },
+      "x-apifox-orders": [
+        "word",
+        "source",
+        "ipa",
+        "pinyin",
+        "county",
+        "town"
+      ],
+      "title": "[入] pronunciation_update",
+      "name": "[入] pronunciation_update"
+    }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
+  },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "7b9a0f5a-94da-4a6c-a012-c38d1cca29bd",
+      "id": "45e0c9bf-ae8f-4759-8f2d-e587974c9ee2",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImNzIiwiaWQiOjUsImV4cCI6MTY3NDU4NzU4Ni41MDYxMjJ9.N1t0oOQB6rOkcEgNqACeq7D_mmkXY062XgWnIq-3GNY",
-          "key": "token"
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "key": "token",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "17",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "DD000024",
+          "key": "order_id",
+          "isBindInitial": false,
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -272,8 +532,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "a04d4136-071b-4a65-995a-409a62ed9618",
+      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -283,5 +547,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }

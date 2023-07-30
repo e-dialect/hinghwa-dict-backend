@@ -1,5 +1,6 @@
 from ..models import User
 from django.utils.timezone import localtime
+from utils.Rewards_action import calculate_title
 
 
 # 返回用户除了 密码 以外的全部信息
@@ -23,10 +24,7 @@ def user_all(user: User) -> dict:
         "wechat": True if len(info.wechat) else False,
         "points_sum": info.points_sum,
         "points_now": info.points_now,
-        "title": {
-            "name": info.title,
-            "color": info.color,
-        },
+        "title": calculate_title(info.points_sum)
     }
 
     response.update(
