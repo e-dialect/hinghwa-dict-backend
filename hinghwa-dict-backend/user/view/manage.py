@@ -18,6 +18,7 @@ from utils.exception.types.not_found import UserNotFoundException
 from user.models import UserInfo, User
 from utils.token import token_pass, token_user
 
+
 class Manage(View):
     # US0201 获取用户信息
     def get(self, request, id):
@@ -166,5 +167,3 @@ class ManagePoints(View):
             },
             status=200,
         )
-
-

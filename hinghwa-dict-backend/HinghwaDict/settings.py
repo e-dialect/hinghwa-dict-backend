@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     "corsheaders",
     "notifications",
     "rewards",
-
     # 'rest_framework'
 ]
 

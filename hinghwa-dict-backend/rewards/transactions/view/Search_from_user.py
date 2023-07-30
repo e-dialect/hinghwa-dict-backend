@@ -2,7 +2,10 @@ import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.transactions_all import transactions_all
-from utils.exception.types.not_found import TransactionsNotFoundException, UserNotFoundException
+from utils.exception.types.not_found import (
+    TransactionsNotFoundException,
+    UserNotFoundException,
+)
 from django.conf import settings
 from ...models import Transactions
 from ..forms import TransactionsInfoForm
@@ -33,6 +36,6 @@ class SearchFromUser(View):
                 "results": results,
                 "amount": str(amount),
                 "page": str(page),
-                "pageSize": str(pageSize)
+                "pageSize": str(pageSize),
             }
         )

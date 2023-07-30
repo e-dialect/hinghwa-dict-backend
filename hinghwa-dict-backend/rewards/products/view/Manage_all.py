@@ -54,9 +54,6 @@ class ManageAllProducts(View):
             products.append(products_all(product))
 
         return JsonResponse(
-            {
-                "result": products,
-                "amount": amount,
-                "page": page,
-                "pageSize": pageSize
-            }, status=200)
+            {"result": products, "amount": amount, "page": page, "pageSize": pageSize},
+            status=200,
+        )

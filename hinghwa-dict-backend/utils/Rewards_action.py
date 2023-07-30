@@ -23,10 +23,7 @@ def calculate_title(points_sum) -> dict:
         title = "语言大师"
         color = "#FF00FF"
 
-    response = {
-        "title": title,
-        "color": color
-    }
+    response = {"title": title, "color": color}
 
     return response
 
@@ -63,6 +60,3 @@ def create_transaction(action, points, reason, user_id):
         return transaction.id
     else:
         raise UserNotFoundException()
-
-
-

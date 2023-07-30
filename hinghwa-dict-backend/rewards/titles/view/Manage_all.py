@@ -34,7 +34,9 @@ class ManageAllTitles(View):
             {
                 "result": titles,
                 "amount": amount,
-            }, status=200)
+            },
+            status=200,
+        )
 
     # RE0201上传新头衔
     @csrf_exempt

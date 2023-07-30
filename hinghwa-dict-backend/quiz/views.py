@@ -151,7 +151,9 @@ class ManageVisibility(View):
             points = 30
             action = "earn"
             points_change(action=action, points=points, user_id=user_id)
-            transaction_id = create_transaction(action=action, points=points, reason="贡献文章", user_id=user_id)
+            transaction_id = create_transaction(
+                action=action, points=points, reason="贡献文章", user_id=user_id
+            )
         else:
             msg = body["reason"]
             content = f"问题(id={id})审核状态变为不可见，理由是:\n\t{msg}"

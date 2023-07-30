@@ -4,20 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rewards', '0001_initial'),
+        ("rewards", "0001_initial"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='products',
-            name='id',
-            field=models.CharField(blank=True, max_length=20, primary_key=True, serialize=False, verbose_name='ID'),
+            model_name="products",
+            name="id",
+            field=models.CharField(
+                blank=True,
+                max_length=20,
+                primary_key=True,
+                serialize=False,
+                verbose_name="ID",
+            ),
         ),
         migrations.AlterField(
-            model_name='title',
-            name='id',
-            field=models.CharField(blank=True, max_length=20, primary_key=True, serialize=False, verbose_name='ID'),
+            model_name="title",
+            name="id",
+            field=models.CharField(
+                blank=True,
+                max_length=20,
+                primary_key=True,
+                serialize=False,
+                verbose_name="ID",
+            ),
         ),
     ]

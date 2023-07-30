@@ -2,7 +2,10 @@ import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.orders_all import orders_all
-from utils.exception.types.not_found import OrdersNotFoundException, ProductsNotFoundException
+from utils.exception.types.not_found import (
+    OrdersNotFoundException,
+    ProductsNotFoundException,
+)
 from django.conf import settings
 from ...models import Orders, Products
 from ..forms import OrdersInfoForm
@@ -42,7 +45,9 @@ class ManageAllOrders(View):
                 action = "redeem"
                 points = product.points
                 user_id = user.id
-                create_transaction(action=action, points=points, reason="兑换商品", user_id=user_id)
+                create_transaction(
+                    action=action, points=points, reason="兑换商品", user_id=user_id
+                )
                 return JsonResponse({"id": orders.id}, status=200)
             else:
                 return JsonResponse({"msg": "商品暂无库存"}, status=300)
@@ -66,6 +71,6 @@ class ManageAllOrders(View):
                 "result": results,
                 "amount": str(amount),
                 "page": str(page),
-                "pageSize": str(pageSize)
+                "pageSize": str(pageSize),
             }
         )

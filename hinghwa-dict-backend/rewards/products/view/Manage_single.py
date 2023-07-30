@@ -45,4 +45,3 @@ class ManageSingleProducts(View):
             setattr(products, key, body[key])
         products.save()
         return JsonResponse(products_all(products), status=200)
-    

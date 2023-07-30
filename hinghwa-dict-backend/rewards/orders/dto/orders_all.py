@@ -9,7 +9,7 @@ def orders_all(orders: Orders):
         "full_name": orders.full_name,
         "telephone": orders.telephone,
         "comment": orders.comment,
-        "id": orders.id
+        "id": orders.id,
     }
 
     return response

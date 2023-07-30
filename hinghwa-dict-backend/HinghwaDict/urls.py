@@ -53,6 +53,9 @@ urlpatterns = [
     path("record", word.record),  # PN0301GET
     path("products", include("rewards.products.urls", namespace="rewards.products")),
     path("titles", include("rewards.titles.urls", namespace="rewards.titles")),
-    path("transactions", include("rewards.transactions.urls", namespace="rewards.transactions")),
-    path("orders", include("rewards.orders.urls", namespace="rewards.orders"))
+    path(
+        "transactions",
+        include("rewards.transactions.urls", namespace="rewards.transactions"),
+    ),
+    path("orders", include("rewards.orders.urls", namespace="rewards.orders")),
 ]

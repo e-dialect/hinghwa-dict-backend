@@ -19,5 +19,3 @@ class SearchFromID(View):
             raise TransactionsNotFoundException()
         transaction = transaction[0]
         return JsonResponse({"transaction": transactions_all(transaction)})
-
-

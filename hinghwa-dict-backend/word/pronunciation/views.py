@@ -40,6 +40,7 @@ from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
 from utils.Rewards_action import points_change, create_transaction
 
+
 class SearchPronunciations(View):
     # PN0201 发音的批量获取
     def get(self, request) -> JsonResponse:
@@ -376,7 +377,9 @@ def managePronunciationVisibility(request, id):
                         points = 30
                         action = "earn"
                         points_change(action=action, points=points, user_id=user_id)
-                        transaction_id = create_transaction(action=action, points=points, reason="贡献文章", user_id=user_id)
+                        transaction_id = create_transaction(
+                            action=action, points=points, reason="贡献文章", user_id=user_id
+                        )
                     else:
                         msg = body["reason"] if "reason" in body else body["message"]
                         content = f"很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}"

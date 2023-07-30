@@ -9,7 +9,7 @@ def transactions_all(transactions: Transactions) -> dict:
         "action": transactions.action,
         "points": transactions.points,
         "id": transactions.id,
-        "reason": transactions.reason
+        "reason": transactions.reason,
     }
 
     return response
