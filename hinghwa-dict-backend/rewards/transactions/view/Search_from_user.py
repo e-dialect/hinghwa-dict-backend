@@ -7,7 +7,7 @@ from utils.exception.types.not_found import (
     UserNotFoundException,
 )
 from django.conf import settings
-from ...models import Transactions
+from ..models.transaction import Transaction
 from ..forms import TransactionsInfoForm
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
@@ -27,7 +27,7 @@ class SearchFromUser(View):
         action = request.GET["action"]
         amount = 0
         results = []
-        transactions = Transactions.objects.filter(user=get_user_by_id(user_id))
+        transactions = Transaction.objects.filter(user=get_user_by_id(user_id))
         for transaction in transactions:
             results.append(transactions_all(transaction))
             amount += 1

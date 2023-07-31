@@ -1,8 +1,8 @@
-from ...models import Transactions
+from ..models.transaction import Transaction
 from user.dto.user_simple import user_simple
 
 
-def transactions_all(transactions: Transactions) -> dict:
+def transactions_all(transactions: Transaction) -> dict:
     response = {
         "user": user_simple(transactions.user),
         "timestamp": transactions.timestamp,

@@ -1,5 +1,5 @@
 from django import forms
-from ..models import Title
+from .models.title import Title
 
 
 class TitleInfoForm(forms.ModelForm):

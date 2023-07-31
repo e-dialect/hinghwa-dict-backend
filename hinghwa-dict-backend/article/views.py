@@ -32,7 +32,7 @@ from utils.exception.types.not_found import (
 )
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
-from rewards.models import Transactions
+from rewards.transactions.models.transaction import Transaction
 from utils.Rewards_action import points_change, create_transaction
 
 

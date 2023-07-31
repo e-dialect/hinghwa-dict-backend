@@ -4,7 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from ..dto.products_all import products_all
 from utils.exception.types.not_found import ProductsNotFoundException
 from django.conf import settings
-from ...models import Products
+from ..models.product import Product
 from ..forms import ProductsInfoForm
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
@@ -45,7 +45,7 @@ class ManageAllProducts(View):
         elif stock == "1":
             filters["quantity__gt"] = 0
 
-        result_products = Products.objects.filter(**filters)
+        result_products = Product.objects.filter(**filters)
 
         amount = str(result_products.count())
 

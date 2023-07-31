@@ -1,9 +1,9 @@
 import uuid
 from user.models import User, UserInfo
-from rewards.models import Transactions
+from rewards.transactions.models.transaction import Transaction
 from utils.exception.types.not_found import UserNotFoundException
 from utils.exception.types.bad_request import BadRequestException
-from rewards.models import Transactions
+from rewards.transactions.models.transaction import Transaction
 from django.utils import timezone
 from .generate_id import generate_transaction_id
 
@@ -49,7 +49,7 @@ def create_transaction(action, points, reason, user_id):
     user = User.objects.filter(id=user_id)
     if user.exists():
         user = user[0]
-        transaction = Transactions()
+        transaction = Transaction()
         transaction.action = action
         transaction.points = points
         transaction.reason = reason

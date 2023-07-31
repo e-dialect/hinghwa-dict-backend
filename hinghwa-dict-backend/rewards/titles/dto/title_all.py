@@ -1,4 +1,4 @@
-from ...models import Title
+from ..models.title import Title
 
 
 def title_all(title: Title) -> dict:

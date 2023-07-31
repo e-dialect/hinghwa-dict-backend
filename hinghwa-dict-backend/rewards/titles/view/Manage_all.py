@@ -2,13 +2,11 @@ import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.title_all import title_all
-from utils.exception.types.not_found import TitleNotFoundException
-from ...models import Title
+from ..models.title import Title
 from ..forms import TitleInfoForm
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.token import token_pass
-import random
 from utils.generate_id import generate_title_id
 
 

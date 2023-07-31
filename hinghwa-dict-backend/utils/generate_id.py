@@ -1,8 +1,11 @@
-from rewards.models import Transactions, Title, Products, Orders
+from rewards.transactions.models.transaction import Transaction
+from rewards.titles.models.title import Title
+from rewards.products.models.product import Product
+from rewards.orders.models.order import Order
 
 
 def generate_transaction_id():
-    last_transaction = Transactions.objects.order_by("-id").first()
+    last_transaction = Transaction.objects.order_by("-id").first()
     if last_transaction:
         last_id = int(last_transaction.id[2:])
         new_id = last_id + 1
@@ -22,7 +25,7 @@ def generate_title_id():
 
 
 def generate_product_id():
-    last_product = Products.objects.order_by("-id").first()
+    last_product = Product.objects.order_by("-id").first()
     if last_product:
         last_id = int(last_product.id[2:])
         new_id = last_id + 1
@@ -32,7 +35,7 @@ def generate_product_id():
 
 
 def generate_order_id():
-    last_order = Orders.objects.order_by("-id").first()
+    last_order = Order.objects.order_by("-id").first()
     if last_order:
         last_id = int(last_order.id[2:])
         new_id = last_id + 1
