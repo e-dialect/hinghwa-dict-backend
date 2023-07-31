@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .view.Search_from_id import *
-from .view.Search_from_user import *
+from .views.Search_from_id import *
+from .views.Search_from_user import *
+from django.views.decorators.csrf import csrf_exempt
 
 app_name = "rewards.transactions"
 

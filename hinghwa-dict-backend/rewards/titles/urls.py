@@ -1,7 +1,8 @@
 from django.urls import path
 
-from .view.Manage_single import *
-from .view.Manage_all import *
+from .views.Manage_single import ManageSingleTitle
+from .views.Manage_all import ManageAllTitles
+from django.views.decorators.csrf import csrf_exempt
 
 app_name = "rewards.titles"
 

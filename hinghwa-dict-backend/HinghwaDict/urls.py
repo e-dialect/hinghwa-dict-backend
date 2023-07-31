@@ -19,10 +19,6 @@ from django.urls import path, include
 from user import views as user
 from website import views as website
 from word.word import views as word
-from rewards.transactions import view as transactions
-from rewards.products import view as products
-from rewards.titles import view as titles
-
 
 urlpatterns = [
     path("admin/", admin.site.urls),

@@ -1,7 +1,7 @@
 from django.urls import path
 
-from .view.Manage_all import *
-from .view.Manage_single import *
+from .views.Manage_all import *
+from .views.Manage_single import *
 
 app_name = "rewards.orders"
 urlpatterns = [
