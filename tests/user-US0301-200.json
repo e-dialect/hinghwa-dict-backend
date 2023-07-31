@@ -264,7 +264,7 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"user\": {\n        \"avatar\": \"http://dummyimage.com/88x31\",\n        \"county\": \"沙湾县\",\n        \"points_sum\": 8,\n        \"nickname\": \"曾涛\",\n        \"title\": {\n            \"title\": \"许\",\n            \"color\": \"#79f297\"\n        },\n        \"telephone\": \"18629551886\",\n        \"town\": \"西盟佤族自治县\",\n        \"points_now\": 15,\n        \"birthday\": \"2009-12-23\"\n    }\n}",
+              "raw": "{\n    \"user\": {\n        \"avatar\": \"http://dummyimage.com/88x31\",\n        \"county\": \"沙湾县\",\n        \"points_sum\": 8,\n        \"nickname\": \"曾涛\",\n        \"title\": {\n            \"title\": \"许\",\n            \"color\": \"#79f297\"\n        },\n        \"telephone\": \"18155364287\",\n        \"town\": \"西盟佤族自治县\",\n        \"points_now\": 15,\n        \"birthday\": \"2009-12-23\"\n    }\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
