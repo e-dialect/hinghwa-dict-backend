@@ -49,9 +49,7 @@ class ManageAllOrders(View):
         action = "redeem"
         points = product.points
         user_id = user.id
-        create_transaction(
-            action=action, points=points, reason="兑换商品", user_id=user_id
-        )
+        create_transaction(action=action, points=points, reason="兑换商品", user_id=user_id)
         return JsonResponse({"id": orders.id}, status=200)
 
     # RE0405获取指定用户全部订单
