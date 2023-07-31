@@ -2,10 +2,8 @@ import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.products_all import products_all
-from utils.exception.types.not_found import ProductsNotFoundException
-from django.conf import settings
 from ..models.product import Product
-from ..forms import ProductsInfoForm
+from ..forms import ProductInfoForm
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.token import token_pass
@@ -18,7 +16,7 @@ class ManageAllProducts(View):
     def post(self, request) -> JsonResponse:
         token = token_pass(request.headers, -1)
         body = demjson.decode(request.body)
-        products_form = ProductsInfoForm(body)
+        products_form = ProductInfoForm(body)
         if not products_form.is_valid():
             raise BadRequestException()
         products = products_form.save(commit=False)

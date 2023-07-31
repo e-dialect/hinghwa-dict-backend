@@ -3,13 +3,9 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.orders_all import orders_all
 from utils.exception.types.not_found import OrdersNotFoundException
-from django.conf import settings
 from ..models.order import Order
-from ..forms import OrdersInfoForm
 from django.views import View
-from utils.exception.types.bad_request import BadRequestException
 from utils.token import token_pass
-from user.utils import get_user_by_id
 from django.utils import timezone
 
 

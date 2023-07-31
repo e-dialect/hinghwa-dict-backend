@@ -1,21 +1,8 @@
-import demjson
 from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
 from ..dto.transactions_all import transactions_all
-from utils.exception.types.not_found import (
-    TransactionsNotFoundException,
-    UserNotFoundException,
-)
-from django.conf import settings
 from ..models.transaction import Transaction
-from ..forms import TransactionsInfoForm
 from django.views import View
-from utils.exception.types.bad_request import BadRequestException
-from utils.token import token_pass, token_user
-from user.dto.user_simple import user_simple
 from user.utils import get_user_by_id
-from django.utils import timezone
-import random
 
 
 class SearchFromUser(View):
@@ -28,6 +15,7 @@ class SearchFromUser(View):
         amount = 0
         results = []
         transactions = Transaction.objects.filter(user=get_user_by_id(user_id))
+        # TODO 真正实现筛选功能
         for transaction in transactions:
             results.append(transactions_all(transaction))
             amount += 1

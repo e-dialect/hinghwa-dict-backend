@@ -5,12 +5,10 @@ from django.views.decorators.csrf import csrf_exempt
 from ...products.models.product import Product
 from ..dto.orders_all import orders_all
 from utils.exception.types.not_found import (
-    OrdersNotFoundException,
     ProductsNotFoundException,
 )
-from django.conf import settings
 from ..models.order import Order
-from ..forms import OrdersInfoForm
+from ..forms import OrderInfoForm
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.token import token_pass, token_user
@@ -35,7 +33,7 @@ class ManageAllOrders(View):
             return JsonResponse({"msg": "用户积分不足"}, status=403)
         if product.quantity <= 0:
             return JsonResponse({"msg": "商品暂无库存"}, status=403)
-        orders_form = OrdersInfoForm(body)
+        orders_form = OrderInfoForm(body)
         if not orders_form.is_valid():
             raise BadRequestException()
         orders = orders_form.save(commit=False)
