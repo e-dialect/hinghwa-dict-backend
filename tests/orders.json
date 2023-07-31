@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "15046191-5462-4c32-9112-b4f75c8ed1ce",
+          "id": "e4b4814c-ea3b-447f-a8c5-4863ff94bacc",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -182,6 +182,7 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -226,7 +227,7 @@
           }
         },
         {
-          "id": "17ebf094-845e-42f8-b639-23905e04756b",
+          "id": "d2e12795-fed5-4372-b521-0bc53b1653e8",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -251,7 +252,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -269,7 +270,59 @@
             "type": "http"
           },
           "response": [],
-          "event": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.variables.set(`article_id`, value);console.log('已设置临时变量【article_id】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【article_id】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            }
+          ],
           "responseDefinition": {
             "id": 4183335,
             "createdAt": "2021-07-29T15:25:08.000Z",
@@ -285,7 +338,8 @@
                 "id": {
                   "type": "integer",
                   "title": "文章的id",
-                  "description": "注：初始化publish_time,update_time"
+                  "description": "注：初始化publish_time,update_time",
+                  "additionalProperties": false
                 }
               },
               "required": [
@@ -295,6 +349,7 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -357,7 +412,7 @@
           }
         },
         {
-          "id": "899b49e3-e7f0-4eb9-a855-7d189f044325",
+          "id": "1a212b72-276b-435c-adb8-4a4e4c15ee3f",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -384,7 +439,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -429,6 +484,7 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -467,7 +523,7 @@
           }
         },
         {
-          "id": "452f1a92-0da7-4ac0-91ee-9bdfc5f4c301",
+          "id": "b373cff7-f9df-4180-a9d5-574a9215ab59",
           "name": "RE0101 上传新商品(RE0101 上传新商品)",
           "request": {
             "url": {
@@ -492,7 +548,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -503,7 +559,7 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"name\": \"她每两\",\n    \"points\": 40,\n    \"quantity\": 53,\n    \"picture\": \"http://dummyimage.com/\\\"2048x2048\",\n    \"details\": \"土打快里面当任两实定我眼质质术标。半世青速经压活际场车米解往把合。走委能此人火内明音基消性角。量战全号事手级那法调理解克型这关。如报方地难口决复计白所消象算当。发准元确用性则便电当列果必。是种风养理提斗准与情调八无置展除些。\"\n}",
+              "raw": "{\n    \"name\": \"她每两\",\n    \"points\": 10,\n    \"quantity\": 53,\n    \"picture\": \"http://dummyimage.com/\\\"2048x2048\",\n    \"details\": \"土打快里面当任两实定我眼质质术标。半世青速经压活际场车米解往把合。走委能此人火内明音基消性角。量战全号事手级那法调理解克型这关。如报方地难口决复计白所消象算当。发准元确用性则便电当列果必。是种风养理提斗准与情调八无置展除些。\"\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
@@ -590,6 +646,7 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -667,7 +724,7 @@
           }
         },
         {
-          "id": "851755b4-7051-408a-b7af-7c5cf8d80c58",
+          "id": "98d11d07-deec-41e6-add5-1664714e93be",
           "name": "RE0401 上传新订单(RE0401 上传新订单)",
           "request": {
             "url": {
@@ -698,7 +755,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -800,6 +857,7 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -867,7 +925,7 @@
           }
         },
         {
-          "id": "c1775cab-b3f2-452d-927e-9e58f57d51e0",
+          "id": "be57a14c-8b97-4cc2-836f-ca0fe1579b20",
           "name": "RE0403 更新订单信息(RE0403 更新订单信息)",
           "request": {
             "url": {
@@ -893,7 +951,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -937,6 +995,7 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -946,18 +1005,21 @@
                     "mock": {
                       "mock": "@cname"
                     },
-                    "title": "用户名"
+                    "title": "用户名",
+                    "additionalProperties": false
                   },
                   "avatar": {
                     "type": "string",
                     "mock": {
                       "mock": "@image('100x100')"
                     },
-                    "title": "头像"
+                    "title": "头像",
+                    "additionalProperties": false
                   },
                   "id": {
                     "type": "integer",
-                    "title": "用户id"
+                    "title": "用户id",
+                    "additionalProperties": false
                   }
                 },
                 "required": [
@@ -966,49 +1028,56 @@
                   "id"
                 ],
                 "title": "user_simple",
-                "name": "user_simple"
+                "name": "user_simple",
+                "additionalProperties": false
               },
               "54229787": {
                 "type": "object",
                 "properties": {
                   "user": {
                     "$ref": "#/definitions/1077996",
-                    "title": "用户"
+                    "title": "用户",
+                    "additionalProperties": false
                   },
                   "address": {
                     "type": "string",
                     "mock": {
                       "mock": "@county(true)"
                     },
-                    "title": "地址"
+                    "title": "地址",
+                    "additionalProperties": false
                   },
                   "full_name": {
                     "type": "string",
                     "mock": {
                       "mock": "@cname"
                     },
-                    "title": "姓名"
+                    "title": "姓名",
+                    "additionalProperties": false
                   },
                   "telephone": {
                     "type": "string",
                     "mock": {
                       "mock": "@phone"
                     },
-                    "title": "电话"
+                    "title": "电话",
+                    "additionalProperties": false
                   },
                   "comment": {
                     "type": "string",
                     "mock": {
                       "mock": "@cparagraph"
                     },
-                    "title": "备注"
+                    "title": "备注",
+                    "additionalProperties": false
                   },
                   "id": {
                     "type": "string",
                     "mock": {
                       "mock": "DD@integer"
                     },
-                    "title": "ID"
+                    "title": "ID",
+                    "additionalProperties": false
                   }
                 },
                 "title": "订单（全）",
@@ -1028,7 +1097,8 @@
                   "comment",
                   "id"
                 ],
-                "name": "order_all"
+                "name": "order_all",
+                "additionalProperties": false
               }
             }
           },
@@ -1097,7 +1167,7 @@
           }
         },
         {
-          "id": "159cffae-090c-413a-b23c-dd491f6f8b23",
+          "id": "675e1b53-16d7-442f-b379-a3c72d0ee8ba",
           "name": "RE0404 获取指定订单信息(RE0404 获取指定订单信息)",
           "request": {
             "url": {
@@ -1123,7 +1193,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -1158,6 +1228,7 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -1167,18 +1238,21 @@
                     "mock": {
                       "mock": "@cname"
                     },
-                    "title": "用户名"
+                    "title": "用户名",
+                    "additionalProperties": false
                   },
                   "avatar": {
                     "type": "string",
                     "mock": {
                       "mock": "@image('100x100')"
                     },
-                    "title": "头像"
+                    "title": "头像",
+                    "additionalProperties": false
                   },
                   "id": {
                     "type": "integer",
-                    "title": "用户id"
+                    "title": "用户id",
+                    "additionalProperties": false
                   }
                 },
                 "required": [
@@ -1187,49 +1261,56 @@
                   "id"
                 ],
                 "title": "user_simple",
-                "name": "user_simple"
+                "name": "user_simple",
+                "additionalProperties": false
               },
               "54229787": {
                 "type": "object",
                 "properties": {
                   "user": {
                     "$ref": "#/definitions/1077996",
-                    "title": "用户"
+                    "title": "用户",
+                    "additionalProperties": false
                   },
                   "address": {
                     "type": "string",
                     "mock": {
                       "mock": "@county(true)"
                     },
-                    "title": "地址"
+                    "title": "地址",
+                    "additionalProperties": false
                   },
                   "full_name": {
                     "type": "string",
                     "mock": {
                       "mock": "@cname"
                     },
-                    "title": "姓名"
+                    "title": "姓名",
+                    "additionalProperties": false
                   },
                   "telephone": {
                     "type": "string",
                     "mock": {
                       "mock": "@phone"
                     },
-                    "title": "电话"
+                    "title": "电话",
+                    "additionalProperties": false
                   },
                   "comment": {
                     "type": "string",
                     "mock": {
                       "mock": "@cparagraph"
                     },
-                    "title": "备注"
+                    "title": "备注",
+                    "additionalProperties": false
                   },
                   "id": {
                     "type": "string",
                     "mock": {
                       "mock": "DD@integer"
                     },
-                    "title": "ID"
+                    "title": "ID",
+                    "additionalProperties": false
                   }
                 },
                 "title": "订单（全）",
@@ -1249,7 +1330,8 @@
                   "comment",
                   "id"
                 ],
-                "name": "order_all"
+                "name": "order_all",
+                "additionalProperties": false
               }
             }
           },
@@ -1273,7 +1355,7 @@
           }
         },
         {
-          "id": "98ce9ff9-edaa-4259-8b07-231358d5e4dd",
+          "id": "fa7e5f9f-6246-48ce-b11b-b47c245cba82",
           "name": "RE0402 删除订单(RE0402 删除订单)",
           "request": {
             "url": {
@@ -1299,7 +1381,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -1334,6 +1416,7 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -1374,18 +1457,21 @@
           "mock": {
             "mock": "@cname"
           },
-          "title": "用户名"
+          "title": "用户名",
+          "additionalProperties": false
         },
         "avatar": {
           "type": "string",
           "mock": {
             "mock": "@image('100x100')"
           },
-          "title": "头像"
+          "title": "头像",
+          "additionalProperties": false
         },
         "id": {
           "type": "integer",
-          "title": "用户id"
+          "title": "用户id",
+          "additionalProperties": false
         }
       },
       "required": [
@@ -1394,49 +1480,56 @@
         "id"
       ],
       "title": "user_simple",
-      "name": "user_simple"
+      "name": "user_simple",
+      "additionalProperties": false
     },
     "54229787": {
       "type": "object",
       "properties": {
         "user": {
           "$ref": "#/definitions/1077996",
-          "title": "用户"
+          "title": "用户",
+          "additionalProperties": false
         },
         "address": {
           "type": "string",
           "mock": {
             "mock": "@county(true)"
           },
-          "title": "地址"
+          "title": "地址",
+          "additionalProperties": false
         },
         "full_name": {
           "type": "string",
           "mock": {
             "mock": "@cname"
           },
-          "title": "姓名"
+          "title": "姓名",
+          "additionalProperties": false
         },
         "telephone": {
           "type": "string",
           "mock": {
             "mock": "@phone"
           },
-          "title": "电话"
+          "title": "电话",
+          "additionalProperties": false
         },
         "comment": {
           "type": "string",
           "mock": {
             "mock": "@cparagraph"
           },
-          "title": "备注"
+          "title": "备注",
+          "additionalProperties": false
         },
         "id": {
           "type": "string",
           "mock": {
             "mock": "DD@integer"
           },
-          "title": "ID"
+          "title": "ID",
+          "additionalProperties": false
         }
       },
       "title": "订单（全）",
@@ -1456,7 +1549,8 @@
         "comment",
         "id"
       ],
-      "name": "order_all"
+      "name": "order_all",
+      "additionalProperties": false
     }
   },
   "mockRules": {
@@ -1471,133 +1565,104 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "936ea526-9d1c-4ae5-81e5-959ffe0c0ef4",
+      "id": "fdf37a97-3568-44f7-b073-5093de281c1e",
       "name": "测试环境",
-      "baseUrl": "http://127.0.0.1:8000",
-      "baseUrls": {
-        "default": "http://127.0.0.1:8000"
-      },
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjc5LCJleHAiOjE2OTEzOTAyNjkuNTUzMDF9.hiFeekbzYTK3Lf8cx3HJNwUAG5WH-pPBcR3dLB7KFBg",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "87",
+          "value": "",
           "key": "quiz_id",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "word_id_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "word_id_1",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "token_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "word_id_3",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "2",
+          "value": "139",
           "key": "user_id",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "",
           "key": "article_id",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "comment_id_1",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "comment_id_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "like_num_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": 6,
+          "value": "",
           "key": "num_pre",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "7",
+          "value": "",
           "key": "num_later",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "2",
-          "key": "id",
-          "initialValue": "2"
-        },
-        {
-          "type": "any",
-          "value": "13",
-          "key": "music_id",
-          "initialValue": "13"
-        },
-        {
-          "type": "any",
-          "value": "undefined",
-          "key": "rewards_id",
-          "initialValue": "undefined"
-        },
-        {
-          "type": "any",
-          "value": "undefined",
-          "key": "title_id",
-          "initialValue": "undefined"
-        },
-        {
-          "type": "any",
-          "value": "SP000011",
-          "key": "products_id",
-          "initialValue": "SP000011"
-        },
-        {
-          "type": "any",
-          "value": "DD000024",
-          "key": "order_id",
-          "isBindInitial": false,
-          "initialValue": "undefined"
-        },
-        {
-          "type": "any",
-          "value": "JL000039",
-          "key": "transaction_id",
-          "initialValue": "JL000039"
+          "value": "{\"id\":139,\"username\":\"user_test\",\"nickname\":\"user_test\",\"email\":\"user_test@user_test.com\",\"telephone\":\"\",\"registration_time\":\"2023-01-17 19:47:22\",\"birthday\":\"1970-01-01\",\"avatar\":\"https://cos.edialect.top/website/默认头像.jpg\",\"county\":\"\",\"town\":\"\",\"is_admin\":false,\"wechat\":false,\"login_time\":\"2023-01-20 04:45:17\"}",
+          "key": "user",
+          "initialValue": "{\"id\":139,\"username\":\"user_test\",\"nickname\":\"user_test\",\"email\":\"user_test@user_test.com\",\"telephone\":\"\",\"registration_time\":\"2023-01-17 19:47:22\",\"birthday\":\"1970-01-01\",\"avatar\":\"https://cos.edialect.top/website/默认头像.jpg\",\"county\":\"\",\"town\":\"\",\"is_admin\":false,\"wechat\":false,\"login_time\":\"2023-01-20 04:45:17\"}"
         }
       ]
     },
@@ -1613,9 +1678,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
-      "baseUrl": "",
-      "baseUrls": {},
+      "id": "098292bd-19a1-44d4-8bce-309e42a8a86a",
       "values": []
     },
     "parameter": {

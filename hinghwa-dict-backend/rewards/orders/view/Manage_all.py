@@ -31,30 +31,28 @@ class ManageAllOrders(View):
             raise ProductsNotFoundException()
         product = product[0]
         body = demjson.decode(request.body)
-        if user.user_info.points_now >= product.points:
-            if product.quantity > 0:
-                orders_form = OrdersInfoForm(body)
-                if not orders_form.is_valid():
-                    raise BadRequestException()
-                orders = orders_form.save(commit=False)
-                orders.user = user
-                orders.id = generate_order_id()
-                orders.save()
-                product.quantity -= 1
-                product.save()
-                user.user_info.points_now -= product.points
-                user.user_info.save()
-                action = "redeem"
-                points = product.points
-                user_id = user.id
-                create_transaction(
-                    action=action, points=points, reason="兑换商品", user_id=user_id
-                )
-                return JsonResponse({"id": orders.id}, status=200)
-            else:
-                return JsonResponse({"msg": "商品暂无库存"}, status=300)
-        else:
-            return JsonResponse({"msg": "用户积分不足"}, status=500)
+        if user.user_info.points_now < product.points:
+            return JsonResponse({"msg": "用户积分不足"}, status=403)
+        if product.quantity <= 0:
+            return JsonResponse({"msg": "商品暂无库存"}, status=403)
+        orders_form = OrdersInfoForm(body)
+        if not orders_form.is_valid():
+            raise BadRequestException()
+        orders = orders_form.save(commit=False)
+        orders.user = user
+        orders.id = generate_order_id()
+        orders.save()
+        product.quantity -= 1
+        product.save()
+        user.user_info.points_now -= product.points
+        user.user_info.save()
+        action = "redeem"
+        points = product.points
+        user_id = user.id
+        create_transaction(
+            action=action, points=points, reason="兑换商品", user_id=user_id
+        )
+        return JsonResponse({"id": orders.id}, status=200)
 
     # RE0405获取指定用户全部订单
     @csrf_exempt

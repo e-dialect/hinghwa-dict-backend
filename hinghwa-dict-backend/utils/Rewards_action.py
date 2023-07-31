@@ -32,14 +32,16 @@ def points_change(action, points, user_id):
     user = User.objects.filter(id=user_id)
     if user.exists():
         user = user[0]
-        if action == "add":
+        if action == "earn":
             user.user_info.points_sum += points
             user.user_info.points_now += points
-        elif action == "sub":
+        elif action == "redeem":
             if user.user_info.points_now >= points:
                 user.user_info.points_now -= points
+            else:
+                raise BadRequestException("积分不足")
         else:
-            return BadRequestException
+            raise BadRequestException("action错误")
         user.user_info.save()
     else:
         raise UserNotFoundException()
