@@ -7,7 +7,7 @@ def application_all_content(application: Application) -> dict:
         {"id": word.id, "word": word.word} for word in application.related_words.all()
     ]
     related_articles = [
-        {"id": article.id, "titles": article.title}
+        {"id": article.id, "title": article.title}
         for article in application.related_articles.all()
     ]
     response = {

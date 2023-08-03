@@ -217,7 +217,7 @@ def announcements(request):
                             "update_time": article.update_time.__format__(
                                 "%Y-%m-%d %H:%M:%S"
                             ),
-                            "titles": article.title,
+                            "title": article.title,
                             "description": article.description,
                             "content": article.content,
                             "cover": article.cover,
