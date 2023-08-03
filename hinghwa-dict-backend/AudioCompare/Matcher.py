@@ -325,7 +325,7 @@ class Matcher(object):
         # pool = multiprocessing.Pool(cpus)
         try:
             # Get the fingerprints from each input file.
-            # Do this using a pool of processes in orders
+            # Do this using a pool of processes in order
             # to parallelize the work neatly.
             map1_result = [_file_fingerprint(item) for item in dir1_files]
             # map2_result = [_file_fingerprint(item) for item in dir2_files]

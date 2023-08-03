@@ -2,7 +2,7 @@ from ..models.order import Order
 from user.dto.user_simple import user_simple
 
 
-def orders_all(orders: Order):
+def order_all(orders: Order):
     response = {
         "user": user_simple(orders.user),
         "address": orders.address,

@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "8352f7a3-5285-4c53-b3c1-2504804606de",
+          "id": "5af0e046-2703-45a1-8e20-e48a4289591a",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "564b3633-c7fe-4f77-9226-33e2e42cae3e",
+          "id": "2486077a-f074-49bc-9e74-897d5bfb2353",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -409,7 +409,7 @@
           }
         },
         {
-          "id": "892669e6-8da3-44ff-ad11-2a0306eed0ce",
+          "id": "79744f3d-ef3c-4522-a80c-691bf9a070df",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -468,7 +468,7 @@
                   "        ",
                   "      try{",
                   "        ",
-                  "          const expression = pm.variables.replaceIn(`$.transaction_id`);",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
                   "          const JSONPath = require('jsonpath-plus').JSONPath;",
                   "          const jsonData = pm.response.json();",
                   "          let value = JSONPath({",
@@ -510,7 +510,7 @@
           "responseDefinition": {
             "id": 27919786,
             "createdAt": "2022-03-20T01:17:01.000Z",
-            "updatedAt": "2023-07-30T11:03:34.000Z",
+            "updatedAt": "2023-08-03T07:35:39.000Z",
             "deletedAt": null,
             "apiDetailId": 14440370,
             "name": "成功",
@@ -518,22 +518,128 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {
-                "transaction_id": {
-                  "type": "string"
-                }
-              },
+              "properties": {},
               "x-apifox-orders": [
-                "transaction_id"
+                "01H6X55E47JH482NARACB4TV1K"
               ],
-              "required": [
-                "transaction_id"
-              ]
+              "required": [],
+              "x-apifox-refs": {
+                "01H6X55E47JH482NARACB4TV1K": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -571,7 +677,7 @@
           }
         },
         {
-          "id": "73ea971e-8120-49fe-bdad-c974ee8bd8c1",
+          "id": "e50519cb-9230-4349-a33f-98f8fabedd15",
           "name": "RE0301 查询特定交易(RE0301 查询特定交易)",
           "request": {
             "url": {
@@ -911,7 +1017,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "3a4c3b85-f69f-4f18-859a-beae1a9f9426",
+      "id": "399fd120-d048-4aec-9fa5-51e6483d7ebf",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -920,7 +1026,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -962,7 +1068,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -1028,9 +1134,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -1053,7 +1158,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "14a8863c-bb67-42f5-999e-ca2ff8f7ae83",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

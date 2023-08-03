@@ -174,7 +174,7 @@ def email(request):
 
 def filterInOrder(objs, order) -> list:
     """
-    将id为order顺序排序objs,len(objs)<=len(orders)
+    将id为order顺序排序objs,len(objs)<=len(order)
     :param objs:待排序的数组
     :param order:
     :return:
@@ -266,7 +266,7 @@ def hot_articles(request):
                             "update_time": article.update_time.__format__(
                                 "%Y-%m-%d %H:%M:%S"
                             ),
-                            "titles": article.title,
+                            "title": article.title,
                             "description": article.description,
                             "content": article.content,
                             "cover": article.cover,

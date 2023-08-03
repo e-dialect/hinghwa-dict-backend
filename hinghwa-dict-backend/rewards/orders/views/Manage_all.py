@@ -3,7 +3,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from ...products.models.product import Product
-from ..dto.orders_all import orders_all
+from ..dto.orders_all import order_all
 from utils.exception.types.not_found import (
     ProductsNotFoundException,
 )
@@ -15,6 +15,7 @@ from utils.token import token_pass, token_user
 from user.utils import get_user_by_id
 from utils.generate_id import generate_order_id
 from utils.Rewards_action import create_transaction
+from ..models.order import Order
 
 
 class ManageAllOrders(View):
@@ -44,11 +45,10 @@ class ManageAllOrders(View):
         product.save()
         user.user_info.points_now -= product.points
         user.user_info.save()
-        action = "redeem"
-        points = product.points
-        user_id = user.id
-        create_transaction(action=action, points=points, reason="兑换商品", user_id=user_id)
-        return JsonResponse({"id": orders.id}, status=200)
+        create_transaction(
+            action="redeem", points=product.points, reason="兑换商品", user_id=user.id
+        )
+        return JsonResponse(order_all(orders), status=200)
 
     # RE0405获取指定用户全部订单
     @csrf_exempt
@@ -60,7 +60,7 @@ class ManageAllOrders(View):
         results = []
         orders = Order.objects.filter(user=get_user_by_id(user_id))
         for order in orders:
-            results.append(orders_all(order))
+            results.append(order_all(order))
             amount += 1
         return JsonResponse(
             {

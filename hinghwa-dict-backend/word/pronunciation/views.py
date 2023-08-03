@@ -1,12 +1,7 @@
 import os
-import random
 import shutil
-import subprocess
 import time
 import datetime
-from django.test import RequestFactory
-import json
-from user.view.manage import ManagePoints
 import demjson
 import numpy as np
 import pydub
@@ -38,7 +33,7 @@ from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
-from utils.Rewards_action import points_change, create_transaction
+from utils.Rewards_action import manage_points_in_pronunciation
 
 
 class SearchPronunciations(View):
@@ -69,7 +64,7 @@ class SearchPronunciations(View):
         pronunciations = list(pronunciations)
         pronunciations.sort(key=lambda item: item.id)
         total = len(pronunciations)
-        if ("orders" in request.GET) and request.GET["orders"] == "1":
+        if ("order" in request.GET) and request.GET["order"] == "1":
             pronunciations.reverse()
         if "pageSize" in request.GET:
             pageSize = int(request.GET["pageSize"])
@@ -374,12 +369,7 @@ def managePronunciationVisibility(request, id):
                         extra = f"，理由是:\n\t{body['reason']}" if "reason" in body else ""
                         content = f"恭喜您的语音(id ={id}) 已通过审核" + extra
                         user_id = pro.contributor.id
-                        points = 30
-                        action = "earn"
-                        points_change(action=action, points=points, user_id=user_id)
-                        transaction_id = create_transaction(
-                            action=action, points=points, reason="贡献文章", user_id=user_id
-                        )
+                        transaction_info = manage_points_in_pronunciation(user_id)
                     else:
                         msg = body["reason"] if "reason" in body else body["message"]
                         content = f"很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}"
@@ -391,7 +381,7 @@ def managePronunciationVisibility(request, id):
                         title="【通知】语音审核结果",
                     )
                     pro.save()
-                    return JsonResponse({"transaction_id": transaction_id}, status=200)
+                    return JsonResponse(transaction_info, status=200)
                 else:
                     return JsonResponse({}, status=404)
             else:

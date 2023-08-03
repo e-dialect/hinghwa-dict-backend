@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "38435418-5541-46a4-82ac-bd96c468f83c",
+          "id": "d392e11e-0e5e-42ef-9a78-c136f9bbf582",
           "name": "LG0101 账号密码登录(登录用户)",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "f49b2130-bc72-4215-afb6-bcdcd70814f8",
+          "id": "14948791-687b-4095-8bc8-0c3843f9dcee",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -277,7 +277,7 @@
           }
         },
         {
-          "id": "b8c81321-36ca-4a3f-9ab9-7549ecec5e45",
+          "id": "391f7049-786a-48cc-9572-763c90a5f71c",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -499,7 +499,7 @@
           }
         },
         {
-          "id": "08faf383-6cd5-4ea7-825c-8a7030788445",
+          "id": "85c6027f-5da8-49b7-814a-f4849cdcf85f",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -903,7 +903,7 @@
           }
         },
         {
-          "id": "5752eb29-0831-4454-bb5d-e8c9d806ac24",
+          "id": "c5fe7e1a-e08e-47a0-9fb6-e104fc162ac6",
           "name": "LG0101 账号密码登录(登录用户)",
           "request": {
             "url": {
@@ -1074,7 +1074,7 @@
           }
         },
         {
-          "id": "9aaa1aa4-9c9d-48f6-8ae2-532c26414525",
+          "id": "1c85af31-7a71-43ed-949c-46ed324fa621",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -1171,7 +1171,7 @@
           }
         },
         {
-          "id": "6c9b9727-330e-438e-aacf-9729d4c621f2",
+          "id": "e0c75870-b76d-452d-82bc-7b5a0da4249d",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -1573,7 +1573,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "8a276939-daf6-4d45-be12-2e73575d0138",
+      "id": "bbcfec0e-edbc-40e4-84a6-52e58f9a6b80",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -1582,7 +1582,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -1624,7 +1624,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -1690,9 +1690,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -1715,7 +1714,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

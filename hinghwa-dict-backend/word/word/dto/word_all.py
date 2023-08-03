@@ -9,7 +9,7 @@ def word_all(word: Word) -> dict:
         {"id": word.id, "word": word.word} for word in word.related_words.all()
     ]
     related_articles = [
-        {"id": article.id, "titles": article.title}
+        {"id": article.id, "title": article.title}
         for article in word.related_articles.all()
     ]
     user = word.contributor

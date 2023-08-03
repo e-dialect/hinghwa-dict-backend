@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "b56caca2-ff7b-4fa1-a381-d71ebd8b3a63",
+          "id": "c0ca369c-66ce-4c08-97d7-a633c6928212",
           "name": "LG0101 账号密码登录()",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "1f1edc3b-184b-454a-8b04-e740e9972b7f",
+          "id": "ccf13c67-d6dc-4dc5-a01a-d1691c727130",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -357,7 +357,7 @@
           }
         },
         {
-          "id": "880a544c-7454-4197-a018-d2740fdc5b2e",
+          "id": "e50e4158-4bef-4b99-8428-dd8f216f33ec",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -579,7 +579,7 @@
           }
         },
         {
-          "id": "e2ac820d-a8e7-4603-bf84-c76eb3bbd67c",
+          "id": "2b587c54-a078-441e-abb5-eec00082012a",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -627,7 +627,7 @@
           "responseDefinition": {
             "id": 27919786,
             "createdAt": "2022-03-20T01:17:01.000Z",
-            "updatedAt": "2023-07-30T11:03:34.000Z",
+            "updatedAt": "2023-08-03T07:35:39.000Z",
             "deletedAt": null,
             "apiDetailId": 14440370,
             "name": "成功",
@@ -635,22 +635,128 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {
-                "transaction_id": {
-                  "type": "string"
-                }
-              },
+              "properties": {},
               "x-apifox-orders": [
-                "transaction_id"
+                "01H6X55E47JH482NARACB4TV1K"
               ],
-              "required": [
-                "transaction_id"
-              ]
+              "required": [],
+              "x-apifox-refs": {
+                "01H6X55E47JH482NARACB4TV1K": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -688,7 +794,7 @@
           }
         },
         {
-          "id": "0efe04c7-5b1e-4c1f-b10a-2bcf8ba27b6c",
+          "id": "bec6e20d-87cc-490e-b897-af2a3c97d7a9",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -910,7 +1016,7 @@
           }
         },
         {
-          "id": "34d2b179-0df0-4e1e-a9a9-71b8bf2808bd",
+          "id": "a19be628-eeb9-4217-ab41-fbaaf6897f04",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -1076,7 +1182,7 @@
           }
         },
         {
-          "id": "c8f2e42b-2c76-4a76-83c2-e73b71115e99",
+          "id": "330727c1-c769-411a-ac78-c601f508232d",
           "name": "AT0401 发表文章评论(成功)",
           "request": {
             "url": {
@@ -1242,7 +1348,7 @@
           }
         },
         {
-          "id": "b8ceaf52-2af6-4ce2-a693-5c705e05675a",
+          "id": "fd66d7f0-f3eb-4dc1-a4f7-c826c28d637f",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -1419,7 +1525,7 @@
           }
         },
         {
-          "id": "449590e1-50dc-4cae-929a-ac7d0a5f8c2d",
+          "id": "6c695f56-765c-46c2-82a5-8c46f5336e67",
           "name": "AT0403 评论内容批量获取(AT0403 评论内容批量获取)",
           "request": {
             "url": {
@@ -1618,7 +1724,7 @@
           }
         },
         {
-          "id": "5bffa264-dbc4-4d37-bbe3-7ad26f217bea",
+          "id": "8b42e4d8-186b-464e-94cb-b59772ce055d",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -1840,7 +1946,7 @@
           }
         },
         {
-          "id": "2dafadb7-2da8-452e-af24-1e53282bef65",
+          "id": "a941fc00-b853-4ab0-adba-fa6ff80ebe31",
           "name": "AT0404 获取文章评论(成功)",
           "request": {
             "url": {
@@ -2017,7 +2123,7 @@
           }
         },
         {
-          "id": "b15693d8-13da-4aab-b2e5-544a4fda3d0b",
+          "id": "d692cc6b-894b-446f-ab67-a4eec7628a0d",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2109,7 +2215,7 @@
           }
         },
         {
-          "id": "5ec447aa-a0a4-43c1-a7a5-2118cca7d112",
+          "id": "01710844-3c79-4e8f-9fb1-a51544badb08",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2201,7 +2307,7 @@
           }
         },
         {
-          "id": "78ed84cf-26db-49c8-a286-e34bc7a260f5",
+          "id": "50aabfd0-f8fa-46fc-8897-0bf31216f08a",
           "name": "AT0406 给文章评论点赞(AT0406 给文章评论点赞)",
           "request": {
             "url": {
@@ -2359,7 +2465,7 @@
           }
         },
         {
-          "id": "96325306-8858-4884-82f6-9eec13bc6e7c",
+          "id": "e8116d3a-9c69-4dfe-8a5f-fa49ec7b2a74",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -2451,7 +2557,7 @@
           }
         },
         {
-          "id": "39dd0901-e7fe-4b01-95e3-ab286ec2b907",
+          "id": "55ccd372-55dd-4e53-b602-481321d31210",
           "name": "AT0407 取消文章评论点赞(AT0407 取消文章评论点赞)",
           "request": {
             "url": {
@@ -2543,7 +2649,7 @@
           }
         },
         {
-          "id": "218c7f50-3194-428c-a550-bc57a2bbb4cb",
+          "id": "d0f05655-347c-4559-8c6c-4ebf295e986c",
           "name": "AT0402 删除文章评论（和子孙评论）(AT0402 删除文章评论（和子孙评论）)",
           "request": {
             "url": {
@@ -2773,6 +2879,82 @@
       ],
       "title": "comment_likes",
       "name": "comment_likes"
+    },
+    "53485892": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "title": "时间",
+          "mock": {
+            "mock": "@datetime"
+          }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "earn",
+            "redeem",
+            "other"
+          ],
+          "x-apifox": {
+            "enumDescriptions": {
+              "earn": "增加",
+              "redeem": "兑换",
+              "other": "其他"
+            }
+          },
+          "title": "类型",
+          "mock": {
+            "mock": "@string"
+          },
+          "description": "add或reedm"
+        },
+        "points": {
+          "type": "integer",
+          "title": "积分数",
+          "mock": {
+            "mock": "@integer(0)"
+          }
+        },
+        "user": {
+          "title": "用户",
+          "$ref": "#/definitions/1077996"
+        },
+        "id": {
+          "type": "string",
+          "title": "ID",
+          "mock": {
+            "mock": "JL@integer"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "title": "原因",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        }
+      },
+      "x-apifox-orders": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "required": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "title": "transaction",
+      "name": "transaction"
     }
   },
   "mockRules": {
@@ -2787,7 +2969,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "3002bc09-9f3a-4573-985e-836555c6e9d6",
+      "id": "da70fd8c-f5aa-4dd7-8ead-9d6e6ebee7a4",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -2796,13 +2978,13 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMxNjU5OS42ODg3Mzh9.oG-svgx-zShqtWkDqZxuYisRLrITl4Zd82yU2ik-lms",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "87",
           "key": "quiz_id",
           "initialValue": ""
         },
@@ -2838,7 +3020,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -2862,13 +3044,13 @@
         },
         {
           "type": "any",
-          "value": "4",
+          "value": 6,
           "key": "num_pre",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "7",
           "key": "num_later",
           "initialValue": ""
         },
@@ -2912,8 +3094,7 @@
           "type": "any",
           "value": "JL000039",
           "key": "transaction_id",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -2929,7 +3110,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "46a99207-ee6d-4749-8079-f88b2d928f2e",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "5d11f9c9-7ea4-4b77-9c3f-55be919ac7a6",
+          "id": "dc283bff-a7b0-4512-8049-d3166d1b5f65",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "50ee65f7-937f-4135-a97e-6d2fcf3f4c4f",
+          "id": "8be7dd80-1bd0-4e89-b6ec-d41bd58a6e85",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -377,7 +377,7 @@
           }
         },
         {
-          "id": "fbc67852-8b0d-429f-836f-c672f355f636",
+          "id": "dadeb29f-3827-4f19-9135-ed68fc750110",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -528,7 +528,7 @@
           }
         },
         {
-          "id": "dda5023e-f83b-4278-9750-0e160722d906",
+          "id": "ff95e189-2997-4583-a81a-0aeff98db89f",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -679,7 +679,7 @@
           }
         },
         {
-          "id": "e1a39e8d-a338-4ab6-9a8d-bcb65cc348ac",
+          "id": "a90c3c82-442e-453a-b487-8c31807b9dc8",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -830,7 +830,7 @@
           }
         },
         {
-          "id": "7bfec2af-13bc-4aae-a9d5-ba94d14074b6",
+          "id": "7d4b96b6-f4c4-4179-a754-0f3e9aeaa7fd",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -1008,7 +1008,7 @@
           }
         },
         {
-          "id": "0695d50c-f894-4d8f-9074-7af762357955",
+          "id": "bafcc936-6fa9-4362-9b90-751b5f99437b",
           "name": "PN0106 审核语音(PN0106 审核语音)",
           "request": {
             "url": {
@@ -1106,7 +1106,7 @@
           }
         },
         {
-          "id": "1258d9a8-807e-4d9b-8346-d100457769a7",
+          "id": "59ba16d1-1626-4043-b399-f8f1cb65ad54",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -1284,7 +1284,7 @@
           }
         },
         {
-          "id": "76cf3a7c-35a5-4656-85a4-cd007b9023dd",
+          "id": "9d8041bd-c9f3-45b2-85c5-df28f5cda172",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -1506,7 +1506,7 @@
           }
         },
         {
-          "id": "15c7c4e0-93df-4b72-959a-7bdb6ef2d433",
+          "id": "7c689c54-60ef-4f4b-bc44-b8ca102a0088",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -1914,7 +1914,7 @@
           }
         },
         {
-          "id": "5cd0e370-41bd-4687-8795-e99e6972b31f",
+          "id": "735238a0-1872-4f42-83a9-2dcd5bea6d0f",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -2013,7 +2013,7 @@
           }
         },
         {
-          "id": "34074eec-d6cb-4c2a-9879-5fa63852a028",
+          "id": "a0bf8ff2-55ff-42dd-a31c-993f63795ea6",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -2112,7 +2112,7 @@
           }
         },
         {
-          "id": "ff63ab37-eb42-4880-8c6d-c3433df2fc89",
+          "id": "23b661ac-c4c8-4e97-84f2-50967fb75d3e",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2290,7 +2290,7 @@
           }
         },
         {
-          "id": "21ed1348-34cd-42e0-b8fa-a46f4df226a6",
+          "id": "0323ba97-0e11-4a5c-a766-fa195638752d",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2468,7 +2468,7 @@
           }
         },
         {
-          "id": "2f6e8ed8-5cad-4a95-920b-90b8850fcd1b",
+          "id": "97728360-21fe-4303-88af-9b74c0609759",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2646,7 +2646,7 @@
           }
         },
         {
-          "id": "d0eea25e-16dc-4ea6-89c5-ec83f14eec48",
+          "id": "64f6fc8d-a550-49c8-8b76-2a223e86360a",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2824,7 +2824,7 @@
           }
         },
         {
-          "id": "3ab3e3b2-7afa-4df7-ac24-181bc4c7f809",
+          "id": "a0c0d837-e2be-4bc3-adb0-26cbe3373fec",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -3358,7 +3358,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "f2c62938-be12-4d94-95c4-38da8d38cd63",
+      "id": "a381a4b2-997b-4011-a720-15aeb0918c70",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -3367,7 +3367,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -3409,7 +3409,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -3475,9 +3475,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -3500,7 +3499,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "14a8863c-bb67-42f5-999e-ca2ff8f7ae83",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

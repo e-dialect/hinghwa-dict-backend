@@ -1,7 +1,7 @@
 import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from ..dto.orders_all import orders_all
+from ..dto.orders_all import order_all
 from utils.exception.types.not_found import OrdersNotFoundException
 from ..models.order import Order
 from django.views import View
@@ -20,7 +20,7 @@ class ManageSingleOrder(View):
         user_id = order.user.id
         token = token_pass(request.headers, -1) or token_pass(request.headers, user_id)
         if token:
-            return JsonResponse(orders_all(order), status=200)
+            return JsonResponse(order_all(order), status=200)
         else:
             return JsonResponse({"msg": "无权限"}, status=403)
 
@@ -55,6 +55,6 @@ class ManageSingleOrder(View):
                 setattr(order, key, body[key])
                 order.timestamp = timezone.now()
             order.save()
-            return JsonResponse(orders_all(order), status=200)
+            return JsonResponse(order_all(order), status=200)
         else:
             return JsonResponse({}, status=403)

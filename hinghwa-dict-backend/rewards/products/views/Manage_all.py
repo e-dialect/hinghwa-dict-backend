@@ -1,7 +1,7 @@
 import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from ..dto.products_all import products_all
+from ..dto.product_all import product_all
 from ..models.product import Product
 from ..forms import ProductInfoForm
 from django.views import View
@@ -49,7 +49,7 @@ class ManageAllProducts(View):
 
         products = []
         for product in result_products:
-            products.append(products_all(product))
+            products.append(product_all(product))
 
         return JsonResponse(
             {"result": products, "amount": amount, "page": page, "pageSize": pageSize},

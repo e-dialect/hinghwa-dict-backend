@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "13daf59d-10bd-449b-9cef-2cc86b23facf",
+          "id": "bf42b536-cc26-48d5-88d2-d0c234f92663",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "938d8763-3adc-49d0-b4e1-ec541dbba88a",
+          "id": "27d1a844-ad5a-4eda-954a-007346e310ef",
           "name": "RE0405 获取用户全部订单(RE0405 获取用户全部订单)",
           "request": {
             "url": {
@@ -553,7 +553,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "68de4c39-65c5-4d96-8dc0-00c2ad8ff0e5",
+      "id": "2da61672-389f-42c7-959a-83544fa7729a",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -562,7 +562,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -604,7 +604,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -670,9 +670,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -695,7 +694,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "14a8863c-bb67-42f5-999e-ca2ff8f7ae83",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

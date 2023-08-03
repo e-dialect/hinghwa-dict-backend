@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "8754b6e1-a2cd-4ad3-a269-9ec2e5a5d305",
+          "id": "23c08426-f540-4852-93c8-55ecb6753015",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "39a636d9-e95d-4551-99f7-2aea3ca6d221",
+          "id": "fffeb770-de67-418f-82d9-f51cf4813cc3",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -244,7 +244,7 @@
           }
         },
         {
-          "id": "cb2dc0d3-6a1e-4ea1-b777-4415bd0214f0",
+          "id": "0d87d937-eba2-4a32-bdea-311bfa2050cc",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -341,7 +341,7 @@
           }
         },
         {
-          "id": "3b779086-0a36-4067-bb89-2ff3845abb2d",
+          "id": "9cadbadf-79ae-4575-ae8a-c1955763c849",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -489,7 +489,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "487e231f-0507-400d-8a08-858274ea8a31",
+      "id": "8e29a04f-a750-472b-bb01-5b8f47e413e3",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -498,7 +498,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -540,7 +540,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -606,9 +606,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -631,7 +630,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

@@ -15,3 +15,7 @@ class Order(models.Model):
     telephone = models.CharField(max_length=20, verbose_name="电话")
     comment = models.CharField(blank=True, max_length=100, verbose_name="备注")
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
+
+    class Meta:
+        verbose_name_plural = "订单"
+        verbose_name = "订单"

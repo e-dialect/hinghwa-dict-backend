@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "1901fe7e-161d-4a76-b1b8-bc48adb4bd6f",
+          "id": "de1b90ca-2722-43db-a488-c2583b9ccb87",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "4ff0b250-6bd7-42b5-9437-7fcd27a191bb",
+          "id": "f8e52aa6-0aa2-461e-baca-1f9bd935c29e",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -409,7 +409,7 @@
           }
         },
         {
-          "id": "e815447d-d521-400c-8e06-8bff0114cfa4",
+          "id": "63436a3f-7e79-4101-b842-9ea6b0b036ad",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -458,7 +458,7 @@
           "responseDefinition": {
             "id": 27919786,
             "createdAt": "2022-03-20T01:17:01.000Z",
-            "updatedAt": "2023-07-30T11:03:34.000Z",
+            "updatedAt": "2023-08-03T07:35:39.000Z",
             "deletedAt": null,
             "apiDetailId": 14440370,
             "name": "成功",
@@ -466,22 +466,128 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {
-                "transaction_id": {
-                  "type": "string"
-                }
-              },
+              "properties": {},
               "x-apifox-orders": [
-                "transaction_id"
+                "01H6X55E47JH482NARACB4TV1K"
               ],
-              "required": [
-                "transaction_id"
-              ]
+              "required": [],
+              "x-apifox-refs": {
+                "01H6X55E47JH482NARACB4TV1K": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -519,7 +625,7 @@
           }
         },
         {
-          "id": "83b1cecf-6a12-42f8-99e0-2c08570a214a",
+          "id": "6ca704cd-a53d-4307-9317-25e25af3e723",
           "name": "RE0101 上传新商品(RE0101 上传新商品)",
           "request": {
             "url": {
@@ -719,7 +825,7 @@
           }
         },
         {
-          "id": "8b95ed25-adfc-4d51-85da-afc472fb7a9f",
+          "id": "cf300713-fc1a-4382-95ed-fb9f967cafd9",
           "name": "RE0401 上传新订单(RE0401 上传新订单)",
           "request": {
             "url": {
@@ -824,7 +930,7 @@
           "responseDefinition": {
             "id": 246212981,
             "createdAt": "2023-07-27T09:31:33.000Z",
-            "updatedAt": "2023-07-27T09:32:34.000Z",
+            "updatedAt": "2023-08-03T10:42:55.000Z",
             "deletedAt": null,
             "apiDetailId": 98804548,
             "name": "成功",
@@ -832,27 +938,114 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {
-                "id": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "DD@integer"
-                  },
-                  "title": "ID"
+              "properties": {},
+              "x-apifox-orders": [
+                "01H6XFWBPRWPNNCVD95KK73AXR"
+              ],
+              "x-apifox-refs": {
+                "01H6XFWBPRWPNNCVD95KK73AXR": {
+                  "$ref": "#/definitions/54229787"
                 }
               },
-              "x-apifox-orders": [
-                "id"
-              ],
-              "x-apifox-refs": {},
-              "required": [
-                "id"
-              ]
+              "required": []
             },
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "54229787": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "$ref": "#/definitions/1077996",
+                    "title": "用户"
+                  },
+                  "address": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@county(true)"
+                    },
+                    "title": "地址"
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "姓名"
+                  },
+                  "telephone": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@phone"
+                    },
+                    "title": "电话"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "备注"
+                  },
+                  "id": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "DD@integer"
+                    },
+                    "title": "ID"
+                  }
+                },
+                "title": "订单（全）",
+                "x-apifox-orders": [
+                  "user",
+                  "address",
+                  "full_name",
+                  "telephone",
+                  "comment",
+                  "id"
+                ],
+                "required": [
+                  "user",
+                  "address",
+                  "full_name",
+                  "telephone",
+                  "comment",
+                  "id"
+                ],
+                "name": "order_all"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -919,7 +1112,7 @@
           }
         },
         {
-          "id": "28d70995-32a7-44b6-bda2-a290091d021f",
+          "id": "dcc4f068-9b8e-4981-8c76-5a9c33c914e3",
           "name": "RE0402 删除订单(RE0402 删除订单)",
           "request": {
             "url": {
@@ -1005,7 +1198,7 @@
           }
         },
         {
-          "id": "8eea9494-f3f9-41b2-9362-a2ce92cbf6e9",
+          "id": "d2c226b2-d86a-4bf9-acb0-23e5d8c9b6d6",
           "name": "RE0404 获取指定订单信息(RE0404 获取指定订单信息)",
           "request": {
             "url": {
@@ -1078,7 +1271,7 @@
           }
         },
         {
-          "id": "376a8714-4667-41a9-a861-70af49a17c3f",
+          "id": "47ed06b6-94a2-4c7b-a196-dcdabcf59d1f",
           "name": "RE0403 更新订单信息(RE0403 更新订单信息)",
           "request": {
             "url": {
@@ -1211,7 +1404,176 @@
   "info": {
     "name": "单个订单操作-404"
   },
-  "dataSchemas": {},
+  "dataSchemas": {
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple",
+      "name": "user_simple"
+    },
+    "53485892": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "title": "时间",
+          "mock": {
+            "mock": "@datetime"
+          }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "earn",
+            "redeem",
+            "other"
+          ],
+          "x-apifox": {
+            "enumDescriptions": {
+              "earn": "增加",
+              "redeem": "兑换",
+              "other": "其他"
+            }
+          },
+          "title": "类型",
+          "mock": {
+            "mock": "@string"
+          },
+          "description": "add或reedm"
+        },
+        "points": {
+          "type": "integer",
+          "title": "积分数",
+          "mock": {
+            "mock": "@integer(0)"
+          }
+        },
+        "user": {
+          "title": "用户",
+          "$ref": "#/definitions/1077996"
+        },
+        "id": {
+          "type": "string",
+          "title": "ID",
+          "mock": {
+            "mock": "JL@integer"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "title": "原因",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        }
+      },
+      "x-apifox-orders": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "required": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "title": "transaction",
+      "name": "transaction"
+    },
+    "54229787": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/1077996",
+          "title": "用户"
+        },
+        "address": {
+          "type": "string",
+          "mock": {
+            "mock": "@county(true)"
+          },
+          "title": "地址"
+        },
+        "full_name": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "姓名"
+        },
+        "telephone": {
+          "type": "string",
+          "mock": {
+            "mock": "@phone"
+          },
+          "title": "电话"
+        },
+        "comment": {
+          "type": "string",
+          "mock": {
+            "mock": "@cparagraph"
+          },
+          "title": "备注"
+        },
+        "id": {
+          "type": "string",
+          "mock": {
+            "mock": "DD@integer"
+          },
+          "title": "ID"
+        }
+      },
+      "title": "订单（全）",
+      "x-apifox-orders": [
+        "user",
+        "address",
+        "full_name",
+        "telephone",
+        "comment",
+        "id"
+      ],
+      "required": [
+        "user",
+        "address",
+        "full_name",
+        "telephone",
+        "comment",
+        "id"
+      ],
+      "name": "order_all"
+    }
+  },
   "mockRules": {
     "rules": [],
     "enableSystemRule": true
@@ -1224,7 +1586,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "6c98a610-db14-4fb8-acd5-d5bf823859eb",
+      "id": "ee52db59-d675-42da-a919-373368e076c2",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -1233,7 +1595,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -1275,7 +1637,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -1341,9 +1703,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -1366,7 +1727,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "14a8863c-bb67-42f5-999e-ca2ff8f7ae83",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

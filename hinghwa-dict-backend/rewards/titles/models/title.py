@@ -9,3 +9,7 @@ class Title(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        verbose_name_plural = "头衔"
+        verbose_name = "头衔"

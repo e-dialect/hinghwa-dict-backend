@@ -1,7 +1,7 @@
 import demjson
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-from ..dto.products_all import products_all
+from ..dto.product_all import product_all
 from utils.exception.types.not_found import ProductsNotFoundException
 from ..models.product import Product
 from django.views import View
@@ -16,12 +16,12 @@ class ManageSingleProducts(View):
         if not product.exists():
             raise ProductsNotFoundException()
         product = product[0]
-        return JsonResponse({"products": products_all(product)}, status=200)
+        return JsonResponse({"products": product_all(product)}, status=200)
 
     # RE0102 删除商品
     @csrf_exempt
     def delete(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         products = Product.objects.filter(id=id)
         if not products.exists():
             raise ProductsNotFoundException()
@@ -32,7 +32,7 @@ class ManageSingleProducts(View):
     # RE0103 更新商品信息
     @csrf_exempt
     def put(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         products = Product.objects.filter(id=id)
         if not products.exists():
             raise ProductsNotFoundException()
@@ -41,4 +41,4 @@ class ManageSingleProducts(View):
         for key in body:
             setattr(products, key, body[key])
         products.save()
-        return JsonResponse(products_all(products), status=200)
+        return JsonResponse(product_all(products), status=200)

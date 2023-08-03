@@ -9,7 +9,7 @@ def notification_normal(notification: Notification) -> dict:
         "from": user_simple(notification.actor),
         "to": user_simple(notification.recipient),
         "time": notification.timestamp.__format__("%Y-%m-%d %H:%M:%S"),
-        "titles": notification.verb,
+        "title": notification.verb,
         "unread": notification.unread,
         "content": notification.description,
         "public": notification.public,

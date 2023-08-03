@@ -6,6 +6,7 @@ from utils.exception.types.bad_request import BadRequestException
 from rewards.transactions.models.transaction import Transaction
 from django.utils import timezone
 from .generate_id import generate_transaction_id
+from rewards.transactions.dto.transactions_all import transactions_all
 
 
 def calculate_title(points_sum) -> dict:
@@ -59,6 +60,40 @@ def create_transaction(action, points, reason, user_id):
         transaction.timestamp = timezone.now()
         transaction.id = generate_transaction_id()
         transaction.save()
-        return transaction.id
+        return transactions_all(transaction)
     else:
         raise UserNotFoundException()
+
+
+def manage_points_in_article(user_id):
+    action = "earn"
+    points = 50
+    reason = "贡献文章"
+    transaction_info = create_transaction(
+        action=action, points=points, reason=reason, user_id=user_id
+    )
+    points_change(action=action, points=points, user_id=user_id)
+
+    return transaction_info
+
+
+def manage_points_in_quiz(user_id):
+    action = "earn"
+    points = 30
+    reason = "贡献题库"
+    transaction_info = create_transaction(
+        action=action, points=points, reason=reason, user_id=user_id
+    )
+    points_change(action=action, points=points, user_id=user_id)
+    return transaction_info
+
+
+def manage_points_in_pronunciation(user_id):
+    action = "earn"
+    points = 30
+    reason = "贡献语音"
+    transaction_info = create_transaction(
+        action=action, points=points, reason=reason, user_id=user_id
+    )
+    points_change(action=action, points=points, user_id=user_id)
+    return transaction_info

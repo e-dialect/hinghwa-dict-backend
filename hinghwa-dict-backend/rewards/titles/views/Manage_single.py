@@ -21,7 +21,7 @@ class ManageSingleTitle(View):
     # RE0202删除头衔
     @csrf_exempt
     def delete(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         title = Title.objects.filter(id=id)
         if not title.exists():
             raise TitleNotFoundException()
@@ -32,7 +32,7 @@ class ManageSingleTitle(View):
     # RE0203更新头衔信息
     @csrf_exempt
     def put(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         title = Title.objects.filter(id=id)
         if not title.exists():
             raise TitleNotFoundException()

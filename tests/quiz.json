@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "0be6acde-1a2c-4c06-a67e-bee36af14cfe",
+          "id": "0a67c420-ea9f-427e-8bd3-6e3f538ead47",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -175,7 +175,7 @@
           }
         },
         {
-          "id": "82de9be8-7c85-414e-b8a4-a72fc9c0c5d0",
+          "id": "652e57a2-3865-4ae7-b1ed-c9a8711e828d",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -570,7 +570,7 @@
           }
         },
         {
-          "id": "7e34eb94-1a63-4d56-8342-d3e4f8c2c0f0",
+          "id": "0ce4da58-52cd-4193-b362-8c61133bebcc",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -1028,7 +1028,7 @@
           }
         },
         {
-          "id": "1a9e2f4f-01c5-47d9-b1ff-c4d9dbc7305b",
+          "id": "fc0a210e-43b9-46a8-8d71-e2da5535d0a9",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -1554,7 +1554,7 @@
           }
         },
         {
-          "id": "d905f4c1-fa2a-42c5-8339-b9e6de9ae521",
+          "id": "42c08d3b-9f40-4d74-b69a-facce08a5d83",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -1623,7 +1623,7 @@
           }
         },
         {
-          "id": "0a57af8b-0d37-441d-9fb9-7be4aeee298b",
+          "id": "c3b32c0b-becf-46d2-89a9-efe1436cae18",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -1845,7 +1845,7 @@
           }
         },
         {
-          "id": "04d8d2ab-a7b8-4e00-8aa0-5642971928f6",
+          "id": "db12169e-1528-4682-b3e2-9d361f5ca9cd",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -1893,7 +1893,7 @@
           "responseDefinition": {
             "id": 106182475,
             "createdAt": "2022-10-06T08:43:19.000Z",
-            "updatedAt": "2022-10-06T08:43:19.000Z",
+            "updatedAt": "2023-08-03T12:13:00.000Z",
             "deletedAt": null,
             "apiDetailId": 42646298,
             "name": "成功",
@@ -1901,12 +1901,128 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {}
+              "properties": {},
+              "x-apifox-orders": [
+                "01H6XN179QTFRGK58PWNCPKC6A"
+              ],
+              "required": [],
+              "x-apifox-refs": {
+                "01H6XN179QTFRGK58PWNCPKC6A": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -1948,7 +2064,7 @@
           }
         },
         {
-          "id": "1fc83a29-63d2-4953-a3ad-9c958a25e66c",
+          "id": "29248409-1334-44ff-90df-9d1aee06f918",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -2286,7 +2402,7 @@
           }
         },
         {
-          "id": "ff676528-dd71-4ee1-a691-5a4efea62f36",
+          "id": "e4f20cbc-e62e-410e-83e3-c7aa3adfbac3",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -2650,7 +2766,7 @@
           }
         },
         {
-          "id": "e7f19091-6668-4634-82f1-11d6b83747c3",
+          "id": "68502756-b247-4ba0-98c3-3c1d9dcc4496",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -2719,7 +2835,7 @@
           }
         },
         {
-          "id": "fa2485bb-554d-4d4f-995b-86b500f06cf6",
+          "id": "5aee70de-4bc4-4329-ba81-714c7ab82eb7",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -2767,7 +2883,7 @@
           "responseDefinition": {
             "id": 106182475,
             "createdAt": "2022-10-06T08:43:19.000Z",
-            "updatedAt": "2022-10-06T08:43:19.000Z",
+            "updatedAt": "2023-08-03T12:13:00.000Z",
             "deletedAt": null,
             "apiDetailId": 42646298,
             "name": "成功",
@@ -2775,12 +2891,128 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {}
+              "properties": {},
+              "x-apifox-orders": [
+                "01H6XN179QTFRGK58PWNCPKC6A"
+              ],
+              "required": [],
+              "x-apifox-refs": {
+                "01H6XN179QTFRGK58PWNCPKC6A": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -2822,7 +3054,7 @@
           }
         },
         {
-          "id": "2c1e0c0b-6807-42a0-a8c8-ec3534caadb5",
+          "id": "b1d9e508-fed5-4533-9286-4218efb247e3",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -3160,7 +3392,7 @@
           }
         },
         {
-          "id": "28b1a2d4-5377-49ca-883e-6e94203faaa3",
+          "id": "22fce59c-28c5-4f6b-995c-aa8b5ab73b5a",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -3524,7 +3756,7 @@
           }
         },
         {
-          "id": "2214d9bf-911c-41f3-a52f-28f06658a70c",
+          "id": "805a6d21-6adc-4415-94db-71724e4dce82",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -3593,7 +3825,7 @@
           }
         },
         {
-          "id": "eca3e66a-01b0-4a07-ab93-0956c0034335",
+          "id": "3b94fd8b-639d-4ec9-8858-439d056eccb5",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -3830,7 +4062,7 @@
           }
         },
         {
-          "id": "918a4e4b-74f6-4f22-9d4c-48219675cad7",
+          "id": "1a43714a-47e2-461e-86de-da5543439564",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -4001,7 +4233,7 @@
           }
         },
         {
-          "id": "2e744246-7c2b-47cd-abc4-5c0826bf4c85",
+          "id": "5d78fdd9-ff6e-4462-8ec7-29e23e68a6f7",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -4527,7 +4759,7 @@
           }
         },
         {
-          "id": "c00fa242-e11c-4fc3-bc13-6d1fd30d5bba",
+          "id": "6ad02ea3-bdca-491d-8cd0-88dabf7783ae",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -4984,7 +5216,7 @@
           }
         },
         {
-          "id": "0f406e0f-e702-4503-900f-5051c127a089",
+          "id": "3eee1f5d-69a4-42df-b829-57415d9962af",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -5390,7 +5622,7 @@
           }
         },
         {
-          "id": "76efede0-bc20-481e-adb3-3d07c8ac73f5",
+          "id": "a7abd798-e345-497f-b0b6-abf60a1c56e5",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -5796,7 +6028,7 @@
           }
         },
         {
-          "id": "8e4c2b47-c72d-42d3-9cca-4c00177c9557",
+          "id": "f42f10c7-6a41-4e11-b868-42f3fc4212fd",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -6018,7 +6250,7 @@
           }
         },
         {
-          "id": "62ad87c5-0f4b-42b5-911e-20d365c83797",
+          "id": "98396cd2-2649-4b99-b85c-93f3abaa5522",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -6066,7 +6298,7 @@
           "responseDefinition": {
             "id": 106182475,
             "createdAt": "2022-10-06T08:43:19.000Z",
-            "updatedAt": "2022-10-06T08:43:19.000Z",
+            "updatedAt": "2023-08-03T12:13:00.000Z",
             "deletedAt": null,
             "apiDetailId": 42646298,
             "name": "成功",
@@ -6074,12 +6306,128 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {}
+              "properties": {},
+              "x-apifox-orders": [
+                "01H6XN179QTFRGK58PWNCPKC6A"
+              ],
+              "required": [],
+              "x-apifox-refs": {
+                "01H6XN179QTFRGK58PWNCPKC6A": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
-            "schemaDefinitions": {}
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
           },
           "requestDefinition": {
             "jsonSchema": {
@@ -6121,7 +6469,7 @@
           }
         },
         {
-          "id": "96d27940-ea18-480f-9dcc-2a62ab1e181a",
+          "id": "15da6fe5-3dad-4ada-a804-130fa5a8e682",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -6292,7 +6640,7 @@
           }
         },
         {
-          "id": "0d39ed7b-e952-4221-a7e8-d7e20d28b759",
+          "id": "23f3d52e-9fef-44c6-93fb-1be4d5d9d9f7",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -6704,7 +7052,7 @@
           }
         },
         {
-          "id": "50226571-1951-49d1-a187-23609b5c1b51",
+          "id": "5bb609a7-5fd7-4ee4-9438-ee21c5b79515",
           "name": "QZ0202 随机测试题(QZ0202 随机测试题)",
           "request": {
             "url": {
@@ -7049,6 +7397,36 @@
     "name": "QZ模块理想状况"
   },
   "dataSchemas": {
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple",
+      "name": "user_simple"
+    },
     "1097305": {
       "type": "object",
       "properties": {
@@ -7357,6 +7735,82 @@
       ],
       "title": "[入] quiz_update",
       "name": "[入] quiz_update"
+    },
+    "53485892": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "title": "时间",
+          "mock": {
+            "mock": "@datetime"
+          }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "earn",
+            "redeem",
+            "other"
+          ],
+          "x-apifox": {
+            "enumDescriptions": {
+              "earn": "增加",
+              "redeem": "兑换",
+              "other": "其他"
+            }
+          },
+          "title": "类型",
+          "mock": {
+            "mock": "@string"
+          },
+          "description": "add或reedm"
+        },
+        "points": {
+          "type": "integer",
+          "title": "积分数",
+          "mock": {
+            "mock": "@integer(0)"
+          }
+        },
+        "user": {
+          "title": "用户",
+          "$ref": "#/definitions/1077996"
+        },
+        "id": {
+          "type": "string",
+          "title": "ID",
+          "mock": {
+            "mock": "JL@integer"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "title": "原因",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        }
+      },
+      "x-apifox-orders": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "required": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "title": "transaction",
+      "name": "transaction"
     }
   },
   "mockRules": {
@@ -7371,7 +7825,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "0a6ea52d-30fe-4f5d-aeb8-a852a42df6ad",
+      "id": "457c79f0-9913-47ae-85ba-a724bc896267",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -7380,7 +7834,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
@@ -7422,7 +7876,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -7488,9 +7942,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -7513,7 +7966,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
       "baseUrl": "",
       "baseUrls": {},
       "values": []
