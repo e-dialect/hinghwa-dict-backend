@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "1a05c13a-9142-4eca-9dfd-40f31f5a8b48",
+          "id": "2e36148a-d9ad-4f44-87db-876b8d761180",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "b705babe-58b4-4706-9644-fa7bfbff7c4f",
+          "id": "c1b7e651-ee67-4da7-b5c2-6d6e3d8717e0",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -634,7 +634,7 @@
           }
         },
         {
-          "id": "63a2a9e5-95c9-4ef3-ae4d-328345cc3acc",
+          "id": "2105f8c0-9290-4f70-93d5-17d513f607c8",
           "name": "US0204 获取用户积分(US0204 获取用户积分)",
           "request": {
             "url": {
@@ -721,7 +721,7 @@
           }
         },
         {
-          "id": "e81dec68-0f7e-4362-9fd3-82bdaeeacdf3",
+          "id": "71beca5a-5925-448a-a780-cc126c1f7c92",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -943,7 +943,7 @@
           }
         },
         {
-          "id": "40b308f8-d997-4bca-9a38-8c59f1002db9",
+          "id": "8dde872c-cb16-4367-b036-47c55e23bf7f",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -1351,7 +1351,7 @@
           }
         },
         {
-          "id": "3210b4dd-e196-44ee-9e82-61b92a7a1456",
+          "id": "52b1a6a4-00f6-4f04-9f79-e45ba69c6393",
           "name": "US0204 获取用户积分(US0204 获取用户积分)",
           "request": {
             "url": {
@@ -1636,7 +1636,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "c0dc0cd7-447c-48a3-9d99-ff9f3d3b8edd",
+      "id": "85eb7568-0041-4ec5-bd31-9b944b8a88a6",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -1645,8 +1645,9 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTg1NjI5MC4zMTI3OTd9.iKHbTJ-n2W1B8c7aenTJL1U4K68kwFBHhNRU9SpuGP0",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1687,7 +1688,7 @@
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -1753,9 +1754,8 @@
         },
         {
           "type": "any",
-          "value": "DD000024",
+          "value": "undefined",
           "key": "order_id",
-          "isBindInitial": false,
           "initialValue": "undefined"
         },
         {
@@ -1778,7 +1778,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
+      "id": "e3522f78-7002-44de-8704-b8c6c94498eb",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

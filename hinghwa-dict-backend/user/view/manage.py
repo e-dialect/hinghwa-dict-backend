@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.views import View
 from notifications.models import Notification
 
-from user.dto.user_all import user_all, user_pointts_change
+from user.dto.user_all import user_all
 from user.forms import UserForm, UserInfoForm
 from user.utils import get_user_by_id
 from utils.PasswordValidation import password_validator
