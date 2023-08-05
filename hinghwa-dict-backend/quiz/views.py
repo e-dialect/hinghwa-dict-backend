@@ -12,6 +12,7 @@ from utils.exception.types.not_found import QuizNotFoundException
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.exception.types.forbidden import ForbiddenException
 from utils.token import token_pass, token_user
+from utils.Rewards_action import manage_points_in_quiz
 
 
 class SingleQuiz(View):
@@ -143,11 +144,13 @@ class ManageVisibility(View):
         quiz.visibility = body["result"]
         if quiz.visibility:
             content = f"问题(id={id})已通过审核"
+            user_id = quiz.author.id
+            transaction_info = manage_points_in_quiz(user_id)
         else:
             msg = body["reason"]
             content = f"问题(id={id})审核状态变为不可见，理由是:\n\t{msg}"
         quiz.save()
-        return JsonResponse({}, status=200)
+        return JsonResponse(transaction_info, status=200)
 
 
 class QuizPaper(View):

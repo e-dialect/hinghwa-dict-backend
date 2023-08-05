@@ -3,7 +3,6 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-
 from website.views import (
     evaluate,
     token_check,
@@ -31,6 +30,7 @@ from utils.exception.types.not_found import (
 )
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
+from utils.Rewards_action import manage_points_in_article
 
 
 class SearchArticle(View):
@@ -188,6 +188,8 @@ class ManageVisibility(View):
         article.visibility = body["result"]
         if article.visibility:
             content = f"恭喜您的文章(id ={id}) 已通过审核"
+            user_id = article.author.id
+            transaction_info = manage_points_in_article(user_id)
         else:
             msg = body["reason"]
             content = f"您的文章(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}"
@@ -199,7 +201,7 @@ class ManageVisibility(View):
             title="【通知】文章审核结果",
         )
         article.save()
-        return JsonResponse({}, status=200)
+        return JsonResponse(transaction_info, status=200)
 
 
 class LikeArticle(View):

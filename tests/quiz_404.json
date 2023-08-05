@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "6479437b-7ab3-4e0d-ba89-3d3d653c1299",
+          "id": "23c08426-f540-4852-93c8-55ecb6753015",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,9 +37,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -52,6 +54,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -62,6 +68,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -73,12 +88,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -114,7 +130,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -122,15 +164,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用�������admin"
+            "httpApiCaseName": "登录用户admin",
+            "id": "edd651ed-88e9-4c07-9af7-f43b4df5c2f3",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "2a30ad97-afe8-486a-8972-42cf5356c3a4",
+          "id": "fffeb770-de67-418f-82d9-f51cf4813cc3",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -151,36 +196,36 @@
             },
             "header": [
               {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 29662407,
@@ -188,15 +233,18 @@
             "httpApiName": "QZ0101 获取单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "get",
-            "httpApiCaseName": "QZ0101 获取单个测试"
+            "httpApiCaseName": "QZ0101 获取单个测试",
+            "id": "d5325700-6531-4c4f-9922-c033f4d0e263",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "141254df-4b64-4b32-aac9-ef50db670013",
+          "id": "0d87d937-eba2-4a32-bdea-311bfa2050cc",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -222,7 +270,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -230,30 +278,51 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"整儿段民也\",\n        \"options\": [\n            \"例治技化系低理车这步去角真资。\",\n            \"期价毛平标火技市才两管保比而最场真。\"\n        ],\n        \"answer\": 55,\n        \"explanation\": \"例江理马上机具确实查么事多级按方先。重共那世战边往子只局做接流周想现后。结铁百米量全圆党导东持二红即世采。\",\n        \"voice_source\": \"http://vgndtyun.bs/ttoeevmbm\"\n    }\n}"
+              "raw": "{\n    \"quiz\": {\n        \"question\": \"整儿段民也\",\n        \"options\": [\n            \"例治技化系低理车这步去角真资。\",\n            \"期价毛平标火技市才两管保比而最场真。\"\n        ],\n        \"answer\": 55,\n        \"explanation\": \"例江理马上机具确实查么事多级按方先。重共那世战边往子只局做接流周想现后。结铁百米量全圆党导东持二红即世采。\",\n        \"voice_source\": \"http://vgndtyun.bs/ttoeevmbm\"\n    }\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "x-apifox-overrides": {},
+              "type": "object",
+              "x-apifox-refs": {},
+              "properties": {
+                "quiz": {
+                  "$ref": "#/definitions/13080737",
+                  "x-apifox-overrides": {}
+                }
+              },
+              "required": [
+                "quiz"
+              ],
+              "x-apifox-orders": [
+                "quiz"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 29663120,
@@ -261,15 +330,18 @@
             "httpApiName": "QZ0103 修改单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0103 修改单个测试"
+            "httpApiCaseName": "QZ0103 修改单个测试",
+            "id": "666f73c2-e9c5-48f9-8d6e-abc9d6f6e012",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "6f96c8c2-93dd-432b-9767-b9c601f77891",
+          "id": "9cadbadf-79ae-4575-ae8a-c1955763c849",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -295,31 +367,35 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 29663170,
@@ -327,10 +403,13 @@
             "httpApiName": "QZ0104 删除单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "QZ0104 删除单个测试"
+            "httpApiCaseName": "QZ0104 删除单个测试",
+            "id": "e38d3b10-3df2-459c-9034-e02cea1438d2",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
@@ -341,51 +420,201 @@
   "info": {
     "name": "QZ模块 404测试"
   },
-  "dataSchemas": {},
+  "dataSchemas": {
+    "13080737": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "title": "问题",
+          "mock": {
+            "mock": "@ctitle"
+          }
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "mock": {
+              "mock": "@csentence"
+            }
+          },
+          "title": "选项"
+        },
+        "explanation": {
+          "type": "string",
+          "title": "答案解析",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "answer": {
+          "type": "integer",
+          "title": "答案序号"
+        },
+        "voice_source": {
+          "type": "string",
+          "mock": {
+            "mock": "@url(\"http\")"
+          },
+          "title": "播报语音链接"
+        }
+      },
+      "x-apifox-orders": [
+        "question",
+        "options",
+        "answer",
+        "explanation",
+        "voice_source"
+      ],
+      "required": [
+        "question",
+        "answer",
+        "options",
+        "explanation"
+      ],
+      "title": "[入] quiz_update",
+      "name": "[入] quiz_update"
+    }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
+  },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "af08e7af-b249-4c15-836b-fb516058cde9",
+      "id": "8e29a04f-a750-472b-bb01-5b8f47e413e3",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
-          "value": "undefined",
-          "key": "token"
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
+          "key": "token",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "3",
-          "key": "num"
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "0",
-          "key": "num_later"
+          "value": "",
+          "key": "word_id_2",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": 20,
-          "key": "num_pre"
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "true",
-          "key": "quiz_new"
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "2",
-          "key": "user_id"
+          "key": "user_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "10",
-          "key": "quiz_id"
+          "value": "3",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "order_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -398,8 +627,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "f7309e05-5c92-4719-9144-7a4605cc3719",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -409,5 +642,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }

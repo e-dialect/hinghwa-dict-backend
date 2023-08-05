@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "98687434-8d0f-4b6a-acfa-eacc3cce0acb",
+          "id": "dc283bff-a7b0-4512-8049-d3166d1b5f65",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "a66eb035-40dc-46ef-8f4f-6b03a1ba6e7c",
+          "id": "8be7dd80-1bd0-4e89-b6ec-d41bd58a6e85",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -377,7 +377,7 @@
           }
         },
         {
-          "id": "1ad75d10-32ce-441d-88c1-824d2cd75653",
+          "id": "dadeb29f-3827-4f19-9135-ed68fc750110",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -528,7 +528,7 @@
           }
         },
         {
-          "id": "87790edb-bbcd-46d7-9c40-ae5334564774",
+          "id": "ff95e189-2997-4583-a81a-0aeff98db89f",
           "name": "WD0102 管理员上传新词语(WD0102 管理员上传新词语)",
           "request": {
             "url": {
@@ -679,7 +679,7 @@
           }
         },
         {
-          "id": "3559cbd8-1a8a-4137-938a-d01c79bca668",
+          "id": "a90c3c82-442e-453a-b487-8c31807b9dc8",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -830,7 +830,7 @@
           }
         },
         {
-          "id": "6583f423-b494-4ce0-a2d9-e98831e1cd6b",
+          "id": "7d4b96b6-f4c4-4179-a754-0f3e9aeaa7fd",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -1008,7 +1008,7 @@
           }
         },
         {
-          "id": "f6126a5c-6b84-41ec-a36a-2f17c6ffc30e",
+          "id": "bafcc936-6fa9-4362-9b90-751b5f99437b",
           "name": "PN0106 审核语音(PN0106 审核语音)",
           "request": {
             "url": {
@@ -1106,7 +1106,7 @@
           }
         },
         {
-          "id": "838b1c54-b672-4dae-bfa3-1ae548810a56",
+          "id": "59ba16d1-1626-4043-b399-f8f1cb65ad54",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -1284,7 +1284,7 @@
           }
         },
         {
-          "id": "9ca9088f-4fb0-4b83-af9d-3d675cdb0bc2",
+          "id": "9d8041bd-c9f3-45b2-85c5-df28f5cda172",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -1506,7 +1506,7 @@
           }
         },
         {
-          "id": "59f52b02-09ca-427c-b08d-50b0753cb0ce",
+          "id": "7c689c54-60ef-4f4b-bc44-b8ca102a0088",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -1801,6 +1801,53 @@
                   "wechat": {
                     "type": "boolean",
                     "title": "绑定微信"
+                  },
+                  "points_sum": {
+                    "type": "integer",
+                    "title": "总分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    },
+                    "minimum": 0
+                  },
+                  "points_now": {
+                    "type": "integer",
+                    "title": "现有分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    },
+                    "minimum": 0
+                  },
+                  "title": {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "mock": {
+                          "mock": "@color"
+                        },
+                        "title": "颜色"
+                      },
+                      "title": {
+                        "type": "string",
+                        "mock": {
+                          "mock": "@cword"
+                        },
+                        "title": "称号"
+                      }
+                    },
+                    "title": "标题",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "x-apifox-orders": [
+                      "title",
+                      "color"
+                    ],
+                    "required": [
+                      "title",
+                      "color"
+                    ]
                   }
                 },
                 "required": [
@@ -1816,6 +1863,27 @@
                   "birthday",
                   "county",
                   "town",
+                  "wechat",
+                  "points_sum",
+                  "points_now",
+                  "title"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "username",
+                  "nickname",
+                  "email",
+                  "telephone",
+                  "birthday",
+                  "avatar",
+                  "is_admin",
+                  "county",
+                  "town",
+                  "points_sum",
+                  "points_now",
+                  "title",
+                  "registration_time",
+                  "login_time",
                   "wechat"
                 ],
                 "title": "user_all",
@@ -1846,7 +1914,7 @@
           }
         },
         {
-          "id": "c35e2536-79ea-4466-a4d7-55f7a4a20993",
+          "id": "735238a0-1872-4f42-83a9-2dcd5bea6d0f",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -1945,7 +2013,7 @@
           }
         },
         {
-          "id": "618bba94-7d34-450b-9f69-6f2a749c9ce9",
+          "id": "a0bf8ff2-55ff-42dd-a31c-993f63795ea6",
           "name": "PN0102 增加一条语音(PN0102 增加一条语音)",
           "request": {
             "url": {
@@ -2044,7 +2112,7 @@
           }
         },
         {
-          "id": "5e95e530-b500-430d-bbde-da9a60447338",
+          "id": "23b661ac-c4c8-4e97-84f2-50967fb75d3e",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2222,7 +2290,7 @@
           }
         },
         {
-          "id": "7d52d3b3-300f-41e6-9f82-13b838406e91",
+          "id": "0323ba97-0e11-4a5c-a766-fa195638752d",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2400,7 +2468,7 @@
           }
         },
         {
-          "id": "2aee44ce-7cb6-476a-b838-89f0f3af68de",
+          "id": "97728360-21fe-4303-88af-9b74c0609759",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2578,7 +2646,7 @@
           }
         },
         {
-          "id": "4fde9452-a3aa-4a7e-a593-01fb9132a1ec",
+          "id": "64f6fc8d-a550-49c8-8b76-2a223e86360a",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -2756,7 +2824,7 @@
           }
         },
         {
-          "id": "e7bb265e-b3f3-404a-a009-a0266b5b1dd1",
+          "id": "a0c0d837-e2be-4bc3-adb0-26cbe3373fec",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -3189,6 +3257,53 @@
         "wechat": {
           "type": "boolean",
           "title": "绑定微信"
+        },
+        "points_sum": {
+          "type": "integer",
+          "title": "总分数",
+          "mock": {
+            "mock": "@integer(0)"
+          },
+          "minimum": 0
+        },
+        "points_now": {
+          "type": "integer",
+          "title": "现有分数",
+          "mock": {
+            "mock": "@integer(0)"
+          },
+          "minimum": 0
+        },
+        "title": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "mock": {
+                "mock": "@color"
+              },
+              "title": "颜色"
+            },
+            "title": {
+              "type": "string",
+              "mock": {
+                "mock": "@cword"
+              },
+              "title": "称号"
+            }
+          },
+          "title": "标题",
+          "mock": {
+            "mock": "@cname"
+          },
+          "x-apifox-orders": [
+            "title",
+            "color"
+          ],
+          "required": [
+            "title",
+            "color"
+          ]
         }
       },
       "required": [
@@ -3204,6 +3319,27 @@
         "birthday",
         "county",
         "town",
+        "wechat",
+        "points_sum",
+        "points_now",
+        "title"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "username",
+        "nickname",
+        "email",
+        "telephone",
+        "birthday",
+        "avatar",
+        "is_admin",
+        "county",
+        "town",
+        "points_sum",
+        "points_now",
+        "title",
+        "registration_time",
+        "login_time",
         "wechat"
       ],
       "title": "user_all",
@@ -3222,7 +3358,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "962d406b-325a-4d7a-afe2-766d6409540b",
+      "id": "a381a4b2-997b-4011-a720-15aeb0918c70",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -3231,13 +3367,13 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY4NDgyNjUyMy40OTM3Nzd9.nWn2HxaDm7fYUGP3aB9WjE3AqXBaxT7-hkO8R22HGNA",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
           "key": "token",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "87",
           "key": "quiz_id",
           "initialValue": ""
         },
@@ -3267,13 +3403,13 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": "2",
           "key": "user_id",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "3",
           "key": "article_id",
           "initialValue": ""
         },
@@ -3297,27 +3433,57 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": 6,
           "key": "num_pre",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "7",
           "key": "num_later",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "{\"id\":5}",
+          "value": "2",
           "key": "id",
-          "initialValue": "{\"id\":5}"
+          "initialValue": "2"
         },
         {
           "type": "any",
           "value": "13",
           "key": "music_id",
           "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "order_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -3333,7 +3499,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "6d32a2a0-2426-4656-b426-2fc92026f7a3",
+      "id": "14a8863c-bb67-42f5-999e-ca2ff8f7ae83",
       "baseUrl": "",
       "baseUrls": {},
       "values": []

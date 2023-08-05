@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "e53ef69e-9d97-4ffe-8a19-012801fff01a",
+          "id": "60329444-b7c7-4e96-b735-fbe9ba1a846e",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -25,11 +25,11 @@
             "header": [
               {
                 "key": "token",
-                "value": "{{token}}"
+                "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,31 +37,43 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"决物权律史增\",\n    \"options\": [\n        \"技目全指心为界亲她天专结农接阶心把。\",\n        \"年就里织当火六按此往该响被增。\"\n    ],\n    \"answer\": 18,\n    \"explanation\": \"标年交高之部回些们金转天做志始市。没县即级马阶采且其调方物称有目效正较。五验义选事厂对场构平现西响志水开。活白活现众三定无济实值程后三年。\",\n    \"voice_source\": \"http://gpd.bi/utjwpt\"\n}"
+              "raw": "{\n    \"question\": \"决物权律史增\",\n    \"options\": [\n        \"技目全指心为界亲她天专结农接阶心把。\",\n        \"年就里织当火六按此往该响被增。\"\n    ],\n    \"answer\": 18,\n    \"explanation\": \"标年交高之部回些们金转天做志始市。没县即级马阶采且其调方物称有目效正较。五验义选事厂对场构平现西响志水开。活白活现众三定无济实值程后三年。\",\n    \"voice_source\": \"http://gpd.bi/utjwpt\"\n}",
+              "generateMode": "normal",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
-            },
-            "defaultEnable": false,
             "id": 69812493,
+            "createdAt": "2022-07-15T06:52:00.000Z",
+            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "deletedAt": null,
             "name": "未登录",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 401,
             "contentType": "json",
             "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
-            "deletedAt": null
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "x-apifox-orders": []
+            },
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "$ref": "#/definitions/13080737",
+              "x-apifox-overrides": {}
+            }
           },
           "metaInfo": {
             "httpApiId": 29662986,
@@ -69,15 +81,18 @@
             "httpApiName": "QZ0102 增加单个测试",
             "httpApiPath": "/quizzes",
             "httpApiMethod": "post",
-            "httpApiCaseName": "QZ0102 增加单个测试"
+            "httpApiCaseName": "QZ0102 增加单个测试",
+            "id": "372ae9e0-91fd-482c-97d3-4b137dc4e28c",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "a5033227-35b2-46d3-a4b8-152736998b98",
+          "id": "0372976d-4026-4015-8f81-27e5a64f5126",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -99,11 +114,11 @@
             "header": [
               {
                 "key": "token",
-                "value": "{{token}}"
+                "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -111,31 +126,56 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"然张具话手建\",\n        \"options\": [\n            \"反得该头性技很己量些物光却。\",\n            \"六况子众图入起标完积山老造路所况造。\",\n            \"积社热题里边品料什西验革反。\",\n            \"办两办高听群省全报因县千到第列张便识。\",\n            \"始装其史�����称代场产制元布我效世。\"\n        ],\n        \"answer\": 95,\n        \"explanation\": \"能却确而下部由新需目音造声离间。极文命油问交几问接写个设千。法带龙年分满飞众叫或但子石律方争。\",\n        \"voice_source\": \"http://ajqnwfwaf.io/fxgfddymr\"\n    }\n}"
+              "raw": "{\n    \"quiz\": {\n        \"question\": \"然张具话手建\",\n        \"options\": [\n            \"反得该头性技很己量些物光却。\",\n            \"六况子众图入起标完积山老造路所况造。\",\n            \"积社热题里边品料什西验革反。\",\n            \"办两办高听群省全报因县千到第列张便识。\",\n            \"始装其史联称代场产制元布我效世。\"\n        ],\n        \"answer\": 95,\n        \"explanation\": \"能却确而下部由新需目音造声离间。极文命油问交几问接写个设千。法带龙年分满飞众叫或但子石律方争。\",\n        \"voice_source\": \"http://ajqnwfwaf.io/fxgfddymr\"\n    }\n}",
+              "generateMode": "normal",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
-            },
-            "defaultEnable": false,
             "id": 69812493,
+            "createdAt": "2022-07-15T06:52:00.000Z",
+            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "deletedAt": null,
             "name": "未登录",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 401,
             "contentType": "json",
             "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
-            "deletedAt": null
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "x-apifox-orders": []
+            },
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "x-apifox-overrides": {},
+              "type": "object",
+              "x-apifox-refs": {},
+              "properties": {
+                "quiz": {
+                  "$ref": "#/definitions/13080737",
+                  "x-apifox-overrides": {}
+                }
+              },
+              "required": [
+                "quiz"
+              ],
+              "x-apifox-orders": [
+                "quiz"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 29663120,
@@ -143,15 +183,18 @@
             "httpApiName": "QZ0103 修改单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0103 修改单个测试"
+            "httpApiCaseName": "QZ0103 修改单个测试",
+            "id": "24b588f3-7a21-4638-908b-63e262f47523",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "99033cf1-90eb-4f05-ad2f-ad4e5dbd5ff2",
+          "id": "3a77bd88-1141-4e9d-9b5e-e77b93b66f50",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -173,36 +216,43 @@
             "header": [
               {
                 "key": "token",
-                "value": "{{token}}"
+                "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {},
-              "x-apifox-orders": []
-            },
-            "defaultEnable": false,
             "id": 69812493,
+            "createdAt": "2022-07-15T06:52:00.000Z",
+            "updatedAt": "2022-07-24T10:44:24.000Z",
+            "deletedAt": null,
             "name": "未登录",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 401,
             "contentType": "json",
             "ordering": 10,
-            "createdAt": "2022-07-15T06:52:00.000Z",
-            "updatedAt": "2022-07-24T10:44:24.000Z",
-            "deletedAt": null
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "x-apifox-orders": []
+            },
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 29663170,
@@ -210,10 +260,13 @@
             "httpApiName": "QZ0104 删除单个测试",
             "httpApiPath": "/quizzes/{id}",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "QZ0104 删除单个测试"
+            "httpApiCaseName": "QZ0104 删除单个测试",
+            "id": "8e797101-e3c6-42ed-a1e3-e8d6df5dda6b",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
@@ -224,51 +277,201 @@
   "info": {
     "name": "QZ模块 401测试"
   },
-  "dataSchemas": {},
+  "dataSchemas": {
+    "13080737": {
+      "type": "object",
+      "properties": {
+        "question": {
+          "type": "string",
+          "title": "问题",
+          "mock": {
+            "mock": "@ctitle"
+          }
+        },
+        "options": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "mock": {
+              "mock": "@csentence"
+            }
+          },
+          "title": "选项"
+        },
+        "explanation": {
+          "type": "string",
+          "title": "答案解析",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "answer": {
+          "type": "integer",
+          "title": "答案序号"
+        },
+        "voice_source": {
+          "type": "string",
+          "mock": {
+            "mock": "@url(\"http\")"
+          },
+          "title": "播报语音链接"
+        }
+      },
+      "x-apifox-orders": [
+        "question",
+        "options",
+        "answer",
+        "explanation",
+        "voice_source"
+      ],
+      "required": [
+        "question",
+        "answer",
+        "options",
+        "explanation"
+      ],
+      "title": "[入] quiz_update",
+      "name": "[入] quiz_update"
+    }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
+  },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "2aa17207-3a79-40d1-b2a7-7c194258bdf2",
+      "id": "3ce95327-950b-44b7-8d93-bbcb7b5fb041",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
-          "value": "undefined",
-          "key": "token"
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
+          "key": "token",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "3",
-          "key": "num"
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "0",
-          "key": "num_later"
+          "value": "",
+          "key": "word_id_2",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": 20,
-          "key": "num_pre"
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "true",
-          "key": "quiz_new"
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "2",
-          "key": "user_id"
+          "key": "user_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "10",
-          "key": "quiz_id"
+          "value": "3",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "order_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -281,8 +484,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "f7309e05-5c92-4719-9144-7a4605cc3719",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -292,5 +499,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }

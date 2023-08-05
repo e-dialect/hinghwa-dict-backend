@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "03d6a3cb-fa40-4e90-b077-6dd6dae6dd73",
+          "id": "2b881294-e6c2-4b4b-ab55-7223a49cd72d",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -37,9 +37,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}"
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -52,6 +54,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.token`);",
@@ -62,6 +68,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -73,12 +88,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【'+ `token` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错：' + e.message;",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -114,7 +130,33 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318056,
@@ -122,15 +164,18 @@
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户admin"
+            "httpApiCaseName": "登录用户admin",
+            "id": "6585f926-d7cc-4971-97cd-d2d3e729c649",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "22252e90-543f-4b33-a0ae-738f048928e8",
+          "id": "86d7626c-3c4b-4c51-8b5e-0f09ea0cc482",
           "name": "AT0201 搜索符合条件的文章(AT0201 搜索符合条件的文章)",
           "request": {
             "url": {
@@ -166,10 +211,11 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -202,7 +248,15 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {},
+              "description": "过滤器（暂时先放着）"
+            }
           },
           "metaInfo": {
             "httpApiId": 5318093,
@@ -210,15 +264,18 @@
             "httpApiName": "AT0201 搜索符合条件的文章",
             "httpApiPath": "/articles",
             "httpApiMethod": "get",
-            "httpApiCaseName": "AT0201 搜索符合条件的文章"
+            "httpApiCaseName": "AT0201 搜索符合条件的文章",
+            "id": "aeddd2da-eef7-48ec-a8a0-09c445d6974d",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "d3cb6984-a8b7-4c93-9952-e57262465e04",
+          "id": "91daff87-0b99-4129-b02b-9d578dcf7627",
           "name": "AT0101 创建文章(AT0101 创建文章)",
           "request": {
             "url": {
@@ -243,7 +300,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -251,9 +308,11 @@
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"title\": \"相体学次交高系\",\n    \"description\": \"育容取众西正类力代处当好根律想。\",\n    \"content\": \"员王有他属满间在争技象结少更。些系着阶十理入十增报情新表行音除。值劳价那件斗话里响小就技里。劳间社还年数全海很格及始重构王认。包取正已称育是响地统育边说少。\",\n    \"cover\": \"http://dummyimage.com/120x240\"\n}"
+              "raw": "{\n    \"title\": \"相体学次交高系\",\n    \"description\": \"育容取众西正类力代处当好根律想。\",\n    \"content\": \"员王有他属满间在争技象结少更。些系着阶十理入十增报情新表行音除。值劳价那件斗话里响小就技里。劳间社还年数全海很格及始重构王认。包取正已称育是响地统育边说少。\",\n    \"cover\": \"http://dummyimage.com/120x240\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -266,6 +325,10 @@
                 "type": "text/javascript",
                 "exec": [
                   "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
                   "      try{",
                   "        ",
                   "          const expression = pm.variables.replaceIn(`$.id`);",
@@ -276,6 +339,15 @@
                   "            path: expression,",
                   "            wrap: false",
                   "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
                   "          ",
                   "        ",
                   "        switch (typeof value) {",
@@ -287,12 +359,13 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`article_id`, value);console.log('已设置环境变量【'+ `article_id` + '】，值为【' + value + '】')",
+                  "        pm.environment.set(`article_id`, value);console.log('已设置环境变量【article_id】，值为 【' + value + '】')",
                   "      } catch(e) {",
-                  "        e.message = '提取变量【article_id】出错：' + e.message;",
+                  "        e.message = '提取变量【article_id】出错: ' + e.message;",
                   "        throw e;",
                   "      }",
-                  "  "
+                  "  ",
+                  "      "
                 ]
               }
             }
@@ -321,7 +394,51 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@ctitle"
+                  },
+                  "title": "文章标题"
+                },
+                "description": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@csentence"
+                  },
+                  "title": "文章简介"
+                },
+                "content": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cparagraph"
+                  },
+                  "title": "文章内容",
+                  "description": "markdown"
+                },
+                "cover": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@image"
+                  },
+                  "title": "文章封面",
+                  "description": "url"
+                }
+              },
+              "required": [
+                "title",
+                "description",
+                "content",
+                "cover"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318101,
@@ -329,15 +446,18 @@
             "httpApiName": "AT0101 创建文章",
             "httpApiPath": "/articles",
             "httpApiMethod": "post",
-            "httpApiCaseName": "AT0101 创建文章"
+            "httpApiCaseName": "AT0101 创建文章",
+            "id": "869afc6a-c09e-4190-a344-a24a5289cb35",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "a3e29a75-d7b1-431b-a1be-97fb2a16ec7b",
+          "id": "adaa8b65-2467-4b75-b03d-a6c40057e3af",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -364,7 +484,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -372,9 +492,11 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"result\": true,\n    \"reason\": \"adipisicing fugiat ea\"\n}"
+              "raw": "{\n    \"result\": true,\n    \"reason\": \"adipisicing fugiat ea\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -383,7 +505,7 @@
           "responseDefinition": {
             "id": 27919786,
             "createdAt": "2022-03-20T01:17:01.000Z",
-            "updatedAt": "2022-03-20T01:17:01.000Z",
+            "updatedAt": "2023-08-03T07:35:39.000Z",
             "deletedAt": null,
             "apiDetailId": 14440370,
             "name": "成功",
@@ -391,11 +513,147 @@
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
-              "properties": {}
+              "properties": {},
+              "x-apifox-orders": [
+                "01H6X55E47JH482NARACB4TV1K"
+              ],
+              "required": [],
+              "x-apifox-refs": {
+                "01H6X55E47JH482NARACB4TV1K": {
+                  "$ref": "#/definitions/53485892"
+                }
+              }
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "53485892": {
+                "type": "object",
+                "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
+                  "user": {
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "id": {
+                    "type": "string",
+                    "title": "ID",
+                    "mock": {
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "required": [
+                  "user",
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
+                ],
+                "title": "transaction",
+                "name": "transaction"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean",
+                  "title": "审核结果"
+                },
+                "reason": {
+                  "type": "string",
+                  "title": "理由"
+                }
+              },
+              "required": [
+                "result",
+                "reason"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 14440370,
@@ -403,15 +661,18 @@
             "httpApiName": "AT0105 审核文章",
             "httpApiPath": "/articles/{id}/visibility",
             "httpApiMethod": "put",
-            "httpApiCaseName": "AT0105 审核文章"
+            "httpApiCaseName": "AT0105 审核文章",
+            "id": "c604f722-28d2-47e4-a73b-0cb1bdf733a0",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "96b4f85d-45a5-4c95-937f-2b4d37fce88b",
+          "id": "474807cb-bba4-48fb-9449-3814cdcc98d9",
           "name": "AT0104 获取文章内容(AT0104 获取文章内容)",
           "request": {
             "url": {
@@ -432,15 +693,17 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": "{{token}}"
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -498,7 +761,301 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1077703": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "文章的id"
+                  },
+                  "author": {
+                    "title": "作者",
+                    "description": "用户id",
+                    "$ref": "#/definitions/1097305",
+                    "x-apifox-overrides": {}
+                  },
+                  "likes": {
+                    "type": "integer",
+                    "title": "点赞数"
+                  },
+                  "views": {
+                    "type": "integer",
+                    "title": "访问量"
+                  },
+                  "like_users": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer",
+                      "description": "用户id"
+                    },
+                    "title": "点赞用户列表"
+                  },
+                  "publish_time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "发表时间"
+                  },
+                  "update_time": {
+                    "type": "string",
+                    "title": "更新时间",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    }
+                  },
+                  "title": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@ctitle"
+                    },
+                    "title": "文章标题"
+                  },
+                  "description": {
+                    "type": "string",
+                    "title": "文章简介",
+                    "mock": {
+                      "mock": "@csentence"
+                    }
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "文章内容",
+                    "description": "markdown",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "cover": {
+                    "type": "string",
+                    "title": "文章封面",
+                    "description": "url",
+                    "mock": {
+                      "mock": "@image"
+                    }
+                  },
+                  "visibility": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "author",
+                  "likes",
+                  "views",
+                  "like_users",
+                  "publish_time",
+                  "update_time",
+                  "title",
+                  "description",
+                  "content",
+                  "cover",
+                  "visibility"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "author",
+                  "likes",
+                  "views",
+                  "like_users",
+                  "publish_time",
+                  "update_time",
+                  "title",
+                  "description",
+                  "content",
+                  "cover",
+                  "visibility"
+                ],
+                "title": "article_all",
+                "name": "article_all"
+              },
+              "1097305": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "user的id",
+                    "mock": {
+                      "mock": "@integer(10000)"
+                    }
+                  },
+                  "username": {
+                    "type": "string",
+                    "title": "用户名",
+                    "mock": {
+                      "mock": "@cname"
+                    }
+                  },
+                  "nickname": {
+                    "type": "string",
+                    "title": "昵称",
+                    "mock": {
+                      "mock": "@cname"
+                    }
+                  },
+                  "email": {
+                    "type": "string",
+                    "title": "邮箱",
+                    "mock": {
+                      "mock": "@email"
+                    }
+                  },
+                  "telephone": {
+                    "type": "string",
+                    "title": "电话"
+                  },
+                  "birthday": {
+                    "type": "string",
+                    "title": "生日",
+                    "mock": {
+                      "mock": "@date('yyyy-MM-dd')"
+                    }
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "title": "头像",
+                    "description": "头像的url地址",
+                    "mock": {
+                      "mock": "@image"
+                    }
+                  },
+                  "is_admin": {
+                    "type": "boolean",
+                    "title": "是否管理员",
+                    "mock": {
+                      "mock": "@boolean"
+                    }
+                  },
+                  "county": {
+                    "type": "string",
+                    "title": "县区",
+                    "description": "用户所在县区",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "town": {
+                    "type": "string",
+                    "title": "乡镇",
+                    "description": "用户所在乡镇",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "registration_time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "注册时间"
+                  },
+                  "login_time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "登录时间"
+                  },
+                  "wechat": {
+                    "type": "boolean",
+                    "title": "绑定微信"
+                  },
+                  "points_sum": {
+                    "type": "integer",
+                    "title": "总分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    },
+                    "minimum": 0
+                  },
+                  "points_now": {
+                    "type": "integer",
+                    "title": "现有分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    },
+                    "minimum": 0
+                  },
+                  "title": {
+                    "type": "object",
+                    "properties": {
+                      "color": {
+                        "type": "string",
+                        "mock": {
+                          "mock": "@color"
+                        },
+                        "title": "颜色"
+                      },
+                      "title": {
+                        "type": "string",
+                        "mock": {
+                          "mock": "@cword"
+                        },
+                        "title": "称号"
+                      }
+                    },
+                    "title": "标题",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "x-apifox-orders": [
+                      "title",
+                      "color"
+                    ],
+                    "required": [
+                      "title",
+                      "color"
+                    ]
+                  }
+                },
+                "required": [
+                  "id",
+                  "email",
+                  "username",
+                  "is_admin",
+                  "avatar",
+                  "registration_time",
+                  "login_time",
+                  "nickname",
+                  "telephone",
+                  "birthday",
+                  "county",
+                  "town",
+                  "wechat",
+                  "points_sum",
+                  "points_now",
+                  "title"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "username",
+                  "nickname",
+                  "email",
+                  "telephone",
+                  "birthday",
+                  "avatar",
+                  "is_admin",
+                  "county",
+                  "town",
+                  "points_sum",
+                  "points_now",
+                  "title",
+                  "registration_time",
+                  "login_time",
+                  "wechat"
+                ],
+                "title": "user_all",
+                "name": "user_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            }
           },
           "metaInfo": {
             "httpApiId": 5333397,
@@ -506,15 +1063,18 @@
             "httpApiName": "AT0104 获取文章内容",
             "httpApiPath": "/articles/{id}",
             "httpApiMethod": "get",
-            "httpApiCaseName": "AT0104 获取文章内容"
+            "httpApiCaseName": "AT0104 获取文章内容",
+            "id": "3a38fde4-c81f-423a-b3f4-37b5c8783b9f",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "e506aa0c-2c83-4511-93e5-2baaf748939a",
+          "id": "30d07337-988b-4029-9dc7-b5825193b0d5",
           "name": "AT0102 删除文章(AT0102 删除文章)",
           "request": {
             "url": {
@@ -535,15 +1095,17 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": "{{token}}"
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -565,7 +1127,11 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 5334205,
@@ -573,15 +1139,18 @@
             "httpApiName": "AT0102 删除文章",
             "httpApiPath": "/articles/{id}",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "AT0102 删除文章"
+            "httpApiCaseName": "AT0102 删除文章",
+            "id": "883c6ede-6ad4-4e2f-8b8f-667442c2fb64",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "713ad676-30bc-465a-b0b6-d82658fd690f",
+          "id": "54a3e2ae-992c-4a87-a510-200133f21bc1",
           "name": "AT0104 获取文章内容(AT0104 获取文章内容)",
           "request": {
             "url": {
@@ -602,15 +1171,17 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": "{{token}}"
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
@@ -631,7 +1202,14 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 3
+            "ordering": 3,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            }
           },
           "metaInfo": {
             "httpApiId": 5333397,
@@ -639,15 +1217,18 @@
             "httpApiName": "AT0104 获取文章内容",
             "httpApiPath": "/articles/{id}",
             "httpApiMethod": "get",
-            "httpApiCaseName": "AT0104 获取文章内容"
+            "httpApiCaseName": "AT0104 获取文章内容",
+            "id": "984891dd-f888-4c93-bdd3-9fdfba0bf943",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "df6ca01c-2f22-45b1-9942-ba09a41eb369",
+          "id": "f14e6a27-a351-487f-adc3-e22126211313",
           "name": "AT0103 更新文章内容(AT0103 更新文章内容)",
           "request": {
             "url": {
@@ -668,12 +1249,13 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": "{{token}}"
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -681,30 +1263,46 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"article\": {\n        \"title\": \"问位建也成加\",\n        \"content\": \"下最眼消事件部安队社知备但称。里山压表飞相位上么单主列当点机易有历。相手比用小养该教音完等往查。治张很东每再较来酸解及商满保义。程图出议者调采且王社府同些须。压没场很几九识论速热感消样数机象能。\",\n        \"description\": \"道后东头易公然队济支条在水习飞设些。\",\n        \"cover\": \"http://dummyimage.com/728x90\"\n    }\n}"
+              "raw": "{\n    \"article\": {\n        \"title\": \"问位建也成加\",\n        \"content\": \"下最眼消事件部安队社知备但称。里山压表飞相位上么单主列当点机易有历。相手比用小养该教音完等往查。治张很东每再较来酸解及商满保义。程图出议者调采且王社府同些须。压没场很几九识论速热感消样数机象能。\",\n        \"description\": \"道后东头易公然队济支条在水习飞设些。\",\n        \"cover\": \"http://dummyimage.com/728x90\"\n    }\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "article": {
+                  "$ref": "#/definitions/1070648"
+                }
+              },
+              "required": [
+                "article"
+              ],
+              "description": "改什么给什么"
+            }
           },
           "metaInfo": {
             "httpApiId": 5334202,
@@ -712,15 +1310,18 @@
             "httpApiName": "AT0103 更新文章内容",
             "httpApiPath": "/articles/{id}",
             "httpApiMethod": "put",
-            "httpApiCaseName": "AT0103 更新文章内容"
+            "httpApiCaseName": "AT0103 更新文章内容",
+            "id": "812f4ccb-452b-4762-81f4-717bdabb2d5a",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "cf1d3c02-8f9f-43fc-92e7-46b9c85eb137",
+          "id": "7159776d-760f-4a95-8859-4c0b7e5b136b",
           "name": "AT0102 删除文章(AT0102 删除文章)",
           "request": {
             "url": {
@@ -741,36 +1342,41 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 5334205,
@@ -778,15 +1384,18 @@
             "httpApiName": "AT0102 删除文章",
             "httpApiPath": "/articles/{id}",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "AT0102 删除文章"
+            "httpApiCaseName": "AT0102 删除文章",
+            "id": "02370b21-b9ac-4301-8e11-f569e6a611c5",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "e616e594-fb60-4e4c-a8ac-1430cce101e6",
+          "id": "961751d1-4d74-4a45-8c94-72d2db94eedd",
           "name": "AT0202 文章内容批量获取(AT0202 文章内容批量获取)",
           "request": {
             "url": {
@@ -811,7 +1420,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -819,9 +1428,11 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"articles\": [\r\n        1,2,3,4,5,6,7,8,9,10\r\n    ]\r\n}"
+              "raw": "{\r\n    \"articles\": [\r\n        1,2,3,4,5,6,7,8,9,10\r\n    ]\r\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
@@ -868,7 +1479,144 @@
             },
             "defaultEnable": true,
             "projectId": 0,
-            "ordering": 1
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1070634": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "文章的id"
+                  },
+                  "author": {
+                    "type": "integer",
+                    "title": "作者",
+                    "description": "用户id"
+                  },
+                  "likes": {
+                    "type": "integer",
+                    "title": "点赞数"
+                  },
+                  "views": {
+                    "type": "integer",
+                    "title": "访问量"
+                  },
+                  "publish_time": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    },
+                    "title": "发表时间"
+                  },
+                  "update_time": {
+                    "type": "string",
+                    "title": "更新时间",
+                    "mock": {
+                      "mock": "@datetime('yyyy-MM-dd HH:mm:ss')"
+                    }
+                  },
+                  "title": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@ctitle"
+                    },
+                    "title": "文章标题"
+                  },
+                  "description": {
+                    "type": "string",
+                    "title": "文章简介",
+                    "mock": {
+                      "mock": "@csentence"
+                    }
+                  },
+                  "content": {
+                    "type": "string",
+                    "title": "文章内容",
+                    "description": "markdown",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
+                  },
+                  "cover": {
+                    "type": "string",
+                    "title": "文章封面",
+                    "description": "url",
+                    "mock": {
+                      "mock": "@image"
+                    }
+                  },
+                  "visibility": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "id",
+                  "author",
+                  "likes",
+                  "views",
+                  "publish_time",
+                  "update_time",
+                  "title",
+                  "description",
+                  "content",
+                  "cover",
+                  "visibility"
+                ],
+                "title": "article_normal",
+                "name": "article_normal"
+              },
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "articles": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "mock": {
+                      "mock": "@id"
+                    }
+                  },
+                  "title": "articles列表",
+                  "description": "内含id"
+                }
+              },
+              "required": [
+                "articles"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 5318170,
@@ -876,15 +1624,18 @@
             "httpApiName": "AT0202 文章内容批量获取",
             "httpApiPath": "/articles",
             "httpApiMethod": "put",
-            "httpApiCaseName": "AT0202 文章内容批量获取"
+            "httpApiCaseName": "AT0202 文章内容批量获取",
+            "id": "b0290773-cee0-4057-8c15-002cc74f3061",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "bdc9bce8-b4e9-40be-9792-f5b798fda8cd",
+          "id": "a790ebcd-7065-41cc-b30f-79f9fb337965",
           "name": "AT0301 给这篇文章点赞(AT0301 给这篇文章点赞)",
           "request": {
             "url": {
@@ -911,31 +1662,35 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 5335759,
@@ -943,15 +1698,18 @@
             "httpApiName": "AT0301 给这篇文章点赞",
             "httpApiPath": "/articles/{id}/like",
             "httpApiMethod": "post",
-            "httpApiCaseName": "AT0301 给这篇文章点赞"
+            "httpApiCaseName": "AT0301 给这篇文章点赞",
+            "id": "2d889d7e-5a49-4335-b811-f1fbbe1d1787",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "359d167c-20c6-4e20-884b-44b8f998f77d",
+          "id": "0fe07bc2-e907-40e2-9f7c-2cd0939e8349",
           "name": "AT0302 取消这篇文章点赞(AT0302 取消这篇文章点赞)",
           "request": {
             "url": {
@@ -973,36 +1731,41 @@
             },
             "header": [
               {
+                "disabled": false,
                 "key": "token",
                 "value": ""
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               }
             ],
             "method": "DELETE",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
           },
           "metaInfo": {
             "httpApiId": 5335801,
@@ -1010,15 +1773,18 @@
             "httpApiName": "AT0302 取消这篇文章点赞",
             "httpApiPath": "/articles/{id}/like",
             "httpApiMethod": "delete",
-            "httpApiCaseName": "AT0302 取消这篇文章点赞"
+            "httpApiCaseName": "AT0302 取消这篇文章点赞",
+            "id": "c655ca66-fec0-4a9c-adcb-bba168db0265",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         },
         {
-          "id": "1c3c4bd6-4698-4978-88fe-b5de2f6a915d",
+          "id": "f9a1b307-57ac-4c11-aa90-d76b0203330e",
           "name": "AT0105 审核文章(AT0105 审核文章)",
           "request": {
             "url": {
@@ -1045,7 +1811,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
               },
               {
                 "key": "Content-Type",
@@ -1053,30 +1819,51 @@
               }
             ],
             "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"result\": false,\n    \"reason\": \"mollit proident\"\n}"
+              "raw": "{\n    \"result\": false,\n    \"reason\": \"mollit proident\"\n}",
+              "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            },
-            "defaultEnable": false,
             "id": 69812670,
+            "createdAt": "2022-07-15T06:52:36.000Z",
+            "updatedAt": "2022-07-15T06:52:36.000Z",
+            "deletedAt": null,
             "name": "不存在",
             "apiDetailId": 0,
             "projectId": 404238,
             "code": 404,
             "contentType": "json",
             "ordering": 30,
-            "createdAt": "2022-07-15T06:52:36.000Z",
-            "updatedAt": "2022-07-15T06:52:36.000Z",
-            "deletedAt": null
+            "jsonSchema": {},
+            "defaultEnable": false,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "boolean",
+                  "title": "审核结果"
+                },
+                "reason": {
+                  "type": "string",
+                  "title": "理由"
+                }
+              },
+              "required": [
+                "result",
+                "reason"
+              ]
+            }
           },
           "metaInfo": {
             "httpApiId": 14440370,
@@ -1084,10 +1871,13 @@
             "httpApiName": "AT0105 审核文章",
             "httpApiPath": "/articles/{id}/visibility",
             "httpApiMethod": "put",
-            "httpApiCaseName": "AT0105 审核文章"
+            "httpApiCaseName": "AT0105 审核文章",
+            "id": "f60935ef-64a7-483e-931f-eb6f147657c9",
+            "type": "http"
           },
           "type": "http",
           "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
         }
@@ -1180,7 +1970,45 @@
         "cover",
         "visibility"
       ],
-      "title": "article_normal"
+      "title": "article_normal",
+      "name": "article_normal"
+    },
+    "1070648": {
+      "type": "object",
+      "properties": {
+        "title": {
+          "type": "string",
+          "mock": {
+            "mock": "@ctitle"
+          },
+          "title": "文章标题"
+        },
+        "description": {
+          "type": "string",
+          "title": "文章简介",
+          "mock": {
+            "mock": "@csentence"
+          }
+        },
+        "content": {
+          "type": "string",
+          "title": "文章内容",
+          "description": "markdown",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        },
+        "cover": {
+          "type": "string",
+          "title": "文章封面",
+          "description": "url",
+          "mock": {
+            "mock": "@image"
+          }
+        }
+      },
+      "title": "[入] articl_update",
+      "name": "[入] articl_update"
     },
     "1077703": {
       "type": "object",
@@ -1287,7 +2115,8 @@
         "cover",
         "visibility"
       ],
-      "title": "article_all"
+      "title": "article_all",
+      "name": "article_all"
     },
     "1077996": {
       "type": "object",
@@ -1316,7 +2145,8 @@
         "avatar",
         "id"
       ],
-      "title": "user_simple"
+      "title": "user_simple",
+      "name": "user_simple"
     },
     "1097305": {
       "type": "object",
@@ -1408,6 +2238,53 @@
         "wechat": {
           "type": "boolean",
           "title": "绑定微信"
+        },
+        "points_sum": {
+          "type": "integer",
+          "title": "总分数",
+          "mock": {
+            "mock": "@integer(0)"
+          },
+          "minimum": 0
+        },
+        "points_now": {
+          "type": "integer",
+          "title": "现有分数",
+          "mock": {
+            "mock": "@integer(0)"
+          },
+          "minimum": 0
+        },
+        "title": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "mock": {
+                "mock": "@color"
+              },
+              "title": "颜色"
+            },
+            "title": {
+              "type": "string",
+              "mock": {
+                "mock": "@cword"
+              },
+              "title": "称号"
+            }
+          },
+          "title": "标题",
+          "mock": {
+            "mock": "@cname"
+          },
+          "x-apifox-orders": [
+            "title",
+            "color"
+          ],
+          "required": [
+            "title",
+            "color"
+          ]
         }
       },
       "required": [
@@ -1423,55 +2300,247 @@
         "birthday",
         "county",
         "town",
+        "wechat",
+        "points_sum",
+        "points_now",
+        "title"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "username",
+        "nickname",
+        "email",
+        "telephone",
+        "birthday",
+        "avatar",
+        "is_admin",
+        "county",
+        "town",
+        "points_sum",
+        "points_now",
+        "title",
+        "registration_time",
+        "login_time",
         "wechat"
       ],
-      "title": "user_all"
+      "title": "user_all",
+      "name": "user_all"
+    },
+    "53485892": {
+      "type": "object",
+      "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "title": "时间",
+          "mock": {
+            "mock": "@datetime"
+          }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "earn",
+            "redeem",
+            "other"
+          ],
+          "x-apifox": {
+            "enumDescriptions": {
+              "earn": "增加",
+              "redeem": "兑换",
+              "other": "其他"
+            }
+          },
+          "title": "类型",
+          "mock": {
+            "mock": "@string"
+          },
+          "description": "add或reedm"
+        },
+        "points": {
+          "type": "integer",
+          "title": "积分数",
+          "mock": {
+            "mock": "@integer(0)"
+          }
+        },
+        "user": {
+          "title": "用户",
+          "$ref": "#/definitions/1077996"
+        },
+        "id": {
+          "type": "string",
+          "title": "ID",
+          "mock": {
+            "mock": "JL@integer"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "title": "原因",
+          "mock": {
+            "mock": "@cparagraph"
+          }
+        }
+      },
+      "x-apifox-orders": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "required": [
+        "user",
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
+      ],
+      "title": "transaction",
+      "name": "transaction"
     }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
   },
   "environment": {
     "id": 510825,
     "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
     "baseUrls": {
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "25f9c230-a609-4d92-86f5-d2f4e634ca54",
+      "id": "78e7338e-f433-4d1d-9b34-6697313d626d",
       "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
       "values": [
         {
           "type": "any",
-          "value": "undefined",
-          "key": "token"
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
+          "key": "token",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "3",
-          "key": "num"
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "0",
-          "key": "num_later"
+          "value": "",
+          "key": "word_id_2",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": 20,
-          "key": "num_pre"
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "true",
-          "key": "quiz_new"
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
         },
         {
           "type": "any",
           "value": "2",
-          "key": "user_id"
+          "key": "user_id",
+          "initialValue": ""
         },
         {
           "type": "any",
-          "value": "10",
-          "key": "quiz_id"
+          "value": "3",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "order_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -1484,8 +2553,12 @@
     }
   },
   "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
     "variable": {
-      "id": "e8d3e5da-3d04-445a-874b-735af6e6e57b",
+      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
+      "baseUrl": "",
+      "baseUrls": {},
       "values": []
     },
     "parameter": {
@@ -1495,5 +2568,6 @@
       "cookie": []
     }
   },
-  "isServerBuild": false
+  "isServerBuild": false,
+  "isTestFlowControl": false
 }

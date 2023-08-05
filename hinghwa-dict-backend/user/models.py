@@ -24,6 +24,8 @@ class UserInfo(models.Model):
     )
     county = models.CharField(blank=True, max_length=100, verbose_name="县区")
     town = models.CharField(blank=True, max_length=100, verbose_name="乡镇")
+    points_sum = models.IntegerField(default=0, verbose_name="总积分")
+    points_now = models.IntegerField(default=0, verbose_name="当前积分")
 
     def __str__(self):
         return self.user.username

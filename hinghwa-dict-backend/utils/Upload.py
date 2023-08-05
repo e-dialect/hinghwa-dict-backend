@@ -13,11 +13,12 @@ def uploadAvatar(id, avatar, suffix="png"):
         "api.pxm.edialect.top",
         "cos.edialect.top",
         "cos.test.edialect.top",
+        "dummyimage.com",
     ]:
         return avatar
     time = timezone.now().__format__("%Y_%m_%d")
     filename = time + "_" + random_str(15) + "." + suffix
     url = download_file(avatar, "download", str(id), filename)
     if url is None:
-        raise NotFoundException()
+        raise NotFoundException("头像上传失败")
     return url

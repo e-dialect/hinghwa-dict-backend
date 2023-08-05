@@ -6,7 +6,14 @@ from .models import User, UserInfo
 class UserInfoForm(forms.ModelForm):
     class Meta:
         model = UserInfo
-        fields = ("nickname", "birthday", "telephone", "avatar", "county", "town")
+        fields = (
+            "nickname",
+            "birthday",
+            "telephone",
+            "avatar",
+            "county",
+            "town",
+        )
 
 
 class UserForm(forms.ModelForm):

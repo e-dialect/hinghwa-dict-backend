@@ -1,0 +1,711 @@
+{
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
+        {
+          "id": "bf42b536-cc26-48d5-88d2-d0c234f92663",
+          "name": "LG0101 账号密码登录(登录用户admin)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "type": "application/json"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【user_id】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【user_id】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183271,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
+                },
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
+                }
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 101029427,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户admin",
+            "id": "3ff72bcf-6268-44dd-87ce-7289c40b6221",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "27d1a844-ad5a-4eda-954a-007346e310ef",
+          "name": "RE0405 获取用户全部订单(RE0405 获取用户全部订单)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "orders"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "user_id",
+                  "value": "{{user_id}}"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {
+              "mode": "raw",
+              "raw": "",
+              "generateMode": "normal",
+              "type": "application/json"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 246269831,
+            "createdAt": "2023-07-27T11:10:24.000Z",
+            "updatedAt": "2023-07-27T11:14:41.000Z",
+            "deletedAt": null,
+            "apiDetailId": 98834636,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "result": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/54229787"
+                  }
+                },
+                "amount": {
+                  "type": "string",
+                  "title": "总数"
+                },
+                "page": {
+                  "type": "string",
+                  "title": "页数"
+                },
+                "pageSize": {
+                  "type": "string",
+                  "title": "每页个数"
+                }
+              },
+              "x-apifox-orders": [
+                "result",
+                "amount",
+                "page",
+                "pageSize"
+              ],
+              "required": [
+                "result",
+                "amount",
+                "page",
+                "pageSize"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 404238,
+            "ordering": 1,
+            "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
+              "54229787": {
+                "type": "object",
+                "properties": {
+                  "user": {
+                    "$ref": "#/definitions/1077996",
+                    "title": "用户"
+                  },
+                  "address": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@county(true)"
+                    },
+                    "title": "地址"
+                  },
+                  "full_name": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "姓名"
+                  },
+                  "telephone": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@phone"
+                    },
+                    "title": "电话"
+                  },
+                  "comment": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    },
+                    "title": "备注"
+                  },
+                  "id": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "DD@integer"
+                    },
+                    "title": "ID"
+                  }
+                },
+                "title": "订单（全）",
+                "x-apifox-orders": [
+                  "user",
+                  "address",
+                  "full_name",
+                  "telephone",
+                  "comment",
+                  "id"
+                ],
+                "required": [
+                  "user",
+                  "address",
+                  "full_name",
+                  "telephone",
+                  "comment",
+                  "id"
+                ],
+                "name": "order_all"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            }
+          },
+          "metaInfo": {
+            "httpApiId": 98834636,
+            "httpApiCaseId": 101029426,
+            "httpApiName": "RE0405 获取用户全部订单",
+            "httpApiPath": "/orders",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "RE0405 获取用户全部订单",
+            "id": "2ad4f828-b64f-4279-a80c-5cff87c34590",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        }
+      ],
+      "name": "指定用户全部订单"
+    }
+  ],
+  "info": {
+    "name": "指定用户全部订单"
+  },
+  "dataSchemas": {
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple",
+      "name": "user_simple"
+    },
+    "54229787": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "$ref": "#/definitions/1077996",
+          "title": "用户"
+        },
+        "address": {
+          "type": "string",
+          "mock": {
+            "mock": "@county(true)"
+          },
+          "title": "地址"
+        },
+        "full_name": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "姓名"
+        },
+        "telephone": {
+          "type": "string",
+          "mock": {
+            "mock": "@phone"
+          },
+          "title": "电话"
+        },
+        "comment": {
+          "type": "string",
+          "mock": {
+            "mock": "@cparagraph"
+          },
+          "title": "备注"
+        },
+        "id": {
+          "type": "string",
+          "mock": {
+            "mock": "DD@integer"
+          },
+          "title": "ID"
+        }
+      },
+      "title": "订单（全）",
+      "x-apifox-orders": [
+        "user",
+        "address",
+        "full_name",
+        "telephone",
+        "comment",
+        "id"
+      ],
+      "required": [
+        "user",
+        "address",
+        "full_name",
+        "telephone",
+        "comment",
+        "id"
+      ],
+      "name": "order_all"
+    }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
+  },
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
+    },
+    "variable": {
+      "id": "2da61672-389f-42c7-959a-83544fa7729a",
+      "name": "测试环境",
+      "baseUrl": "http://127.0.0.1:8000",
+      "baseUrls": {
+        "default": "http://127.0.0.1:8000"
+      },
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
+          "key": "token",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "87",
+          "key": "quiz_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "3",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "order_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
+        }
+      ]
+    },
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
+    "variable": {
+      "id": "14a8863c-bb67-42f5-999e-ca2ff8f7ae83",
+      "baseUrl": "",
+      "baseUrls": {},
+      "values": []
+    },
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false,
+  "isTestFlowControl": false
+}

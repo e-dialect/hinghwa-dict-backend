@@ -1,10 +1,7 @@
 import os
-import random
 import shutil
-import subprocess
 import time
 import datetime
-
 import demjson
 import numpy as np
 import pydub
@@ -36,6 +33,7 @@ from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
+from utils.Rewards_action import manage_points_in_pronunciation
 
 
 class SearchPronunciations(View):
@@ -370,6 +368,8 @@ def managePronunciationVisibility(request, id):
                     if pro.visibility:
                         extra = f"，理由是:\n\t{body['reason']}" if "reason" in body else ""
                         content = f"恭喜您的语音(id ={id}) 已通过审核" + extra
+                        user_id = pro.contributor.id
+                        transaction_info = manage_points_in_pronunciation(user_id)
                     else:
                         msg = body["reason"] if "reason" in body else body["message"]
                         content = f"很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}"
@@ -381,7 +381,7 @@ def managePronunciationVisibility(request, id):
                         title="【通知】语音审核结果",
                     )
                     pro.save()
-                    return JsonResponse({}, status=200)
+                    return JsonResponse(transaction_info, status=200)
                 else:
                     return JsonResponse({}, status=404)
             else:

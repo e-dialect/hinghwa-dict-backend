@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "e1159943-e320-4854-8a29-83206e541094",
+          "id": "7145b079-0a9b-4c33-a63a-698f53b6f604",
           "name": "PN0205 语音上传榜单(PN0205 语音上传榜单)",
           "request": {
             "url": {
@@ -113,7 +113,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "060a446e-b3d7-4131-9361-5b946164120f",
+      "id": "dd8e9943-233a-45db-b236-0f2d2fdc60f8",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -122,13 +122,13 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY4NDgyNjUyMy40OTM3Nzd9.nWn2HxaDm7fYUGP3aB9WjE3AqXBaxT7-hkO8R22HGNA",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
           "key": "token",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "87",
           "key": "quiz_id",
           "initialValue": ""
         },
@@ -158,13 +158,13 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": "2",
           "key": "user_id",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "17",
           "key": "article_id",
           "initialValue": ""
         },
@@ -188,27 +188,58 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": 6,
           "key": "num_pre",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "7",
           "key": "num_later",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "{\"id\":5}",
+          "value": "2",
           "key": "id",
-          "initialValue": "{\"id\":5}"
+          "initialValue": "2"
         },
         {
           "type": "any",
           "value": "13",
           "key": "music_id",
           "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "DD000024",
+          "key": "order_id",
+          "isBindInitial": false,
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
         }
       ]
     },
@@ -224,7 +255,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "6d32a2a0-2426-4656-b426-2fc92026f7a3",
+      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
       "baseUrl": "",
       "baseUrls": {},
       "values": []
