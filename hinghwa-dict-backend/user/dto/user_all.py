@@ -25,7 +25,7 @@ def user_all(user: User) -> dict:
         "points_sum": info.points_sum,
         "points_now": info.points_now,
         "title": calculate_title(info.points_sum),
-        "level": calculate_level(info.points_sum)
+        "level": calculate_level(info.points_sum),
     }
 
     response.update(
