@@ -16,11 +16,11 @@ class ManageAllTitles(View):
     def get(self, request):
         min = request.GET.get("min")
         max = request.GET.get("max")
-        filters = {
-            "points__gte": min,
-            "points__lte": max,
-        }
-
+        filters = {}
+        if min:
+            filters["points__gte"] = min
+        if max:
+            filters["points__lte"] = max
         result_titles = Title.objects.filter(**filters)
         amount = str(result_titles.count())
 

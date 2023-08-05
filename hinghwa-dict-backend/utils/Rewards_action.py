@@ -29,6 +29,21 @@ def calculate_title(points_sum) -> dict:
     return response
 
 
+def calculate_level(points_sum):
+    if 0 <= points_sum < 100:
+        return 1
+    elif points_sum < 500:
+        return 2
+    elif points_sum < 1000:
+        return 3
+    elif points_sum < 2000:
+        return 4
+    elif points_sum < 5000:
+        return 5
+    else:
+        return 6
+
+
 def points_change(action, points, user_id):
     user = User.objects.filter(id=user_id)
     if user.exists():

@@ -33,11 +33,11 @@ class ManageAllProducts(View):
         page = str(request.GET.get("page", 1))
         stock = request.GET.get("stock")
 
-        filters = {
-            "points__gte": min,
-            "points__lte": max,
-        }
-
+        filters = {}
+        if min:
+            filters["points__gte"] = min
+        if max:
+            filters["points__lte"] = max
         if stock == "0":
             filters["quantity"] = 0
         elif stock == "1":
