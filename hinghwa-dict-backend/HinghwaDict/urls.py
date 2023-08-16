@@ -54,4 +54,5 @@ urlpatterns = [
         include("rewards.transactions.urls", namespace="rewards.transactions"),
     ),
     path("orders", include("rewards.orders.urls", namespace="rewards.orders")),
+    path("lists", include("word.lists.urls", namespace="word.lists"))
 ]

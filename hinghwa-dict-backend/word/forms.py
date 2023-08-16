@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Word, Pronunciation, Character, Application
+from .models import Word, Pronunciation, Character, Application, List
 
 
 class WordForm(forms.ModelForm):
@@ -50,4 +50,13 @@ class ApplicationForm(forms.ModelForm):
             "mandarin",
             "standard_ipa",
             "standard_pinyin",
+        )
+
+
+class ListForm(forms.ModelForm):
+    class Meta:
+        model = List
+        fields = (
+            "name",
+            "description"
         )

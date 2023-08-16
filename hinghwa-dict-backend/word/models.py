@@ -206,3 +206,23 @@ class Character(models.Model):
     class Meta:
         verbose_name_plural = "单字"
         verbose_name = "单字"
+
+
+class List(models.Model):
+    name = models.CharField(blank=True, max_length=30, verbose_name="类型")
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="list_words",
+        verbose_name="词单作者"
+    )
+    words = models.ManyToManyField(
+        Word,
+        related_name="included_word",
+        verbose_name="词语",
+        blank=True,
+    )
+    id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
+    createTime = models.DateTimeField(blank=True, verbose_name="创建时间")
+    updateTime = models.DateTimeField(blank=True, verbose_name="更新时间")
+    description = models.CharField(blank=True, max_length= 100, verbose_name="词单简介")
