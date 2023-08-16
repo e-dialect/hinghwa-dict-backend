@@ -23,8 +23,8 @@ class Word(models.Model):
     )
     annotation = models.TextField(verbose_name="附注", blank=True)
     mandarin = models.TextField(verbose_name="对应普通话词语", blank=True, default="[]")
-    standard_ipa = models.CharField(max_length=30, verbose_name="标准IPA", blank=True)
-    standard_pinyin = models.CharField(max_length=30, verbose_name="标准拼音", blank=True)
+    standard_ipa = models.CharField(max_length=100, verbose_name="标准IPA", blank=True)
+    standard_pinyin = models.CharField(max_length=100, verbose_name="标准拼音", blank=True)
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
     related_words = models.ManyToManyField(

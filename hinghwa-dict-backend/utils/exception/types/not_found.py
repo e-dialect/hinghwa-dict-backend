@@ -122,7 +122,7 @@ class ProductsNotFoundException(NotFoundException):
     param id:商品id
     """
 
-    def __int__(self, id=0):
+    def __int__(self, id=""):
         super().__init__()
         self.status = 404
         self.msg = "商品{}不存在".format(id)
@@ -134,7 +134,7 @@ class TitleNotFoundException(NotFoundException):
     param id:头衔id
     """
 
-    def __init__(self, id=0):
+    def __init__(self, id=""):
         super().__init__()
         self.status = 404
         self.msg = "头衔{}不存在".format(id)
@@ -146,7 +146,7 @@ class TransactionsNotFoundException(NotFoundException):
     param id:积分记录id
     """
 
-    def __init__(self, id=0):
+    def __init__(self, id=""):
         super().__init__()
         self.status = 404
         self.msg = "积分记录{}不存在".format(id)
@@ -158,7 +158,19 @@ class OrdersNotFoundException(NotFoundException):
     param id:订单id
     """
 
-    def __init__(self, id=0):
+    def __init__(self, id=""):
         super().__init__()
         self.status = 404
         self.msg = "订单{}不存在".format(id)
+
+
+class ThesaurusNotFoundException(NotFoundException):
+    """
+    词单不存在
+    param id:订单id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "词单{}不存在".format(id)

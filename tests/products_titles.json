@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "f6163b8c-d1fb-4e89-aab0-d605afa8a589",
+          "id": "88d7fcdd-fcc9-40fa-bbe7-7cda5b898c7a",
           "name": "LG0101 账号密码登录(LG0101 账号密码登录)",
           "request": {
             "url": {
@@ -176,7 +176,7 @@
           }
         },
         {
-          "id": "b3452a40-9475-4d77-bada-e4dc30e84b9b",
+          "id": "72a9983c-7242-4a2a-a952-cb84ea30c7b7",
           "name": "RE0105 获取全部商品信息(RE0201 获取全部商品信息)",
           "request": {
             "url": {
@@ -240,7 +240,7 @@
           "responseDefinition": {
             "id": 241027133,
             "createdAt": "2023-07-19T02:22:47.000Z",
-            "updatedAt": "2023-07-22T09:20:06.000Z",
+            "updatedAt": "2023-08-16T07:27:24.000Z",
             "deletedAt": null,
             "apiDetailId": 96538392,
             "name": "成功",
@@ -263,11 +263,15 @@
                 },
                 "pageSize": {
                   "type": "string"
+                },
+                "total_pages": {
+                  "type": "string"
                 }
               },
               "x-apifox-orders": [
                 "result",
                 "amount",
+                "total_pages",
                 "page",
                 "pageSize"
               ],
@@ -275,7 +279,8 @@
                 "result",
                 "amount",
                 "page",
-                "pageSize"
+                "pageSize",
+                "total_pages"
               ]
             },
             "defaultEnable": true,
@@ -368,159 +373,6 @@
             "useWhatWGUrlParser": false,
             "disableUrlEncoding": false
           }
-        },
-        {
-          "id": "fbeb9309-54b2-45ab-8380-441b6a73c23c",
-          "name": "RE0205 获取头衔(RE0205 获取头衔)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "titles"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [
-                {
-                  "disabled": false,
-                  "key": "min",
-                  "value": ""
-                },
-                {
-                  "disabled": false,
-                  "key": "max",
-                  "value": ""
-                }
-              ],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
-              }
-            ],
-            "method": "GET",
-            "baseUrl": "http://127.0.0.1:8000",
-            "body": {},
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "id": 243215348,
-            "createdAt": "2023-07-22T09:14:47.000Z",
-            "updatedAt": "2023-07-30T10:56:53.000Z",
-            "deletedAt": null,
-            "apiDetailId": 97484186,
-            "name": "成功",
-            "code": 200,
-            "contentType": "json",
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "amount": {
-                  "type": "string",
-                  "title": "总数量"
-                },
-                "result": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/definitions/53293005"
-                  },
-                  "title": "查询结果"
-                }
-              },
-              "x-apifox-orders": [
-                "result",
-                "amount"
-              ],
-              "required": [
-                "result",
-                "amount"
-              ]
-            },
-            "defaultEnable": true,
-            "projectId": 404238,
-            "ordering": 1,
-            "schemaDefinitions": {
-              "53293005": {
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "title": "头衔",
-                    "mock": {
-                      "mock": "@ctitle"
-                    }
-                  },
-                  "color": {
-                    "type": "string",
-                    "title": "颜色",
-                    "mock": {
-                      "mock": "@color"
-                    }
-                  },
-                  "id": {
-                    "type": "string",
-                    "title": "ID",
-                    "mock": {
-                      "mock": "TX@integer"
-                    }
-                  },
-                  "points": {
-                    "type": "integer",
-                    "title": "所需分数",
-                    "mock": {
-                      "mock": "@natural(1,100)"
-                    }
-                  }
-                },
-                "x-apifox-orders": [
-                  "name",
-                  "points",
-                  "color",
-                  "id"
-                ],
-                "required": [
-                  "name",
-                  "points",
-                  "color",
-                  "id"
-                ],
-                "title": "头衔（全）",
-                "name": "title_all"
-              }
-            }
-          },
-          "requestDefinition": {
-            "jsonSchema": {}
-          },
-          "metaInfo": {
-            "httpApiId": 97484186,
-            "httpApiCaseId": 97484186,
-            "httpApiName": "RE0205 获取头衔",
-            "httpApiPath": "/titles",
-            "httpApiMethod": "get",
-            "httpApiCaseName": "RE0205 获取头衔",
-            "httpApiTempId": "95bfbdef-3649-4a8f-8fff-97860403d2f6",
-            "id": "95bfbdef-3649-4a8f-8fff-97860403d2f6",
-            "type": "http"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
-          }
         }
       ],
       "name": "全部商品头衔操作-理想情况"
@@ -595,53 +447,6 @@
       ],
       "title": "商品（全）",
       "name": "product_all"
-    },
-    "53293005": {
-      "type": "object",
-      "properties": {
-        "name": {
-          "type": "string",
-          "title": "头衔",
-          "mock": {
-            "mock": "@ctitle"
-          }
-        },
-        "color": {
-          "type": "string",
-          "title": "颜色",
-          "mock": {
-            "mock": "@color"
-          }
-        },
-        "id": {
-          "type": "string",
-          "title": "ID",
-          "mock": {
-            "mock": "TX@integer"
-          }
-        },
-        "points": {
-          "type": "integer",
-          "title": "所需分数",
-          "mock": {
-            "mock": "@natural(1,100)"
-          }
-        }
-      },
-      "x-apifox-orders": [
-        "name",
-        "points",
-        "color",
-        "id"
-      ],
-      "required": [
-        "name",
-        "points",
-        "color",
-        "id"
-      ],
-      "title": "头衔（全）",
-      "name": "title_all"
     }
   },
   "mockRules": {
@@ -656,7 +461,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "da3f136f-6cc7-4a6d-8ae6-662ae5036d16",
+      "id": "ee034fd8-c1c2-4c83-9c80-d638868a6e47",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -665,7 +470,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTg1NjI5MC4zMTI3OTd9.iKHbTJ-n2W1B8c7aenTJL1U4K68kwFBHhNRU9SpuGP0",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5Mjc3NTc0Ny40OTMxMjN9.OtKvQk2x7ygpqshJq98MTdghhaVAJmiBDkIsSYKO0j0",
           "key": "token",
           "isBindInitial": false,
           "initialValue": ""
@@ -708,7 +513,7 @@
         },
         {
           "type": "any",
-          "value": "3",
+          "value": "13",
           "key": "article_id",
           "initialValue": ""
         },
@@ -774,9 +579,9 @@
         },
         {
           "type": "any",
-          "value": "undefined",
+          "value": "DD000004",
           "key": "order_id",
-          "initialValue": "undefined"
+          "initialValue": "DD000004"
         },
         {
           "type": "any",
@@ -798,7 +603,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "9c55e22c-678f-4f2f-931b-8650431df0cf",
+      "id": "4e104331-ec84-43ee-ae51-dfeab092b07f",
       "baseUrl": "",
       "baseUrls": {},
       "values": []
