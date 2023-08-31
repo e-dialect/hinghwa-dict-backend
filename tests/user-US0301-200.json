@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "11810dfb-922f-44f2-8f7e-faecf676af39",
+          "id": "778ca519-98e6-4d00-97e3-ebc2fb83c383",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -226,7 +226,7 @@
           }
         },
         {
-          "id": "357a18ab-e2c1-4e0d-87fd-9229ba8541a4",
+          "id": "3115313a-54e2-4c95-8061-34f84a01d131",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -633,7 +633,7 @@
           }
         },
         {
-          "id": "2cfaa973-a109-4f34-8ba6-5f9b07fa4b31",
+          "id": "f15bb2f8-7cc6-4384-9401-ad75a93aef36",
           "name": "US0204 获取用户积分(US0204 获取用户积分)",
           "request": {
             "url": {
@@ -720,7 +720,7 @@
           }
         },
         {
-          "id": "695b756a-a591-4dbd-954c-8d96a6b93bc8",
+          "id": "29028157-277c-4488-bb1d-6605eddccb4c",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -942,7 +942,7 @@
           }
         },
         {
-          "id": "1f57a3f4-b8b3-4e10-8edb-b38053b57b59",
+          "id": "bdf6ac8f-d6f3-4867-baf4-bbd27596154f",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -1349,7 +1349,7 @@
           }
         },
         {
-          "id": "859ce564-ccfb-4127-a2ef-5403a43dfc98",
+          "id": "039bdcef-fe7c-47ea-bd99-61192f98dd39",
           "name": "US0204 获取用户积分(US0204 获取用户积分)",
           "request": {
             "url": {
@@ -1643,7 +1643,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "e7fbfe87-6c81-428a-ae26-9d1d64040a72",
+      "id": "f46a5542-a6ad-4cb7-9e60-24e4da07a0ce",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {
@@ -1652,7 +1652,7 @@
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5NDA3MTk1MC43NDI3N30.ML7coOi949j1FP7cuNJkzRNvurEx-d-DO6Sq7jKCkgk",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5NDA5NDE3NS45NDI0MTN9.kegVWTjVbdcu8Ct1Fc46_6Q2r79Pf45Kolh-1mtlcBY",
           "key": "token",
           "isBindInitial": false,
           "initialValue": ""
@@ -1785,7 +1785,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "5612f965-4c9d-483c-a513-bc8d822d726e",
+      "id": "6f36c6cd-464e-4d0d-9a13-29ba6f962326",
       "baseUrl": "",
       "baseUrls": {},
       "values": []
