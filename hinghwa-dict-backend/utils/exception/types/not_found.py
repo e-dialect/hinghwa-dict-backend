@@ -164,7 +164,7 @@ class OrdersNotFoundException(NotFoundException):
         self.msg = "订单{}不存在".format(id)
 
 
-class ThesaurusNotFoundException(NotFoundException):
+class ListsNotFoundException(NotFoundException):
     """
     词单不存在
     param id:订单id

@@ -2,6 +2,7 @@ from rewards.transactions.models.transaction import Transaction
 from rewards.titles.models.title import Title
 from rewards.products.models.product import Product
 from rewards.orders.models.order import Order
+from word.models import List
 
 
 def generate_transaction_id():
@@ -42,3 +43,13 @@ def generate_order_id():
     else:
         new_id = 1
     return f"DD{new_id:06d}"
+
+
+def generate_list_id():
+    last_order = List.objects.order_by("-id").first()
+    if last_order:
+        last_id = int(last_order.id[2:])
+        new_id = last_id + 1
+    else:
+        new_id = 1
+    return f"CD{new_id:06d}"
