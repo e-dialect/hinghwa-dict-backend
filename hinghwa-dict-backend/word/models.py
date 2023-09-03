@@ -211,10 +211,7 @@ class Character(models.Model):
 class List(models.Model):
     name = models.CharField(blank=True, max_length=30, verbose_name="类型")
     author = models.ForeignKey(
-        User,
-        on_delete=models.CASCADE,
-        related_name="list_words",
-        verbose_name="词单作者"
+        User, on_delete=models.CASCADE, related_name="list_words", verbose_name="词单作者"
     )
     words = models.ManyToManyField(
         Word,
@@ -225,4 +222,4 @@ class List(models.Model):
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
     createTime = models.DateTimeField(blank=True, verbose_name="创建时间")
     updateTime = models.DateTimeField(blank=True, verbose_name="更新时间")
-    description = models.CharField(blank=True, max_length= 100, verbose_name="词单简介")
+    description = models.CharField(blank=True, max_length=100, verbose_name="词单简介")

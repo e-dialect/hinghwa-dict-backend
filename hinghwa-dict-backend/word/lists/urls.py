@@ -9,5 +9,5 @@ app_name = "word.lists"
 urlpatterns = [
     path("", csrf_exempt(ManageAllLists.as_view())),
     path("/<str:list_id>", csrf_exempt(ManageSingleLists.as_view())),
-    path("/<str:list_id>/words", csrf_exempt(ManageListWords.as_view()))
+    path("/<str:list_id>/words", csrf_exempt(ManageListWords.as_view())),
 ]

@@ -1,5 +1,5 @@
 import demjson
-from ...models import List,Word
+from ...models import List, Word
 from ..dto.list_all import list_all
 from django.http import JsonResponse
 from django.views import View

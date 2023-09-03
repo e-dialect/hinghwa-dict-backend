@@ -43,9 +43,4 @@ class ManageAllLists(View):
         result = []
         for list in total_list:
             result.append(list_all(list))
-        return JsonResponse(
-            {
-                "total": result.count(),
-                "lists": result
-            }
-        )
+        return JsonResponse({"total": result.count(), "lists": result})

@@ -12,7 +12,7 @@ def list_all(list: List):
         "description": list.description,
         "words": [word_simple(x) for x in list.words.all()],
         "length": list.words.count(),
-        "id": list.id
+        "id": list.id,
     }
 
     return response

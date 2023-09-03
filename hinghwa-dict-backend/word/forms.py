@@ -56,7 +56,4 @@ class ApplicationForm(forms.ModelForm):
 class ListForm(forms.ModelForm):
     class Meta:
         model = List
-        fields = (
-            "name",
-            "description"
-        )
+        fields = ("name", "description")
