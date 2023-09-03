@@ -15,25 +15,39 @@ from django.core.paginator import Paginator
 from pydub import AudioSegment as audio
 
 from user.models import User
-from utils.token import token_pass, token_user
+from utils.token import get_request_user, token_pass, token_user
 from user.dto.user_simple import user_simple
 from utils.exception.types.bad_request import (
+    BadRequestException,
     PronunciationRankWithoutDays,
     InvalidPronunciation,
 )
-from utils.exception.types.not_found import WordNotFoundException
+from utils.exception.types.not_found import (
+    PronunciationNotFoundException,
+    WordNotFoundException,
+)
 
 from website.views import token_check, sendNotification, simpleUserInfo, upload_file
 from ..forms import PronunciationForm
 from ..models import Word, Character, Pronunciation, split
 from django.utils import timezone
 from word.utils import translate
-import requests
 from pydub.silence import split_on_silence
 from AudioCompare.main import audio_matcher, Arg
 from .dto.pronunciation_all import pronunciation_all
 from .dto.pronunciation_normal import pronunciation_normal
-from utils.Rewards_action import manage_points_in_pronunciation
+from utils.Rewards_action import (
+    manage_points_in_pronunciation,
+    revert_points_in_pronunciation,
+)
+
+
+# 从id中获取单条语音
+def get_pronunciation_by_id(id: int) -> Pronunciation:
+    pronunciations = Pronunciation.objects.filter(id=id)
+    if not pronunciations.exists():
+        raise PronunciationNotFoundException(id)
+    return pronunciations[0]
 
 
 class SearchPronunciations(View):
@@ -278,118 +292,124 @@ def combinePronunciationV2(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-@csrf_exempt
-def managePronunciation(request, id):
-    try:
-        pronunciation = Pronunciation.objects.filter(id=id)
-        if pronunciation.exists():
-            pronunciation = pronunciation[0]
-            # PN0101 获取发音信息
-            if request.method == "GET":
-                pronunciation.views += 1
-                pronunciation.save()
-                return JsonResponse(
-                    {"pronunciation": pronunciation_all(pronunciation)},
-                    status=200,
-                )
-            # PN0103 更改发音信息
-            elif request.method == "PUT":
-                token = request.headers["token"]
-                if token_check(token, settings.JWT_KEY, pronunciation.contributor.id):
-                    body = demjson.decode(request.body)
-                    body = body["pronunciation"]
-                    pronunciation_form = PronunciationForm(body)
-                    for key in body:
-                        if (key != "word") and len(pronunciation_form[key].errors.data):
-                            return JsonResponse({}, status=400)
-                    for key in body:
-                        if key != "word":
-                            setattr(pronunciation, key, body[key])
-                        else:
-                            pronunciation.word = Word.objects.get(id=body[key])
-                    pronunciation.save()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
-            # PN0104 删除发音
-            elif request.method == "DELETE":
-                token = request.headers["token"]
-                user = token_check(
-                    token, settings.JWT_KEY, pronunciation.contributor.id
-                )
-                if user:
-                    if user != pronunciation.contributor:
-                        body = demjson.decode(request.body)
-                        message = body["message"] if "message" in body else "管理员操作"
-                        content = (
-                            f"您的语音(id = {pronunciation.id}) 已被删除，理由是：\n\t{message}"
-                        )
-                        sendNotification(
-                            None,
-                            [pronunciation.contributor],
-                            content,
-                            target=pronunciation,
-                            title="【通知】语音处理结果",
-                        )
-                    pronunciation.delete()
-                    return JsonResponse({}, status=200)
-                else:
-                    return JsonResponse({}, status=401)
+class ManagePronunciation(View):
+    # PN0101 获取发音信息
+    def get(request, id):
+        pronunciation = get_pronunciation_by_id(id)
+        pronunciation.views += 1
+        pronunciation.save()
+        return JsonResponse(
+            {"pronunciation": pronunciation_all(pronunciation)},
+            status=200,
+        )
+
+    # PN0103 更改发音信息
+    def put(request, id):
+        token_pass(request.headers, -1)
+        pronunciation = get_pronunciation_by_id(id)
+        body = demjson.decode(request.body) if len(request.body) else {}
+        if "pronunciation" not in body:
+            return BadRequestException("缺少pronunciation字段")
+        pronunciation_form = PronunciationForm(body["pronunciation"])
+        for key in body["pronunciation"]:
+            if (key != "word") and len(pronunciation_form[key].errors.data):
+                return BadRequestException()
+        for key in body["pronunciation"]:
+            if key != "word":
+                setattr(pronunciation, key, body["pronunciation"][key])
             else:
-                return JsonResponse({}, status=405)
+                pronunciation.word = Word.objects.get(id=body["pronunciation"][key])
+        pronunciation.save()
+        return JsonResponse({}, status=200)
+
+    # PN0104 删除发音
+    def delete(request, id):
+        token_pass(request.headers, -1)
+        pronunciation = get_pronunciation_by_id(id)
+        body = demjson.decode(request.body) if len(request.body) else {}
+        if "message" in body:
+            message = body["message"]
         else:
-            return JsonResponse({}, status=404)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+            return BadRequestException("缺失改变审核结果的理由")
+        pronunciation.delete()
+        sendNotification(
+            get_request_user(request),
+            [pronunciation.contributor],
+            f"您的语音(id={pronunciation.id}) 已被删除，理由是：\n\t{message}",
+            target=pronunciation,
+            title=f"【通知】语音{pronunciation.word.word}被删除",
+        )
+
+        return JsonResponse({}, status=200)
 
 
-@csrf_exempt
-def managePronunciationVisibility(request, id):
-    """
-    管理员管理发音的visibility字段
-    :param request:
-    :return:
-    """
-    try:
-        # PN0105 更改审核结果 PN0106审核语音
-        if request.method in ["PUT", "POST"]:
-            token = request.headers["token"]
-            user = token_check(token, settings.JWT_KEY, -1)
-            if user:
-                pro = Pronunciation.objects.filter(id=id)
-                if pro.exists():
-                    body = demjson.decode(request.body) if len(request.body) else {}
-                    pro = pro[0]
-                    if "result" in body:
-                        pro.visibility = body["result"]
-                    else:
-                        pro.visibility ^= True
-                    pro.verifier = user
-                    if pro.visibility:
-                        extra = f"，理由是:\n\t{body['reason']}" if "reason" in body else ""
-                        content = f"恭喜您的语音(id ={id}) 已通过审核" + extra
-                        user_id = pro.contributor.id
-                        transaction_info = manage_points_in_pronunciation(user_id)
-                    else:
-                        msg = body["reason"] if "reason" in body else body["message"]
-                        content = f"很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}"
-                    sendNotification(
-                        None,
-                        [pro.contributor],
-                        content=content,
-                        target=pro,
-                        title="【通知】语音审核结果",
-                    )
-                    pro.save()
-                    return JsonResponse(transaction_info, status=200)
-                else:
-                    return JsonResponse({}, status=404)
-            else:
-                return JsonResponse({}, status=401)
+class ManageApproval(View):
+    # PN0106 审核语音
+    def post(request, id):
+        token_pass(request.headers, -1)
+        verifier = get_request_user(request)
+        body = demjson.decode(request.body) if len(request.body) else {}
+        if "result" in body:
+            result = body["result"]
         else:
-            return JsonResponse({}, status=405)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
+            return BadRequestException("缺失审核结果")
+        if "reason" in body:
+            reason = "，理由是" + body["reason"] + "。"
+        else:
+            if result == False:
+                return BadRequestException("缺失审核不通过的理由")
+            reason = ""
+        pronunciation = get_pronunciation_by_id(id)
+        pronunciation.visibility = result
+        pronunciation.verifier = verifier
+        pronunciation.save()
+        pro = f"语音(id={id})"
+        contributor = pronunciation.contributor
+        if result:
+            content = f"恭喜您，您的语音{pro}审核通过"
+            transaction_info = manage_points_in_pronunciation(contributor.id)
+
+        else:
+            content = f"很遗憾，您的语音{pro}审核未通过"
+            transaction_info = revert_points_in_pronunciation(contributor.id)
+        sendNotification(
+            verifier,
+            [contributor],
+            content=content + reason,
+            target=pronunciation,
+            title=f"【通知】语音（{pronunciation.word.word}）审核结果",
+        )
+        return JsonResponse(transaction_info, status=200)
+
+    # PN0105 更改审核结果
+    def put(request, id):
+        token_pass(request.headers, -1)
+        verifier = get_request_user(request)
+        body = demjson.decode(request.body) if len(request.body) else {}
+        if "message" in body:
+            message = body["message"]
+        else:
+            return BadRequestException("缺失改变审核结果的理由")
+        pronunciation = get_pronunciation_by_id(id)
+        pronunciation.visibility ^= True
+        pronunciation.verifier = verifier
+        pronunciation.save()
+        pro = f"语音(id={id})"
+        contributor = pronunciation.contributor
+        if pronunciation.visibility:
+            content = f"恭喜您，您的语音{pro}其审核已变更为通过"
+            transaction_info = manage_points_in_pronunciation(contributor.id)
+        else:
+            content = f"很遗憾，您的语音{pro}其审核已变更为未通过"
+            transaction_info = revert_points_in_pronunciation(contributor.id)
+        sendNotification(
+            verifier,
+            [contributor],
+            content=content + f"，理由是:{message}。",
+            target=pronunciation,
+            title=f"【通知】语音（{pronunciation.word.word}）审核结果变更",
+        )
+        return JsonResponse(transaction_info, status=200)
 
 
 def split_silence(music, rate=0.22):

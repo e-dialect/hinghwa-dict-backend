@@ -174,3 +174,15 @@ class ThesaurusNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "词单{}不存在".format(id)
+
+
+class PronunciationNotFoundException(NotFoundException):
+    """
+    语音条不存在异常
+    ： parma id:语音id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "语音{}不存在！".format(id)
