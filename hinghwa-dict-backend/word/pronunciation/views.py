@@ -42,6 +42,14 @@ from utils.Rewards_action import (
 )
 
 
+# 从id中获取单条语音
+def get_pronunciation_by_id(id: int) -> Pronunciation:
+    pronunciations = Pronunciation.objects.filter(id=id)
+    if not pronunciations.exists():
+        raise PronunciationNotFoundException(id)
+    return pronunciations[0]
+
+
 class SearchPronunciations(View):
     # PN0201 发音的批量获取
     def get(self, request) -> JsonResponse:
@@ -287,10 +295,7 @@ def combinePronunciationV2(request):
 class ManagePronunciation(View):
     # PN0101 获取发音信息
     def get(request, id):
-        pronunciations = Pronunciation.objects.filter(id=id)
-        if not pronunciations.exists():
-            raise PronunciationNotFoundException(id)
-        pronunciation = pronunciations[0]
+        pronunciation = get_pronunciation_by_id(id)
         pronunciation.views += 1
         pronunciation.save()
         return JsonResponse(
@@ -301,10 +306,7 @@ class ManagePronunciation(View):
     # PN0103 更改发音信息
     def put(request, id):
         token_pass(request.headers["token"], -1)
-        pronunciations = Pronunciation.objects.filter(id=id)
-        if not pronunciations.exists():
-            raise PronunciationNotFoundException(id)
-        pronunciation = pronunciations[0]
+        pronunciation = get_pronunciation_by_id(id)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "pronunciation" not in body:
             return BadRequestException("缺少pronunciation字段")
@@ -323,10 +325,7 @@ class ManagePronunciation(View):
     # PN0104 删除发音
     def delete(request, id):
         token_pass(request.headers["token"], -1)
-        pronunciations = Pronunciation.objects.filter(id=id)
-        if not pronunciations.exists():
-            raise PronunciationNotFoundException(id)
-        pronunciation = pronunciations[0]
+        pronunciation = get_pronunciation_by_id(id)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "message" in body:
             message = body["message"]
@@ -349,9 +348,6 @@ class ManageApproval(View):
     def post(request, id):
         token_pass(request.headers["token"], -1)
         verifier = get_request_user(request)
-        pronunciations = Pronunciation.objects.filter(id=id)
-        if not pronunciations.exists():
-            raise PronunciationNotFoundException(id)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "result" in body:
             result = body["result"]
@@ -363,7 +359,7 @@ class ManageApproval(View):
             if result == False:
                 return BadRequestException("缺失审核不通过的理由")
             reason = ""
-        pronunciation = pronunciations[0]
+        pronunciation = get_pronunciation_by_id(id)
         pronunciation.visibility = result
         pronunciation.verifier = verifier
         pronunciation.save()
@@ -389,15 +385,12 @@ class ManageApproval(View):
     def put(request, id):
         token_pass(request.headers["token"], -1)
         verifier = get_request_user(request)
-        pronunciations = Pronunciation.objects.filter(id=id)
-        if not pronunciations.exists():
-            raise PronunciationNotFoundException(id)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "message" in body:
             message = body["message"]
         else:
             return BadRequestException("缺失改变审核结果的理由")
-        pronunciation = pronunciations[0]
+        pronunciation = get_pronunciation_by_id(id)
         pronunciation.visibility ^= True
         pronunciation.verifier = verifier
         pronunciation.save()
