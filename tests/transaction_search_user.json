@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "cdf6dab9-9f25-4f1f-a9e2-0e2b3928d22a",
+          "id": "a0995b7c-6f56-4cd2-9e49-463cf99c86e1",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -211,12 +211,13 @@
           },
           "metaInfo": {
             "httpApiId": 5318056,
-            "httpApiCaseId": 101029427,
+            "httpApiCaseId": 32697822,
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
             "httpApiCaseName": "登录用户admin",
-            "id": "3ff72bcf-6268-44dd-87ce-7289c40b6221",
+            "httpApiTempId": "04a323f8-9c43-46d4-b12d-e2e4f43ba104",
+            "id": "04a323f8-9c43-46d4-b12d-e2e4f43ba104",
             "type": "http"
           },
           "type": "http",
@@ -226,14 +227,14 @@
           }
         },
         {
-          "id": "0002f9f3-4b7a-47d9-bb69-184adfac91f0",
-          "name": "RE0405 获取用户全部订单(RE0405 获取用户全部订单)",
+          "id": "8a3aaf2b-286b-4a1e-b064-82dbf1763488",
+          "name": "RE0302 查询交易记录(RE0302 查询交易记录)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "orders"
+                "transactions"
               ],
               "host": [
                 "127",
@@ -244,7 +245,7 @@
               "query": [
                 {
                   "disabled": false,
-                  "key": "user_id",
+                  "key": "user",
                   "value": "{{user_id}}"
                 },
                 {
@@ -255,6 +256,21 @@
                 {
                   "disabled": false,
                   "key": "pageSize",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "action",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "start_date",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "end_date",
                   "value": ""
                 }
               ],
@@ -268,67 +284,55 @@
               {
                 "key": "User-Agent",
                 "value": "Apifox/1.0.0 (https://www.apifox.cn)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
               }
             ],
             "method": "GET",
             "baseUrl": "http://127.0.0.1:8000",
-            "body": {
-              "mode": "raw",
-              "raw": "",
-              "generateMode": "normal",
-              "type": "application/json"
-            },
+            "body": {},
             "type": "http"
           },
           "response": [],
           "event": [],
           "responseDefinition": {
-            "id": 246269831,
-            "createdAt": "2023-07-27T11:10:24.000Z",
-            "updatedAt": "2023-08-16T07:28:04.000Z",
+            "id": 243217582,
+            "createdAt": "2023-07-22T09:41:02.000Z",
+            "updatedAt": "2023-08-16T07:27:49.000Z",
             "deletedAt": null,
-            "apiDetailId": 98834636,
+            "apiDetailId": 97485718,
             "name": "成功",
             "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
-                "result": {
+                "results": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/54229787"
+                    "$ref": "#/definitions/53485892"
                   }
                 },
                 "amount": {
-                  "type": "string",
-                  "title": "总数"
+                  "type": "string"
                 },
                 "page": {
-                  "type": "string",
-                  "title": "页数"
+                  "type": "string"
                 },
                 "pageSize": {
-                  "type": "string",
-                  "title": "每页个数"
+                  "type": "string"
                 },
                 "total_pages": {
                   "type": "string"
                 }
               },
               "x-apifox-orders": [
-                "result",
+                "results",
                 "amount",
                 "total_pages",
                 "page",
                 "pageSize"
               ],
               "required": [
-                "result",
+                "results",
                 "amount",
                 "page",
                 "pageSize",
@@ -369,84 +373,96 @@
                 "title": "user_simple",
                 "name": "user_simple"
               },
-              "54229787": {
+              "53485892": {
                 "type": "object",
                 "properties": {
+                  "timestamp": {
+                    "type": "string",
+                    "format": "date-time",
+                    "title": "时间",
+                    "mock": {
+                      "mock": "@datetime"
+                    }
+                  },
+                  "action": {
+                    "type": "string",
+                    "enum": [
+                      "earn",
+                      "redeem",
+                      "other"
+                    ],
+                    "x-apifox": {
+                      "enumDescriptions": {
+                        "earn": "增加",
+                        "redeem": "兑换",
+                        "other": "其他"
+                      }
+                    },
+                    "title": "类型",
+                    "mock": {
+                      "mock": "@string"
+                    },
+                    "description": "add或reedm"
+                  },
+                  "points": {
+                    "type": "integer",
+                    "title": "积分数",
+                    "mock": {
+                      "mock": "@integer(0)"
+                    }
+                  },
                   "user": {
-                    "$ref": "#/definitions/1077996",
-                    "title": "用户"
-                  },
-                  "address": {
-                    "type": "string",
-                    "mock": {
-                      "mock": "@county(true)"
-                    },
-                    "title": "地址"
-                  },
-                  "full_name": {
-                    "type": "string",
-                    "mock": {
-                      "mock": "@cname"
-                    },
-                    "title": "姓名"
-                  },
-                  "telephone": {
-                    "type": "string",
-                    "mock": {
-                      "mock": "@phone"
-                    },
-                    "title": "电话"
-                  },
-                  "comment": {
-                    "type": "string",
-                    "mock": {
-                      "mock": "@cparagraph"
-                    },
-                    "title": "备注"
+                    "title": "用户",
+                    "$ref": "#/definitions/1077996"
                   },
                   "id": {
                     "type": "string",
+                    "title": "ID",
                     "mock": {
-                      "mock": "DD@integer"
-                    },
-                    "title": "ID"
+                      "mock": "JL@integer"
+                    }
+                  },
+                  "reason": {
+                    "type": "string",
+                    "title": "原因",
+                    "mock": {
+                      "mock": "@cparagraph"
+                    }
                   }
                 },
-                "title": "订单（全）",
                 "x-apifox-orders": [
                   "user",
-                  "address",
-                  "full_name",
-                  "telephone",
-                  "comment",
-                  "id"
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
                 ],
                 "required": [
                   "user",
-                  "address",
-                  "full_name",
-                  "telephone",
-                  "comment",
-                  "id"
+                  "timestamp",
+                  "action",
+                  "points",
+                  "id",
+                  "reason"
                 ],
-                "name": "order_all"
+                "title": "transaction",
+                "name": "transaction"
               }
             }
           },
           "requestDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {}
-            }
+            "jsonSchema": {}
           },
           "metaInfo": {
-            "httpApiId": 98834636,
-            "httpApiCaseId": 101029426,
-            "httpApiName": "RE0405 获取用户全部订单",
-            "httpApiPath": "/orders",
+            "httpApiId": 97485718,
+            "httpApiCaseId": 97485718,
+            "httpApiName": "RE0302 查询交易记录",
+            "httpApiPath": "/transactions",
             "httpApiMethod": "get",
-            "httpApiCaseName": "RE0405 获取用户全部订单",
-            "id": "2ad4f828-b64f-4279-a80c-5cff87c34590",
+            "httpApiCaseName": "RE0302 查询交易记录",
+            "httpApiTempId": "cafcb667-5eca-490b-9f2c-48a547b1bb14",
+            "id": "cafcb667-5eca-490b-9f2c-48a547b1bb14",
             "type": "http"
           },
           "type": "http",
@@ -456,11 +472,11 @@
           }
         }
       ],
-      "name": "指定用户全部订单"
+      "name": "查询用户全部积分记录"
     }
   ],
   "info": {
-    "name": "指定用户全部订单"
+    "name": "查询用户全部积分记录"
   },
   "dataSchemas": {
     "1077996": {
@@ -493,67 +509,81 @@
       "title": "user_simple",
       "name": "user_simple"
     },
-    "54229787": {
+    "53485892": {
       "type": "object",
       "properties": {
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "title": "时间",
+          "mock": {
+            "mock": "@datetime"
+          }
+        },
+        "action": {
+          "type": "string",
+          "enum": [
+            "earn",
+            "redeem",
+            "other"
+          ],
+          "x-apifox": {
+            "enumDescriptions": {
+              "earn": "增加",
+              "redeem": "兑换",
+              "other": "其他"
+            }
+          },
+          "title": "类型",
+          "mock": {
+            "mock": "@string"
+          },
+          "description": "add或reedm"
+        },
+        "points": {
+          "type": "integer",
+          "title": "积分数",
+          "mock": {
+            "mock": "@integer(0)"
+          }
+        },
         "user": {
-          "$ref": "#/definitions/1077996",
-          "title": "用户"
-        },
-        "address": {
-          "type": "string",
-          "mock": {
-            "mock": "@county(true)"
-          },
-          "title": "地址"
-        },
-        "full_name": {
-          "type": "string",
-          "mock": {
-            "mock": "@cname"
-          },
-          "title": "姓名"
-        },
-        "telephone": {
-          "type": "string",
-          "mock": {
-            "mock": "@phone"
-          },
-          "title": "电话"
-        },
-        "comment": {
-          "type": "string",
-          "mock": {
-            "mock": "@cparagraph"
-          },
-          "title": "备注"
+          "title": "用户",
+          "$ref": "#/definitions/1077996"
         },
         "id": {
           "type": "string",
+          "title": "ID",
           "mock": {
-            "mock": "DD@integer"
-          },
-          "title": "ID"
+            "mock": "JL@integer"
+          }
+        },
+        "reason": {
+          "type": "string",
+          "title": "原因",
+          "mock": {
+            "mock": "@cparagraph"
+          }
         }
       },
-      "title": "订单（全）",
       "x-apifox-orders": [
         "user",
-        "address",
-        "full_name",
-        "telephone",
-        "comment",
-        "id"
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
       ],
       "required": [
         "user",
-        "address",
-        "full_name",
-        "telephone",
-        "comment",
-        "id"
+        "timestamp",
+        "action",
+        "points",
+        "id",
+        "reason"
       ],
-      "name": "order_all"
+      "title": "transaction",
+      "name": "transaction"
     }
   },
   "mockRules": {
@@ -568,7 +598,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "d547d904-20ae-4e7f-8922-3623d57abc0f",
+      "id": "b87fdd3d-b23c-4c08-8cf3-6e9906943d6e",
       "name": "测试环境",
       "baseUrl": "http://127.0.0.1:8000",
       "baseUrls": {

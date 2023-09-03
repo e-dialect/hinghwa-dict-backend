@@ -8,6 +8,7 @@ from django.views import View
 from utils.exception.types.bad_request import BadRequestException
 from utils.token import token_pass
 from utils.generate_id import generate_product_id
+from django.core.paginator import Paginator
 
 
 class ManageAllProducts(View):
@@ -32,6 +33,10 @@ class ManageAllProducts(View):
         pageSize = str(request.GET.get("pageSize", 10))
         page = str(request.GET.get("page", 1))
         stock = request.GET.get("stock")
+        if not pageSize:
+            pageSize = 10
+        if not page:
+            page = 1
 
         filters = {}
         if min:
@@ -51,7 +56,16 @@ class ManageAllProducts(View):
         for product in result_products:
             products.append(product_all(product))
 
+        paginator = Paginator(products, pageSize)
+        current_page = paginator.get_page(page)
+
         return JsonResponse(
-            {"result": products, "amount": amount, "page": page, "pageSize": pageSize},
+            {
+                "result": products,
+                "amount": amount,
+                "total_pages": str(paginator.num_pages),
+                "page": str(current_page.number),
+                "pageSize": str(pageSize),
+            },
             status=200,
         )

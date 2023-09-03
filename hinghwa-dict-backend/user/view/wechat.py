@@ -60,24 +60,24 @@ class WechatRegister(View):
         user_info = UserInfo.objects.filter(wechat__contains=openid)
         if user_info.exists():  # 微信号有记录了
             return JsonResponse({"msg": "该微信已绑定账户"}, status=409)
-        if user_form.is_valid():
+        if not user_form.is_valid():
+            if user_form["username"].errors:
+                return JsonResponse({"msg": "用户名重复"}, status=409)
+            else:
+                return JsonResponse({"msg": "请求有误"}, status=400)
+        else:
             user = user_form.save(commit=False)
             password_validator(user_form.cleaned_data["password"])
             user.set_password(user_form.cleaned_data["password"])
-            user.save()
             user_info = UserInfo.objects.create(user=user, nickname=user.username)
             user_info.wechat = openid
             if "nickname" in body:
                 user_info.nickname = body["nickname"]
             if "avatar" in body:
                 user_info.avatar = uploadAvatar(user.id, body["avatar"], suffix="png")
+            user.save()
             user_info.save()
             return JsonResponse({}, status=200)
-        else:
-            if user_form["username"].errors:
-                return JsonResponse({"msg": "用户名重复"}, status=409)
-            else:
-                return JsonResponse({"msg": "请求有误"}, status=400)
 
 
 class BindWechat(View):

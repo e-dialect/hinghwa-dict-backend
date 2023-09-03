@@ -18,11 +18,8 @@ class ManageSingleOrder(View):
             raise OrdersNotFoundException()
         order = order[0]
         user_id = order.user.id
-        token = token_pass(request.headers, -1) or token_pass(request.headers, user_id)
-        if token:
-            return JsonResponse(order_all(order), status=200)
-        else:
-            return JsonResponse({"msg": "无权限"}, status=403)
+        token_pass(request.headers, user_id)
+        return JsonResponse(order_all(order), status=200)
 
     # RE0402删除订单
     @csrf_exempt

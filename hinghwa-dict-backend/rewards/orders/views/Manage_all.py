@@ -7,7 +7,6 @@ from ..dto.orders_all import order_all
 from utils.exception.types.not_found import (
     ProductsNotFoundException,
 )
-from ..models.order import Order
 from ..forms import OrderInfoForm
 from django.views import View
 from utils.exception.types.bad_request import BadRequestException
@@ -16,6 +15,7 @@ from user.utils import get_user_by_id
 from utils.generate_id import generate_order_id
 from utils.Rewards_action import create_transaction
 from ..models.order import Order
+from django.core.paginator import Paginator
 
 
 class ManageAllOrders(View):
@@ -56,17 +56,25 @@ class ManageAllOrders(View):
         user_id = request.GET["user_id"]
         page = request.GET.get("page", 1)
         pageSize = request.GET.get("pageSize", 10)
+        if not page:
+            page = 1
+        if not pageSize:
+            pageSize = 10
         amount = 0
         results = []
         orders = Order.objects.filter(user=get_user_by_id(user_id))
         for order in orders:
             results.append(order_all(order))
             amount += 1
+        paginator = Paginator(orders, pageSize)
+        current_page = paginator.get_page(page)
+
         return JsonResponse(
             {
                 "result": results,
                 "amount": str(amount),
-                "page": str(page),
+                "total_pages": str(paginator.num_pages),
+                "page": str(current_page.number),
                 "pageSize": str(pageSize),
             }
         )
