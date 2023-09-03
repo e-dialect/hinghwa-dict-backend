@@ -112,3 +112,14 @@ def manage_points_in_pronunciation(user_id):
     )
     points_change(action=action, points=points, user_id=user_id)
     return transaction_info
+
+
+def revert_points_in_pronunciation(user_id):
+    action = "redeem"
+    points = 30
+    reason = "撤销语音贡献"
+    transaction_info = create_transaction(
+        action=action, points=points, reason=reason, user_id=user_id
+    )
+    points_change(action=action, points=points, user_id=user_id)
+    return transaction_info
