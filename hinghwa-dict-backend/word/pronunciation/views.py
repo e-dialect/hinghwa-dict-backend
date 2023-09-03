@@ -322,7 +322,7 @@ def managePronunciation(request, id):
                         body = demjson.decode(request.body)
                         message = body["message"] if "message" in body else "管理员操作"
                         content = (
-                            f"您的语音(id = {pronunciation.id}) 已被删除，理由是：\n\t{message}"
+                            f"您的语音(id={pronunciation.id}) 已被删除，理由是：\n\t{message}"
                         )
                         sendNotification(
                             None,
@@ -367,12 +367,12 @@ def managePronunciationVisibility(request, id):
                     pro.verifier = user
                     if pro.visibility:
                         extra = f"，理由是:\n\t{body['reason']}" if "reason" in body else ""
-                        content = f"恭喜您的语音(id ={id}) 已通过审核" + extra
+                        content = f"恭喜您的语音(id={id}) 已通过审核" + extra
                         user_id = pro.contributor.id
                         transaction_info = manage_points_in_pronunciation(user_id)
                     else:
                         msg = body["reason"] if "reason" in body else body["message"]
-                        content = f"很遗憾，您的语音(id = {id}) 没通过审核，理由是:\n\t{msg}"
+                        content = f"很遗憾，您的语音(id={id}) 没通过审核，理由是:\n\t{msg}"
                     sendNotification(
                         None,
                         [pro.contributor],

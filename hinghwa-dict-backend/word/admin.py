@@ -111,7 +111,7 @@ class PronunciationAdmin(admin.ModelAdmin):
     def pass_visibility(self, request, queryset):
         for pro in queryset:
             if not pro.visibility:
-                content = f"恭喜您的语音(id ={pro.id}) 已通过审核"
+                content = f"恭喜您的语音(id={pro.id}) 已通过审核"
                 sendNotification(
                     None,
                     [pro.contributor],
@@ -139,7 +139,7 @@ class PronunciationAdmin(admin.ModelAdmin):
     def withdraw_visibility(self, request, queryset):
         for pro in queryset:
             if pro.visibility:
-                content = f"很遗憾，您的语音(id = {id}) 没通过审核"
+                content = f"很遗憾，您的语音(id={id}) 没通过审核"
                 sendNotification(
                     None,
                     [pro.contributor],
