@@ -1,13 +1,18 @@
 from django.urls import path
 
 from .views import *
-from .views import SearchPronunciations, ManageApproval, PronunciationRanking
+from .views import (
+    SearchPronunciations,
+    ManageApproval,
+    PronunciationRanking,
+    ManagePronunciation,
+)
 
 app_name = "word.pronunciation"
 
 urlpatterns = [
     path("", csrf_exempt(SearchPronunciations.as_view())),
-    path("/<int:id>", managePronunciation),
+    path("/<int:id>", csrf_exempt(ManagePronunciation.as_view())),
     path("/combine", combinePronunciationV2),
     path("/translate", translatePronunciation),
     path("/<int:id>/visibility", csrf_exempt(ManageApproval.as_view())),
