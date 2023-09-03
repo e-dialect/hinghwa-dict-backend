@@ -305,7 +305,7 @@ class ManagePronunciation(View):
 
     # PN0103 更改发音信息
     def put(request, id):
-        token_pass(request.headers["token"], -1)
+        token_pass(request.headers, -1)
         pronunciation = get_pronunciation_by_id(id)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "pronunciation" not in body:
@@ -324,7 +324,7 @@ class ManagePronunciation(View):
 
     # PN0104 删除发音
     def delete(request, id):
-        token_pass(request.headers["token"], -1)
+        token_pass(request.headers, -1)
         pronunciation = get_pronunciation_by_id(id)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "message" in body:
@@ -346,7 +346,7 @@ class ManagePronunciation(View):
 class ManageApproval(View):
     # PN0106 审核语音
     def post(request, id):
-        token_pass(request.headers["token"], -1)
+        token_pass(request.headers, -1)
         verifier = get_request_user(request)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "result" in body:
@@ -383,7 +383,7 @@ class ManageApproval(View):
 
     # PN0105 更改审核结果
     def put(request, id):
-        token_pass(request.headers["token"], -1)
+        token_pass(request.headers, -1)
         verifier = get_request_user(request)
         body = demjson.decode(request.body) if len(request.body) else {}
         if "message" in body:
