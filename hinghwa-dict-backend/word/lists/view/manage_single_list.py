@@ -14,9 +14,8 @@ from utils.exception.types.bad_request import BadRequestException
 class ManageSingleLists(View):
     # WD0602删除词单
     @csrf_exempt
-    def delete(self, request):
+    def delete(self, request, list_id):
         token_pass(request.headers, -1)
-        list_id = request.GET["list_id"]
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()
