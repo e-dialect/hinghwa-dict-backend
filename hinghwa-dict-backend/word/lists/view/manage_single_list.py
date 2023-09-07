@@ -45,9 +45,8 @@ class ManageSingleLists(View):
         return JsonResponse(list_all(list), status=200)
 
     # WD0604查看词单(单)
-    def get(self, request):
+    def get(self, request, list_id):
         token_pass(request.headers, 0)
-        list_id = request.GET["list_id"]
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()
