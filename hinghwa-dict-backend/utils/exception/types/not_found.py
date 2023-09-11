@@ -167,7 +167,7 @@ class OrdersNotFoundException(NotFoundException):
 class ListsNotFoundException(NotFoundException):
     """
     词单不存在
-    param id:订单id
+    param id:词单id
     """
 
     def __init__(self, id=""):

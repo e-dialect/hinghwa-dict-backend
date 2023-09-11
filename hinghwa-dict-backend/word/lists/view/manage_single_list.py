@@ -14,9 +14,8 @@ from utils.exception.types.bad_request import BadRequestException
 class ManageSingleLists(View):
     # WD0602删除词单
     @csrf_exempt
-    def delete(self, request):
+    def delete(self, request, list_id):
         token_pass(request.headers, -1)
-        list_id = request.GET["list_id"]
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()
@@ -25,23 +24,29 @@ class ManageSingleLists(View):
         return JsonResponse({}, status=200)
 
     # WD0603更改词单信息
-    def put(self, request):
+    def put(self, request, list_id):
         token_pass(request.headers, -1)
-        list_id = request.GET["list_id"]
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()
         list = list[0]
         body = demjson.decode(request.body)
         for key in body:
-            setattr(list, key, body[key])
+            if key != "words":
+                setattr(list, key, body[key])
+            else:
+                for id in body["words"]:
+                    Word.objects.get(id=id)
+                list.words.clear()
+                for id in body["words"]:
+                    word = Word.objects.get(id=id)
+                    list.words.add(word)
         list.save()
         return JsonResponse(list_all(list), status=200)
 
     # WD0604查看词单(单)
-    def get(self, request):
+    def get(self, request, list_id):
         token_pass(request.headers, 0)
-        list_id = request.GET["list_id"]
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()

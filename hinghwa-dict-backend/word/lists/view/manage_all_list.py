@@ -23,17 +23,14 @@ class ManageAllLists(View):
         if not list_form.is_valid():
             raise BadRequestException()
         list = list_form.save(commit=False)
+        list.createTime = timezone.now()
+        list.updateTime = timezone.now()
+        list.author = user
         list.id = generate_list_id()
         for id in body["words"]:
             word = Word.objects.get(id=id)
-            print()
-            print(list)
-            print(type(word))
+            list.save()
             list.words.add(word)
-        list.author = user
-        list.createTime = timezone.now()
-        list.updateTime = timezone.now()
-        list.save()
         return JsonResponse(list_all(list), status=200)
 
     # WD0605查找词单(多)
@@ -43,4 +40,4 @@ class ManageAllLists(View):
         result = []
         for list in total_list:
             result.append(list_all(list))
-        return JsonResponse({"total": result.count(), "lists": result})
+        return JsonResponse({"total": len(result), "lists": result})

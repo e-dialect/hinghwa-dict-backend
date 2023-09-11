@@ -15,17 +15,15 @@ from django.utils import timezone
 class ManageListWords(View):
     # WD0606增加词单词语
     @csrf_exempt
-    def post(self, request):
+    def post(self, request, list_id):
         token_pass(request.headers, -1)
-        list_id = request.GET["list_id"]
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()
-        body = demjson.decode(request)
+        list = list[0]
+        body = demjson.decode(request.body)
         for id in body["words"]:
             word = Word.objects.get(id=id)
-            if not word:
-                raise WordNotFoundException()
             list.words.add(word)
         list.updateTime = timezone.now()
         list.save()
@@ -33,10 +31,9 @@ class ManageListWords(View):
 
     # WD0607删除词单词语
     @csrf_exempt
-    def delete(self, request):
+    def delete(self, request, list_id):
         token_pass(request.headers, -1)
-        list_id = request.GET["list_id"]
-        body = demjson.decode(request)
+        body = demjson.decode(request.body)
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()
@@ -48,4 +45,4 @@ class ManageListWords(View):
             list.words.remove(word)
         list.updateTime = timezone.now()
         list.save()
-        return JsonResponse({}, status=200)
+        return JsonResponse(list_all(list), status=200)
