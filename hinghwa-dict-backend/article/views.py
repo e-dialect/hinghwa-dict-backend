@@ -187,12 +187,12 @@ class ManageVisibility(View):
         body = demjson.decode(request.body)
         article.visibility = body["result"]
         if article.visibility:
-            content = f"恭喜您的文章(id ={id}) 已通过审核"
+            content = f"恭喜您的 文章(id={id}) 已通过审核"
             user_id = article.author.id
             transaction_info = manage_points_in_article(user_id)
         else:
             msg = body["reason"]
-            content = f"您的文章(id = {id}) 审核状态变为不可见，理由是:\n\t{msg}"
+            content = f"您的 文章(id={id}) 审核状态变为不可见，理由是:\n\t{msg}"
         sendNotification(
             None,
             [article.author],
