@@ -209,7 +209,7 @@ class Character(models.Model):
 
 
 class List(models.Model):
-    name = models.CharField(blank=True, max_length=30, verbose_name="类型")
+    name = models.CharField(blank=True, max_length=30, verbose_name="词单名称")
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="list_words", verbose_name="词单作者"
     )
@@ -223,3 +223,7 @@ class List(models.Model):
     createTime = models.DateTimeField(blank=True, verbose_name="创建时间")
     updateTime = models.DateTimeField(blank=True, verbose_name="更新时间")
     description = models.CharField(blank=True, max_length=100, verbose_name="词单简介")
+
+    class Meta:
+        verbose_name_plural = "词单"
+        verbose_name = "词单"

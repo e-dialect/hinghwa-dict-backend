@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ngettext
 
-from .models import Word, Character, Pronunciation, Application
+from .models import Word, Character, Pronunciation, Application, List
 from website.views import sendNotification
 
 
@@ -183,7 +183,27 @@ class ApplicationAdmin(admin.ModelAdmin):
     raw_id_fields = ("contributor", "verifier", "word")
 
 
+class ListsAdmin(admin.ModelAdmin):
+    list_display = ["id", "name", "createTime", "updateTime", "description", "author", "include_words"]
+    list_filter = ["name", "author"]
+    search_fields = [
+        "words_word",
+        "name",
+        "description",
+        "author"
+        "id"
+    ]
+    ordering = ["-id"]
+    list_per_page = 50
+    # filter_horizontal = ["words_included_word"]
+    raw_id_fields = ["words"]
+
+    def include_words(self, obj):
+        return [bt.word for bt in obj.words.all()]
+
+
 admin.site.register(Word, WordAdmin)
 admin.site.register(Character, CharacterAdmin)
 admin.site.register(Pronunciation, PronunciationAdmin)
 admin.site.register(Application, ApplicationAdmin)
+admin.site.register(List, ListsAdmin)
