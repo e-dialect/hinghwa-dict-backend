@@ -120,7 +120,7 @@ class SingleApplication(View):
                 # 修改词语
                 word = application.word
                 content = (
-                    f"您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})已通过"
+                    f"您对 词语(id={application.word.id}) 提出的修改建议申请(id={application.id}) 已通过"
                     f"，感谢您为社区所做的贡献！"
                 )
                 title = "【通知】词条修改申请审核结果"
@@ -131,8 +131,8 @@ class SingleApplication(View):
                 )
                 application.word = word
                 content = (
-                    f"您的创建申请 (id = {application.id})已通过，"
-                    f"已创建词条(id = {word.id})，感谢您为社区所做的贡献！"
+                    f"您的创建 申请(id={application.id}) 已通过，"
+                    f"已创建 词条(id={word.id}) ，感谢您为社区所做的贡献！"
                 )
                 title = "【通知】词条创建申请审核结果"
             attributes = [
@@ -160,14 +160,14 @@ class SingleApplication(View):
             if application.word:
                 # 修改词语
                 content = (
-                    f"您对(id = {application.word.id}) 词语提出的修改建议(id = {application.id})"
+                    f"您对 词语(id={application.word.id}) 提出的修改建议 申请(id={application.id})"
                     f'未能通过审核，理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
                 )
                 feedback = application.word.id
             else:
                 # 新建词语
                 content = (
-                    f"您的创建申请 (id = {application.id})未能通过审核，"
+                    f"您的词语创建 申请(id={application.id}) 未能通过审核，"
                     f'理由是:\n\t{body["reason"]}\n感谢您为社区所做的贡献！'
                 )
         application.save()
