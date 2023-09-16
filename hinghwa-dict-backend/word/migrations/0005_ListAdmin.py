@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('word', '0004_word_list'),
+        ("word", "0004_word_list"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='list',
-            options={'verbose_name': '词单', 'verbose_name_plural': '词单'},
+            name="list",
+            options={"verbose_name": "词单", "verbose_name_plural": "词单"},
         ),
     ]

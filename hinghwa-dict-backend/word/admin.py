@@ -184,15 +184,17 @@ class ApplicationAdmin(admin.ModelAdmin):
 
 
 class ListsAdmin(admin.ModelAdmin):
-    list_display = ["id", "name", "createTime", "updateTime", "description", "author", "include_words"]
-    list_filter = ["name", "author"]
-    search_fields = [
-        "words_word",
+    list_display = [
+        "id",
         "name",
+        "createTime",
+        "updateTime",
         "description",
-        "author"
-        "id"
+        "author",
+        "include_words",
     ]
+    list_filter = ["name", "author"]
+    search_fields = ["words_word", "name", "description", "author" "id"]
     ordering = ["-id"]
     list_per_page = 50
     # filter_horizontal = ["words_included_word"]
