@@ -46,7 +46,6 @@ class ManageSingleLists(View):
 
     # WD0604查看词单(单)
     def get(self, request, list_id):
-        token_pass(request.headers, 0)
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()

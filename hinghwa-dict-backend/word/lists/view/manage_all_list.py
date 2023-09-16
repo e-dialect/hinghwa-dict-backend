@@ -35,7 +35,6 @@ class ManageAllLists(View):
 
     # WD0605查找词单(多)
     def get(self, request):
-        token_pass(request.headers, 0)
         total_list = List.objects.all()
         result = []
         for list in total_list:
