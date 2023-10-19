@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "0a67c420-ea9f-427e-8bd3-6e3f538ead47",
+          "id": "5a1068e4-7442-472e-9118-41727bb115e8",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -101,12 +101,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -131,6 +126,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -175,7 +179,7 @@
           }
         },
         {
-          "id": "652e57a2-3865-4ae7-b1ed-c9a8711e828d",
+          "id": "76e758c2-9aca-4238-9786-934d9aa6094f",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -202,7 +206,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -266,12 +270,7 @@
           ],
           "responseDefinition": {
             "id": 70049266,
-            "createdAt": "2022-07-15T11:28:36.000Z",
-            "updatedAt": "2022-07-15T11:29:54.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663288,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -293,6 +292,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:28:36.000Z",
+            "updatedAt": "2022-07-15T11:29:54.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663288,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -431,6 +438,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -449,7 +463,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -467,7 +482,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -523,6 +539,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -533,7 +553,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -543,7 +564,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -570,7 +592,7 @@
           }
         },
         {
-          "id": "0ce4da58-52cd-4193-b362-8c61133bebcc",
+          "id": "119bf3f1-851c-4111-ae16-21d40f5faf32",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -595,7 +617,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -606,7 +628,7 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"目里特意七\",\n    \"options\": [\n        \"下改深区矿许之体山因本电气强收用度。\",\n        \"但存务事需见热却候心部切各。\"\n    ],\n    \"answer\": 6,\n    \"explanation\": \"正周按到组同先现亲通布安角事便明。书厂例了温最此回教况直元取提单叫。调任思角行石状东那种联关义观。提比便化满才与造我话切况外。受报指几使院精土难基车清不才可基候。\",\n    \"voice_source\": \"http://qdnwcqfb.id/aifs\"\n}",
+              "raw": "{\n    \"question\": \"维你军局论积\",\n    \"answer\": 91,\n    \"options\": [\n        \"公东在都认科往部增任照流转。\",\n        \"电铁关增得反北元群本效文心指今。\",\n        \"统住产张信民下少料许他导空。\",\n        \"西眼世量已前红上到农走织认。\"\n    ],\n    \"explanation\": \"第也没然她非入话应却或东。又面场斯划月情场三机走出教程眼千类。处形革些些能程用学把值精数这气战元。角内连常深及拉受气主省进只国。理如石想般快该厂院次听米连代工月。做热电联难业果报维领成除活拉见百。\",\n    \"type\": \"laboris amet culpa\",\n    \"voice_source\": \"http://hjxik.mz/orkty\"\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
@@ -634,7 +656,15 @@
                   "          } catch(e) {",
                   "            let text = pm.response.text();",
                   "            const xml2js = require('xml2js');",
-                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            function removeXmlUselessPrefixAndSuffix(text) {",
+                  "              const start = text.indexOf('<');",
+                  "              const end = text.lastIndexOf('>');",
+                  "              if (start === -1 || end === -1) {",
+                  "                return text;",
+                  "              }",
+                  "              return text.substring(start, end + 1);",
+                  "            }",
+                  "            text = removeXmlUselessPrefixAndSuffix(text);",
                   "            let json;",
                   "            let xmlParseOptions = {",
                   "                explicitArray: false,",
@@ -721,12 +751,7 @@
           ],
           "responseDefinition": {
             "id": 70048663,
-            "createdAt": "2022-07-15T11:22:03.000Z",
-            "updatedAt": "2022-07-23T08:30:31.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662986,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -748,6 +773,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:22:03.000Z",
+            "updatedAt": "2022-07-23T08:30:31.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662986,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -886,6 +920,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -904,7 +945,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -922,7 +964,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -978,6 +1021,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -988,7 +1035,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -998,7 +1046,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -1028,7 +1077,7 @@
           }
         },
         {
-          "id": "fc0a210e-43b9-46a8-8d71-e2da5535d0a9",
+          "id": "0f95aab4-7add-47b2-a568-5db056991f15",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -1055,7 +1104,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -1250,12 +1299,7 @@
           ],
           "responseDefinition": {
             "id": 70049266,
-            "createdAt": "2022-07-15T11:28:36.000Z",
-            "updatedAt": "2022-07-15T11:29:54.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663288,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -1277,6 +1321,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:28:36.000Z",
+            "updatedAt": "2022-07-15T11:29:54.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663288,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -1415,6 +1467,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -1433,7 +1492,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -1451,7 +1511,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -1507,6 +1568,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -1517,7 +1582,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -1527,7 +1593,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -1554,7 +1621,7 @@
           }
         },
         {
-          "id": "42c08d3b-9f40-4d74-b69a-facce08a5d83",
+          "id": "4df00ed0-4eac-4e2b-b5af-8dbf2b2ede5d",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -1576,7 +1643,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -1623,7 +1690,7 @@
           }
         },
         {
-          "id": "c3b32c0b-becf-46d2-89a9-efe1436cae18",
+          "id": "66eca05b-07a8-44d8-8b8d-9ff353ff65da",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -1648,7 +1715,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -1771,12 +1838,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -1801,6 +1863,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -1845,7 +1916,7 @@
           }
         },
         {
-          "id": "db12169e-1528-4682-b3e2-9d361f5ca9cd",
+          "id": "683b173c-9135-403f-bc7d-3918d158c54e",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -1872,7 +1943,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -1892,12 +1963,7 @@
           "event": [],
           "responseDefinition": {
             "id": 106182475,
-            "createdAt": "2022-10-06T08:43:19.000Z",
-            "updatedAt": "2023-08-03T12:13:00.000Z",
-            "deletedAt": null,
-            "apiDetailId": 42646298,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -1915,6 +1981,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-10-06T08:43:19.000Z",
+            "updatedAt": "2023-08-03T12:13:00.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 42646298,
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -2064,7 +2138,7 @@
           }
         },
         {
-          "id": "29248409-1334-44ff-90df-9d1aee06f918",
+          "id": "1b6aa0a7-b95e-4a1a-ba00-65c1b20fdf72",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -2086,7 +2160,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -2098,12 +2172,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70047710,
-            "createdAt": "2022-07-15T11:04:02.000Z",
-            "updatedAt": "2022-07-23T07:28:13.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662407,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -2125,6 +2194,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:04:02.000Z",
+            "updatedAt": "2022-07-23T07:28:13.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662407,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -2263,6 +2340,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -2281,7 +2365,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -2299,7 +2384,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -2355,6 +2441,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -2365,7 +2455,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -2375,7 +2466,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -2402,7 +2494,7 @@
           }
         },
         {
-          "id": "e4f20cbc-e62e-410e-83e3-c7aa3adfbac3",
+          "id": "c42d1e66-814c-40df-b8e0-45607810cd10",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -2428,7 +2520,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -2448,12 +2540,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70048846,
-            "createdAt": "2022-07-15T11:23:50.000Z",
-            "updatedAt": "2022-07-23T08:32:09.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663120,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -2473,6 +2560,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:23:50.000Z",
+            "updatedAt": "2022-07-23T08:32:09.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663120,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -2611,6 +2707,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -2629,7 +2732,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -2647,7 +2751,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -2703,6 +2808,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -2713,7 +2822,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -2723,7 +2833,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -2766,7 +2877,7 @@
           }
         },
         {
-          "id": "68502756-b247-4ba0-98c3-3c1d9dcc4496",
+          "id": "d96462ff-a46b-42eb-9b3e-5141dcc60e52",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -2788,7 +2899,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -2835,7 +2946,7 @@
           }
         },
         {
-          "id": "5aee70de-4bc4-4329-ba81-714c7ab82eb7",
+          "id": "64a5e100-acb1-4e87-a844-7825159bc7f5",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -2862,7 +2973,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -2882,12 +2993,7 @@
           "event": [],
           "responseDefinition": {
             "id": 106182475,
-            "createdAt": "2022-10-06T08:43:19.000Z",
-            "updatedAt": "2023-08-03T12:13:00.000Z",
-            "deletedAt": null,
-            "apiDetailId": 42646298,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -2905,6 +3011,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-10-06T08:43:19.000Z",
+            "updatedAt": "2023-08-03T12:13:00.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 42646298,
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -3054,7 +3168,7 @@
           }
         },
         {
-          "id": "b1d9e508-fed5-4533-9286-4218efb247e3",
+          "id": "ecdcfcb3-b92a-493a-84a1-36cc57dff24c",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -3076,7 +3190,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -3088,12 +3202,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70047710,
-            "createdAt": "2022-07-15T11:04:02.000Z",
-            "updatedAt": "2022-07-23T07:28:13.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662407,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -3115,6 +3224,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:04:02.000Z",
+            "updatedAt": "2022-07-23T07:28:13.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662407,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -3253,6 +3370,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -3271,7 +3395,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -3289,7 +3414,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -3345,6 +3471,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -3355,7 +3485,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -3365,7 +3496,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -3392,7 +3524,7 @@
           }
         },
         {
-          "id": "22fce59c-28c5-4f6b-995c-aa8b5ab73b5a",
+          "id": "4b15d172-5db9-4a89-a104-b9b4f42b8b7b",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -3418,7 +3550,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -3438,12 +3570,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70048846,
-            "createdAt": "2022-07-15T11:23:50.000Z",
-            "updatedAt": "2022-07-23T08:32:09.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663120,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -3463,6 +3590,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:23:50.000Z",
+            "updatedAt": "2022-07-23T08:32:09.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663120,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -3601,6 +3737,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -3619,7 +3762,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -3637,7 +3781,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -3693,6 +3838,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -3703,7 +3852,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -3713,7 +3863,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -3756,7 +3907,7 @@
           }
         },
         {
-          "id": "805a6d21-6adc-4415-94db-71724e4dce82",
+          "id": "b5270863-dbeb-4ece-b614-4d912ecdd402",
           "name": "QZ0101 获取单个测试(QZ0101 获取单个测试)",
           "request": {
             "url": {
@@ -3778,7 +3929,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -3825,7 +3976,7 @@
           }
         },
         {
-          "id": "3b94fd8b-639d-4ec9-8858-439d056eccb5",
+          "id": "78f40d4e-f25a-4822-aaa0-c36aca8b4595",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -3851,7 +4002,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "DELETE",
@@ -3990,7 +4141,15 @@
                   "          } catch(e) {",
                   "            let text = pm.response.text();",
                   "            const xml2js = require('xml2js');",
-                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            function removeXmlUselessPrefixAndSuffix(text) {",
+                  "              const start = text.indexOf('<');",
+                  "              const end = text.lastIndexOf('>');",
+                  "              if (start === -1 || end === -1) {",
+                  "                return text;",
+                  "              }",
+                  "              return text.substring(start, end + 1);",
+                  "            }",
+                  "            text = removeXmlUselessPrefixAndSuffix(text);",
                   "            let json;",
                   "            let xmlParseOptions = {",
                   "                explicitArray: false,",
@@ -4026,12 +4185,7 @@
           ],
           "responseDefinition": {
             "id": 70048940,
-            "createdAt": "2022-07-15T11:25:39.000Z",
-            "updatedAt": "2022-07-15T11:25:39.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663170,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -4040,6 +4194,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:25:39.000Z",
+            "updatedAt": "2022-07-15T11:25:39.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663170,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -4062,7 +4225,7 @@
           }
         },
         {
-          "id": "1a43714a-47e2-461e-86de-da5543439564",
+          "id": "91b4fd9d-0ee5-4841-827b-b8c27d84e894",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -4087,7 +4250,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -4159,12 +4322,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -4189,6 +4347,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -4233,7 +4400,7 @@
           }
         },
         {
-          "id": "5d78fdd9-ff6e-4462-8ec7-29e23e68a6f7",
+          "id": "b9c6af07-90dd-45c9-9bfc-c71913874c44",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -4260,7 +4427,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -4455,12 +4622,7 @@
           ],
           "responseDefinition": {
             "id": 70049266,
-            "createdAt": "2022-07-15T11:28:36.000Z",
-            "updatedAt": "2022-07-15T11:29:54.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663288,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -4482,6 +4644,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:28:36.000Z",
+            "updatedAt": "2022-07-15T11:29:54.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663288,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -4620,6 +4790,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -4638,7 +4815,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -4656,7 +4834,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -4712,6 +4891,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -4722,7 +4905,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -4732,7 +4916,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -4759,7 +4944,7 @@
           }
         },
         {
-          "id": "6ad02ea3-bdca-491d-8cd0-88dabf7783ae",
+          "id": "042ed06d-9af9-4365-8e9f-59b99f73512e",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -4784,7 +4969,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -4795,7 +4980,8 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"实论术影化使\",\n    \"options\": [\n        \"商参百设动深重温义同府事。\",\n        \"况新将治法题往长断拉也要天本西变年。\",\n        \"放般约只段文料难江把当五规据改加候。\"\n    ],\n    \"answer\": 68,\n    \"explanation\": \"保为题日而能参装确才养阶验。目除式称准要以史计为图百。并太了备多素向时路江方由东水才之高。克好状算化切育张要酸构线传反设。省己院都质见青验状从工很代。\",\n    \"voice_source\": \"http://demjhs.lc/tiwepkmjl\"\n}",
+              "raw": "{\n    \"question\": \"八原事量\",\n    \"answer\": 44,\n    \"options\": [\n        \"局好维子以交同改利处济外十按写格步身。\",\n        \"总入三值马从指断以儿活育写于维北领。\",\n        \"气代对线明金比看接今制究层。\",\n        \"近算习路列得把斗建阶老前程道政。\",\n        \"万传成她象走出义近导自义青思置。\"\n    ],\n    \"explanation\": \"生精文流林式群市选见按声平。象温往度业半到建设农京改省边把县美。切江统今战约示领进会较引南多员。边如取什的部例次如正增知件即合类。群过平主精引本才除土么查油民六在。\",\n    \"type\": \"est qui et officia exercitation\",\n    \"voice_source\": \"http://gbrjxdv.fj/nlvoluge\"\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -4822,7 +5008,15 @@
                   "          } catch(e) {",
                   "            let text = pm.response.text();",
                   "            const xml2js = require('xml2js');",
-                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            function removeXmlUselessPrefixAndSuffix(text) {",
+                  "              const start = text.indexOf('<');",
+                  "              const end = text.lastIndexOf('>');",
+                  "              if (start === -1 || end === -1) {",
+                  "                return text;",
+                  "              }",
+                  "              return text.substring(start, end + 1);",
+                  "            }",
+                  "            text = removeXmlUselessPrefixAndSuffix(text);",
                   "            let json;",
                   "            let xmlParseOptions = {",
                   "                explicitArray: false,",
@@ -4909,12 +5103,7 @@
           ],
           "responseDefinition": {
             "id": 70048663,
-            "createdAt": "2022-07-15T11:22:03.000Z",
-            "updatedAt": "2022-07-23T08:30:31.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662986,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -4936,6 +5125,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:22:03.000Z",
+            "updatedAt": "2022-07-23T08:30:31.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662986,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -5074,6 +5272,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -5092,7 +5297,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -5110,7 +5316,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -5166,6 +5373,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -5176,7 +5387,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -5186,7 +5398,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -5216,7 +5429,7 @@
           }
         },
         {
-          "id": "3eee1f5d-69a4-42df-b829-57415d9962af",
+          "id": "3ebe75d2-8c7a-4d37-8248-f6abf97c79f7",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -5241,7 +5454,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -5252,7 +5465,8 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"斗设他放从政比\",\n    \"options\": [\n        \"又亲计圆市过物四明三斯气。\",\n        \"往红明资需总被例在老门同合。\",\n        \"集许质型素来电立非备话是。\"\n    ],\n    \"answer\": 29,\n    \"explanation\": \"资文矿深消精林心消保府动。织见它所离强直联称定业以相观飞响农。品养算传农千热造水六八导。出半适世院队合从工太部真整开。现反验称亲月且率期能期步阶如一律。声题国龙地本色队思光置教机各准。\",\n    \"voice_source\": \"\"\n}",
+              "raw": "{\n    \"question\": \"程也极华改\",\n    \"answer\": 29,\n    \"options\": [\n        \"龙争知元华的已马由来果酸国外长从满。\",\n        \"候或只需地年公系天应青认样府。\",\n        \"常一四则其门实制精写写名养严今图。\"\n    ],\n    \"explanation\": \"交术府两体国最现儿那收率装出步。物类身矿反安没商四识种到离圆基色得万。为到无根起管米低正以它相。过处住将科书元才龙放做上效技带同越。要器力设手可上质出区易龙后油山研作。准正龙米百影和心界给史天。常劳阶车满己办却验声力果边约连利。\",\n    \"type\": \"aliqua officia dolor irure veniam\",\n    \"voice_source\": \"http://adsdll.la/qwe\"\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -5279,7 +5493,15 @@
                   "          } catch(e) {",
                   "            let text = pm.response.text();",
                   "            const xml2js = require('xml2js');",
-                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            function removeXmlUselessPrefixAndSuffix(text) {",
+                  "              const start = text.indexOf('<');",
+                  "              const end = text.lastIndexOf('>');",
+                  "              if (start === -1 || end === -1) {",
+                  "                return text;",
+                  "              }",
+                  "              return text.substring(start, end + 1);",
+                  "            }",
+                  "            text = removeXmlUselessPrefixAndSuffix(text);",
                   "            let json;",
                   "            let xmlParseOptions = {",
                   "                explicitArray: false,",
@@ -5315,12 +5537,7 @@
           ],
           "responseDefinition": {
             "id": 70048663,
-            "createdAt": "2022-07-15T11:22:03.000Z",
-            "updatedAt": "2022-07-23T08:30:31.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662986,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -5342,6 +5559,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:22:03.000Z",
+            "updatedAt": "2022-07-23T08:30:31.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662986,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -5480,6 +5706,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -5498,7 +5731,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -5516,7 +5750,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -5572,6 +5807,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -5582,7 +5821,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -5592,7 +5832,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -5622,7 +5863,7 @@
           }
         },
         {
-          "id": "a7abd798-e345-497f-b0b6-abf60a1c56e5",
+          "id": "d381e1cf-9d60-4de1-bd76-98b9baf4c0fe",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -5647,7 +5888,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -5658,7 +5899,8 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"新角外林\",\n    \"options\": [\n        \"三好界意习们如现克群备海那两。\",\n        \"公影照完方里极界他行件育种。\",\n        \"局老组记式深有多可形增实花。\",\n        \"全机温作合看意点府今专型值可采。\",\n        \"况选海议图明严开价主克中米。\"\n    ],\n    \"answer\": 98,\n    \"explanation\": \"处识且会性商员着将市每常又。最据石提派科求务式流军得学风种周难个。书治再管可思气白信能心本老时。并者委布江品选处常京青周才。\",\n    \"voice_source\": \"http://wqwtph.nu/nrmlhc\"\n}",
+              "raw": "{\n    \"question\": \"少已图点\",\n    \"answer\": 16,\n    \"options\": [\n        \"号领元事很合当受压元样类保。\",\n        \"万族府名断统系准外还以重被路复。\",\n        \"教二低住里水局表道正非业当么。\",\n        \"两每安名主革号何快这值派须正全斗报。\",\n        \"政图半物增从进话能很线拉切会给山交上。\"\n    ],\n    \"explanation\": \"道器山多达主感些难极较位真并看两识。物教许群问年两结完称而重。维变比把引别维达被便志团正院什。内点书越增代集色命着非公音。\",\n    \"type\": \"id magna cillum consequat\",\n    \"voice_source\": \"http://etpkl.hk/bhcj\"\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -5685,7 +5927,15 @@
                   "          } catch(e) {",
                   "            let text = pm.response.text();",
                   "            const xml2js = require('xml2js');",
-                  "            text = text.replace(/^[^<]*/, '').replace(/[^>]*$/, '');",
+                  "            function removeXmlUselessPrefixAndSuffix(text) {",
+                  "              const start = text.indexOf('<');",
+                  "              const end = text.lastIndexOf('>');",
+                  "              if (start === -1 || end === -1) {",
+                  "                return text;",
+                  "              }",
+                  "              return text.substring(start, end + 1);",
+                  "            }",
+                  "            text = removeXmlUselessPrefixAndSuffix(text);",
                   "            let json;",
                   "            let xmlParseOptions = {",
                   "                explicitArray: false,",
@@ -5721,12 +5971,7 @@
           ],
           "responseDefinition": {
             "id": 70048663,
-            "createdAt": "2022-07-15T11:22:03.000Z",
-            "updatedAt": "2022-07-23T08:30:31.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662986,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -5748,6 +5993,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:22:03.000Z",
+            "updatedAt": "2022-07-23T08:30:31.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662986,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -5886,6 +6140,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -5904,7 +6165,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -5922,7 +6184,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -5978,6 +6241,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -5988,7 +6255,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -5998,7 +6266,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -6028,7 +6297,7 @@
           }
         },
         {
-          "id": "f42f10c7-6a41-4e11-b868-42f3fc4212fd",
+          "id": "fff92673-0994-40f4-8d13-513af6757687",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -6053,7 +6322,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -6176,12 +6445,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -6206,6 +6470,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -6250,7 +6523,7 @@
           }
         },
         {
-          "id": "98396cd2-2649-4b99-b85c-93f3abaa5522",
+          "id": "5926de1d-f70f-4a1d-b897-f3fe44335772",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -6277,7 +6550,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -6297,12 +6570,7 @@
           "event": [],
           "responseDefinition": {
             "id": 106182475,
-            "createdAt": "2022-10-06T08:43:19.000Z",
-            "updatedAt": "2023-08-03T12:13:00.000Z",
-            "deletedAt": null,
-            "apiDetailId": 42646298,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -6320,6 +6588,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-10-06T08:43:19.000Z",
+            "updatedAt": "2023-08-03T12:13:00.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 42646298,
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -6469,7 +6745,7 @@
           }
         },
         {
-          "id": "15da6fe5-3dad-4ada-a804-130fa5a8e682",
+          "id": "f4125a0a-a546-481a-8fd2-605ab94d2326",
           "name": "LG0101 账号密码登录(登录用户user_test)",
           "request": {
             "url": {
@@ -6494,7 +6770,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -6566,12 +6842,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -6596,6 +6867,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -6640,7 +6920,7 @@
           }
         },
         {
-          "id": "23f3d52e-9fef-44c6-93fb-1be4d5d9d9f7",
+          "id": "63f24a67-fadb-490c-b52a-f564530a19ff",
           "name": "QZ0201 搜索测试题(QZ0201 搜索测试题)",
           "request": {
             "url": {
@@ -6667,7 +6947,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -6748,12 +7028,7 @@
           ],
           "responseDefinition": {
             "id": 70049266,
-            "createdAt": "2022-07-15T11:28:36.000Z",
-            "updatedAt": "2022-07-15T11:29:54.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663288,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -6775,6 +7050,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:28:36.000Z",
+            "updatedAt": "2022-07-15T11:29:54.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663288,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -6913,6 +7196,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -6931,7 +7221,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -6949,7 +7240,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -7005,6 +7297,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -7015,7 +7311,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -7025,7 +7322,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -7052,7 +7350,7 @@
           }
         },
         {
-          "id": "5bb609a7-5fd7-4ee4-9438-ee21c5b79515",
+          "id": "c670369d-407c-4b33-9fd2-5d20b90c872e",
           "name": "QZ0202 随机测试题(QZ0202 随机测试题)",
           "request": {
             "url": {
@@ -7074,7 +7372,7 @@
             "header": [
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -7086,12 +7384,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70049339,
-            "createdAt": "2022-07-15T11:30:51.000Z",
-            "updatedAt": "2022-07-23T08:32:52.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29663329,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -7113,6 +7406,14 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:30:51.000Z",
+            "updatedAt": "2022-07-23T08:32:52.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29663329,
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -7251,6 +7552,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -7269,7 +7577,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -7287,7 +7596,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -7343,6 +7653,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -7353,7 +7667,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -7363,7 +7678,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -7564,6 +7880,13 @@
             "title",
             "color"
           ]
+        },
+        "level": {
+          "type": "integer",
+          "title": "等级",
+          "mock": {
+            "mock": "@integer(1,6)"
+          }
         }
       },
       "required": [
@@ -7582,7 +7905,8 @@
         "wechat",
         "points_sum",
         "points_now",
-        "title"
+        "title",
+        "level"
       ],
       "x-apifox-orders": [
         "id",
@@ -7600,7 +7924,8 @@
         "title",
         "registration_time",
         "login_time",
-        "wechat"
+        "wechat",
+        "level"
       ],
       "title": "user_all",
       "name": "user_all"
@@ -7656,6 +7981,10 @@
             "string",
             "null"
           ]
+        },
+        "type": {
+          "type": "string",
+          "title": "类型"
         }
       },
       "x-apifox-orders": [
@@ -7666,7 +7995,8 @@
         "id",
         "author",
         "visibility",
-        "voice_source"
+        "voice_source",
+        "type"
       ],
       "required": [
         "question",
@@ -7676,7 +8006,8 @@
         "id",
         "visibility",
         "author",
-        "voice_source"
+        "voice_source",
+        "type"
       ],
       "title": "quiz_all",
       "name": "quiz_all"
@@ -7718,6 +8049,10 @@
             "mock": "@url(\"http\")"
           },
           "title": "播报语音链接"
+        },
+        "type": {
+          "type": "string",
+          "title": "类型"
         }
       },
       "x-apifox-orders": [
@@ -7725,13 +8060,15 @@
         "options",
         "answer",
         "explanation",
-        "voice_source"
+        "voice_source",
+        "type"
       ],
       "required": [
         "question",
         "answer",
         "options",
-        "explanation"
+        "explanation",
+        "type"
       ],
       "title": "[入] quiz_update",
       "name": "[入] quiz_update"
@@ -7825,17 +8162,14 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "457c79f0-9913-47ae-85ba-a724bc896267",
+      "id": "ee7a162a-249e-44fb-9eda-08c1234ef0f6",
       "name": "测试环境",
-      "baseUrl": "http://127.0.0.1:8000",
-      "baseUrls": {
-        "default": "http://127.0.0.1:8000"
-      },
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMyMzMyMC44NTg0Mjl9.HcRDDnLRNQGINlbGSSxWYGeeYmjDlcoGzSr_5JkgCxo",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -7846,13 +8180,13 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": "16",
           "key": "word_id_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "15",
           "key": "word_id_1",
           "initialValue": ""
         },
@@ -7876,7 +8210,7 @@
         },
         {
           "type": "any",
-          "value": "3",
+          "value": "1",
           "key": "article_id",
           "initialValue": ""
         },
@@ -7942,15 +8276,33 @@
         },
         {
           "type": "any",
-          "value": "undefined",
+          "value": "DD000004",
           "key": "order_id",
-          "initialValue": "undefined"
+          "initialValue": "DD000004"
         },
         {
           "type": "any",
           "value": "JL000039",
           "key": "transaction_id",
           "initialValue": "JL000039"
+        },
+        {
+          "type": "any",
+          "value": "CD000015",
+          "key": "list_id",
+          "initialValue": "CD000015"
+        },
+        {
+          "type": "any",
+          "value": "SJ000008",
+          "key": "paper_id",
+          "initialValue": "SJ000008"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "paper_count",
+          "initialValue": "undefined"
         }
       ]
     },
@@ -7966,9 +8318,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
-      "baseUrl": "",
-      "baseUrls": {},
+      "id": "286dbad6-8ca6-47b7-8138-5a71649452e4",
       "values": []
     },
     "parameter": {

@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "d392e11e-0e5e-42ef-9a78-c136f9bbf582",
+          "id": "8d201910-66a4-4db1-9df5-ed6a803711c4",
           "name": "LG0101 账号密码登录(登录用户)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -101,12 +101,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -131,6 +126,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -175,7 +179,7 @@
           }
         },
         {
-          "id": "14948791-687b-4095-8bc8-0c3843f9dcee",
+          "id": "ff48a81a-6aa2-4569-869d-f6902b1e5412",
           "name": "QZ0105 审核测试题(QZ0105审核测试题)",
           "request": {
             "url": {
@@ -202,7 +206,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -277,7 +281,7 @@
           }
         },
         {
-          "id": "391f7049-786a-48cc-9572-763c90a5f71c",
+          "id": "8d5d700d-54c7-43d6-80c4-867cd6f986b2",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -302,7 +306,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -425,12 +429,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -455,6 +454,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -499,7 +507,7 @@
           }
         },
         {
-          "id": "85c6027f-5da8-49b7-814a-f4849cdcf85f",
+          "id": "3e9a40bb-e4f8-44c2-9942-9973a44bb355",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -524,7 +532,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -535,7 +543,8 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"列题些外如引林\",\n    \"options\": [\n        \"设验段律形儿具越内话听说越产。\",\n        \"合车产记示深江更装备日不华金。\"\n    ],\n    \"answer\": 47,\n    \"explanation\": \"南国年而该比没义济复样音水每数金。政由记院里马定拉维有儿着京。办派料引清主证经生界运确间因安个参。对始争发动查还委须毛式济业。江重江越常之身手是造种你消准支。就定还统更那其大文你区了正来层实。事员你了空边素好准活用革取打。\",\n    \"voice_source\": \"http://lkthye.pn/rcfkmvvrwv\"\n}",
+              "raw": "{\n    \"question\": \"及处认色多\",\n    \"answer\": 27,\n    \"options\": [\n        \"也场重世见龙老保还必容难清八。\",\n        \"号总上计新我铁论容及越己教般方。\"\n    ],\n    \"explanation\": \"今如统进持养层达派身导阶周本常感满。生号越当价向交相决做之查没总用资九。几日接技必品技八必华与北江同取查路。强劳支口权收层其参拉所元千音群按。金比术圆法响部始到保历天近交铁设二。\",\n    \"type\": \"sunt\",\n    \"voice_source\": \"http://gvspnk.dk/qjtd\"\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -596,12 +605,7 @@
           ],
           "responseDefinition": {
             "id": 70048663,
-            "createdAt": "2022-07-15T11:22:03.000Z",
-            "updatedAt": "2022-07-23T08:30:31.000Z",
-            "deletedAt": null,
-            "apiDetailId": 29662986,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -623,6 +627,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2022-07-15T11:22:03.000Z",
+            "updatedAt": "2022-07-23T08:30:31.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 29662986,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -761,6 +774,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -779,7 +799,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -797,7 +818,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -853,6 +875,10 @@
                       "string",
                       "null"
                     ]
+                  },
+                  "type": {
+                    "type": "string",
+                    "title": "类型"
                   }
                 },
                 "x-apifox-orders": [
@@ -863,7 +889,8 @@
                   "id",
                   "author",
                   "visibility",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "required": [
                   "question",
@@ -873,7 +900,8 @@
                   "id",
                   "visibility",
                   "author",
-                  "voice_source"
+                  "voice_source",
+                  "type"
                 ],
                 "title": "quiz_all",
                 "name": "quiz_all"
@@ -903,7 +931,7 @@
           }
         },
         {
-          "id": "c5fe7e1a-e08e-47a0-9fb6-e104fc162ac6",
+          "id": "fa2f3c2f-ee53-4793-9c05-4486b4f1e5b4",
           "name": "LG0101 账号密码登录(登录用户)",
           "request": {
             "url": {
@@ -928,7 +956,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -1000,12 +1028,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -1030,6 +1053,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -1074,7 +1106,7 @@
           }
         },
         {
-          "id": "1c85af31-7a71-43ed-949c-46ed324fa621",
+          "id": "4ad134fb-b8fe-4541-acd7-f4f38e1308dc",
           "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
           "request": {
             "url": {
@@ -1100,7 +1132,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -1111,7 +1143,8 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"规文则制总间水\",\n        \"options\": [\n            \"县际制对认门每事石属委感识人证回求。\",\n            \"两今强三马自生从起华研色当。\",\n            \"并在节加局点办易及无复么区。\",\n            \"及最候整别线层表识性明行积正打确。\",\n            \"实深精采入历号来带们并选通半天。\"\n        ],\n        \"answer\": 87,\n        \"explanation\": \"任深红研价除王使节委高门完。严物题门作元参争做须式界身验消的。家求断制商做省素心起之格家手状进根。书深角导自开记身科头将动金反太持听。当存步布干且越受以市阶用规果率且。才加方不了民导得京须于四重流问。\",\n        \"voice_source\": \"http://hcrlxrrdtx.il/ocmqkpb\"\n    }\n}",
+              "raw": "{\n    \"quiz\": {\n        \"question\": \"从和约压\",\n        \"answer\": 68,\n        \"options\": [\n            \"派权国任也王做青决素至有除光确教争。\",\n            \"个素分器无化基电外毛东准准。\"\n        ],\n        \"explanation\": \"维们以报与研办至毛史战设志装积质。然维计声用安统行容观的场。价口种头根铁提般称术即学领据响省集指。部与报道容能变约决命府说位还。十切克口习交值好出毛动做界。干上术将性第在部提极调复打还务。\",\n        \"type\": \"sit voluptate dolore officia tempor\",\n        \"voice_source\": \"http://pygvn.cr/negcxwue\"\n    }\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -1171,7 +1204,7 @@
           }
         },
         {
-          "id": "e0c75870-b76d-452d-82bc-7b5a0da4249d",
+          "id": "7d004833-dc40-4854-b14d-24957ad7d158",
           "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
           "request": {
             "url": {
@@ -1197,7 +1230,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "DELETE",
@@ -1388,6 +1421,13 @@
             "title",
             "color"
           ]
+        },
+        "level": {
+          "type": "integer",
+          "title": "等级",
+          "mock": {
+            "mock": "@integer(1,6)"
+          }
         }
       },
       "required": [
@@ -1406,7 +1446,8 @@
         "wechat",
         "points_sum",
         "points_now",
-        "title"
+        "title",
+        "level"
       ],
       "x-apifox-orders": [
         "id",
@@ -1424,7 +1465,8 @@
         "title",
         "registration_time",
         "login_time",
-        "wechat"
+        "wechat",
+        "level"
       ],
       "title": "user_all",
       "name": "user_all"
@@ -1480,6 +1522,10 @@
             "string",
             "null"
           ]
+        },
+        "type": {
+          "type": "string",
+          "title": "类型"
         }
       },
       "x-apifox-orders": [
@@ -1490,7 +1536,8 @@
         "id",
         "author",
         "visibility",
-        "voice_source"
+        "voice_source",
+        "type"
       ],
       "required": [
         "question",
@@ -1500,7 +1547,8 @@
         "id",
         "visibility",
         "author",
-        "voice_source"
+        "voice_source",
+        "type"
       ],
       "title": "quiz_all",
       "name": "quiz_all"
@@ -1542,6 +1590,10 @@
             "mock": "@url(\"http\")"
           },
           "title": "播报语音链接"
+        },
+        "type": {
+          "type": "string",
+          "title": "类型"
         }
       },
       "x-apifox-orders": [
@@ -1549,13 +1601,15 @@
         "options",
         "answer",
         "explanation",
-        "voice_source"
+        "voice_source",
+        "type"
       ],
       "required": [
         "question",
         "answer",
         "options",
-        "explanation"
+        "explanation",
+        "type"
       ],
       "title": "[入] quiz_update",
       "name": "[入] quiz_update"
@@ -1573,17 +1627,14 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "bbcfec0e-edbc-40e4-84a6-52e58f9a6b80",
+      "id": "1ed7d456-e0d7-4c79-8a24-f326eac35873",
       "name": "测试环境",
-      "baseUrl": "http://127.0.0.1:8000",
-      "baseUrls": {
-        "default": "http://127.0.0.1:8000"
-      },
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTY2MzQ0Ny45MTgxMjR9.blDREsAN85taICmCPnqRuklUDBWLIsG5czFe9m3c5E8",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMyMzMyMC44NTg0Mjl9.HcRDDnLRNQGINlbGSSxWYGeeYmjDlcoGzSr_5JkgCxo",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1594,13 +1645,13 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": "16",
           "key": "word_id_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "15",
           "key": "word_id_1",
           "initialValue": ""
         },
@@ -1624,7 +1675,7 @@
         },
         {
           "type": "any",
-          "value": "3",
+          "value": "1",
           "key": "article_id",
           "initialValue": ""
         },
@@ -1690,15 +1741,33 @@
         },
         {
           "type": "any",
-          "value": "undefined",
+          "value": "DD000004",
           "key": "order_id",
-          "initialValue": "undefined"
+          "initialValue": "DD000004"
         },
         {
           "type": "any",
           "value": "JL000039",
           "key": "transaction_id",
           "initialValue": "JL000039"
+        },
+        {
+          "type": "any",
+          "value": "CD000015",
+          "key": "list_id",
+          "initialValue": "CD000015"
+        },
+        {
+          "type": "any",
+          "value": "SJ000008",
+          "key": "paper_id",
+          "initialValue": "SJ000008"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "paper_count",
+          "initialValue": "undefined"
         }
       ]
     },
@@ -1714,9 +1783,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "298e3590-1634-4e6e-ba31-ca5206df8092",
-      "baseUrl": "",
-      "baseUrls": {},
+      "id": "286dbad6-8ca6-47b7-8138-5a71649452e4",
       "values": []
     },
     "parameter": {
