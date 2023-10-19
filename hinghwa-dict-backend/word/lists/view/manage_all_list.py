@@ -22,6 +22,8 @@ class ManageAllLists(View):
         list_form = ListForm(body)
         if not list_form.is_valid():
             raise BadRequestException()
+        for id in body["words"]:
+            word = Word.objects.get(id=id)
         list = list_form.save(commit=False)
         list.createTime = timezone.now()
         list.updateTime = timezone.now()
