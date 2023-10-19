@@ -14,5 +14,6 @@ def quiz_all(quiz: Quiz) -> dict:
         "explanation": quiz.explanation,
         "voice_source": quiz.voice_source,
         "visibility": quiz.visibility,
+        "type": quiz.type,
     }
     return response
