@@ -357,7 +357,6 @@
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "listened",
                     "word_uploaded"
                   ],
                   "x-apifox-orders": [
