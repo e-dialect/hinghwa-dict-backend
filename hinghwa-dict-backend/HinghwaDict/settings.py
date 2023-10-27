@@ -306,7 +306,7 @@ CACHES = {
         "LOCATION": "pronunciation_ranking_cache_table",
     },
 }
-SIMPLEUI_LOGO = 'https://hinghwa.cn/img/blue.7169aa26.svg'
+SIMPLEUI_LOGO = "https://hinghwa.cn/img/blue.7169aa26.svg"
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_ACTION = False
 SIMPLEUI_ANALYSIS = False
