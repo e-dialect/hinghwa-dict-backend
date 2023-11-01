@@ -59,6 +59,11 @@ class Manage(View):
                 "word_uploaded": user.contribute_words.count(),
                 "article_views": user.articles.aggregate(Sum("views"))["views__sum"]
                 or 0,
+                # TODO 去除播放量相关（需要确认前端全部删除）
+                "listened": user.contribute_pronunciation.aggregate(Sum("views")).get(
+                    "views__sum"
+                )
+                or 0,
             },
         }
 
