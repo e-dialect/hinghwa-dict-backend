@@ -19,6 +19,7 @@ def create_quiz_history(id):
     history.total = 0
     history.save()
 
+
 class QuizHistory(View):
     # 查询
     def get(self, request):

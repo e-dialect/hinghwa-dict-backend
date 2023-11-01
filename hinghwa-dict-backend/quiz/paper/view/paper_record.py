@@ -45,9 +45,3 @@ class PaperRecord(View):
         for record in total_records:
             results.append(record_all(record))
         return JsonResponse({"total": len(results), "record": results})
-
-
-
-
-
-

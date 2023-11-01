@@ -67,4 +67,3 @@ class QuizHistory(models.Model):
     paper = models.ManyToManyField(
         Paper, related_name="relate_paper", verbose_name="对应试卷"
     )
-

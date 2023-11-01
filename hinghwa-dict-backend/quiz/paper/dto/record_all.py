@@ -8,6 +8,6 @@ def record_all(record: Record):
         "timestamp": record.timestamp,
         "correct_answer": record.correct_answer,
         "answer_user": user_simple(record.answer_user),
-        "paper": paper_all(record.exam)
+        "paper": paper_all(record.exam),
     }
     return response

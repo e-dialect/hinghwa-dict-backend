@@ -6,47 +6,101 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('quiz', '0003_quiz_voice_source'),
+        ("quiz", "0003_quiz_voice_source"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Paper',
+            name="Paper",
             fields=[
-                ('title', models.CharField(blank=True, max_length=50, verbose_name='试卷标题')),
-                ('quantity', models.IntegerField(blank=True, verbose_name='题目数量')),
-                ('id', models.CharField(max_length=20, primary_key=True, serialize=False, verbose_name='ID')),
+                (
+                    "title",
+                    models.CharField(blank=True, max_length=50, verbose_name="试卷标题"),
+                ),
+                ("quantity", models.IntegerField(blank=True, verbose_name="题目数量")),
+                (
+                    "id",
+                    models.CharField(
+                        max_length=20,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='quiz',
-            name='type',
-            field=models.CharField(blank=True, max_length=50, verbose_name='问题类型'),
+            model_name="quiz",
+            name="type",
+            field=models.CharField(blank=True, max_length=50, verbose_name="问题类型"),
         ),
         migrations.CreateModel(
-            name='Record',
+            name="Record",
             fields=[
-                ('timestamp', models.DateTimeField(blank=True, verbose_name='时间')),
-                ('correct_answer', models.CharField(blank=True, max_length=150, verbose_name='答对数量')),
-                ('id', models.CharField(max_length=20, primary_key=True, serialize=False, verbose_name='ID')),
-                ('answer_user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='answer_user', to=settings.AUTH_USER_MODEL, verbose_name='答题人')),
-                ('exam', models.ManyToManyField(related_name='exam_record', to='quiz.Paper', verbose_name='对应试卷')),
+                ("timestamp", models.DateTimeField(blank=True, verbose_name="时间")),
+                (
+                    "correct_answer",
+                    models.CharField(blank=True, max_length=150, verbose_name="答对数量"),
+                ),
+                (
+                    "id",
+                    models.CharField(
+                        max_length=20,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "answer_user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="answer_user",
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="答题人",
+                    ),
+                ),
+                (
+                    "exam",
+                    models.ManyToManyField(
+                        related_name="exam_record", to="quiz.Paper", verbose_name="对应试卷"
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='QuizHistory',
+            name="QuizHistory",
             fields=[
-                ('id', models.CharField(max_length=20, primary_key=True, serialize=False, verbose_name='ID')),
-                ('total', models.IntegerField(blank=True, verbose_name='总答题数')),
-                ('paper', models.ManyToManyField(related_name='relate_paper', to='quiz.Paper', verbose_name='对应试卷')),
+                (
+                    "id",
+                    models.CharField(
+                        max_length=20,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("total", models.IntegerField(blank=True, verbose_name="总答题数")),
+                (
+                    "paper",
+                    models.ManyToManyField(
+                        related_name="relate_paper",
+                        to="quiz.Paper",
+                        verbose_name="对应试卷",
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='paper',
-            name='quizzes',
-            field=models.ManyToManyField(blank=True, related_name='exam_questions', to='quiz.Quiz', verbose_name='问题列表'),
+            model_name="paper",
+            name="quizzes",
+            field=models.ManyToManyField(
+                blank=True,
+                related_name="exam_questions",
+                to="quiz.Quiz",
+                verbose_name="问题列表",
+            ),
         ),
     ]
