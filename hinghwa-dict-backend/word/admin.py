@@ -1,12 +1,9 @@
 from django.contrib import admin
 from django.contrib import messages
-from django.db.models import F, Case, When, Value
-from django.forms import IntegerField
 from django.utils.translation import ngettext
 
 from .models import Word, Character, Pronunciation, Application, List
 from website.views import sendNotification
-from django import forms
 
 
 # Register your models here.
@@ -209,7 +206,6 @@ class ListsAdmin(admin.ModelAdmin):
     inlines = (WordsInlineAdmin,)
 
     def include_words(self, obj):
-        # words = List.words.through.objects.filter(li_id=obj.id).order_by('id').all()
         return [bt.word for bt in obj.words.all()]
 
 
