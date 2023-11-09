@@ -3,10 +3,9 @@ import demjson
 from ..dto.paper_all import paper_all
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from ...models import Quiz, Paper, Record
+from ...models import Quiz, Paper
 from utils.exception.types.bad_request import InsufficientQuiz
-from utils.token import token_pass, token_user
-from django.utils import timezone
+from utils.token import token_pass
 from utils.generate_id import generate_paper_id
 
 
@@ -35,9 +34,8 @@ class ManageAllPaper(View):
     # QZ0204 查询所有试卷
     @csrf_exempt
     def get(self, request):
-        # token_pass(request.headers, -1)
         total_papers = Paper.objects.all()
         result = []
         for paper in total_papers:
             result.append(paper_all(paper))
-        return JsonResponse({"total": len(result), "paper": result})
+        return JsonResponse({"total": len(result), "paper": result}, status=200)

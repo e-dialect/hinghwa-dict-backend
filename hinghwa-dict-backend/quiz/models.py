@@ -45,16 +45,4 @@ class Paper(models.Model):
     quizzes = models.ManyToManyField(
         Quiz, related_name="exam_questions", verbose_name="问题列表", blank=True
     )
-    quantity = models.IntegerField(blank=True, verbose_name="题目数量")
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
-
-
-class Record(models.Model):
-    timestamp = models.DateTimeField(blank=True, verbose_name="时间")
-    correct_answer = models.IntegerField(blank=True, verbose_name="答对数量")
-    user_answer = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="user", verbose_name="词单作者"
-    )
-    exam = models.ManyToManyField(
-        Paper, related_name="exam_record", verbose_name="答卷记录"
-    )

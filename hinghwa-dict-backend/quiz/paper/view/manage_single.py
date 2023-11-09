@@ -3,8 +3,7 @@ from django.http import JsonResponse
 from ..dto.paper_all import paper_all
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
-from ...models import Quiz, Paper, Record
-from utils.exception.types.bad_request import InsufficientQuiz
+from ...models import Paper
 from utils.exception.types.not_found import PaperNotFoundException
 
 
