@@ -246,7 +246,8 @@ class CommentArticle(View):
         ):
             raise ArticleNotFoundException()
         article = article[0]
-        comments = [comment_normal(comment) for comment in article.comments.all()]
+        comments = [comment_normal(comment)
+                    for comment in article.comments.all()]
         return JsonResponse({"comments": comments}, status=200)
 
     # AT0401 发表文章评论
@@ -319,13 +320,13 @@ class CommentDetail(View):
             token = token_pass(request.headers)
             user = token_user(token)
         except UnauthorizedException:
-            return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
-        
+            return JsonResponse({"comment": comment_all(comment), "me": me}, status=401)
+
         is_liked = comment.like_users.filter(id=user.id).exists()
         is_author = (user == comment.user if user else False)
-        
+
         me = {"is_liked": is_liked, "is_author": is_author}
-        
+
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
 
