@@ -4,6 +4,7 @@ from django.db import models
 from article.models import Article
 import re
 
+
 # application是为了修改word而产生的
 # 所以当word字段发生变化的时候，需要考虑修改application
 
@@ -218,6 +219,7 @@ class List(models.Model):
         related_name="included_word",
         verbose_name="词语",
         blank=True,
+        through="ListShip",
     )
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
     createTime = models.DateTimeField(blank=True, verbose_name="创建时间")
@@ -227,3 +229,13 @@ class List(models.Model):
     class Meta:
         verbose_name_plural = "词单"
         verbose_name = "词单"
+
+
+class ListShip(models.Model):
+    li = models.ForeignKey(List, on_delete=models.CASCADE)
+    word = models.ForeignKey(Word, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['id']
+        verbose_name_plural = "包含词"
+        verbose_name = "包含词"

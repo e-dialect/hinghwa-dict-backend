@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib import messages
+from django.db.models import F, Case, When, Value
+from django.forms import IntegerField
 from django.utils.translation import ngettext
 
 from .models import Word, Character, Pronunciation, Application, List
 from website.views import sendNotification
+from django import forms
 
 
 # Register your models here.
@@ -183,6 +186,10 @@ class ApplicationAdmin(admin.ModelAdmin):
     raw_id_fields = ("contributor", "verifier", "word")
 
 
+class WordsInlineAdmin(admin.TabularInline):
+    model = List.words.through
+
+
 class ListsAdmin(admin.ModelAdmin):
     list_display = [
         "id",
@@ -199,8 +206,10 @@ class ListsAdmin(admin.ModelAdmin):
     list_per_page = 50
     # filter_horizontal = ["words_included_word"]
     raw_id_fields = ["words"]
+    inlines = (WordsInlineAdmin,)
 
     def include_words(self, obj):
+        # words = List.words.through.objects.filter(li_id=obj.id).order_by('id').all()
         return [bt.word for bt in obj.words.all()]
 
 
