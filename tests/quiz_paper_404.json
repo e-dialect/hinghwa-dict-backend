@@ -991,8 +991,7 @@
                 "required": [
                   "id",
                   "title",
-                  "quizzes",
-                  "quantity"
+                  "quizzes"
                 ],
                 "title": "paper_all",
                 "name": "paper_all"
@@ -1494,8 +1493,7 @@
       "required": [
         "id",
         "title",
-        "quizzes",
-        "quantity"
+        "quizzes"
       ],
       "title": "paper_all",
       "name": "paper_all"
