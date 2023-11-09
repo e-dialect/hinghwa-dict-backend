@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "2e36148a-d9ad-4f44-87db-876b8d761180",
+          "id": "043545db-84fa-4f2b-bea5-2d09ec40af6d",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -152,12 +152,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -182,6 +177,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -226,7 +230,7 @@
           }
         },
         {
-          "id": "c1b7e651-ee67-4da7-b5c2-6d6e3d8717e0",
+          "id": "c61dd30f-b8a9-4472-a648-7f5b007f8e83",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -252,7 +256,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -264,12 +268,7 @@
           "event": [],
           "responseDefinition": {
             "id": 4116009,
-            "createdAt": "2021-07-28T16:58:17.000Z",
-            "updatedAt": "2023-01-18T09:37:05.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5298312,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -343,29 +342,19 @@
                       },
                       "title": "上传词语",
                       "description": "上传词语数量"
-                    },
-                    "listened": {
-                      "type": "integer",
-                      "mock": {
-                        "mock": "@integer"
-                      },
-                      "title": "听",
-                      "description": "上传语音被播放的量"
                     }
                   },
                   "required": [
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "listened",
                     "word_uploaded"
                   ],
                   "x-apifox-orders": [
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "word_uploaded",
-                    "listened"
+                    "word_uploaded"
                   ]
                 },
                 "notification": {
@@ -430,6 +419,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-28T16:58:17.000Z",
+            "updatedAt": "2023-08-31T07:46:49.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5298312,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -568,6 +566,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -586,7 +591,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -604,7 +610,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -634,7 +641,7 @@
           }
         },
         {
-          "id": "2105f8c0-9290-4f70-93d5-17d513f607c8",
+          "id": "25aa911e-33ae-48cc-ba1a-e4823216cbb8",
           "name": "US0204 获取用户积分(US0204 获取用户积分)",
           "request": {
             "url": {
@@ -661,7 +668,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -682,12 +689,7 @@
           "event": [],
           "responseDefinition": {
             "id": 242011749,
-            "createdAt": "2023-07-20T04:37:09.000Z",
-            "updatedAt": "2023-07-20T04:37:09.000Z",
-            "deletedAt": null,
-            "apiDetailId": 96930096,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -696,6 +698,14 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2023-07-20T04:37:09.000Z",
+            "updatedAt": "2023-07-20T04:37:09.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 96930096,
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -721,7 +731,7 @@
           }
         },
         {
-          "id": "71beca5a-5925-448a-a780-cc126c1f7c92",
+          "id": "d7b33b0a-d13f-4912-8ae1-1c730b668fd6",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -746,7 +756,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -869,12 +879,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5318056,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -899,6 +904,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5318056,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -943,7 +957,7 @@
           }
         },
         {
-          "id": "8dde872c-cb16-4367-b036-47c55e23bf7f",
+          "id": "a9f8a3b6-ee0c-44de-8b48-426311b3c3ba",
           "name": "US0201 获取指定用户信息(US0201 获取指定用户信息)",
           "request": {
             "url": {
@@ -969,7 +983,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -981,12 +995,7 @@
           "event": [],
           "responseDefinition": {
             "id": 4116009,
-            "createdAt": "2021-07-28T16:58:17.000Z",
-            "updatedAt": "2023-01-18T09:37:05.000Z",
-            "deletedAt": null,
-            "apiDetailId": 5298312,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -1060,29 +1069,19 @@
                       },
                       "title": "上传词语",
                       "description": "上传词语数量"
-                    },
-                    "listened": {
-                      "type": "integer",
-                      "mock": {
-                        "mock": "@integer"
-                      },
-                      "title": "听",
-                      "description": "上传语音被播放的量"
                     }
                   },
                   "required": [
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "listened",
                     "word_uploaded"
                   ],
                   "x-apifox-orders": [
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "word_uploaded",
-                    "listened"
+                    "word_uploaded"
                   ]
                 },
                 "notification": {
@@ -1147,6 +1146,15 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2021-07-28T16:58:17.000Z",
+            "updatedAt": "2023-08-31T07:46:49.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 5298312,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
                 "type": "object",
@@ -1285,6 +1293,13 @@
                       "title",
                       "color"
                     ]
+                  },
+                  "level": {
+                    "type": "integer",
+                    "title": "等级",
+                    "mock": {
+                      "mock": "@integer(1,6)"
+                    }
                   }
                 },
                 "required": [
@@ -1303,7 +1318,8 @@
                   "wechat",
                   "points_sum",
                   "points_now",
-                  "title"
+                  "title",
+                  "level"
                 ],
                 "x-apifox-orders": [
                   "id",
@@ -1321,7 +1337,8 @@
                   "title",
                   "registration_time",
                   "login_time",
-                  "wechat"
+                  "wechat",
+                  "level"
                 ],
                 "title": "user_all",
                 "name": "user_all"
@@ -1351,7 +1368,7 @@
           }
         },
         {
-          "id": "52b1a6a4-00f6-4f04-9f79-e45ba69c6393",
+          "id": "240b839e-c6e1-4c62-9c2e-045fd7733cd7",
           "name": "US0204 获取用户积分(US0204 获取用户积分)",
           "request": {
             "url": {
@@ -1378,7 +1395,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -1399,12 +1416,7 @@
           "event": [],
           "responseDefinition": {
             "id": 242011749,
-            "createdAt": "2023-07-20T04:37:09.000Z",
-            "updatedAt": "2023-07-20T04:37:09.000Z",
-            "deletedAt": null,
-            "apiDetailId": 96930096,
             "name": "成功",
-            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -1413,6 +1425,14 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "folderId": 0,
+            "createdAt": "2023-07-20T04:37:09.000Z",
+            "updatedAt": "2023-07-20T04:37:09.000Z",
+            "deletedAt": null,
+            "code": 200,
+            "apiDetailId": 96930096,
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -1582,6 +1602,13 @@
             "title",
             "color"
           ]
+        },
+        "level": {
+          "type": "integer",
+          "title": "等级",
+          "mock": {
+            "mock": "@integer(1,6)"
+          }
         }
       },
       "required": [
@@ -1600,7 +1627,8 @@
         "wechat",
         "points_sum",
         "points_now",
-        "title"
+        "title",
+        "level"
       ],
       "x-apifox-orders": [
         "id",
@@ -1618,7 +1646,8 @@
         "title",
         "registration_time",
         "login_time",
-        "wechat"
+        "wechat",
+        "level"
       ],
       "title": "user_all",
       "name": "user_all"
@@ -1636,16 +1665,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "85eb7568-0041-4ec5-bd31-9b944b8a88a6",
+      "id": "3a36d3e8-0f5f-4958-bbd7-c011b4151910",
       "name": "测试环境",
-      "baseUrl": "http://127.0.0.1:8000",
-      "baseUrls": {
-        "default": "http://127.0.0.1:8000"
-      },
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTg1NjI5MC4zMTI3OTd9.iKHbTJ-n2W1B8c7aenTJL1U4K68kwFBHhNRU9SpuGP0",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMyMzMyMC44NTg0Mjl9.HcRDDnLRNQGINlbGSSxWYGeeYmjDlcoGzSr_5JkgCxo",
           "key": "token",
           "isBindInitial": false,
           "initialValue": ""
@@ -1658,13 +1683,13 @@
         },
         {
           "type": "any",
-          "value": "",
+          "value": "16",
           "key": "word_id_2",
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "",
+          "value": "15",
           "key": "word_id_1",
           "initialValue": ""
         },
@@ -1688,7 +1713,7 @@
         },
         {
           "type": "any",
-          "value": "3",
+          "value": "1",
           "key": "article_id",
           "initialValue": ""
         },
@@ -1754,15 +1779,33 @@
         },
         {
           "type": "any",
-          "value": "undefined",
+          "value": "DD000004",
           "key": "order_id",
-          "initialValue": "undefined"
+          "initialValue": "DD000004"
         },
         {
           "type": "any",
           "value": "JL000039",
           "key": "transaction_id",
           "initialValue": "JL000039"
+        },
+        {
+          "type": "any",
+          "value": "CD000015",
+          "key": "list_id",
+          "initialValue": "CD000015"
+        },
+        {
+          "type": "any",
+          "value": "SJ000008",
+          "key": "paper_id",
+          "initialValue": "SJ000008"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "paper_count",
+          "initialValue": "undefined"
         }
       ]
     },
@@ -1778,9 +1821,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e3522f78-7002-44de-8704-b8c6c94498eb",
-      "baseUrl": "",
-      "baseUrls": {},
+      "id": "53c86235-aafd-43fd-841c-7e318f3b05cf",
       "values": []
     },
     "parameter": {

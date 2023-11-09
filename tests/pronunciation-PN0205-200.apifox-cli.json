@@ -1623,29 +1623,19 @@
                       },
                       "title": "上传词语",
                       "description": "上传词语数量"
-                    },
-                    "listened": {
-                      "type": "integer",
-                      "mock": {
-                        "mock": "@integer"
-                      },
-                      "title": "听",
-                      "description": "上传语音被播放的量"
                     }
                   },
                   "required": [
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "listened",
                     "word_uploaded"
                   ],
                   "x-apifox-orders": [
                     "pronunciation",
                     "pronunciation_uploaded",
                     "word",
-                    "word_uploaded",
-                    "listened"
+                    "word_uploaded"
                   ]
                 },
                 "notification": {
