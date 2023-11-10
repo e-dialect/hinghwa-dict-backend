@@ -320,7 +320,7 @@ class CommentDetail(View):
 
             me = {"is_liked": is_liked, "is_author": is_author}
 
-        except Comment.DoesNotExist:
+        except:
             raise CommentNotFoundException(id)
 
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
