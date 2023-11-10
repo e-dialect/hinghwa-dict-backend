@@ -313,17 +313,15 @@ class CommentDetail(View):
             token = token_pass(request.headers)
             user = token_user(token)
 
-        except UnauthorizedException:
-            return JsonResponse({"comment": comment_all(comment), "me": me}, status=401)
+            # 获取评论信息
 
-        # 获取评论信息
-        try:
             comment = Comment.objects.get(id=id)
             is_liked = comment.like_users.filter(id=user.id).exists()
             is_author = user == comment.user if user else False
 
             me = {"is_liked": is_liked, "is_author": is_author}
-
+        except UnauthorizedException:
+            return JsonResponse({"comment": comment_all(comment), "me": me}, status=401)
         except Comment.DoesNotExist:
             raise CommentNotFoundException(id)
 
