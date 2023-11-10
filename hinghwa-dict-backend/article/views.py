@@ -310,21 +310,20 @@ class CommentDetail(View):
 
         try:
             comment = Comment.objects.get(id=id)
-        # 这里为什么不是 except Comment.DoesNotExist
-        except:
-            raise CommentNotFoundException(id)
 
-        # 登录获取 user 信息
-        try:
+            # 登录获取 user 信息
             token = token_pass(request.headers)
             user = token_user(token)
+
+            is_liked = comment.like_users.filter(id=user.id).exists()
+            is_author = user == comment.user if user else False
+
+            me = {"is_liked": is_liked, "is_author": is_author}
+
+        except Comment.DoesNotExist:
+            raise CommentNotFoundException(id)
         except UnauthorizedException:
             return JsonResponse({"comment": comment_all(comment), "me": me}, status=401)
-
-        is_liked = comment.like_users.filter(id=user.id).exists()
-        is_author = user == comment.user if user else False
-
-        me = {"is_liked": is_liked, "is_author": is_author}
 
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
