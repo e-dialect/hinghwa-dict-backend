@@ -304,23 +304,27 @@ class SearchComment(View):
 
 class CommentDetail(View):
     # AT0405 获取评论详情
-    def get(self, request, id) -> JsonResponse:  # 注意没有使用request，位置也是需要保留着的
+    def get(self, request, id) -> JsonResponse:
         # 初始化 me 的信息
         me = {"is_liked": False, "is_author": False}
 
+        # 登录获取 user 信息，如果用户未登录则直接返回 401，不允许其查看评论
         try:
-            comment = Comment.objects.get(id=id)
-
-            # 登录获取 user 信息
             token = token_pass(request.headers)
             user = token_user(token)
 
+        except UnauthorizedException:
+            return JsonResponse({"comment": comment_all(comment), "me": me}, status=401)
+
+        # 获取评论信息
+        try:
+            comment = Comment.objects.get(id=id)
             is_liked = comment.like_users.filter(id=user.id).exists()
             is_author = user == comment.user if user else False
 
             me = {"is_liked": is_liked, "is_author": is_author}
 
-        except:
+        except Comment.DoesNotExist:
             raise CommentNotFoundException(id)
 
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
