@@ -305,17 +305,18 @@ class SearchComment(View):
 class CommentDetail(View):
     # AT0405 获取评论详情
     def get(self, request, id) -> JsonResponse:
-        # 初始化 me 的信息
-        me = {"is_liked": False, "is_author": False}
-
-        token = token_pass(request.headers)
-        user = token_user(token)
-
         comment = Comment.objects.get(id=id)
-        is_liked = comment.like_users.filter(id=user.id).exists()
-        is_author = user == comment.user if user else False
 
-        me = {"is_liked": is_liked, "is_author": is_author}
+        try:
+            token = token_pass(request.headers)
+            user = token_user(token)
+
+            # 是否是评论的作者，未添加
+
+        except UnauthorizedException:
+            me = {"like": False}
+        else:
+            me = {"like": comment.like_users.filter(id=user.id).exists()}
 
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
