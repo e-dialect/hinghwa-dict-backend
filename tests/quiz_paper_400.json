@@ -4,284 +4,7 @@
     {
       "item": [
         {
-          "id": "8d201910-66a4-4db1-9df5-ed6a803711c4",
-          "name": "LG0101 账号密码登录(登录用户)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "login"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://apifox.com)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "baseUrl": "http://127.0.0.1:8000",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}",
-              "type": "application/json"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "postProcessors.0.extractor",
-                "type": "text/javascript",
-                "exec": [
-                  "",
-                  "        if (JSON.setEnableBigInt) {",
-                  "          JSON.setEnableBigInt(undefined);",
-                  "        }",
-                  "        ",
-                  "      try{",
-                  "        ",
-                  "          const expression = pm.variables.replaceIn(`$.token`);",
-                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                  "          const jsonData = pm.response.json();",
-                  "          let value = JSONPath({",
-                  "            json: jsonData,",
-                  "            path: expression,",
-                  "            wrap: false",
-                  "          });",
-                  "",
-                  "          ",
-                  "          if (false && undefined !== undefined) {",
-                  "            if (Array.isArray(value)) {",
-                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
-                  "            } else {",
-                  "              value = undefined;",
-                  "            }",
-                  "          }",
-                  "          ",
-                  "        ",
-                  "        switch (typeof value) {",
-                  "          case 'object':",
-                  "            value = JSON.stringify(value);",
-                  "            break;",
-                  "          default:",
-                  "            value = String(value);",
-                  "            break;",
-                  "        }",
-                  "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
-                  "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错: ' + e.message;",
-                  "        throw e;",
-                  "      }",
-                  "  ",
-                  "      "
-                ]
-              }
-            }
-          ],
-          "responseDefinition": {
-            "id": 4183271,
-            "name": "成功",
-            "contentType": "json",
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string"
-                  },
-                  "title": "权"
-                },
-                "id": {
-                  "type": "integer",
-                  "title": "用户id"
-                }
-              },
-              "required": [
-                "token",
-                "id"
-              ]
-            },
-            "defaultEnable": true,
-            "projectId": 0,
-            "ordering": 1,
-            "unpackerId": "",
-            "unpackerSetting": "",
-            "folderId": 0,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "code": 200,
-            "apiDetailId": 5318056,
-            "responseExamples": [],
-            "schemaDefinitions": {}
-          },
-          "requestDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@cname"
-                  },
-                  "title": "用户名"
-                },
-                "password": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string('lower', 1, 3)"
-                  },
-                  "title": "密码"
-                }
-              },
-              "required": [
-                "username",
-                "password"
-              ]
-            }
-          },
-          "metaInfo": {
-            "httpApiId": 5318056,
-            "httpApiCaseId": 36686342,
-            "httpApiName": "LG0101 账号密码登录",
-            "httpApiPath": "/login",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户",
-            "id": "017b2bf3-7a42-4267-b3b8-d19048ccb513",
-            "type": "http"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "ff48a81a-6aa2-4569-869d-f6902b1e5412",
-          "name": "QZ0105 审核测试题(QZ0105审核测试题)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "quizzes",
-                "1",
-                "visibility"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://apifox.com)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "baseUrl": "http://127.0.0.1:8000",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"result\": true,\n    \"reason\": \"dolore culpa laboris\"\n}",
-              "type": "application/json"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "id": 69812625,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null,
-            "name": "无权限",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 403,
-            "contentType": "json",
-            "ordering": 20,
-            "jsonSchema": {},
-            "defaultEnable": false,
-            "folderId": 0,
-            "responseExamples": [],
-            "schemaDefinitions": {}
-          },
-          "requestDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "result": {
-                  "type": "boolean",
-                  "title": "审核结果"
-                },
-                "reason": {
-                  "type": "string",
-                  "title": "原因"
-                }
-              },
-              "x-apifox-orders": [
-                "result",
-                "reason"
-              ],
-              "required": [
-                "result",
-                "reason"
-              ]
-            }
-          },
-          "metaInfo": {
-            "httpApiId": 42646298,
-            "httpApiCaseId": 49792215,
-            "httpApiName": "QZ0105 审核测试题",
-            "httpApiPath": "/quizzes/{id}/visibility",
-            "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0105审核测试题",
-            "id": "29af34b0-5d23-41de-8d3b-23f7c66dba0f",
-            "type": "http"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "8d5d700d-54c7-43d6-80c4-867cd6f986b2",
+          "id": "19ec7433-3ac7-4324-bff8-5104161bcffa",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -318,6 +41,7 @@
             "body": {
               "mode": "raw",
               "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -430,6 +154,7 @@
           "responseDefinition": {
             "id": 4183271,
             "name": "成功",
+            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
@@ -460,9 +185,7 @@
             "createdAt": "2021-07-29T14:43:37.000Z",
             "updatedAt": "2021-08-12T16:27:18.000Z",
             "deletedAt": null,
-            "code": 200,
             "apiDetailId": 5318056,
-            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -492,12 +215,12 @@
           },
           "metaInfo": {
             "httpApiId": 5318056,
-            "httpApiCaseId": 65362551,
+            "httpApiCaseId": 115892877,
             "httpApiName": "LG0101 账号密码登录",
             "httpApiPath": "/login",
             "httpApiMethod": "post",
             "httpApiCaseName": "登录用户admin",
-            "id": "bbdef29b-63e6-4e0b-9b9a-78a00f1d3925",
+            "id": "693ce0af-a3fc-4209-bbec-2afe0662a24e",
             "type": "http"
           },
           "type": "http",
@@ -507,7 +230,7 @@
           }
         },
         {
-          "id": "3e9a40bb-e4f8-44c2-9942-9973a44bb355",
+          "id": "dca8323a-bdc9-4b55-8eb9-2032b8c5535c",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -543,69 +266,18 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"question\": \"及处认色多\",\n    \"answer\": 27,\n    \"options\": [\n        \"也场重世见龙老保还必容难清八。\",\n        \"号总上计新我铁论容及越己教般方。\"\n    ],\n    \"explanation\": \"今如统进持养层达派身导阶周本常感满。生号越当价向交相决做之查没总用资九。几日接技必品技八必华与北江同取查路。强劳支口权收层其参拉所元千音群按。金比术圆法响部始到保历天近交铁设二。\",\n    \"type\": \"sunt\",\n    \"voice_source\": \"http://gvspnk.dk/qjtd\"\n}",
+              "raw": "{\r\n    \"question\": \"名律能\",\r\n    \"answer\": 29,\r\n    \"options\": [\r\n        \"毛低便例质天来整干周然率局列层离标。\",\r\n        \"非直定存公期号主林装斗也每给千果用。\",\r\n        \"技门确气我称公学第着维复美段约反部。\",\r\n        \"引里华达些程以本次上之意总。\"\r\n    ],\r\n    \"explanation\": \"四华率代美等就因究造很化音。走别带极圆验火展在前起化权派将候。写非温然江然容青和证济众织装图律。种学队变知象计两张白律近只参比物些各。\",\r\n    \"type\": \"1\",\r\n    \"voice_source\": \"http://mjfufjiuxv.nr/avfsync\"\r\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
           },
           "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "postProcessors.0.extractor",
-                "type": "text/javascript",
-                "exec": [
-                  "",
-                  "        if (JSON.setEnableBigInt) {",
-                  "          JSON.setEnableBigInt(undefined);",
-                  "        }",
-                  "        ",
-                  "      try{",
-                  "        ",
-                  "          const expression = pm.variables.replaceIn(`$.quiz.id`);",
-                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                  "          const jsonData = pm.response.json();",
-                  "          let value = JSONPath({",
-                  "            json: jsonData,",
-                  "            path: expression,",
-                  "            wrap: false",
-                  "          });",
-                  "",
-                  "          ",
-                  "          if (false && undefined !== undefined) {",
-                  "            if (Array.isArray(value)) {",
-                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
-                  "            } else {",
-                  "              value = undefined;",
-                  "            }",
-                  "          }",
-                  "          ",
-                  "        ",
-                  "        switch (typeof value) {",
-                  "          case 'object':",
-                  "            value = JSON.stringify(value);",
-                  "            break;",
-                  "          default:",
-                  "            value = String(value);",
-                  "            break;",
-                  "        }",
-                  "      ",
-                  "        pm.environment.set(`quiz_id`, value);console.log('已设置环境变量【quiz_id】，值为 【' + value + '】')",
-                  "      } catch(e) {",
-                  "        e.message = '提取变量【quiz_id】出错: ' + e.message;",
-                  "        throw e;",
-                  "      }",
-                  "  ",
-                  "      "
-                ]
-              }
-            }
-          ],
+          "event": [],
           "responseDefinition": {
             "id": 70048663,
             "name": "成功",
+            "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "x-apifox-overrides": {},
@@ -633,7 +305,6 @@
             "createdAt": "2022-07-15T11:22:03.000Z",
             "updatedAt": "2022-07-23T08:30:31.000Z",
             "deletedAt": null,
-            "code": 200,
             "apiDetailId": 29662986,
             "responseExamples": [],
             "schemaDefinitions": {
@@ -916,12 +587,12 @@
           },
           "metaInfo": {
             "httpApiId": 29662986,
-            "httpApiCaseId": 36686343,
+            "httpApiCaseId": 115892928,
             "httpApiName": "QZ0102 增加单个测试",
             "httpApiPath": "/quizzes",
             "httpApiMethod": "post",
             "httpApiCaseName": "QZ0102 增加单个测试",
-            "id": "ad59ec61-e491-4bba-b82a-a23bc328d7bd",
+            "id": "c2b8048e-8b9e-40d5-9696-9a1620dd91b7",
             "type": "http"
           },
           "type": "http",
@@ -931,14 +602,15 @@
           }
         },
         {
-          "id": "fa2f3c2f-ee53-4793-9c05-4486b4f1e5b4",
-          "name": "LG0101 账号密码登录(登录用户)",
+          "id": "d234ab7c-cad7-4598-bf99-b4d512d9cdea",
+          "name": "QZ0203 测试题组卷(QZ0203 测试题组卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "login"
+                "quizzes",
+                "paper"
               ],
               "host": [
                 "127",
@@ -946,7 +618,18 @@
                 "0",
                 "1"
               ],
-              "query": [],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "number",
+                  "value": "999"
+                },
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "1"
+                }
+              ],
               "variable": []
             },
             "header": [
@@ -967,183 +650,7 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"username\": \"user_test\",\n    \"password\": \"123456\"\n}",
-              "type": "application/json"
-            },
-            "type": "http"
-          },
-          "response": [],
-          "event": [
-            {
-              "listen": "test",
-              "script": {
-                "id": "postProcessors.0.extractor",
-                "type": "text/javascript",
-                "exec": [
-                  "",
-                  "        if (JSON.setEnableBigInt) {",
-                  "          JSON.setEnableBigInt(undefined);",
-                  "        }",
-                  "        ",
-                  "      try{",
-                  "        ",
-                  "          const expression = pm.variables.replaceIn(`$.token`);",
-                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
-                  "          const jsonData = pm.response.json();",
-                  "          let value = JSONPath({",
-                  "            json: jsonData,",
-                  "            path: expression,",
-                  "            wrap: false",
-                  "          });",
-                  "",
-                  "          ",
-                  "          if (false && undefined !== undefined) {",
-                  "            if (Array.isArray(value)) {",
-                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
-                  "            } else {",
-                  "              value = undefined;",
-                  "            }",
-                  "          }",
-                  "          ",
-                  "        ",
-                  "        switch (typeof value) {",
-                  "          case 'object':",
-                  "            value = JSON.stringify(value);",
-                  "            break;",
-                  "          default:",
-                  "            value = String(value);",
-                  "            break;",
-                  "        }",
-                  "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
-                  "      } catch(e) {",
-                  "        e.message = '提取变量【token】出错: ' + e.message;",
-                  "        throw e;",
-                  "      }",
-                  "  ",
-                  "      "
-                ]
-              }
-            }
-          ],
-          "responseDefinition": {
-            "id": 4183271,
-            "name": "成功",
-            "contentType": "json",
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "token": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string"
-                  },
-                  "title": "权"
-                },
-                "id": {
-                  "type": "integer",
-                  "title": "用户id"
-                }
-              },
-              "required": [
-                "token",
-                "id"
-              ]
-            },
-            "defaultEnable": true,
-            "projectId": 0,
-            "ordering": 1,
-            "unpackerId": "",
-            "unpackerSetting": "",
-            "folderId": 0,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
-            "code": 200,
-            "apiDetailId": 5318056,
-            "responseExamples": [],
-            "schemaDefinitions": {}
-          },
-          "requestDefinition": {
-            "jsonSchema": {
-              "type": "object",
-              "properties": {
-                "username": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@cname"
-                  },
-                  "title": "用户名"
-                },
-                "password": {
-                  "type": "string",
-                  "mock": {
-                    "mock": "@string('lower', 1, 3)"
-                  },
-                  "title": "密码"
-                }
-              },
-              "required": [
-                "username",
-                "password"
-              ]
-            }
-          },
-          "metaInfo": {
-            "httpApiId": 5318056,
-            "httpApiCaseId": 65362530,
-            "httpApiName": "LG0101 账号密码登录",
-            "httpApiPath": "/login",
-            "httpApiMethod": "post",
-            "httpApiCaseName": "登录用户",
-            "id": "dcd62988-2072-497f-bbb1-69908eaf5dfc",
-            "type": "http"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "4ad134fb-b8fe-4541-acd7-f4f38e1308dc",
-          "name": "QZ0103 修改单个测试(QZ0103 修改单个测试)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "quizzes",
-                "{{quiz_id}}"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://apifox.com)"
-              },
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "PUT",
-            "baseUrl": "http://127.0.0.1:8000",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n    \"quiz\": {\n        \"question\": \"从和约压\",\n        \"answer\": 68,\n        \"options\": [\n            \"派权国任也王做青决素至有除光确教争。\",\n            \"个素分器无化基电外毛东准准。\"\n        ],\n        \"explanation\": \"维们以报与研办至毛史战设志装积质。然维计声用安统行容观的场。价口种头根铁提般称术即学领据响省集指。部与报道容能变约决命府说位还。十切克口习交值好出毛动做界。干上术将性第在部提极调复打还务。\",\n        \"type\": \"sit voluptate dolore officia tempor\",\n        \"voice_source\": \"http://pygvn.cr/negcxwue\"\n    }\n}",
+              "raw": "{\n    \"title\": \"道是合加\"\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
@@ -1152,17 +659,31 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "id": 69812625,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
+            "id": 73275463,
+            "createdAt": "2022-07-24T10:43:07.000Z",
+            "updatedAt": "2022-07-24T10:43:07.000Z",
             "deletedAt": null,
-            "name": "无权限",
+            "name": "请求有误",
             "apiDetailId": 0,
             "projectId": 404238,
-            "code": 403,
+            "code": 400,
             "contentType": "json",
-            "ordering": 20,
-            "jsonSchema": {},
+            "ordering": 50,
+            "jsonSchema": {
+              "title": "",
+              "type": "object",
+              "properties": {
+                "msg": {
+                  "type": "string"
+                }
+              },
+              "x-apifox-orders": [
+                "msg"
+              ],
+              "required": [
+                "msg"
+              ]
+            },
             "defaultEnable": false,
             "folderId": 0,
             "responseExamples": [],
@@ -1170,104 +691,32 @@
           },
           "requestDefinition": {
             "jsonSchema": {
-              "x-apifox-overrides": {},
               "type": "object",
-              "x-apifox-refs": {},
               "properties": {
-                "quiz": {
-                  "$ref": "#/definitions/13080737",
-                  "x-apifox-overrides": {}
+                "title": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@ctitle"
+                  },
+                  "description": "试卷标题"
                 }
               },
-              "required": [
-                "quiz"
-              ],
               "x-apifox-orders": [
-                "quiz"
+                "title"
+              ],
+              "required": [
+                "title"
               ]
             }
           },
           "metaInfo": {
-            "httpApiId": 29663120,
-            "httpApiCaseId": 36686344,
-            "httpApiName": "QZ0103 修改单个测试",
-            "httpApiPath": "/quizzes/{id}",
-            "httpApiMethod": "put",
-            "httpApiCaseName": "QZ0103 修改单个测试",
-            "id": "cb147d0d-6802-4529-a655-0b8246a61bec",
-            "type": "http"
-          },
-          "type": "http",
-          "protocolProfileBehavior": {
-            "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
-          }
-        },
-        {
-          "id": "7d004833-dc40-4854-b14d-24957ad7d158",
-          "name": "QZ0104 删除单个测试(QZ0104 删除单个测试)",
-          "request": {
-            "url": {
-              "protocol": "http",
-              "port": "8000",
-              "path": [
-                "quizzes",
-                "{{quiz_id}}"
-              ],
-              "host": [
-                "127",
-                "0",
-                "0",
-                "1"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "header": [
-              {
-                "key": "token",
-                "value": "{{token}}"
-              },
-              {
-                "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://apifox.com)"
-              }
-            ],
-            "method": "DELETE",
-            "baseUrl": "http://127.0.0.1:8000",
-            "body": {},
-            "type": "http"
-          },
-          "response": [],
-          "event": [],
-          "responseDefinition": {
-            "id": 69812625,
-            "createdAt": "2022-07-15T06:52:17.000Z",
-            "updatedAt": "2022-07-15T06:52:26.000Z",
-            "deletedAt": null,
-            "name": "无权限",
-            "apiDetailId": 0,
-            "projectId": 404238,
-            "code": 403,
-            "contentType": "json",
-            "ordering": 20,
-            "jsonSchema": {},
-            "defaultEnable": false,
-            "folderId": 0,
-            "responseExamples": [],
-            "schemaDefinitions": {}
-          },
-          "requestDefinition": {
-            "jsonSchema": {}
-          },
-          "metaInfo": {
-            "httpApiId": 29663170,
-            "httpApiCaseId": 36686345,
-            "httpApiName": "QZ0104 删除单个测试",
-            "httpApiPath": "/quizzes/{id}",
-            "httpApiMethod": "delete",
-            "httpApiCaseName": "QZ0104 删除单个测试",
-            "id": "aeabdaca-8f07-4e0f-9bc8-3be5e79a8651",
+            "httpApiId": 58017398,
+            "httpApiCaseId": 115892927,
+            "httpApiName": "QZ0203 测试题组卷",
+            "httpApiPath": "/quizzes/paper",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "QZ0203 测试题组卷",
+            "id": "d443acee-9f00-433d-9575-64942512eaf5",
             "type": "http"
           },
           "type": "http",
@@ -1277,11 +726,11 @@
           }
         }
       ],
-      "name": "QZ模块 403测试"
+      "name": "QZ模块组卷题目不足"
     }
   ],
   "info": {
-    "name": "QZ模块 403测试"
+    "name": "QZ模块组卷题目不足"
   },
   "dataSchemas": {
     "1097305": {
@@ -1627,14 +1076,13 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "1ed7d456-e0d7-4c79-8a24-f326eac35873",
+      "id": "8591d99e-8049-4fac-ba9a-3f3c4c86a836",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMyMzMyMC44NTg0Mjl9.HcRDDnLRNQGINlbGSSxWYGeeYmjDlcoGzSr_5JkgCxo",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMwMzU3NC42MDQ1NDZ9.GPLw8A6TTlu8XAQbOaJPZrhsUYgH6PlGq3sCDVhX_KI",
           "key": "token",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1767,7 +1215,8 @@
           "type": "any",
           "value": "undefined",
           "key": "paper_count",
-          "initialValue": "undefined"
+          "isBindInitial": false,
+          "initialValue": ""
         }
       ]
     },
@@ -1783,7 +1232,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "286dbad6-8ca6-47b7-8138-5a71649452e4",
+      "id": "e0de281e-1703-4d0c-bc7b-e6f3b73514a8",
       "values": []
     },
     "parameter": {

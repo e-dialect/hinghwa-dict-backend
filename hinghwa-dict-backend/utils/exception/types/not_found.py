@@ -179,10 +179,22 @@ class ListsNotFoundException(NotFoundException):
 class PronunciationNotFoundException(NotFoundException):
     """
     语音条不存在异常
-    ： parma id:语音id
+    parma id:语音id
     """
 
     def __init__(self, id=""):
         super().__init__()
         self.status = 404
         self.msg = "语音{}不存在！".format(id)
+
+
+class PaperNotFoundException(NotFoundException):
+    """
+    试卷不存在异常
+    parma id:试卷id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "试卷{}不存在！".format(id)

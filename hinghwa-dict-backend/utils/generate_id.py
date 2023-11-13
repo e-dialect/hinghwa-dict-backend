@@ -3,6 +3,7 @@ from rewards.titles.models.title import Title
 from rewards.products.models.product import Product
 from rewards.orders.models.order import Order
 from word.models import List
+from quiz.models import Paper
 
 
 def generate_transaction_id():
@@ -53,3 +54,13 @@ def generate_list_id():
     else:
         new_id = 1
     return f"CD{new_id:06d}"
+
+
+def generate_paper_id():
+    last_paper = Paper.objects.order_by("-id").first()
+    if last_paper:
+        last_id = int(last_paper.id[2:])
+        new_id = last_id + 1
+    else:
+        new_id = 1
+    return f"SJ{new_id:06d}"
