@@ -305,20 +305,27 @@ class SearchComment(View):
 class CommentDetail(View):
     # AT0405 获取评论详情
     def get(self, request, id) -> JsonResponse:
-        comment = Comment.objects.get(id=id)
-
         try:
-            token = token_pass(request.headers)
-            user = token_user(token)
+            comment = Comment.objects.get(id=id)
 
-            # 是否是评论的作者，未添加
-
-        except UnauthorizedException:
             me = {"like": False}
-        else:
-            me = {"like": comment.like_users.filter(id=user.id).exists()}
 
-        return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
+            try:
+                token = token_pass(request.headers)
+                user = token_user(token)
+
+                # 是否是评论的作者，未添加
+
+            except UnauthorizedException:
+                pass  # 保留默认值
+
+            else:
+                me["like"] = comment.like_users.filter(id=user.id).exists()
+
+            return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
+
+        except Comment.DoesNotExist:
+            raise CommentNotFoundException(id)
 
 
 class LikeComment(View):
