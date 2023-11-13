@@ -308,22 +308,14 @@ class CommentDetail(View):
         # 初始化 me 的信息
         me = {"is_liked": False, "is_author": False}
 
-        # 登录获取 user 信息，如果用户未登录则直接返回 401，不允许其查看评论
-        try:
-            token = token_pass(request.headers)
-            user = token_user(token)
+        token = token_pass(request.headers)
+        user = token_user(token)
 
-            # 获取评论信息
+        comment = Comment.objects.get(id=id)
+        is_liked = comment.like_users.filter(id=user.id).exists()
+        is_author = user == comment.user if user else False
 
-            comment = Comment.objects.get(id=id)
-            is_liked = comment.like_users.filter(id=user.id).exists()
-            is_author = user == comment.user if user else False
-
-            me = {"is_liked": is_liked, "is_author": is_author}
-        except UnauthorizedException:
-            pass
-        except Comment.DoesNotExist:
-            raise CommentNotFoundException(id)
+        me = {"is_liked": is_liked, "is_author": is_author}
 
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
