@@ -114,6 +114,8 @@ class MultiQuiz(View):
         if not quiz_form.is_valid():
             raise BadRequestException()
         quiz = quiz_form.save(commit=False)
+        type_name = body["type"]
+        quiz.type = type_name
         quiz.author = user
         quiz.save()
         return JsonResponse({"quiz": quiz_all(quiz)}, status=200)
