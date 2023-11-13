@@ -321,7 +321,7 @@ class CommentDetail(View):
 
             me = {"is_liked": is_liked, "is_author": is_author}
         except UnauthorizedException:
-            return JsonResponse({"comment": comment_all(comment), "me": me}, status=401)
+            pass
         except Comment.DoesNotExist:
             raise CommentNotFoundException(id)
 
