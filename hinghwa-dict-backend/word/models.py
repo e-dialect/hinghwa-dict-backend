@@ -236,6 +236,6 @@ class ListShip(models.Model):
     word = models.ForeignKey(Word, on_delete=models.CASCADE)
 
     class Meta:
-        ordering = ['id']
+        ordering = ["id"]
         verbose_name_plural = "包含词"
         verbose_name = "包含词"
