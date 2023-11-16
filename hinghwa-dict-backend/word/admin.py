@@ -183,6 +183,10 @@ class ApplicationAdmin(admin.ModelAdmin):
     raw_id_fields = ("contributor", "verifier", "word")
 
 
+class WordsInlineAdmin(admin.TabularInline):
+    model = List.words.through
+
+
 class ListsAdmin(admin.ModelAdmin):
     list_display = [
         "id",
@@ -199,6 +203,7 @@ class ListsAdmin(admin.ModelAdmin):
     list_per_page = 50
     # filter_horizontal = ["words_included_word"]
     raw_id_fields = ["words"]
+    inlines = (WordsInlineAdmin,)
 
     def include_words(self, obj):
         return [bt.word for bt in obj.words.all()]
