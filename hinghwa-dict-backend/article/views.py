@@ -307,20 +307,20 @@ class CommentDetail(View):
     def get(self, request, id) -> JsonResponse:
         try:
             comment = Comment.objects.get(id=id)
-
-            me = {"like": False}
-
-            # token = token_pass(request.headers)
-            user = request.user
-
-            # 是否是评论的作者，未添加
-
-            me["like"] = comment.like_users.filter(id=user.id).exists()
-
-            return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
-
         except Comment.DoesNotExist:
             raise CommentNotFoundException(id)
+
+        me = {"like": False}
+
+        # token = token_pass(request.headers)
+        user = request.user
+
+        # 是否是评论的作者，未添加
+
+        me["like"] = comment.like_users.filter(id=user.id).exists()
+
+        return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
+
 
 
 class LikeComment(View):
