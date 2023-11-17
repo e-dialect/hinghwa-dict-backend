@@ -322,7 +322,6 @@ class CommentDetail(View):
         return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
 
-
 class LikeComment(View):
     # AT0406 给文章评论点赞
     def post(self, request, id) -> JsonResponse:
