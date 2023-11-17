@@ -310,17 +310,12 @@ class CommentDetail(View):
 
             me = {"like": False}
 
-            try:
-                token = token_pass(request.headers)
-                user = token_user(token)
+            # token = token_pass(request.headers)
+            user = request.user
 
-                # 是否是评论的作者，未添加
+            # 是否是评论的作者，未添加
 
-            except UnauthorizedException:
-                pass  # 保留默认值
-
-            else:
-                me["like"] = comment.like_users.filter(id=user.id).exists()
+            me["like"] = comment.like_users.filter(id=user.id).exists()
 
             return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
