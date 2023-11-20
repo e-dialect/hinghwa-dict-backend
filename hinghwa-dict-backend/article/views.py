@@ -304,12 +304,22 @@ class SearchComment(View):
 
 class CommentDetail(View):
     # AT0405 获取评论详情
-    def get(self, request, id) -> JsonResponse:  # 注意没有使用request，位置也是需要保留着的
+    def get(self, request, id) -> JsonResponse:
         try:
             comment = Comment.objects.get(id=id)
-        except:
+        except Comment.DoesNotExist:
             raise CommentNotFoundException(id)
-        return JsonResponse({"comment": comment_all(comment)}, status=200)
+
+        me = {"like": False}
+
+        # token = token_pass(request.headers)
+        user = request.user
+
+        # 是否是评论的作者，未添加
+
+        me["like"] = comment.like_users.filter(id=user.id).exists()
+
+        return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
 
 
 class LikeComment(View):
