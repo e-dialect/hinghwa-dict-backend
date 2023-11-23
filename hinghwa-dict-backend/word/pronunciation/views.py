@@ -336,7 +336,7 @@ class ManagePronunciation(View):
             get_request_user(request),
             [pronunciation.contributor],
             f"您的语音(id={pronunciation.id}) 已被删除，理由是：\n\t{message}",
-            target=pronunciation,
+            action_object=pronunciation,
             title=f"【通知】语音{pronunciation.word.word}被删除",
         )
 
@@ -376,7 +376,7 @@ class ManageApproval(View):
             verifier,
             [contributor],
             content=content + reason,
-            target=pronunciation,
+            action_object=pronunciation,
             title=f"【通知】语音（{pronunciation.word.word}）审核结果",
         )
         return JsonResponse(transaction_info, status=200)
@@ -406,7 +406,7 @@ class ManageApproval(View):
             verifier,
             [contributor],
             content=content + f"，理由是:{message}。",
-            target=pronunciation,
+            action_object=pronunciation,
             title=f"【通知】语音（{pronunciation.word.word}）审核结果变更",
         )
         return JsonResponse(transaction_info, status=200)
