@@ -79,7 +79,9 @@ class SearchArticle(View):
         article.author = user
         article.save()
         content = f"我创建了文章(id={article.id}),请及时去审核"
-        sendNotification(article.author, None, content, title="【提醒】文章待审核")
+        sendNotification(
+            article.author, None, content, title="【提醒】文章待审核", action_object=article
+        )
         return JsonResponse({"id": article.id}, status=200)
 
     # AT0202 文章内容批量获取
@@ -162,7 +164,9 @@ class ManageArticle(View):
         article.visibility = False
         article.save()
         content = f"我修改了文章(id={article.id}),请及时去审核"
-        sendNotification(article.author, None, content, title="【提醒】文章待审核")
+        sendNotification(
+            article.author, None, content, title="【提醒】文章待审核", action_object=article
+        )
         return JsonResponse({}, status=200)
 
     # AT0102 删除文章
@@ -197,7 +201,7 @@ class ManageVisibility(View):
             None,
             [article.author],
             content=content,
-            target=article,
+            action_object=article,
             title="【通知】文章审核结果",
         )
         article.save()
