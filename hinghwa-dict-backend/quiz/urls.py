@@ -16,5 +16,4 @@ urlpatterns = [
     path("/paper/records", csrf_exempt(PaperRecordAll.as_view())),
     path("/paper/records/<str:record_id>", csrf_exempt(PaperRecordSingle.as_view())),
     path("/paper/<str:paper_id>", csrf_exempt(ManageSinglePaper.as_view())),
-
 ]

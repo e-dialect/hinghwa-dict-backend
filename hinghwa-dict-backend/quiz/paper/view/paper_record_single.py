@@ -16,6 +16,3 @@ class PaperRecordSingle(View):
         user_id = record.examine.id
         token_pass(request.headers, user_id)
         return JsonResponse(paper_record_all(record), status=200)
-
-
-
