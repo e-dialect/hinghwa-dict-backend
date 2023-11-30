@@ -2,6 +2,8 @@ from django.urls import path
 from .paper.view.manage_all import *
 from .paper.view.manage_single import *
 from .views import *
+from .paper.view.paper_record_all import *
+from .paper.view.paper_record_single import *
 
 app_name = "users"
 
@@ -11,5 +13,8 @@ urlpatterns = [
     path("/<int:id>/visibility", csrf_exempt(ManageVisibility.as_view())),  # QZ0105
     path("/random", csrf_exempt(RandomQuiz.as_view())),  # QZ0202
     path("/paper", csrf_exempt(ManageAllPaper.as_view())),  # QZ0203
+    path("/paper/records", csrf_exempt(PaperRecordAll.as_view())),
+    path("/paper/records/<str:record_id>", csrf_exempt(PaperRecordSingle.as_view())),
     path("/paper/<str:paper_id>", csrf_exempt(ManageSinglePaper.as_view())),
+
 ]
