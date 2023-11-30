@@ -58,6 +58,5 @@ class PaperRecord(models.Model):
         on_delete=models.CASCADE,
         related_name="papers",
         verbose_name="试卷",
-        blank=True,
     )
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
