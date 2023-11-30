@@ -198,3 +198,15 @@ class PaperNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "试卷{}不存在！".format(id)
+
+
+class PaperRecordNotFoundException(NotFoundException):
+    """
+    试卷不存在异常
+    parma id:答卷记录id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "答卷记录{}不存在！".format(id)
