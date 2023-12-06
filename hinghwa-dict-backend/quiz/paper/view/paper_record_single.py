@@ -13,6 +13,6 @@ class PaperRecordSingle(View):
         if not record.exists():
             raise PaperRecordNotFoundException()
         record = record[0]
-        user_id = record.examine.id
+        user_id = record.contributor.id
         token_pass(request.headers, user_id)
         return JsonResponse(paper_record_all(record), status=200)

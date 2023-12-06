@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "examine",
+                    "contributor",
                     models.ForeignKey(
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="paper_user",
@@ -35,7 +35,6 @@ class Migration(migrations.Migration):
                 (
                     "paper",
                     models.ForeignKey(
-                        blank=True,
                         on_delete=django.db.models.deletion.CASCADE,
                         related_name="papers",
                         to="quiz.paper",

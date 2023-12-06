@@ -49,7 +49,7 @@ class Paper(models.Model):
 
 
 class PaperRecord(models.Model):
-    examine = models.ForeignKey(
+    contributor = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name="paper_user", verbose_name="答卷人"
     )
     timestamp = models.DateTimeField(verbose_name="时间")
