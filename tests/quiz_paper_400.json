@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "19ec7433-3ac7-4324-bff8-5104161bcffa",
+          "id": "5c4f1d66-c9a4-4b5b-b0b6-17a40c641577",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -153,6 +153,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
+            "apiDetailId": 5318056,
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -181,11 +182,11 @@
             "ordering": 1,
             "unpackerId": "",
             "unpackerSetting": "",
-            "folderId": 0,
             "createdAt": "2021-07-29T14:43:37.000Z",
             "updatedAt": "2021-08-12T16:27:18.000Z",
             "deletedAt": null,
-            "apiDetailId": 5318056,
+            "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -230,7 +231,7 @@
           }
         },
         {
-          "id": "dca8323a-bdc9-4b55-8eb9-2032b8c5535c",
+          "id": "754925da-38ca-4269-9320-40a32887fb9d",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -276,6 +277,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70048663,
+            "apiDetailId": 29662986,
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -301,11 +303,10 @@
             "ordering": 1,
             "unpackerId": "",
             "unpackerSetting": "",
-            "folderId": 0,
             "createdAt": "2022-07-15T11:22:03.000Z",
             "updatedAt": "2022-07-23T08:30:31.000Z",
             "deletedAt": null,
-            "apiDetailId": 29662986,
+            "folderId": 0,
             "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
@@ -602,15 +603,14 @@
           }
         },
         {
-          "id": "d234ab7c-cad7-4598-bf99-b4d512d9cdea",
+          "id": "d57cb2f5-c8cf-4eb5-a7b9-82b163d8fde4",
           "name": "QZ0203 测试题组卷(QZ0203 测试题组卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper"
+                "papers"
               ],
               "host": [
                 "127",
@@ -713,7 +713,7 @@
             "httpApiId": 58017398,
             "httpApiCaseId": 115892927,
             "httpApiName": "QZ0203 测试题组卷",
-            "httpApiPath": "/quizzes/paper",
+            "httpApiPath": "/papers",
             "httpApiMethod": "post",
             "httpApiCaseName": "QZ0203 测试题组卷",
             "id": "d443acee-9f00-433d-9575-64942512eaf5",
@@ -1076,13 +1076,14 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "8591d99e-8049-4fac-ba9a-3f3c4c86a836",
+      "id": "2195a3b5-f1db-462d-8dc6-1bd8fd154bdb",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMwMzU3NC42MDQ1NDZ9.GPLw8A6TTlu8XAQbOaJPZrhsUYgH6PlGq3sCDVhX_KI",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwMjQ4NTQ4OC40NjEzNTJ9.cI7C1YR7nqLQ8PuGB5Do5gJS6DSgQup_3Vczks2UtdI",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1215,8 +1216,13 @@
           "type": "any",
           "value": "undefined",
           "key": "paper_count",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "DJ000014",
+          "key": "paper_record_id",
+          "initialValue": "DJ000014"
         }
       ]
     },
@@ -1232,7 +1238,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e0de281e-1703-4d0c-bc7b-e6f3b73514a8",
+      "id": "80f20e9c-9b1c-477f-9934-a1db494d4edf",
       "values": []
     },
     "parameter": {
