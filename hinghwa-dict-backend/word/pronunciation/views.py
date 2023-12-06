@@ -294,7 +294,7 @@ def combinePronunciationV2(request):
 
 class ManagePronunciation(View):
     # PN0101 获取发音信息
-    def get(request, id):
+    def get(self, request, id):
         pronunciation = get_pronunciation_by_id(id)
         pronunciation.views += 1
         pronunciation.save()
@@ -304,7 +304,7 @@ class ManagePronunciation(View):
         )
 
     # PN0103 更改发音信息
-    def put(request, id):
+    def put(self, request, id):
         token_pass(request.headers, -1)
         pronunciation = get_pronunciation_by_id(id)
         body = demjson.decode(request.body) if len(request.body) else {}
@@ -323,7 +323,7 @@ class ManagePronunciation(View):
         return JsonResponse({}, status=200)
 
     # PN0104 删除发音
-    def delete(request, id):
+    def delete(self, request, id):
         token_pass(request.headers, -1)
         pronunciation = get_pronunciation_by_id(id)
         body = demjson.decode(request.body) if len(request.body) else {}
@@ -345,7 +345,7 @@ class ManagePronunciation(View):
 
 class ManageApproval(View):
     # PN0106 审核语音
-    def post(request, id):
+    def post(self, request, id):
         token_pass(request.headers, -1)
         verifier = get_request_user(request)
         body = demjson.decode(request.body) if len(request.body) else {}
@@ -382,7 +382,7 @@ class ManageApproval(View):
         return JsonResponse(transaction_info, status=200)
 
     # PN0105 更改审核结果
-    def put(request, id):
+    def put(self, request, id):
         token_pass(request.headers, -1)
         verifier = get_request_user(request)
         body = demjson.decode(request.body) if len(request.body) else {}
