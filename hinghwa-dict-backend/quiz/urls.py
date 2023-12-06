@@ -12,8 +12,4 @@ urlpatterns = [
     path("/<int:id>", csrf_exempt(SingleQuiz.as_view())),  # QZ0101 QZ0103  QZ0104
     path("/<int:id>/visibility", csrf_exempt(ManageVisibility.as_view())),  # QZ0105
     path("/random", csrf_exempt(RandomQuiz.as_view())),  # QZ0202
-    path("/paper", csrf_exempt(ManageAllPaper.as_view())),  # QZ0203
-    path("/paper/records", csrf_exempt(PaperRecordAll.as_view())),
-    path("/paper/records/<str:record_id>", csrf_exempt(PaperRecordSingle.as_view())),
-    path("/paper/<str:paper_id>", csrf_exempt(ManageSinglePaper.as_view())),
 ]
