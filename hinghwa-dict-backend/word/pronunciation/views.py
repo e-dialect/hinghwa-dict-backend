@@ -13,7 +13,7 @@ from django.core.cache import caches
 from django.db.models import Q, Count, Max
 from django.core.paginator import Paginator
 from pydub import AudioSegment as audio
-
+from rewards.transactions.dto import transactions_all
 from user.models import User
 from utils.token import get_request_user, token_pass, token_user
 from user.dto.user_simple import user_simple
@@ -40,6 +40,7 @@ from utils.Rewards_action import (
     manage_points_in_pronunciation,
     revert_points_in_pronunciation,
 )
+from rewards.transactions.dto import transactions_all
 
 
 # 从id中获取单条语音
@@ -367,11 +368,9 @@ class ManageApproval(View):
         contributor = pronunciation.contributor
         if result:
             content = f"恭喜您，您的语音{pro}审核通过"
-            transaction_info = manage_points_in_pronunciation(contributor.id)
-
+            transaction = manage_points_in_pronunciation(contributor.id)
         else:
             content = f"很遗憾，您的语音{pro}审核未通过"
-            transaction_info = revert_points_in_pronunciation(contributor.id)
         sendNotification(
             verifier,
             [contributor],
@@ -379,7 +378,7 @@ class ManageApproval(View):
             action_object=pronunciation,
             title=f"【通知】语音（{pronunciation.word.word}）审核结果",
         )
-        return JsonResponse(transaction_info, status=200)
+        return JsonResponse(transaction, status=200)
 
     # PN0105 更改审核结果
     def put(self, request, id):
