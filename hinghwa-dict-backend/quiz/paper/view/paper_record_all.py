@@ -3,7 +3,7 @@ import demjson
 from ..dto.paper_record_dto import paper_record_all
 from django.views import View
 from ...models import Quiz, Paper
-from utils.token import token_pass
+from utils.token import token_pass, token_user
 from utils.generate_id import generate_paper_record_id
 from user.models import User
 from utils.exception.types.bad_request import BadRequestException
@@ -17,17 +17,17 @@ class PaperRecordAll(View):
     # QZ0301 创建答卷记录
     @csrf_exempt
     def post(self, request):
-        token_pass(request.headers, -1)
+        token = token_pass(request.headers)
+        user = token_user(token)
+        token_pass(request.headers, user.id)
         contributor = request.GET["contributor"]
         paper = request.GET["paper"]
-        user = User.objects.filter(id=contributor)
         paper = Paper.objects.filter(id=paper)
-        user = user[0]
         paper = paper[0]
         record = PaperRecord()
         record.timestamp = timezone.now()
         record.id = generate_paper_record_id()
-        record.contributor = user
+        record.contributor = get_user_by_id(contributor)
         record.paper = paper
         record.save()
         return JsonResponse(paper_record_all(record))

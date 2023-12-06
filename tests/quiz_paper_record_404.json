@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "db445c9b-66b6-42aa-9fa8-a57b1a1ebb3a",
+          "id": "343f7d22-cf53-4c91-8be3-aaed27dd6fa3",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -231,7 +231,7 @@
           }
         },
         {
-          "id": "14c672c5-6821-4d92-8a83-ec8981fe8701",
+          "id": "46d0b878-2c39-4509-a5f8-45afbd564367",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -603,7 +603,7 @@
           }
         },
         {
-          "id": "c0299fa7-1dce-41bb-9821-a61603198b89",
+          "id": "fa111d80-62c6-4d1b-aaa3-50a5b5d7c881",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -975,15 +975,14 @@
           }
         },
         {
-          "id": "a3badf2b-4862-4c31-80e2-8e3ba2bad9bf",
+          "id": "3f9a9118-9113-4a36-ade7-937e16cf8f81",
           "name": "QZ0203 测试题组卷(QZ0203 测试题组卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper"
+                "papers"
               ],
               "host": [
                 "127",
@@ -1084,11 +1083,8 @@
             }
           ],
           "responseDefinition": {
-            "id": 147260241,
-            "createdAt": "2023-01-10T15:21:40.000Z",
-            "updatedAt": "2023-10-19T06:23:50.000Z",
-            "deletedAt": null,
-            "apiDetailId": 58017398,
+            "createdAt": "2023-12-06T16:26:16.393Z",
+            "updatedAt": "2023-12-06T16:26:16.393Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -1098,6 +1094,8 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "apiDetailId": 58017398,
+            "id": 147260241,
             "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
@@ -1439,7 +1437,7 @@
             "httpApiId": 58017398,
             "httpApiCaseId": 125111422,
             "httpApiName": "QZ0203 测试题组卷",
-            "httpApiPath": "/quizzes/paper",
+            "httpApiPath": "/papers",
             "httpApiMethod": "post",
             "httpApiCaseName": "QZ0203 测试题组卷",
             "id": "706274f7-5b61-4890-ab26-0be314fb9798",
@@ -1452,15 +1450,14 @@
           }
         },
         {
-          "id": "3d393c2c-a93b-4698-bda4-0856d0b47703",
+          "id": "5fcab3e8-3457-4204-bd23-46efbc229d0b",
           "name": "QZ0204 查询所有试卷(QZ0204 查询所有试卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper"
+                "papers"
               ],
               "host": [
                 "127",
@@ -1489,11 +1486,8 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "id": 337002971,
-            "createdAt": "2023-10-19T03:41:47.000Z",
-            "updatedAt": "2023-10-19T06:02:17.000Z",
-            "deletedAt": null,
-            "apiDetailId": 118004287,
+            "createdAt": "2023-12-06T16:26:38.928Z",
+            "updatedAt": "2023-12-06T16:26:38.928Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -1523,6 +1517,8 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "apiDetailId": 118004287,
+            "id": 337002971,
             "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
@@ -1847,7 +1843,7 @@
             "httpApiId": 118004287,
             "httpApiCaseId": 125111421,
             "httpApiName": "QZ0204 查询所有试卷",
-            "httpApiPath": "/quizzes/paper",
+            "httpApiPath": "/papers",
             "httpApiMethod": "get",
             "httpApiCaseName": "QZ0204 查询所有试卷",
             "id": "0eaa01e0-20f2-4736-b325-b4e5013870ea",
@@ -1860,15 +1856,14 @@
           }
         },
         {
-          "id": "6d472f1d-3936-4365-870a-a2d3a01613f9",
+          "id": "18b8f916-5629-4239-aab5-ffbd1cacfbfa",
           "name": "QZ0205 查询特定试卷(QZ0205 查询特定试卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper",
+                "papers",
                 "{{paper_id}}"
               ],
               "host": [
@@ -1898,11 +1893,8 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "id": 337143360,
-            "createdAt": "2023-10-19T06:27:14.000Z",
-            "updatedAt": "2023-10-19T06:27:31.000Z",
-            "deletedAt": null,
-            "apiDetailId": 118058158,
+            "createdAt": "2023-12-06T16:27:05.644Z",
+            "updatedAt": "2023-12-06T16:27:05.644Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -1912,6 +1904,8 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
+            "apiDetailId": 118058158,
+            "id": 337143360,
             "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
@@ -2236,7 +2230,7 @@
             "httpApiId": 118058158,
             "httpApiCaseId": 125111420,
             "httpApiName": "QZ0205 查询特定试卷",
-            "httpApiPath": "/quizzes/paper/{paper_id}",
+            "httpApiPath": "/papers/{paper_id}",
             "httpApiMethod": "get",
             "httpApiCaseName": "QZ0205 查询特定试卷",
             "id": "25be8193-a55c-4b7a-afa4-ed15fd469e18",
@@ -2249,15 +2243,14 @@
           }
         },
         {
-          "id": "0569f0d5-7393-4b9b-a815-0417bca395e8",
+          "id": "d19e9396-114a-43ed-abe3-fafd7692d341",
           "name": "QZ0301 创建答卷记录(QZ0301 创建答卷记录)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper",
+                "papers",
                 "records"
               ],
               "host": [
@@ -2359,8 +2352,8 @@
             }
           ],
           "responseDefinition": {
-            "createdAt": "2023-12-06T15:06:26.448Z",
-            "updatedAt": "2023-12-06T15:06:26.448Z",
+            "createdAt": "2023-12-06T16:27:37.502Z",
+            "updatedAt": "2023-12-06T16:27:37.502Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -2388,7 +2381,7 @@
             "httpApiId": 129250132,
             "httpApiCaseId": 125111419,
             "httpApiName": "QZ0301 创建答卷记录",
-            "httpApiPath": "/quizzes/paper/records",
+            "httpApiPath": "/papers/records",
             "httpApiMethod": "post",
             "httpApiCaseName": "QZ0301 创建答卷记录",
             "id": "d66ffb61-6f84-46da-8d71-4808b9993aac",
@@ -2401,15 +2394,14 @@
           }
         },
         {
-          "id": "15d6d904-d289-4b58-ba24-c4baf6dc839c",
+          "id": "ec828d9b-88f5-4bed-87f3-89dcfd28433f",
           "name": "QZ0302 获取用户答卷记录(QZ0302 获取用户答卷记录)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper",
+                "papers",
                 "records"
               ],
               "host": [
@@ -2454,8 +2446,8 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "createdAt": "2023-11-30T02:17:26.947Z",
-            "updatedAt": "2023-11-30T02:17:26.947Z",
+            "createdAt": "2023-12-06T16:28:30.291Z",
+            "updatedAt": "2023-12-06T16:28:30.291Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -2491,6 +2483,7 @@
             "apiDetailId": 129251034,
             "tempId": "1701276183847",
             "id": 361145208,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -2885,7 +2878,7 @@
             "httpApiId": 129251034,
             "httpApiCaseId": 125111418,
             "httpApiName": "QZ0302 获取用户答卷记录",
-            "httpApiPath": "/quizzes/paper/records",
+            "httpApiPath": "/papers/records",
             "httpApiMethod": "get",
             "httpApiCaseName": "QZ0302 获取用户答卷记录",
             "id": "c6f561e0-7a2f-4db4-b26d-418a9f3668d0",
@@ -2898,15 +2891,14 @@
           }
         },
         {
-          "id": "ac20dcc8-e186-4f50-97cf-8a0b5bb02659",
+          "id": "2e347cf8-2a23-4986-a470-544ee851ee27",
           "name": "QZ0303 查询单个答卷记录(QZ0303 查询单个答卷记录)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper",
+                "papers",
                 "records",
                 "{{}}"
               ],
@@ -2960,7 +2952,7 @@
             "httpApiId": 129321574,
             "httpApiCaseId": 125111417,
             "httpApiName": "QZ0303 查询单个答卷记录",
-            "httpApiPath": "/quizzes/paper/records/{record_id}",
+            "httpApiPath": "/papers/records/{record_id}",
             "httpApiMethod": "get",
             "httpApiCaseName": "QZ0303 查询单个答卷记录",
             "id": "2ba1efb0-f9db-47ee-be53-611c4cce2693",
@@ -3434,12 +3426,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "9aa7c71d-2125-4ddf-a1d7-b07631eff53d",
+      "id": "e581f307-0597-4f2b-b1bb-8ea197f0ca8d",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwMjQ3MjczNC44NzEwN30._yvdJw8014yAc0uFvW_mQHVzB5f9l8rxVfJ3SsGKBzQ",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwMjQ4NTQ4OC40NjEzNTJ9.cI7C1YR7nqLQ8PuGB5Do5gJS6DSgQup_3Vczks2UtdI",
           "key": "token",
           "isBindInitial": false,
           "initialValue": ""
@@ -3596,7 +3588,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "dedd9b95-6079-4b70-9822-aeb66ba8bd12",
+      "id": "80f20e9c-9b1c-477f-9934-a1db494d4edf",
       "values": []
     },
     "parameter": {
