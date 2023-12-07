@@ -179,5 +179,6 @@ class SingleApplication(View):
             content,
             target=application,
             title=title,
+            action_object=application.word,
         )
         return JsonResponse({"word": feedback}, status=200)

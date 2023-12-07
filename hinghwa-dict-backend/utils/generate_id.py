@@ -4,6 +4,7 @@ from rewards.products.models.product import Product
 from rewards.orders.models.order import Order
 from word.models import List
 from quiz.models import Paper, PaperRecord, QuizRecord
+from quiz.models import Paper, PaperRecord
 
 
 def generate_transaction_id():

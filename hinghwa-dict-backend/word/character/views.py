@@ -117,6 +117,12 @@ def searchCharactersPinyin(request):
                 result1[pinyin]["characters"].append(
                     {"character": character, "word": word, "traditional": traditional}
                 )
+                unique_result = []
+                exist_set = set()
+                for item in result1.values():
+                    if item["pinyin"] not in exist_set:
+                        unique_result.append(item)
+                        exist_set.add(item["pinyin"])
             return JsonResponse({"result": list(result1.values())}, status=200)
         else:
             return JsonResponse({}, status=405)
