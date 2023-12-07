@@ -46,3 +46,17 @@ class Paper(models.Model):
         Quiz, related_name="exam_questions", verbose_name="问题列表", blank=True
     )
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
+
+
+class PaperRecord(models.Model):
+    contributor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="paper_user", verbose_name="答卷人"
+    )
+    timestamp = models.DateTimeField(verbose_name="时间")
+    paper = models.ForeignKey(
+        Paper,
+        on_delete=models.CASCADE,
+        related_name="papers",
+        verbose_name="试卷",
+    )
+    id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)

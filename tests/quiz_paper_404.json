@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "fcb595d7-b867-4c00-8c8d-c4590e6e0e96",
+          "id": "fbd03ffc-571e-41ee-aec4-5fa293c2302b",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -153,6 +153,7 @@
           ],
           "responseDefinition": {
             "id": 4183271,
+            "apiDetailId": 5318056,
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -181,11 +182,11 @@
             "ordering": 1,
             "unpackerId": "",
             "unpackerSetting": "",
-            "folderId": 0,
             "createdAt": "2021-07-29T14:43:37.000Z",
             "updatedAt": "2021-08-12T16:27:18.000Z",
             "deletedAt": null,
-            "apiDetailId": 5318056,
+            "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -230,7 +231,7 @@
           }
         },
         {
-          "id": "2958fcc7-6ba7-4f5f-8c87-5583b04da068",
+          "id": "20736526-aa24-4d8c-8c2b-c86ea4795a18",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -276,6 +277,7 @@
           "event": [],
           "responseDefinition": {
             "id": 70048663,
+            "apiDetailId": 29662986,
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -301,11 +303,10 @@
             "ordering": 1,
             "unpackerId": "",
             "unpackerSetting": "",
-            "folderId": 0,
             "createdAt": "2022-07-15T11:22:03.000Z",
             "updatedAt": "2022-07-23T08:30:31.000Z",
             "deletedAt": null,
-            "apiDetailId": 29662986,
+            "folderId": 0,
             "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
@@ -602,15 +603,14 @@
           }
         },
         {
-          "id": "8fd4f34d-3f88-4b29-a30b-4ed266180a90",
+          "id": "675ab577-ddf0-4fc4-a7b8-85519f2f58fc",
           "name": "QZ0203 测试题组卷(QZ0203 测试题组卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper"
+                "papers"
               ],
               "host": [
                 "127",
@@ -659,7 +659,8 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "id": 147260241,
+            "createdAt": "2023-12-06T16:26:16.393Z",
+            "updatedAt": "2023-12-06T16:26:16.393Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -669,10 +670,8 @@
             "defaultEnable": true,
             "projectId": 404238,
             "ordering": 1,
-            "createdAt": "2023-01-10T15:21:40.000Z",
-            "updatedAt": "2023-10-19T06:23:50.000Z",
-            "deletedAt": null,
             "apiDetailId": 58017398,
+            "id": 147260241,
             "responseExamples": [],
             "schemaDefinitions": {
               "1097305": {
@@ -967,25 +966,17 @@
                       "x-apifox-orders": [
                         "01HD3987MFMNXZBC3WYH3E2Z14"
                       ],
-                      "required": [],
                       "x-apifox-refs": {
                         "01HD3987MFMNXZBC3WYH3E2Z14": {
                           "$ref": "#/definitions/13080595"
                         }
                       }
                     }
-                  },
-                  "quantity": {
-                    "type": "integer",
-                    "mock": {
-                      "mock": "@integer"
-                    }
                   }
                 },
                 "x-apifox-orders": [
                   "id",
                   "title",
-                  "quantity",
                   "quizzes"
                 ],
                 "required": [
@@ -1022,7 +1013,7 @@
             "httpApiId": 58017398,
             "httpApiCaseId": 115895585,
             "httpApiName": "QZ0203 测试题组卷",
-            "httpApiPath": "/quizzes/paper",
+            "httpApiPath": "/papers",
             "httpApiMethod": "post",
             "httpApiCaseName": "QZ0203 测试题组卷",
             "id": "8a7c0ce2-ce97-445e-b556-ea8840d8c554",
@@ -1035,16 +1026,15 @@
           }
         },
         {
-          "id": "13bb46a7-515f-4a9c-940f-8c7ec0c7b8ed",
+          "id": "43d96cf9-cdf3-48da-865f-eb685418bd31",
           "name": "QZ0205 查询特定试卷(QZ0205 查询特定试卷)",
           "request": {
             "url": {
               "protocol": "http",
               "port": "8000",
               "path": [
-                "quizzes",
-                "paper",
-                "~{{paper_id}}"
+                "papers",
+                "{{}}"
               ],
               "host": [
                 "127",
@@ -1096,7 +1086,7 @@
             "httpApiId": 118058158,
             "httpApiCaseId": 115895584,
             "httpApiName": "QZ0205 查询特定试卷",
-            "httpApiPath": "/quizzes/paper/{paper_id}",
+            "httpApiPath": "/papers/{paper_id}",
             "httpApiMethod": "get",
             "httpApiCaseName": "QZ0205 查询特定试卷",
             "id": "8f365ee2-f6c2-4730-88ed-ce5eb5e4b765",
@@ -1469,25 +1459,17 @@
             "x-apifox-orders": [
               "01HD3987MFMNXZBC3WYH3E2Z14"
             ],
-            "required": [],
             "x-apifox-refs": {
               "01HD3987MFMNXZBC3WYH3E2Z14": {
                 "$ref": "#/definitions/13080595"
               }
             }
           }
-        },
-        "quantity": {
-          "type": "integer",
-          "mock": {
-            "mock": "@integer"
-          }
         }
       },
       "x-apifox-orders": [
         "id",
         "title",
-        "quantity",
         "quizzes"
       ],
       "required": [
@@ -1511,13 +1493,14 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "87342855-c0fa-467e-88b3-14eb766f85ae",
+      "id": "d4d42086-0fd3-4484-9e56-21f32aa107c3",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5ODMwMzU3NC42MDQ1NDZ9.GPLw8A6TTlu8XAQbOaJPZrhsUYgH6PlGq3sCDVhX_KI",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwMjQ4NTQ4OC40NjEzNTJ9.cI7C1YR7nqLQ8PuGB5Do5gJS6DSgQup_3Vczks2UtdI",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1650,8 +1633,13 @@
           "type": "any",
           "value": "undefined",
           "key": "paper_count",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "DJ000014",
+          "key": "paper_record_id",
+          "initialValue": "DJ000014"
         }
       ]
     },
@@ -1667,7 +1655,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e0de281e-1703-4d0c-bc7b-e6f3b73514a8",
+      "id": "80f20e9c-9b1c-477f-9934-a1db494d4edf",
       "values": []
     },
     "parameter": {
