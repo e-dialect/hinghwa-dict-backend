@@ -58,12 +58,12 @@ class Manage(View):
                 "word": user.contribute_words.filter(visibility=True).count(),
                 "word_uploaded": user.contribute_words.count(),
                 "article_views": user.articles.aggregate(Sum("views"))["views__sum"]
-                or 0,
+                                 or 0,
                 # TODO 去除播放量相关（需要确认前端全部删除）
                 "listened": user.contribute_pronunciation.aggregate(Sum("views")).get(
                     "views__sum"
                 )
-                or 0,
+                            or 0,
             },
         }
 
@@ -128,6 +128,23 @@ class ManagePassword(View):
         body = demjson.decode(request.body)
         if not user.check_password(body["oldpassword"]):
             raise WrongPassword()
+        password_validator(body["newpassword"])
+        user.set_password(body["newpassword"])
+        user.save()
+        return JsonResponse(
+            {
+                "user": user_all(user),
+                "token": generate_token(user),
+            },
+            status=200,
+        )
+
+    # US0307 微信更新用户密码
+    def post(self, request, id) -> JsonResponse:
+        user = get_request_user(request)
+        if user.id != id:
+            raise ForbiddenException
+        body = demjson.decode(request.body)
         password_validator(body["newpassword"])
         user.set_password(body["newpassword"])
         user.save()
