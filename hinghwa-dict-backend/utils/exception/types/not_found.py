@@ -210,3 +210,15 @@ class PaperRecordNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "答卷记录{}不存在！".format(id)
+
+
+class QuizRecordNotFoundException(NotFoundException):
+    """
+    答题记录不存在异常
+    parma id:答题记录id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "答题记录{}不存在！".format(id)
