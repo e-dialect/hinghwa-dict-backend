@@ -6,7 +6,11 @@ from ...models import Quiz, Paper, QuizRecord
 from utils.token import token_pass, token_user
 from utils.generate_id import generate_quiz_record_id
 from ...forms import QuizRecordForm
-from utils.exception.types.not_found import PaperNotFoundException, QuizNotFoundException, QuizRecordNotFoundException
+from utils.exception.types.not_found import (
+    PaperNotFoundException,
+    QuizNotFoundException,
+    QuizRecordNotFoundException,
+)
 from utils.exception.types.bad_request import BadRequestException
 
 

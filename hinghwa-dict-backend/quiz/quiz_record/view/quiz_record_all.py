@@ -6,7 +6,10 @@ from ...models import Quiz, Paper, QuizRecord
 from utils.token import token_pass, token_user
 from utils.generate_id import generate_quiz_record_id
 from ...forms import QuizRecordForm
-from utils.exception.types.not_found import PaperNotFoundException, QuizNotFoundException
+from utils.exception.types.not_found import (
+    PaperNotFoundException,
+    QuizNotFoundException,
+)
 from utils.exception.types.bad_request import BadRequestException
 
 
@@ -47,5 +50,4 @@ class QuizRecordAll(View):
         results = []
         for record in records:
             results.append(quiz_record(record))
-        return JsonResponse({"total": len(results),"records":results }, status=200)
-
+        return JsonResponse({"total": len(results), "records": results}, status=200)

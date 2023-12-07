@@ -9,7 +9,7 @@ def quiz_record(record: QuizRecord):
         "quiz": quiz_all(record.quiz),
         "answer": record.answer,
         "correctness": record.correctness,
-        "paper": None if record.paper is None else paper_simple(record.paper)
+        "paper": None if record.paper is None else paper_simple(record.paper),
     }
 
     return response
