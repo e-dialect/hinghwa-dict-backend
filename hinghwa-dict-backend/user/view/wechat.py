@@ -13,7 +13,9 @@ from utils.exception.types.not_found import (
     NotBoundWechat,
     NotFoundException,
 )
+from utils.exception.types.forbidden import ForbiddenException
 from utils.token import generate_token, check_request_user
+from user.dto.user_all import user_all
 
 
 class OpenId:
@@ -106,3 +108,29 @@ class BindWechat(View):
         user.user_info.wechat = ""
         user.user_info.save()
         return JsonResponse({}, status=200)
+
+
+class WechatManage(View):
+    # US0307 微信更新用户密码
+    def post(self, request, id) -> JsonResponse:
+        #    基于token获取的用户
+        user = check_request_user(request, id)
+        if user.id != id:
+            raise ForbiddenException
+        body = demjson.decode(request.body)
+        jscode = body["jscode"]
+        openid = OpenId(jscode).get_openid()
+        #   基于jscode获取的用户
+        user_info = UserInfo.objects.filter(wechat__contains=openid)
+        if user_info[0].user != user:
+            raise ForbiddenException
+        password_validator(body["newpassword"])
+        user.set_password(body["newpassword"])
+        user.save()
+        return JsonResponse(
+            {
+                "user": user_all(user),
+                "token": generate_token(user),
+            },
+            status=200,
+        )

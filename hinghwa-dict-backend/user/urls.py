@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .view.wechat import WechatLogin, WechatRegister, BindWechat
+from .view.wechat import WechatLogin, WechatRegister, BindWechat, WechatManage
 from .views import *
 from .view.manage import *
 from .view.forget import *
@@ -17,9 +17,7 @@ urlpatterns = [
 urlpatterns += [
     path("<int:id>", csrf_exempt(Manage.as_view())),  # get US0201 put US0301
     path("<int:id>/password", csrf_exempt(ManagePassword.as_view())),  # put US0302
-    path(
-        "<int:id>/password/reset", csrf_exempt(ManagePassword.as_view())
-    ),  # post US0307
+    path("<int:id>/password/reset", csrf_exempt(WechatManage.as_view())),  # post US0307
     path("<int:id>/email", csrf_exempt(ManageEmail.as_view())),  # put US0303
     path("<int:id>/points", csrf_exempt(ManagePoints.as_view())),
 ]

@@ -139,23 +139,6 @@ class ManagePassword(View):
             status=200,
         )
 
-    # US0307 微信更新用户密码
-    def post(self, request, id) -> JsonResponse:
-        user = get_request_user(request)
-        if user.id != id:
-            raise ForbiddenException
-        body = demjson.decode(request.body)
-        password_validator(body["newpassword"])
-        user.set_password(body["newpassword"])
-        user.save()
-        return JsonResponse(
-            {
-                "user": user_all(user),
-                "token": generate_token(user),
-            },
-            status=200,
-        )
-
 
 class ManageEmail(View):
     # US0303 更新用户邮箱
