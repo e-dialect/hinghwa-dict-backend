@@ -9,7 +9,7 @@ from ...forms import QuizRecordForm
 from utils.exception.types.not_found import (
     PaperRecordNotFoundException,
     QuizNotFoundException,
-    UserNotFoundException
+    UserNotFoundException,
 )
 from utils.exception.types.bad_request import BadRequestException
 from django.utils import timezone
