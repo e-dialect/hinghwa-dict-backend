@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "309eca57-f86a-40e9-93ee-9fdeebd3b278",
+          "id": "3c92ac93-eebf-4045-8bab-3e0e6fad4e14",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -231,7 +231,7 @@
           }
         },
         {
-          "id": "3da2e8c6-2111-4462-b97e-4f23ff288916",
+          "id": "9e717b5f-06ca-4b72-b67b-55cdcc3fd364",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -655,7 +655,7 @@
           }
         },
         {
-          "id": "0c761920-d892-4554-a76a-67add09377e5",
+          "id": "9a833b72-3746-48f9-81c7-f4458643d23d",
           "name": "QZ0102 增加单个测试(QZ0102 增加单个测试)",
           "request": {
             "url": {
@@ -1027,7 +1027,7 @@
           }
         },
         {
-          "id": "b15709bf-ea33-41e2-9cbb-06fe6c24fa7a",
+          "id": "da46514a-3517-4c09-b073-7cc5c09662ae",
           "name": "QZ0203 测试题组卷(QZ0203 测试题组卷)",
           "request": {
             "url": {
@@ -1502,7 +1502,7 @@
           }
         },
         {
-          "id": "aed6c259-b9d9-4ecf-ae54-d9401b06d193",
+          "id": "4d7dadc3-acd0-46bf-b811-e6944343647e",
           "name": "QZ0401 创建答题记录(QZ0401 创建答题记录)",
           "request": {
             "url": {
@@ -1651,20 +1651,32 @@
                     "mock": "@boolean"
                   }
                 },
-                "paper": {
+                "contributor": {
                   "type": "string",
-                  "title": "所在试卷（可为空）"
+                  "title": "用户id",
+                  "mock": {
+                    "mock": "@string('number', 1, 3)"
+                  }
+                },
+                "paper_record": {
+                  "type": "string",
+                  "title": "所在试卷（可为空）",
+                  "mock": {
+                    "mock": "@string('number', 1, 3)"
+                  }
                 }
               },
               "x-apifox-orders": [
-                "paper",
+                "paper_record",
+                "contributor",
                 "answer",
                 "correctness"
               ],
               "required": [
-                "paper",
+                "paper_record",
                 "answer",
-                "correctness"
+                "correctness",
+                "contributor"
               ]
             }
           },
@@ -1685,7 +1697,7 @@
           }
         },
         {
-          "id": "df4cad91-fcee-409b-8ca2-87530dba5323",
+          "id": "c86c39b3-4315-4168-85b8-8a4e5d57c3fd",
           "name": "QZ0402 查询所有答题记录(QZ0402 查询所有答题记录)",
           "request": {
             "url": {
@@ -1722,8 +1734,8 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "createdAt": "2023-12-07T09:18:47.685Z",
-            "updatedAt": "2023-12-07T09:18:47.685Z",
+            "createdAt": "2023-12-21T09:58:50.043Z",
+            "updatedAt": "2023-12-21T09:58:50.043Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
@@ -1762,6 +1774,36 @@
             "id": 361865513,
             "responseExamples": [],
             "schemaDefinitions": {
+              "1077996": {
+                "type": "object",
+                "properties": {
+                  "nickname": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@cname"
+                    },
+                    "title": "用户名"
+                  },
+                  "avatar": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@image('100x100')"
+                    },
+                    "title": "头像"
+                  },
+                  "id": {
+                    "type": "integer",
+                    "title": "用户id"
+                  }
+                },
+                "required": [
+                  "nickname",
+                  "avatar",
+                  "id"
+                ],
+                "title": "user_simple",
+                "name": "user_simple"
+              },
               "1097305": {
                 "type": "object",
                 "properties": {
@@ -2031,6 +2073,87 @@
                 "title": "quiz_all",
                 "name": "quiz_all"
               },
+              "65181535": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@string"
+                    }
+                  },
+                  "title": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@ctitle"
+                    }
+                  },
+                  "quizzes": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "properties": {},
+                      "x-apifox-orders": [
+                        "01HD3987MFMNXZBC3WYH3E2Z14"
+                      ],
+                      "x-apifox-refs": {
+                        "01HD3987MFMNXZBC3WYH3E2Z14": {
+                          "$ref": "#/definitions/13080595"
+                        }
+                      }
+                    }
+                  }
+                },
+                "x-apifox-orders": [
+                  "id",
+                  "title",
+                  "quizzes"
+                ],
+                "required": [
+                  "id",
+                  "title",
+                  "quizzes"
+                ],
+                "title": "paper_all",
+                "name": "paper_all"
+              },
+              "71627581": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "title": "ID"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@timestamp"
+                    },
+                    "title": "时间戳"
+                  },
+                  "user": {
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "paper": {
+                    "title": "包含的测试题",
+                    "$ref": "#/definitions/65181535"
+                  }
+                },
+                "x-apifox-orders": [
+                  "id",
+                  "user",
+                  "timestamp",
+                  "paper"
+                ],
+                "required": [
+                  "id",
+                  "timestamp",
+                  "paper",
+                  "user"
+                ],
+                "title": "paper_record_all",
+                "name": "paper_record_all"
+              },
               "71819921": {
                 "type": "object",
                 "properties": {
@@ -2041,7 +2164,7 @@
                   "paper": {
                     "anyOf": [
                       {
-                        "$ref": "#/definitions/73061649"
+                        "$ref": "#/definitions/71627581"
                       },
                       {
                         "type": "null"
@@ -2065,10 +2188,26 @@
                       "mock": "@boolean"
                     },
                     "title": "是否正确"
+                  },
+                  "contributor": {
+                    "title": "答题人",
+                    "mock": {
+                      "mock": "@name"
+                    },
+                    "$ref": "#/definitions/1077996"
+                  },
+                  "timestamp": {
+                    "type": "string",
+                    "mock": {
+                      "mock": "@timestamp"
+                    },
+                    "title": "时间戳"
                   }
                 },
                 "x-apifox-orders": [
                   "id",
+                  "contributor",
+                  "timestamp",
                   "quiz",
                   "correctness",
                   "answer",
@@ -2079,38 +2218,12 @@
                   "answer",
                   "paper",
                   "id",
-                  "correctness"
+                  "correctness",
+                  "contributor",
+                  "timestamp"
                 ],
-                "title": "quiz_record"
-              },
-              "73061649": {
-                "type": "object",
-                "properties": {
-                  "id": {
-                    "type": "string",
-                    "mock": {
-                      "mock": "@string"
-                    },
-                    "title": "ID"
-                  },
-                  "title": {
-                    "type": "string",
-                    "mock": {
-                      "mock": "@ctitle"
-                    },
-                    "title": "试卷标题"
-                  }
-                },
-                "x-apifox-orders": [
-                  "id",
-                  "title"
-                ],
-                "required": [
-                  "id",
-                  "title"
-                ],
-                "title": "paper_simple",
-                "name": "paper_simple"
+                "title": "quiz_record",
+                "name": "quiz_record"
               }
             }
           },
@@ -2134,7 +2247,7 @@
           }
         },
         {
-          "id": "a8e90f0e-8894-41e5-bc60-64f11833a861",
+          "id": "01996320-04a8-4456-80cf-d65226d417c0",
           "name": "QZ0403 查询特定答题记录(QZ0403 查询特定答题记录)",
           "request": {
             "url": {
@@ -2208,7 +2321,7 @@
           }
         },
         {
-          "id": "72ac287d-b99a-44fd-8b8d-a78cef250e1e",
+          "id": "97354418-04a8-4d56-a1c4-e7d0d18efb6c",
           "name": "QZ0404 更新答题记录(QZ0404 更新答题记录)",
           "request": {
             "url": {
@@ -2246,7 +2359,7 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"paper\": \"\",\r\n    \"answer\": \"voluptate Excepteur deserunt\",\r\n    \"correctness\": true\r\n}",
+              "raw": "{\r\n    \"paper_record\": \"\",\r\n    \"answer\": \"proident reprehenderit cillum\",\r\n    \"correctness\": true,\r\n    \"contributor\": \"1\"\r\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
@@ -2279,24 +2392,33 @@
                   "type": "string",
                   "title": "作答答案"
                 },
-                "paper": {
-                  "type": "string",
-                  "title": "所在试卷"
-                },
                 "correctness": {
                   "type": "boolean",
                   "title": "是否正确"
+                },
+                "contributor": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('number', 1, 3)"
+                  },
+                  "title": "用户id"
+                },
+                "paper_record": {
+                  "type": "string",
+                  "title": "所在试卷"
                 }
               },
               "x-apifox-orders": [
-                "paper",
+                "paper_record",
                 "answer",
-                "correctness"
+                "correctness",
+                "contributor"
               ],
               "required": [
-                "paper",
+                "paper_record",
                 "answer",
-                "correctness"
+                "correctness",
+                "contributor"
               ]
             }
           },
@@ -2317,7 +2439,7 @@
           }
         },
         {
-          "id": "0067656a-e1dd-4906-8f41-69f96e3c0d7f",
+          "id": "ba8daf83-5751-49a4-9aee-52ea08bd32df",
           "name": "QZ0405 删除答题记录(QZ0405 删除答题记录)",
           "request": {
             "url": {
@@ -2398,6 +2520,36 @@
     "name": "QZ模块答题记录 404"
   },
   "dataSchemas": {
+    "1077996": {
+      "type": "object",
+      "properties": {
+        "nickname": {
+          "type": "string",
+          "mock": {
+            "mock": "@cname"
+          },
+          "title": "用户名"
+        },
+        "avatar": {
+          "type": "string",
+          "mock": {
+            "mock": "@image('100x100')"
+          },
+          "title": "头像"
+        },
+        "id": {
+          "type": "integer",
+          "title": "用户id"
+        }
+      },
+      "required": [
+        "nickname",
+        "avatar",
+        "id"
+      ],
+      "title": "user_simple",
+      "name": "user_simple"
+    },
     "1097305": {
       "type": "object",
       "properties": {
@@ -2772,6 +2924,43 @@
       "title": "paper_all",
       "name": "paper_all"
     },
+    "71627581": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "title": "ID"
+        },
+        "timestamp": {
+          "type": "string",
+          "mock": {
+            "mock": "@timestamp"
+          },
+          "title": "时间戳"
+        },
+        "user": {
+          "$ref": "#/definitions/1077996"
+        },
+        "paper": {
+          "title": "包含的测试题",
+          "$ref": "#/definitions/65181535"
+        }
+      },
+      "x-apifox-orders": [
+        "id",
+        "user",
+        "timestamp",
+        "paper"
+      ],
+      "required": [
+        "id",
+        "timestamp",
+        "paper",
+        "user"
+      ],
+      "title": "paper_record_all",
+      "name": "paper_record_all"
+    },
     "71819921": {
       "type": "object",
       "properties": {
@@ -2782,7 +2971,7 @@
         "paper": {
           "anyOf": [
             {
-              "$ref": "#/definitions/73061649"
+              "$ref": "#/definitions/71627581"
             },
             {
               "type": "null"
@@ -2806,10 +2995,26 @@
             "mock": "@boolean"
           },
           "title": "是否正确"
+        },
+        "contributor": {
+          "title": "答题人",
+          "mock": {
+            "mock": "@name"
+          },
+          "$ref": "#/definitions/1077996"
+        },
+        "timestamp": {
+          "type": "string",
+          "mock": {
+            "mock": "@timestamp"
+          },
+          "title": "时间戳"
         }
       },
       "x-apifox-orders": [
         "id",
+        "contributor",
+        "timestamp",
         "quiz",
         "correctness",
         "answer",
@@ -2820,38 +3025,12 @@
         "answer",
         "paper",
         "id",
-        "correctness"
+        "correctness",
+        "contributor",
+        "timestamp"
       ],
-      "title": "quiz_record"
-    },
-    "73061649": {
-      "type": "object",
-      "properties": {
-        "id": {
-          "type": "string",
-          "mock": {
-            "mock": "@string"
-          },
-          "title": "ID"
-        },
-        "title": {
-          "type": "string",
-          "mock": {
-            "mock": "@ctitle"
-          },
-          "title": "试卷标题"
-        }
-      },
-      "x-apifox-orders": [
-        "id",
-        "title"
-      ],
-      "required": [
-        "id",
-        "title"
-      ],
-      "title": "paper_simple",
-      "name": "paper_simple"
+      "title": "quiz_record",
+      "name": "quiz_record"
     }
   },
   "mockRules": {
@@ -2866,12 +3045,12 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "3073506e-d936-4a36-a237-86b19451e024",
+      "id": "fe0d3498-4cf9-4814-aa1d-8f1d86bdd133",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwMjU0MzYwNy43NTM2fQ.2phV44q3K0kV9jGJEFPLAEbC0Xv9r3OStnLTC6sod-c",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwMzc1NTQxNy43NzIyMn0.qDtx_ydvnsTAwviajaKRdigEGoZYMkcZG0Xb7rFfe9U",
           "key": "token",
           "isBindInitial": false,
           "initialValue": ""
@@ -2880,7 +3059,6 @@
           "type": "any",
           "value": "31",
           "key": "quiz_id",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -3019,8 +3197,7 @@
           "type": "any",
           "value": "DT000016",
           "key": "quiz_record_id",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "DT000016"
         }
       ]
     },
@@ -3036,7 +3213,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "ac911c77-49ec-49ef-a63a-e18579683f6e",
+      "id": "81c3b978-80b6-4b97-8482-a69cc79d47af",
       "values": []
     },
     "parameter": {
