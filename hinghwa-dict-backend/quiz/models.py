@@ -63,11 +63,14 @@ class PaperRecord(models.Model):
 
 
 class QuizRecord(models.Model):
+    contributor = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="QuizRecordUser", verbose_name="答题人"
+    )
     quiz = models.ForeignKey(
         Quiz, on_delete=models.CASCADE, related_name="quiz", verbose_name="测试题"
     )
     paper = models.ForeignKey(
-        Paper,
+        PaperRecord,
         on_delete=models.CASCADE,
         related_name="quiz_paper",
         verbose_name="所在试卷",
@@ -75,4 +78,8 @@ class QuizRecord(models.Model):
     )
     answer = models.CharField(max_length=1000, verbose_name="答案")
     correctness = models.BooleanField(verbose_name="是否正确")
+    timestamp = models.DateTimeField(verbose_name="时间")
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
+
+
+
