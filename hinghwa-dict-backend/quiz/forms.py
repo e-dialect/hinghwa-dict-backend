@@ -11,4 +11,4 @@ class QuizForm(forms.ModelForm):
 class QuizRecordForm(forms.ModelForm):
     class Meta:
         model = QuizRecord
-        fields = ("answer", "correctness")
+        fields = ("answer", "correctness", "contributor")

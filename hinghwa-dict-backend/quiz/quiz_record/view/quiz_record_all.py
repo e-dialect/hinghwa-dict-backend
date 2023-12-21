@@ -7,10 +7,14 @@ from utils.token import token_pass, token_user
 from utils.generate_id import generate_quiz_record_id
 from ...forms import QuizRecordForm
 from utils.exception.types.not_found import (
-    PaperNotFoundException,
+    PaperRecordNotFoundException,
     QuizNotFoundException,
+    UserNotFoundException
 )
 from utils.exception.types.bad_request import BadRequestException
+from django.utils import timezone
+from user.models import User
+from ...models import PaperRecord
 
 
 class QuizRecordAll(View):
@@ -21,25 +25,31 @@ class QuizRecordAll(View):
         record_form = QuizRecordForm(body)
         quiz_id = request.GET["quiz_id"]
         quiz = Quiz.objects.filter(id=quiz_id)
-        if body["paper"] != "":
-            paper = Paper.objects.filter(id=body["paper"])
+        if body["paper_record"] != "":
+            paper = PaperRecord.objects.filter(id=body["paper_record"])
             if not paper.exists():
-                raise PaperNotFoundException()
+                raise PaperRecordNotFoundException()
         if not quiz.exists():
             raise QuizNotFoundException()
         quiz = quiz[0]
+        contributor = User.objects.filter(id=body["contributor"])
+        if not contributor.exists():
+            raise UserNotFoundException()
+        contributor = contributor[0]
         if not record_form.is_valid():
             raise BadRequestException()
         record = record_form.save(commit=False)
         record.id = generate_quiz_record_id()
-        print()
-        if body["paper"] != "":
-            paper = Paper.objects.filter(id=body["paper"])
+        if body["paper_record"] != "":
+            paper = PaperRecord.objects.filter(id=body["paper_record"])
             if not paper.exists():
-                raise PaperNotFoundException()
+                raise PaperRecordNotFoundException()
             paper = paper[0]
             record.paper = paper
         record.quiz = quiz
+        record.contributor = contributor
+        record.timestamp = timezone.now()
+        print("test")
         record.save()
         return JsonResponse(quiz_record(record), status=200)
 
