@@ -76,7 +76,7 @@ class QuizRecord(models.Model):
         PaperRecord,
         on_delete=models.CASCADE,
         related_name="quiz_paper",
-        verbose_name="所在试卷",
+        verbose_name="所在答卷记录",
         null=True,
     )
     answer = models.CharField(max_length=1000, verbose_name="答案")
