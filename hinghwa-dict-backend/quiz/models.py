@@ -83,3 +83,21 @@ class QuizRecord(models.Model):
     correctness = models.BooleanField(verbose_name="是否正确")
     timestamp = models.DateTimeField(verbose_name="时间")
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
+
+
+class Cert(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="cert_user",
+        verbose_name="证书用户",
+        null=True,
+    )
+    level = models.IntegerField(verbose_name="等级")
+    name = models.CharField(max_length=20, verbose_name="参与者")
+    place = models.CharField(max_length=100, verbose_name="地址")
+    sequence = models.IntegerField(verbose_name="第几次认证")
+    grade = models.CharField(max_length=20, verbose_name="等级")
+    scores = models.TextField(blank=True, default="[]", verbose_name="分数")
+    time = models.CharField(max_length=20, verbose_name="时间")
+    id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
