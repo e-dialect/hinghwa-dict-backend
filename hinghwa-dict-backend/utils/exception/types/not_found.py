@@ -222,3 +222,15 @@ class QuizRecordNotFoundException(NotFoundException):
         super().__init__()
         self.status = 404
         self.msg = "答题记录{}不存在！".format(id)
+
+
+class CertNotFoundException(NotFoundException):
+    """
+    证书不存在异常
+    parma id:证书id
+    """
+
+    def __init__(self, id=""):
+        super().__init__()
+        self.status = 404
+        self.msg = "证书{}不存在！".format(id)
