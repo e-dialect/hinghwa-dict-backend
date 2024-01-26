@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "a47dc44e-a966-4dd2-84e6-0cb60a134905",
+          "id": "e2263ea4-c07a-4fae-89f7-2ef4ac189ea0",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -186,7 +186,6 @@
             "updatedAt": "2021-08-12T16:27:18.000Z",
             "deletedAt": null,
             "folderId": 0,
-            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -231,7 +230,7 @@
           }
         },
         {
-          "id": "c1a8beff-0b2e-4552-ba98-780985153fd7",
+          "id": "932ef5b2-8b6b-42e3-8596-3b800a77e8fd",
           "name": "QZ0501 查询证书信息(QZ0501 查询证书信息)",
           "request": {
             "url": {
@@ -304,7 +303,7 @@
           }
         },
         {
-          "id": "030c39fb-d3a9-4e98-a0dd-35ece468ee8b",
+          "id": "11cf8ecf-8966-4451-b245-8ab31cf4a02a",
           "name": "QZ0503 查询所有证书(QZ0503 查询所有证书)",
           "request": {
             "url": {
@@ -406,14 +405,13 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "0b16ee76-b2bf-438b-8c2d-e55689b37674",
+      "id": "40f13f65-07c0-4267-bfe2-5472eae734ec",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwNjA4NzI1NC45OTI0ODZ9.8xT_qRkxAcma58Ct5uqOI4pEQtZhtIUsrHVhwlquJRA",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcwNjg3Mjc3Ny45NTAxNTR9.BSiV3vJPqdeARJL7V4l70yIZKb5eeev0VTmFMjq4QAw",
           "key": "token",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -564,8 +562,7 @@
           "type": "any",
           "value": "PLPT0000000033",
           "key": "cert_id",
-          "isBindInitial": false,
-          "initialValue": ""
+          "initialValue": "PLPT0000000033"
         }
       ]
     },
@@ -581,7 +578,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "663fac7c-6af9-4a1a-b9a9-90497177db8a",
+      "id": "2840edfb-857f-4387-86f1-71a08aacf685",
       "values": []
     },
     "parameter": {
