@@ -25,7 +25,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "views",
-                    models.IntegerField(default=0, editable=False, verbose_name="阅读量"),
+                    models.IntegerField(
+                        default=0, editable=False, verbose_name="阅读量"
+                    ),
                 ),
                 (
                     "publish_time",
@@ -39,7 +41,10 @@ class Migration(migrations.Migration):
                 ),
                 ("content", models.TextField(verbose_name="正文")),
                 ("cover", models.URLField(verbose_name="图片地址")),
-                ("visibility", models.BooleanField(default=False, verbose_name="是否审核")),
+                (
+                    "visibility",
+                    models.BooleanField(default=False, verbose_name="是否审核"),
+                ),
                 (
                     "author",
                     models.ForeignKey(
@@ -78,7 +83,10 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("content", models.TextField(max_length=500, verbose_name="内容")),
-                ("time", models.DateTimeField(auto_now_add=True, verbose_name="评论时间")),
+                (
+                    "time",
+                    models.DateTimeField(auto_now_add=True, verbose_name="评论时间"),
+                ),
                 (
                     "article",
                     models.ForeignKey(

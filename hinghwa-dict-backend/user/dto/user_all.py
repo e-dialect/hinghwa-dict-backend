@@ -30,9 +30,11 @@ def user_all(user: User) -> dict:
 
     response.update(
         {
-            "login_time": localtime(user.last_login).__format__("%Y-%m-%d %H:%M:%S")
-            if user.last_login
-            else "",
+            "login_time": (
+                localtime(user.last_login).__format__("%Y-%m-%d %H:%M:%S")
+                if user.last_login
+                else ""
+            ),
         }
     )
     return response

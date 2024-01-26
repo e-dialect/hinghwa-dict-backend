@@ -27,7 +27,10 @@ class Migration(migrations.Migration):
                 ("title", models.CharField(max_length=100, verbose_name="曲名")),
                 ("artist", models.CharField(max_length=100, verbose_name="作者")),
                 ("cover", models.URLField(verbose_name="音乐封面地址")),
-                ("visibility", models.BooleanField(default=False, verbose_name="是否可见")),
+                (
+                    "visibility",
+                    models.BooleanField(default=False, verbose_name="是否可见"),
+                ),
                 (
                     "contributor",
                     models.ForeignKey(

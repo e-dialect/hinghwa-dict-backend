@@ -62,7 +62,9 @@ class Migration(migrations.Migration):
                 ("annotation", models.TextField(blank=True, verbose_name="附注")),
                 (
                     "mandarin",
-                    models.TextField(blank=True, default="[]", verbose_name="对应普通话词语"),
+                    models.TextField(
+                        blank=True, default="[]", verbose_name="对应普通话词语"
+                    ),
                 ),
                 (
                     "standard_ipa",
@@ -70,13 +72,20 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "standard_pinyin",
-                    models.CharField(blank=True, max_length=30, verbose_name="标准拼音"),
+                    models.CharField(
+                        blank=True, max_length=30, verbose_name="标准拼音"
+                    ),
                 ),
                 (
                     "views",
-                    models.IntegerField(default=0, editable=False, verbose_name="访问量"),
+                    models.IntegerField(
+                        default=0, editable=False, verbose_name="访问量"
+                    ),
                 ),
-                ("visibility", models.BooleanField(default=False, verbose_name="是否审核")),
+                (
+                    "visibility",
+                    models.BooleanField(default=False, verbose_name="是否审核"),
+                ),
                 (
                     "contributor",
                     models.ForeignKey(
@@ -127,10 +136,15 @@ class Migration(migrations.Migration):
                 ("pinyin", models.CharField(max_length=50, verbose_name="拼音")),
                 ("county", models.CharField(max_length=100, verbose_name="县区")),
                 ("town", models.CharField(max_length=100, verbose_name="乡镇")),
-                ("visibility", models.BooleanField(default=False, verbose_name="是否可见")),
+                (
+                    "visibility",
+                    models.BooleanField(default=False, verbose_name="是否可见"),
+                ),
                 (
                     "views",
-                    models.IntegerField(default=0, editable=False, verbose_name="访问量"),
+                    models.IntegerField(
+                        default=0, editable=False, verbose_name="访问量"
+                    ),
                 ),
                 (
                     "contributor",
@@ -192,7 +206,9 @@ class Migration(migrations.Migration):
                 ("annotation", models.TextField(blank=True, verbose_name="附注")),
                 (
                     "mandarin",
-                    models.TextField(blank=True, default="[]", verbose_name="对应普通话词语"),
+                    models.TextField(
+                        blank=True, default="[]", verbose_name="对应普通话词语"
+                    ),
                 ),
                 (
                     "standard_ipa",
@@ -200,7 +216,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "standard_pinyin",
-                    models.CharField(blank=True, max_length=30, verbose_name="标准拼音"),
+                    models.CharField(
+                        blank=True, max_length=30, verbose_name="标准拼音"
+                    ),
                 ),
                 (
                     "contributor",

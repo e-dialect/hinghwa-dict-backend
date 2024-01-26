@@ -26,7 +26,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "details",
-                    models.TextField(blank=True, max_length=200, verbose_name="商品详情"),
+                    models.TextField(
+                        blank=True, max_length=200, verbose_name="商品详情"
+                    ),
                 ),
                 (
                     "id",

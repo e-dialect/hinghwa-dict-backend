@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/3.0/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
+
 import logging
 import os
 
@@ -188,8 +189,12 @@ CORS_ALLOW_HEADERS = (
     "token",
 )
 # parameter of Tencent cos
-COS_SECRET_ID = env.str("COS_SECRET_ID", "DEFAULT_COS_SECRET_ID")  # 替换为用户的 secretId
-COS_SECRET_KEY = env.str("COS_SECRET_KEY", "DEFAULT_COS_SECRET_KEY")  # 替换为用户的 secretKey
+COS_SECRET_ID = env.str(
+    "COS_SECRET_ID", "DEFAULT_COS_SECRET_ID"
+)  # 替换为用户的 secretId
+COS_SECRET_KEY = env.str(
+    "COS_SECRET_KEY", "DEFAULT_COS_SECRET_KEY"
+)  # 替换为用户的 secretKey
 COS_BUCKET = env.str("COS_BUCKET", "DEFAULT_COS_BUCKET")  # BucketName-APPID
 COS_REGION = env.str("COS_REGION", "DEFAULT_COS_REGION")
 

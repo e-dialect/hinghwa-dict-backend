@@ -469,7 +469,7 @@ def translatePronunciation(request):
                 Arg(
                     [
                         os.path.join(settings.MEDIA_ROOT, "audio", "temp"),
-                        os.path.join(settings.SAVED_PINYIN, "submit")
+                        os.path.join(settings.SAVED_PINYIN, "submit"),
                         # os.path.join(settings.BASE_DIR, "AudioCompare", "submit")
                     ]
                 )

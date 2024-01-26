@@ -16,7 +16,9 @@ class Quiz(models.Model):
     answer = models.IntegerField(default=0, verbose_name="答案序号", editable=True)
     explanation = models.TextField(verbose_name="答案解析")
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
-    voice_source = models.URLField(max_length=200, verbose_name="播报语音链接", default="")
+    voice_source = models.URLField(
+        max_length=200, verbose_name="播报语音链接", default=""
+    )
     type = models.CharField(blank=True, max_length=50, verbose_name="问题类型")
 
     def __str__(self):

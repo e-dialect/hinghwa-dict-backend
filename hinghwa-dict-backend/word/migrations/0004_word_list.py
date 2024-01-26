@@ -41,11 +41,19 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("createTime", models.DateTimeField(blank=True, verbose_name="创建时间")),
-                ("updateTime", models.DateTimeField(blank=True, verbose_name="更新时间")),
+                (
+                    "createTime",
+                    models.DateTimeField(blank=True, verbose_name="创建时间"),
+                ),
+                (
+                    "updateTime",
+                    models.DateTimeField(blank=True, verbose_name="更新时间"),
+                ),
                 (
                     "description",
-                    models.CharField(blank=True, max_length=100, verbose_name="词单简介"),
+                    models.CharField(
+                        blank=True, max_length=100, verbose_name="词单简介"
+                    ),
                 ),
                 (
                     "author",

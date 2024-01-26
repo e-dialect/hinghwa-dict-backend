@@ -25,7 +25,9 @@ class Word(models.Model):
     annotation = models.TextField(verbose_name="附注", blank=True)
     mandarin = models.TextField(verbose_name="对应普通话词语", blank=True, default="[]")
     standard_ipa = models.CharField(max_length=100, verbose_name="标准IPA", blank=True)
-    standard_pinyin = models.CharField(max_length=100, verbose_name="标准拼音", blank=True)
+    standard_pinyin = models.CharField(
+        max_length=100, verbose_name="标准拼音", blank=True
+    )
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
     related_words = models.ManyToManyField(
@@ -69,7 +71,10 @@ class Application(models.Model):
     )
     reason = models.CharField(max_length=200, blank=True, verbose_name="理由")
     contributor = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="applications", verbose_name="贡献者"
+        User,
+        on_delete=models.CASCADE,
+        related_name="applications",
+        verbose_name="贡献者",
     )
     verifier = models.ForeignKey(
         User,
@@ -86,12 +91,17 @@ class Application(models.Model):
     annotation = models.TextField(verbose_name="附注", blank=True)
     mandarin = models.TextField(verbose_name="对应普通话词语", blank=True, default="[]")
     standard_ipa = models.CharField(max_length=30, verbose_name="标准IPA", blank=True)
-    standard_pinyin = models.CharField(max_length=30, verbose_name="标准拼音", blank=True)
+    standard_pinyin = models.CharField(
+        max_length=30, verbose_name="标准拼音", blank=True
+    )
     related_words = models.ManyToManyField(
         Word, related_name="related_applications", verbose_name="相关词汇", blank=True
     )
     related_articles = models.ManyToManyField(
-        Article, related_name="related_applications", verbose_name="相关帖子", blank=True
+        Article,
+        related_name="related_applications",
+        verbose_name="相关帖子",
+        blank=True,
     )
 
     def granted(self):
@@ -127,7 +137,10 @@ class Application(models.Model):
 
 class Pronunciation(models.Model):
     word = models.ForeignKey(
-        Word, on_delete=models.CASCADE, related_name="pronunciation", verbose_name="词语"
+        Word,
+        on_delete=models.CASCADE,
+        related_name="pronunciation",
+        verbose_name="词语",
     )
     source = models.URLField(verbose_name="来源")
     ipa = models.CharField(max_length=50, verbose_name="ipa")
@@ -212,7 +225,10 @@ class Character(models.Model):
 class List(models.Model):
     name = models.CharField(blank=True, max_length=30, verbose_name="词单名称")
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="list_words", verbose_name="词单作者"
+        User,
+        on_delete=models.CASCADE,
+        related_name="list_words",
+        verbose_name="词单作者",
     )
     words = models.ManyToManyField(
         Word,
