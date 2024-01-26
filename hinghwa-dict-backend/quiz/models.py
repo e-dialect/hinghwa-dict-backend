@@ -99,5 +99,5 @@ class Cert(models.Model):
     sequence = models.IntegerField(verbose_name="第几次认证")
     grade = models.CharField(max_length=20, verbose_name="等级")
     scores = models.TextField(blank=True, default="[]", verbose_name="分数")
-    time = models.CharField(max_length=20, verbose_name="时间")
+    time = models.DateTimeField(max_length=20, verbose_name="时间")
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)

@@ -10,6 +10,7 @@ from utils.token import token_pass
 from utils.generate_id import generate_cert_id
 from utils.exception.types.not_found import UserNotFoundException
 from user.utils import get_user_by_id
+from django.utils import timezone
 
 
 class AllCert(View):
@@ -28,6 +29,7 @@ class AllCert(View):
             user = user[0]
             cert.user = user
         cert.id = generate_cert_id()
+        cert.time = timezone.now()
         cert.save()
         return JsonResponse(cert_info(cert), status=200)
 

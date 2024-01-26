@@ -5,4 +5,4 @@ from ..models import Cert
 class CertForm(forms.ModelForm):
     class Meta:
         model = Cert
-        fields = ("level", "name", "place", "sequence", "grade", "scores", "time")
+        fields = ("level", "name", "place", "sequence", "grade", "scores")
