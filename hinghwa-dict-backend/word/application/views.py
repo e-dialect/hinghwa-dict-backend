@@ -106,7 +106,9 @@ class SingleApplication(View):
         """
         WD0404 修改申请
         """
-        user = token_user(token_pass(request.headers, -1))  # user = 操作用户（仅限管理员）
+        user = token_user(
+            token_pass(request.headers, -1)
+        )  # user = 操作用户（仅限管理员）
         application = find_application(id)
         application.verifier = user
         feedback = None

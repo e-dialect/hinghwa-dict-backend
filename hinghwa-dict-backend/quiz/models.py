@@ -16,7 +16,9 @@ class Quiz(models.Model):
     answer = models.IntegerField(default=0, verbose_name="答案序号", editable=True)
     explanation = models.TextField(verbose_name="答案解析")
     visibility = models.BooleanField(default=False, verbose_name="是否审核")
-    voice_source = models.URLField(max_length=200, verbose_name="播报语音链接", default="")
+    voice_source = models.URLField(
+        max_length=200, verbose_name="播报语音链接", default=""
+    )
     type = models.CharField(blank=True, max_length=50, verbose_name="问题类型")
 
     def __str__(self):
@@ -82,4 +84,22 @@ class QuizRecord(models.Model):
     answer = models.CharField(max_length=1000, verbose_name="答案")
     correctness = models.BooleanField(verbose_name="是否正确")
     timestamp = models.DateTimeField(verbose_name="时间")
+    id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)
+
+
+class Cert(models.Model):
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="cert_user",
+        verbose_name="证书用户",
+        null=True,
+    )
+    level = models.IntegerField(verbose_name="等级")
+    name = models.CharField(max_length=20, verbose_name="参与者")
+    place = models.CharField(max_length=100, verbose_name="地址")
+    sequence = models.IntegerField(verbose_name="第几次认证")
+    grade = models.CharField(max_length=20, verbose_name="等级")
+    scores = models.TextField(blank=True, default="[]", verbose_name="分数")
+    time = models.DateTimeField(max_length=20, verbose_name="时间")
     id = models.CharField(max_length=20, verbose_name="ID", primary_key=True)

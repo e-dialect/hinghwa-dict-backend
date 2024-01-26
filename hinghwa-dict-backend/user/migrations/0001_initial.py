@@ -26,11 +26,15 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "wechat",
-                    models.CharField(blank=True, max_length=128, verbose_name="微信标识码"),
+                    models.CharField(
+                        blank=True, max_length=128, verbose_name="微信标识码"
+                    ),
                 ),
                 (
                     "qq",
-                    models.CharField(blank=True, max_length=128, verbose_name="qq标识码"),
+                    models.CharField(
+                        blank=True, max_length=128, verbose_name="qq标识码"
+                    ),
                 ),
                 (
                     "nickname",
@@ -38,7 +42,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "birthday",
-                    models.DateField(blank=True, default="1970-1-1", verbose_name="生日"),
+                    models.DateField(
+                        blank=True, default="1970-1-1", verbose_name="生日"
+                    ),
                 ),
                 (
                     "telephone",

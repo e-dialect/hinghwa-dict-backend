@@ -80,7 +80,11 @@ class SearchArticle(View):
         article.save()
         content = f"我创建了文章(id={article.id}),请及时去审核"
         sendNotification(
-            article.author, None, content, title="【提醒】文章待审核", action_object=article
+            article.author,
+            None,
+            content,
+            title="【提醒】文章待审核",
+            action_object=article,
         )
         return JsonResponse({"id": article.id}, status=200)
 
@@ -165,7 +169,11 @@ class ManageArticle(View):
         article.save()
         content = f"我修改了文章(id={article.id}),请及时去审核"
         sendNotification(
-            article.author, None, content, title="【提醒】文章待审核", action_object=article
+            article.author,
+            None,
+            content,
+            title="【提醒】文章待审核",
+            action_object=article,
         )
         return JsonResponse({}, status=200)
 

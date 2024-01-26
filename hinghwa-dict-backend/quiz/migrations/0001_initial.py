@@ -26,7 +26,10 @@ class Migration(migrations.Migration):
                 ),
                 ("answer", models.IntegerField(default=0, verbose_name="答案序号")),
                 ("explanation", models.TextField(verbose_name="答案解析")),
-                ("visibility", models.BooleanField(default=False, verbose_name="是否审核")),
+                (
+                    "visibility",
+                    models.BooleanField(default=False, verbose_name="是否审核"),
+                ),
             ],
             options={
                 "verbose_name": "测试题",

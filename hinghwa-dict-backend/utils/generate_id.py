@@ -3,7 +3,7 @@ from rewards.titles.models.title import Title
 from rewards.products.models.product import Product
 from rewards.orders.models.order import Order
 from word.models import List
-from quiz.models import Paper, PaperRecord, QuizRecord
+from quiz.models import Paper, PaperRecord, QuizRecord, Cert
 from quiz.models import Paper, PaperRecord
 
 
@@ -85,3 +85,13 @@ def generate_quiz_record_id():
     else:
         new_id = 1
     return f"DT{new_id:06d}"
+
+
+def generate_cert_id():
+    last_cert_record = Cert.objects.order_by("-id").first()
+    if last_cert_record:
+        last_id = int(last_cert_record.id[4:])
+        new_id = last_id + 1
+    else:
+        new_id = 1
+    return f"PLPT{new_id:010d}"

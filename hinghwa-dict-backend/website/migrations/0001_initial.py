@@ -20,8 +20,14 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 ("english", models.CharField(max_length=255, verbose_name="英文表达")),
-                ("mandarin", models.CharField(max_length=255, verbose_name="普通话表达")),
-                ("character", models.CharField(max_length=255, verbose_name="方言表达")),
+                (
+                    "mandarin",
+                    models.CharField(max_length=255, verbose_name="普通话表达"),
+                ),
+                (
+                    "character",
+                    models.CharField(max_length=255, verbose_name="方言表达"),
+                ),
                 ("pinyin", models.CharField(max_length=255, verbose_name="方言拼音")),
             ],
             options={
@@ -41,9 +47,18 @@ class Migration(migrations.Migration):
                         verbose_name="ID",
                     ),
                 ),
-                ("announcements", models.TextField(default="[]", verbose_name="本站公告")),
-                ("hot_articles", models.TextField(default="[]", verbose_name="热门文章")),
-                ("word_of_the_day", models.TextField(default="1", verbose_name="每日一词")),
+                (
+                    "announcements",
+                    models.TextField(default="[]", verbose_name="本站公告"),
+                ),
+                (
+                    "hot_articles",
+                    models.TextField(default="[]", verbose_name="热门文章"),
+                ),
+                (
+                    "word_of_the_day",
+                    models.TextField(default="1", verbose_name="每日一词"),
+                ),
                 ("carousel", models.TextField(default="[]", verbose_name="精品推荐")),
             ],
             options={

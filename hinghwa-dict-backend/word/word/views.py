@@ -449,5 +449,7 @@ class DictionarySearch(View):
             ]
         if len(result) > 100:
             result = result[:100]
-            return JsonResponse({"words": result, "msg": "请求的词语太多了，请更精确一些"}, status=400)
+            return JsonResponse(
+                {"words": result, "msg": "请求的词语太多了，请更精确一些"}, status=400
+            )
         return JsonResponse({"words": result}, status=200)

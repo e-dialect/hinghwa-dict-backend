@@ -17,13 +17,15 @@ def pronunciation_all(pronunciation: Pronunciation) -> dict:
         "county": pronunciation.county,
         "town": pronunciation.town,
         "visibility": pronunciation.visibility,
-        "verifier": {
-            "nickname": pronunciation.verifier.user_info.nickname,
-            "avatar": pronunciation.verifier.user_info.avatar,
-            "id": pronunciation.verifier.id,
-        }
-        if pronunciation.verifier
-        else None,
+        "verifier": (
+            {
+                "nickname": pronunciation.verifier.user_info.nickname,
+                "avatar": pronunciation.verifier.user_info.avatar,
+                "id": pronunciation.verifier.id,
+            }
+            if pronunciation.verifier
+            else None
+        ),
         "granted": pronunciation.granted(),
         "upload_time": localtime(pronunciation.upload_time).strftime(
             "%Y-%m-%d %H:%M:%S"

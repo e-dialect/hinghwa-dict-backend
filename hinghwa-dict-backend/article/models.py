@@ -60,7 +60,10 @@ class Comment(models.Model):
         verbose_name="父评论",
     )
     article = models.ForeignKey(
-        Article, on_delete=models.CASCADE, related_name="comments", verbose_name="评论文章"
+        Article,
+        on_delete=models.CASCADE,
+        related_name="comments",
+        verbose_name="评论文章",
     )
     like_users = models.ManyToManyField(
         User,

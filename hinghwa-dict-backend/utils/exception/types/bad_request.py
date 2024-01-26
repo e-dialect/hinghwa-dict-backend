@@ -54,6 +54,7 @@ class ReturnUsersNumException(BadRequestException):
     """
 
     def __init__(
-        self, msg="请在return_users_num字段中加入请求的点赞人数，要求为正整数，或者不发送return_users_num字段"
+        self,
+        msg="请在return_users_num字段中加入请求的点赞人数，要求为正整数，或者不发送return_users_num字段",
     ):
         super().__init__(msg)

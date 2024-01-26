@@ -17,7 +17,9 @@ class Migration(migrations.Migration):
             fields=[
                 (
                     "title",
-                    models.CharField(blank=True, max_length=50, verbose_name="试卷标题"),
+                    models.CharField(
+                        blank=True, max_length=50, verbose_name="试卷标题"
+                    ),
                 ),
                 (
                     "id",
