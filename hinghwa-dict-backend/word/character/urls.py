@@ -11,4 +11,5 @@ urlpatterns = [
     path("/words", searchEach),
     path("/words/v2", searchEachV2),
     path("/pinyin", searchCharactersPinyin),
+    path("/search", searchCharactersPinYinV2),
 ]

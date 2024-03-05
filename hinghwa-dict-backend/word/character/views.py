@@ -1,4 +1,5 @@
 import os
+import re
 
 import demjson
 import xlrd
@@ -7,7 +8,7 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
+from .dto.character_simple import character_simple
 from website.views import token_check, filterInOrder
 from ..forms import CharacterForm
 from ..models import Word, Character, Pronunciation
@@ -276,5 +277,22 @@ def load_character(request):
             return JsonResponse({}, status=200)
         else:
             return JsonResponse({}, status=401)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
+
+
+def searchCharactersPinYinV2(request):
+    try:
+        if request.method == "GET":
+            content = request.GET["search"]
+            search = re.findall(r"[a-zA-Z]+", content)
+            result = []
+            for key in search:
+                characters = Character.objects.filter(pinyin__icontains=key)
+                for character in characters:
+                    result.append(character_simple(character))
+            return JsonResponse(
+                {"total": len(result), "characters": result}, status=200
+            )
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
