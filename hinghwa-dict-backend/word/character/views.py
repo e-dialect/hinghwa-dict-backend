@@ -38,6 +38,8 @@ def searchCharacters(request):
                 character_form = CharacterForm(body)
                 if character_form.is_valid():
                     character = character_form.save(commit=False)
+                    if "type" in body:
+                        character.type = body["type"]
                     character.save()
                     return JsonResponse({"id": character.id}, status=200)
                 else:

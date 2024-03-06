@@ -36,6 +36,7 @@ class CharacterForm(forms.ModelForm):
             "county",
             "town",
             "traditional",
+            "type",
         )
 
 
