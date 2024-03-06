@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "68fa04d1-b219-4941-b86f-d8598eb0057e",
+          "id": "28e6c30a-6cf4-4317-ae0c-19cf3d4a408d",
           "name": "LG0101 账号密码登录(登录用户admin)",
           "request": {
             "url": {
@@ -186,7 +186,6 @@
             "updatedAt": "2021-08-12T16:27:18.000Z",
             "deletedAt": null,
             "folderId": 0,
-            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -231,7 +230,7 @@
           }
         },
         {
-          "id": "662dd0b2-5bda-4304-8fc7-24a7235adf6d",
+          "id": "f34c1a46-2286-40eb-b2cf-a09741895011",
           "name": "CH0102 单字上传(CH0102 单字上传)",
           "request": {
             "url": {
@@ -334,7 +333,7 @@
           }
         },
         {
-          "id": "e1048bb8-92a3-47ae-a0ee-6ed38057c7f9",
+          "id": "df4b4700-2ec7-4aeb-9f55-0591d0595a4a",
           "name": "CH0102 单字上传(CH0102 单字上传)",
           "request": {
             "url": {
@@ -437,7 +436,7 @@
           }
         },
         {
-          "id": "27853a9d-3296-4fc4-bcaa-25c9bfdb6d06",
+          "id": "41b026b8-ce63-4cfa-99d4-e002b9febaf3",
           "name": "CH0102 单字上传(CH0102 单字上传)",
           "request": {
             "url": {
@@ -540,7 +539,7 @@
           }
         },
         {
-          "id": "1e5e822e-4a1b-4d4d-aa49-df5c61642cad",
+          "id": "b68302f5-677f-43fe-8af2-f9d94cd77a47",
           "name": "CH0102 单字上传(CH0102 单字上传)",
           "request": {
             "url": {
@@ -643,7 +642,7 @@
           }
         },
         {
-          "id": "c68a4f62-dccf-451e-8b1c-a259b1a7951d",
+          "id": "b8c4329f-44cc-459d-bb4a-4456902d8264",
           "name": "CH0205 搜索框拼音查字(CH0205 搜索框拼音查字)",
           "request": {
             "url": {
@@ -686,34 +685,78 @@
           "response": [],
           "event": [],
           "responseDefinition": {
-            "createdAt": "2024-03-05T12:33:05.866Z",
-            "updatedAt": "2024-03-05T12:33:05.866Z",
+            "createdAt": "2024-03-06T12:44:25.872Z",
+            "updatedAt": "2024-03-06T12:44:25.872Z",
             "name": "成功",
             "code": 200,
             "contentType": "json",
             "jsonSchema": {
               "type": "object",
               "properties": {
-                "total": {
-                  "type": "integer",
-                  "title": "总数"
-                },
                 "characters": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/definitions/85006342"
+                    "type": "object",
+                    "properties": {
+                      "label": {
+                        "type": "string"
+                      },
+                      "traditional": {
+                        "type": "string"
+                      },
+                      "characters": {
+                        "type": "array",
+                        "items": {
+                          "type": "object",
+                          "properties": {
+                            "county": {
+                              "type": "string"
+                            },
+                            "town": {
+                              "type": "string"
+                            },
+                            "characters": {
+                              "$ref": "#/definitions/4521843"
+                            }
+                          },
+                          "x-apifox-orders": [
+                            "county",
+                            "town",
+                            "characters"
+                          ],
+                          "required": [
+                            "county",
+                            "town",
+                            "characters"
+                          ]
+                        }
+                      }
+                    },
+                    "x-apifox-orders": [
+                      "label",
+                      "traditional",
+                      "characters"
+                    ],
+                    "required": [
+                      "label",
+                      "characters",
+                      "traditional"
+                    ]
                   }
+                },
+                "total": {
+                  "type": "integer"
                 }
               },
-              "x-apifox-orders": [
-                "total",
-                "characters"
-              ],
-              "x-apifox-refs": {},
               "required": [
-                "total",
-                "characters"
-              ]
+                "characters",
+                "total"
+              ],
+              "x-apifox-orders": [
+                "characters",
+                "total"
+              ],
+              "x-apifox-refs": {}
             },
             "defaultEnable": true,
             "projectId": 404238,
@@ -723,7 +766,7 @@
             "id": 408129568,
             "responseExamples": [],
             "schemaDefinitions": {
-              "85006342": {
+              "4521843": {
                 "type": "object",
                 "properties": {
                   "id": {
@@ -789,20 +832,22 @@
                   "traditional": {
                     "type": "string",
                     "title": "繁体字"
+                  },
+                  "source": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "ipa对应的语音"
+                  },
+                  "word": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ],
+                    "description": "对应词语的id（什么叫对应？汉字一样+pinyin一样）"
                   }
                 },
-                "x-apifox-orders": [
-                  "id",
-                  "shengmu",
-                  "ipa",
-                  "pinyin",
-                  "yunmu",
-                  "shengdiao",
-                  "character",
-                  "county",
-                  "town",
-                  "traditional"
-                ],
                 "required": [
                   "id",
                   "shengmu",
@@ -813,11 +858,26 @@
                   "character",
                   "county",
                   "town",
+                  "source",
+                  "word",
                   "traditional"
                 ],
-                "x-apifox-refs": {},
-                "title": "character_simple",
-                "name": "character_simple"
+                "x-apifox-orders": [
+                  "id",
+                  "shengmu",
+                  "ipa",
+                  "pinyin",
+                  "yunmu",
+                  "shengdiao",
+                  "character",
+                  "county",
+                  "town",
+                  "traditional",
+                  "source",
+                  "word"
+                ],
+                "title": "character_all",
+                "name": "character_all"
               }
             }
           },
@@ -934,7 +994,7 @@
       "title": "[入] character_update",
       "name": "[入] character_update"
     },
-    "85006342": {
+    "4521843": {
       "type": "object",
       "properties": {
         "id": {
@@ -1000,20 +1060,22 @@
         "traditional": {
           "type": "string",
           "title": "繁体字"
+        },
+        "source": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "description": "ipa对应的语音"
+        },
+        "word": {
+          "type": [
+            "integer",
+            "null"
+          ],
+          "description": "对应词语的id（什么叫对应？汉字一样+pinyin一样）"
         }
       },
-      "x-apifox-orders": [
-        "id",
-        "shengmu",
-        "ipa",
-        "pinyin",
-        "yunmu",
-        "shengdiao",
-        "character",
-        "county",
-        "town",
-        "traditional"
-      ],
       "required": [
         "id",
         "shengmu",
@@ -1024,11 +1086,26 @@
         "character",
         "county",
         "town",
+        "source",
+        "word",
         "traditional"
       ],
-      "x-apifox-refs": {},
-      "title": "character_simple",
-      "name": "character_simple"
+      "x-apifox-orders": [
+        "id",
+        "shengmu",
+        "ipa",
+        "pinyin",
+        "yunmu",
+        "shengdiao",
+        "character",
+        "county",
+        "town",
+        "traditional",
+        "source",
+        "word"
+      ],
+      "title": "character_all",
+      "name": "character_all"
     }
   },
   "mockRules": {
@@ -1043,14 +1120,13 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "8f52ae91-3a34-4d63-a358-ae7ced2a8b23",
+      "id": "16b0d8a1-5857-4e0d-b7cb-bc410f198b87",
       "name": "测试环境",
       "values": [
         {
           "type": "any",
           "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcxMDI0MzEyMi4zODg4MjZ9.Yqglry0yFAnSBHcMKoDafs095kwYQfEjZC-A6b1F9nw",
           "key": "token",
-          "isBindInitial": false,
           "initialValue": ""
         },
         {
@@ -1217,7 +1293,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "71aaedd2-bfae-45a4-9636-ade9a27a2916",
+      "id": "e2aae7ae-0a4d-46b8-a19c-4b709046e616",
       "values": []
     },
     "parameter": {
