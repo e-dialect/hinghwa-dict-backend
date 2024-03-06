@@ -285,7 +285,7 @@ def searchCharactersPinYinV2(request):
     try:
         if request.method == "GET":
             content = request.GET["search"]
-            search = re.findall(r"[a-zA-Z]+", content)
+            search = re.findall(r"[a-zA-Z]+\d*", content)
             result = []
             for key in search:
                 characters = Character.objects.filter(pinyin__icontains=key)
