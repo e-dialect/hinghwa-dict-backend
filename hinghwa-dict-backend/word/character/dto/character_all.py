@@ -17,5 +17,6 @@ def character_all(character: Character, word: Word, source: Pronunciation) -> di
         "traditional": character.traditional,
         "word": word,
         "source": source,
+        "type": None if character.type is None else character.type,
     }
     return response

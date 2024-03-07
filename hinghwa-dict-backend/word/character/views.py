@@ -38,6 +38,8 @@ def searchCharacters(request):
                 character_form = CharacterForm(body)
                 if character_form.is_valid():
                     character = character_form.save(commit=False)
+                    if "type" in body:
+                        character.type = body["type"]
                     character.save()
                     return JsonResponse({"id": character.id}, status=200)
                 else:
@@ -75,7 +77,7 @@ def searchCharactersPinyin(request):
             pinyin_list = []
             for item in characters:
                 if ((item.pinyin, item.character) not in result) or (
-                    item.town == "城里" and item.county == "莆田"
+                        item.town == "城里" and item.county == "莆田"
                 ):
                     result[(item.pinyin, item.character, item.traditional)] = item
                     pinyin_list.append(item.pinyin)
@@ -86,13 +88,13 @@ def searchCharactersPinyin(request):
             words_dict = {}
             pronunciations_dict = {}
             for item in Word.objects.filter(standard_pinyin__in=pinyin_list).filter(
-                visibility=True
+                    visibility=True
             ):
                 if item.standard_pinyin not in words_dict:
                     words_dict[item.standard_pinyin] = []
                 words_dict[item.standard_pinyin].append(item)
             for item in Pronunciation.objects.filter(pinyin__in=pinyin_list).filter(
-                visibility=True
+                    visibility=True
             ):
                 if item.pinyin not in pronunciations_dict:
                     pronunciations_dict[item.pinyin] = item

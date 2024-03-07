@@ -13,5 +13,6 @@ def character_normal(character: Character) -> dict:
         "county": character.county,
         "town": character.town,
         "traditional": character.traditional,
+        "type": None if character.type is None else character.type,
     }
     return response

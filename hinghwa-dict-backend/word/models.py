@@ -200,6 +200,7 @@ class Character(models.Model):
     county = models.CharField(max_length=100, verbose_name="县区")
     town = models.CharField(max_length=100, verbose_name="乡镇")
     traditional = models.CharField(max_length=30, verbose_name="繁体字", default="")
+    type = models.CharField(max_length=20, verbose_name="读音类型", null=True)
 
     def clean(self):
         self.shengmu = self.shengmu.strip()
