@@ -8,13 +8,12 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-
-from website.views import token_check, filterInOrder
-from .dto.character_all import character_all
-from .dto.character_normal import character_normal
 from .dto.character_simple import character_simple
+from website.views import token_check, filterInOrder
 from ..forms import CharacterForm
 from ..models import Word, Character, Pronunciation
+from .dto.character_normal import character_normal
+from .dto.character_all import character_all
 
 
 @csrf_exempt
@@ -77,7 +76,9 @@ def searchCharactersPinyin(request):
             result = {}
             pinyin_list = []
             for item in characters:
-                if ((item.pinyin, item.character) not in result) or (item.town == "城里" and item.county == "莆田"):
+                if ((item.pinyin, item.character) not in result) or (
+                    item.town == "城里" and item.county == "莆田"
+                ):
                     result[(item.pinyin, item.character, item.traditional)] = item
                     pinyin_list.append(item.pinyin)
             # 实现逻辑是将所有Word和Pronunciation按pinyin归类
@@ -86,25 +87,39 @@ def searchCharactersPinyin(request):
             result1 = {}
             words_dict = {}
             pronunciations_dict = {}
-            for item in Word.objects.filter(standard_pinyin__in=pinyin_list).filter(visibility=True):
+            for item in Word.objects.filter(standard_pinyin__in=pinyin_list).filter(
+                visibility=True
+            ):
                 if item.standard_pinyin not in words_dict:
                     words_dict[item.standard_pinyin] = []
                 words_dict[item.standard_pinyin].append(item)
-            for item in Pronunciation.objects.filter(pinyin__in=pinyin_list).filter(visibility=True):
+            for item in Pronunciation.objects.filter(pinyin__in=pinyin_list).filter(
+                visibility=True
+            ):
                 if item.pinyin not in pronunciations_dict:
                     pronunciations_dict[item.pinyin] = item
             t = 0
             for (pinyin, character, traditional), item in result.items():
                 if pinyin not in result1:
-                    pronunciation = (pronunciations_dict[pinyin].source if pinyin in pronunciations_dict else None)
-                    result1[pinyin] = {"pinyin": pinyin, "source": pronunciation, "characters": [], }
+                    pronunciation = (
+                        pronunciations_dict[pinyin].source
+                        if pinyin in pronunciations_dict
+                        else None
+                    )
+                    result1[pinyin] = {
+                        "pinyin": pinyin,
+                        "source": pronunciation,
+                        "characters": [],
+                    }
                 word = None
                 if pinyin in words_dict:
                     for item in words_dict[pinyin]:
                         if item.word == character:
                             word = item.id
                             break
-                result1[pinyin]["characters"].append({"character": character, "word": word, "traditional": traditional})
+                result1[pinyin]["characters"].append(
+                    {"character": character, "word": word, "traditional": traditional}
+                )
                 unique_result = []
                 exist_set = set()
                 for item in result1.values():
@@ -142,14 +157,18 @@ def searchEachV2(request):
     try:
         if request.method == "GET":
             search = request.GET["search"]
-            result = Character.objects.filter(Q(character__in=search) | Q(traditional__in=search))
+            result = Character.objects.filter(
+                Q(character__in=search) | Q(traditional__in=search)
+            )
             dic = {}
             scores = {}
             for idx, character in enumerate(search):
                 if character not in scores:
                     scores[character] = idx * 10
             for character in result:
-                word = Word.objects.filter(standard_pinyin=character.pinyin).filter(word=character.character)
+                word = Word.objects.filter(standard_pinyin=character.pinyin).filter(
+                    word=character.character
+                )
                 word = word[0].id if word.exists() else None
                 source = Pronunciation.objects.filter(pinyin=character.pinyin)
                 source = source[0].source if source.exists() else None
@@ -160,7 +179,9 @@ def searchEachV2(request):
                 score = min(scores[character.character], scores[character.traditional])
                 if (score, character.character, character.traditional) not in dic:
                     dic[(score, character.character, character.traditional)] = []
-                dic[(score, character.character, character.traditional)].append(character_all(character, word, source))
+                dic[(score, character.character, character.traditional)].append(
+                    character_all(character, word, source)
+                )
             ans = []
             dict_list = sorted(dic.keys())
             for score, character, traditional in dict_list:
@@ -172,7 +193,13 @@ def searchEachV2(request):
                 result = []
                 for (county, town), value in new_dic.items():
                     result.append({"county": county, "town": town, "characters": value})
-                ans.append({"label": character, "traditional": traditional, "characters": result, })
+                ans.append(
+                    {
+                        "label": character,
+                        "traditional": traditional,
+                        "characters": result,
+                    }
+                )
             return JsonResponse({"characters": ans}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
@@ -185,7 +212,10 @@ def manageCharacter(request, id):
         if character.exists():
             character = character[0]
             if request.method == "GET":
-                return JsonResponse({"character": character_normal(character)}, status=200, )
+                return JsonResponse(
+                    {"character": character_normal(character)},
+                    status=200,
+                )
             elif request.method == "PUT":
                 body = demjson.decode(request.body)
                 token = request.headers["token"]
@@ -228,7 +258,9 @@ def load_character(request):
             flush = body["flush"]
             if flush:
                 Character.objects.all().delete()
-            sheet = xlrd.open_workbook(os.path.join("material", "character", file)).sheet_by_index(0)
+            sheet = xlrd.open_workbook(
+                os.path.join("material", "character", file)
+            ).sheet_by_index(0)
             lines = sheet.nrows
             col = sheet.ncols
             title = sheet.row(0)
@@ -261,6 +293,8 @@ def searchCharactersPinYinV2(request):
                 characters = Character.objects.filter(pinyin__icontains=key)
                 for character in characters:
                     result.append(character_simple(character))
-            return JsonResponse({"total": len(result), "characters": result}, status=200)
+            return JsonResponse(
+                {"total": len(result), "characters": result}, status=200
+            )
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
