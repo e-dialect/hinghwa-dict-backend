@@ -1,0 +1,1283 @@
+{
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
+        {
+          "id": "b2e26895-76dd-47a4-99aa-a7e955e91745",
+          "name": "LG0101 账号密码登录(登录用户admin)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "login"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://apifox.com)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"testtest123\"\r\n}",
+              "generateMode": "normal",
+              "type": "application/json"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.token`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【token】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            },
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.1.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.variables.set(`user_id`, value);console.log('已设置临时变量【user_id】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【user_id】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4183271,
+            "apiDetailId": 5318056,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string"
+                  },
+                  "title": "权"
+                },
+                "id": {
+                  "type": "integer",
+                  "title": "用户id"
+                }
+              },
+              "required": [
+                "token",
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "username": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@cname"
+                  },
+                  "title": "用户名"
+                },
+                "password": {
+                  "type": "string",
+                  "mock": {
+                    "mock": "@string('lower', 1, 3)"
+                  },
+                  "title": "密码"
+                }
+              },
+              "required": [
+                "username",
+                "password"
+              ]
+            }
+          },
+          "metaInfo": {
+            "httpApiId": 5318056,
+            "httpApiCaseId": 143404108,
+            "httpApiName": "LG0101 账号密码登录",
+            "httpApiPath": "/login",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "登录用户admin",
+            "id": "764fcd5d-f94c-4743-ade2-207a3207e6ad",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "efe61e04-1559-4f16-b4aa-3d46bf360a9e",
+          "name": "CH0102 单字上传(CH0102 单字上传)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "characters"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://apifox.com)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"character\": {\n        \"county\": \"富顺县\",\n        \"pinyin\": \"omezj\",\n        \"town\": \"精河县\",\n        \"type\": \"证\",\n        \"ipa\": \"kksfg\",\n        \"shengmu\": \"dcjrn\",\n        \"yunmu\": \"wxrmt\",\n        \"shengdiao\": \"621\",\n        \"traditional\": \"in pariatur dolor amet\",\n        \"character\": \"很\"\n    }\n}",
+              "generateMode": "normal",
+              "type": "application/json"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "id": "postProcessors.0.extractor",
+                "type": "text/javascript",
+                "exec": [
+                  "",
+                  "        if (JSON.setEnableBigInt) {",
+                  "          JSON.setEnableBigInt(undefined);",
+                  "        }",
+                  "        ",
+                  "      try{",
+                  "        ",
+                  "          const expression = pm.variables.replaceIn(`$.id`);",
+                  "          const JSONPath = require('jsonpath-plus').JSONPath;",
+                  "          const jsonData = pm.response.json();",
+                  "          let value = JSONPath({",
+                  "            json: jsonData,",
+                  "            path: expression,",
+                  "            wrap: false",
+                  "          });",
+                  "",
+                  "          ",
+                  "          if (false && undefined !== undefined) {",
+                  "            if (Array.isArray(value)) {",
+                  "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
+                  "            } else {",
+                  "              value = undefined;",
+                  "            }",
+                  "          }",
+                  "          ",
+                  "        ",
+                  "        switch (typeof value) {",
+                  "          case 'object':",
+                  "            value = JSON.stringify(value);",
+                  "            break;",
+                  "          default:",
+                  "            value = String(value);",
+                  "            break;",
+                  "        }",
+                  "      ",
+                  "        pm.environment.set(`character_id`, value);console.log('已设置环境变量【character_id】，值为 【' + value + '】')",
+                  "      } catch(e) {",
+                  "        e.message = '提取变量【character_id】出错: ' + e.message;",
+                  "        throw e;",
+                  "      }",
+                  "  ",
+                  "      "
+                ]
+              }
+            }
+          ],
+          "responseDefinition": {
+            "id": 4369481,
+            "apiDetailId": 5384744,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "id"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-08-03T13:31:21.000Z",
+            "updatedAt": "2021-08-03T13:32:26.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "character": {
+                  "$ref": "#/definitions/1078259"
+                }
+              },
+              "required": [
+                "character"
+              ]
+            }
+          },
+          "metaInfo": {
+            "httpApiId": 5384744,
+            "httpApiCaseId": 143404112,
+            "httpApiName": "CH0102 单字上传",
+            "httpApiPath": "/characters",
+            "httpApiMethod": "post",
+            "httpApiCaseName": "CH0102 单字上传",
+            "id": "a0aa33c9-3867-4ff2-82f4-5eb1c2be74bd",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "a5f1264b-8d9c-4fa6-b289-2df46a58e2f8",
+          "name": "CH0101 单字获取(CH0101 单字获取)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "characters",
+                "{{character_id}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://apifox.com)"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4281264,
+            "apiDetailId": 5352356,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "character": {
+                  "title": "字典character",
+                  "description": "包含表中所有字段",
+                  "$ref": "#/definitions/1011870"
+                }
+              },
+              "required": [
+                "character"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-08-01T13:52:11.000Z",
+            "updatedAt": "2021-08-06T14:09:42.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {
+              "1011870": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "词语id"
+                  },
+                  "shengmu": {
+                    "type": "string",
+                    "title": "声母",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "ipa": {
+                    "type": "string",
+                    "title": "国际音标",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "pinyin": {
+                    "type": "string",
+                    "title": "拼音",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "yunmu": {
+                    "type": "string",
+                    "title": "韵母",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "shengdiao": {
+                    "type": "string",
+                    "title": "声调",
+                    "mock": {
+                      "mock": "@string('number',1,3)"
+                    }
+                  },
+                  "character": {
+                    "type": "string",
+                    "title": "汉字",
+                    "mock": {
+                      "mock": "@cword(1,1)"
+                    }
+                  },
+                  "county": {
+                    "type": "string",
+                    "title": "县区",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "town": {
+                    "type": "string",
+                    "title": "乡镇",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "traditional": {
+                    "type": "string",
+                    "title": "繁体字"
+                  },
+                  "type": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "title": "读音类型",
+                    "mock": {
+                      "mock": "@cword"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "shengmu",
+                  "ipa",
+                  "pinyin",
+                  "yunmu",
+                  "shengdiao",
+                  "character",
+                  "county",
+                  "town",
+                  "traditional"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "shengmu",
+                  "ipa",
+                  "pinyin",
+                  "yunmu",
+                  "shengdiao",
+                  "character",
+                  "county",
+                  "town",
+                  "traditional",
+                  "type"
+                ],
+                "title": "character_normal",
+                "name": "character_normal"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
+          },
+          "metaInfo": {
+            "httpApiId": 5352356,
+            "httpApiCaseId": 143404111,
+            "httpApiName": "CH0101 单字获取",
+            "httpApiPath": "/characters/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "CH0101 单字获取",
+            "id": "ab51c985-8d18-4df0-8085-621170ffb9e9",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "ef48061f-36ff-44ee-8a75-f725710cc292",
+          "name": "CH0103 单字更改(CH0103 单字更改)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "characters",
+                "{{character_id}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "disabled": false,
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://apifox.com)"
+              },
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"character\": {\n        \"ipa\": \"nivfj\",\n        \"type\": \"影\",\n        \"pinyin\": \"yewns\",\n        \"yunmu\": \"lohbt\",\n        \"traditional\": \"non est veniam consequat\",\n        \"shengdiao\": \"2\",\n        \"character\": \"由\",\n        \"county\": \"东区\",\n        \"town\": \"盘县\",\n        \"shengmu\": \"omrmt\"\n    }\n}",
+              "generateMode": "normal",
+              "type": "application/json"
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4281266,
+            "apiDetailId": 5352358,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-08-01T13:56:48.000Z",
+            "updatedAt": "2021-08-01T13:56:48.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "character": {
+                  "title": "字典character",
+                  "description": "改啥给啥",
+                  "$ref": "#/definitions/1078259"
+                }
+              },
+              "required": [
+                "character"
+              ]
+            }
+          },
+          "metaInfo": {
+            "httpApiId": 5352358,
+            "httpApiCaseId": 143404110,
+            "httpApiName": "CH0103 单字更改",
+            "httpApiPath": "/characters/{id}",
+            "httpApiMethod": "put",
+            "httpApiCaseName": "CH0103 单字更改",
+            "id": "17110b08-93a0-4094-8e4f-56c42c605390",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        },
+        {
+          "id": "26e83f99-4bad-43cb-a270-bfd90cdf903a",
+          "name": "CH0101 单字获取(CH0101 单字获取)",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "characters",
+                "{{character_id}}"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://apifox.com)"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {},
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 4281264,
+            "apiDetailId": 5352356,
+            "name": "成功",
+            "code": 200,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {
+                "character": {
+                  "title": "字典character",
+                  "description": "包含表中所有字段",
+                  "$ref": "#/definitions/1011870"
+                }
+              },
+              "required": [
+                "character"
+              ]
+            },
+            "defaultEnable": true,
+            "projectId": 0,
+            "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-08-01T13:52:11.000Z",
+            "updatedAt": "2021-08-06T14:09:42.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [],
+            "schemaDefinitions": {
+              "1011870": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "integer",
+                    "title": "词语id"
+                  },
+                  "shengmu": {
+                    "type": "string",
+                    "title": "声母",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "ipa": {
+                    "type": "string",
+                    "title": "国际音标",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "pinyin": {
+                    "type": "string",
+                    "title": "拼音",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "yunmu": {
+                    "type": "string",
+                    "title": "韵母",
+                    "mock": {
+                      "mock": "@string('lower',5)"
+                    }
+                  },
+                  "shengdiao": {
+                    "type": "string",
+                    "title": "声调",
+                    "mock": {
+                      "mock": "@string('number',1,3)"
+                    }
+                  },
+                  "character": {
+                    "type": "string",
+                    "title": "汉字",
+                    "mock": {
+                      "mock": "@cword(1,1)"
+                    }
+                  },
+                  "county": {
+                    "type": "string",
+                    "title": "县区",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "town": {
+                    "type": "string",
+                    "title": "乡镇",
+                    "mock": {
+                      "mock": "@county"
+                    }
+                  },
+                  "traditional": {
+                    "type": "string",
+                    "title": "繁体字"
+                  },
+                  "type": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "title": "读音类型",
+                    "mock": {
+                      "mock": "@cword"
+                    }
+                  }
+                },
+                "required": [
+                  "id",
+                  "shengmu",
+                  "ipa",
+                  "pinyin",
+                  "yunmu",
+                  "shengdiao",
+                  "character",
+                  "county",
+                  "town",
+                  "traditional"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "shengmu",
+                  "ipa",
+                  "pinyin",
+                  "yunmu",
+                  "shengdiao",
+                  "character",
+                  "county",
+                  "town",
+                  "traditional",
+                  "type"
+                ],
+                "title": "character_normal",
+                "name": "character_normal"
+              }
+            }
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
+          },
+          "metaInfo": {
+            "httpApiId": 5352356,
+            "httpApiCaseId": 143404198,
+            "httpApiName": "CH0101 单字获取",
+            "httpApiPath": "/characters/{id}",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "CH0101 单字获取",
+            "id": "4c8835ae-4d4e-4e5c-9da6-553e57342892",
+            "type": "http"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false
+          }
+        }
+      ],
+      "name": "单字200"
+    }
+  ],
+  "info": {
+    "name": "单字200"
+  },
+  "dataSchemas": {
+    "1011870": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "title": "词语id"
+        },
+        "shengmu": {
+          "type": "string",
+          "title": "声母",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "ipa": {
+          "type": "string",
+          "title": "国际音标",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "pinyin": {
+          "type": "string",
+          "title": "拼音",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "yunmu": {
+          "type": "string",
+          "title": "韵母",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "shengdiao": {
+          "type": "string",
+          "title": "声调",
+          "mock": {
+            "mock": "@string('number',1,3)"
+          }
+        },
+        "character": {
+          "type": "string",
+          "title": "汉字",
+          "mock": {
+            "mock": "@cword(1,1)"
+          }
+        },
+        "county": {
+          "type": "string",
+          "title": "县区",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "town": {
+          "type": "string",
+          "title": "乡镇",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "traditional": {
+          "type": "string",
+          "title": "繁体字"
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "读音类型",
+          "mock": {
+            "mock": "@cword"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "shengmu",
+        "ipa",
+        "pinyin",
+        "yunmu",
+        "shengdiao",
+        "character",
+        "county",
+        "town",
+        "traditional"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "shengmu",
+        "ipa",
+        "pinyin",
+        "yunmu",
+        "shengdiao",
+        "character",
+        "county",
+        "town",
+        "traditional",
+        "type"
+      ],
+      "title": "character_normal",
+      "name": "character_normal"
+    },
+    "1078259": {
+      "type": "object",
+      "properties": {
+        "shengmu": {
+          "type": "string",
+          "title": "声母",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "ipa": {
+          "type": "string",
+          "title": "国际音标",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "pinyin": {
+          "type": "string",
+          "title": "拼音",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "yunmu": {
+          "type": "string",
+          "title": "韵母",
+          "mock": {
+            "mock": "@string('lower',5)"
+          }
+        },
+        "shengdiao": {
+          "type": "string",
+          "title": "声调",
+          "mock": {
+            "mock": "@string('number',1,3)"
+          }
+        },
+        "character": {
+          "type": "string",
+          "title": "汉字",
+          "mock": {
+            "mock": "@cword(1,1)"
+          }
+        },
+        "county": {
+          "type": "string",
+          "title": "县区",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "town": {
+          "type": "string",
+          "title": "乡镇",
+          "mock": {
+            "mock": "@county"
+          }
+        },
+        "traditional": {
+          "type": "string",
+          "title": "繁体字"
+        },
+        "type": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "title": "读音类型",
+          "mock": {
+            "mock": "@cword"
+          }
+        }
+      },
+      "x-apifox-orders": [
+        "shengmu",
+        "ipa",
+        "pinyin",
+        "yunmu",
+        "shengdiao",
+        "character",
+        "county",
+        "town",
+        "traditional",
+        "type"
+      ],
+      "title": "[入] character_update",
+      "name": "[入] character_update"
+    }
+  },
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
+  },
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
+    },
+    "variable": {
+      "id": "91c6bf7c-4914-4075-9263-b1fba68cf0b5",
+      "name": "测试环境",
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcxMDI0MzEyMi4zODg4MjZ9.Yqglry0yFAnSBHcMKoDafs095kwYQfEjZC-A6b1F9nw",
+          "key": "token",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "31",
+          "key": "quiz_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "16",
+          "key": "word_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "15",
+          "key": "word_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "token_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "user_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "1",
+          "key": "article_id",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": 6,
+          "key": "num_pre",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "7",
+          "key": "num_later",
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "id",
+          "initialValue": "2"
+        },
+        {
+          "type": "any",
+          "value": "13",
+          "key": "music_id",
+          "initialValue": "13"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "rewards_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "title_id",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "SP000011",
+          "key": "products_id",
+          "initialValue": "SP000011"
+        },
+        {
+          "type": "any",
+          "value": "DD000004",
+          "key": "order_id",
+          "initialValue": "DD000004"
+        },
+        {
+          "type": "any",
+          "value": "JL000039",
+          "key": "transaction_id",
+          "initialValue": "JL000039"
+        },
+        {
+          "type": "any",
+          "value": "CD000015",
+          "key": "list_id",
+          "initialValue": "CD000015"
+        },
+        {
+          "type": "any",
+          "value": "SJ000008",
+          "key": "paper_id",
+          "initialValue": "SJ000008"
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "paper_count",
+          "initialValue": "undefined"
+        },
+        {
+          "type": "any",
+          "value": "DJ000014",
+          "key": "paper_record_id",
+          "initialValue": "DJ000014"
+        },
+        {
+          "type": "any",
+          "value": "DT000016",
+          "key": "quiz_record_id",
+          "initialValue": "DT000016"
+        },
+        {
+          "type": "any",
+          "value": "PLPT0000000033",
+          "key": "cert_id",
+          "initialValue": "PLPT0000000033"
+        },
+        {
+          "type": "any",
+          "value": "43",
+          "key": "character_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        }
+      ]
+    },
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
+    "variable": {
+      "id": "63ffcc94-f1fb-4fef-a881-a096843e26f2",
+      "values": []
+    },
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false,
+  "isTestFlowControl": false
+}
