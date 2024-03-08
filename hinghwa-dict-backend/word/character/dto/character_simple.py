@@ -29,6 +29,7 @@ def character_simple(character: Character) -> dict:
             "traditional": character.traditional,
             "word": {"id": word_id} if word else None,
             "source": {"source": source_value} if source else None,
+            "type": None if character.type is None else character.type,
         }
     )
 
