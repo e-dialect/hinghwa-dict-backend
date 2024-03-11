@@ -1,13 +1,13 @@
 setuptools==57.4.0
-django==3.1.14
+django==5.0.3
 demjson~=2.2.4
 pyjwt~=2.4.0
-django-cors-headers
+django-cors-headers~=4.3.1
 xlrd~=2.0.1
 cos-python-sdk-v5
 apscheduler==3.7.0
 django_apscheduler
-django-notifications-hq==1.6.0
+django-notifications-hq==1.8.3
 pydub==0.25.1
 ffmpeg==1.4
 ffprobe==0.5

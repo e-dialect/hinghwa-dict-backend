@@ -10,11 +10,10 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
-import logging
 import os
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import time
+
 import environ
 
 env = environ.Env()
@@ -217,8 +216,8 @@ LOGGING = {
     "formatters": {
         "standard": {
             "format": "[%(asctime)s] [%(levelname)s] : "
-            "[%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] "
-            "- %(message)s"
+                      "[%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] "
+                      "- %(message)s"
         },
         "simple": {"format": "%(levelname)s %(module)s %(lineno)d %(message)s"},
         "verbose": {
@@ -315,3 +314,4 @@ SIMPLEUI_LOGO = "https://hinghwa.cn/img/blue.7169aa26.svg"
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_ACTION = False
 SIMPLEUI_ANALYSIS = False
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
