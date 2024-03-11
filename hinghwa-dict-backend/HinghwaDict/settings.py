@@ -314,4 +314,4 @@ SIMPLEUI_LOGO = "https://hinghwa.cn/img/blue.7169aa26.svg"
 SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_ACTION = False
 SIMPLEUI_ANALYSIS = False
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
