@@ -3,7 +3,7 @@ import math
 import os
 import random
 
-import demjson
+import demjson3
 import jwt
 import requests
 from apscheduler.schedulers.background import BackgroundScheduler
@@ -136,7 +136,7 @@ def email(request):
         return str(email).find("@") == -1
 
     try:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         email = body["email"].replace(" ", "")
         if check(email):
             return JsonResponse({}, status=400)
@@ -228,7 +228,7 @@ def announcements(request):
                 )
             return JsonResponse({"announcements": announcements}, status=200)
         elif request.method == "PUT":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = request.headers["token"]
             if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body["announcements"], list):
@@ -277,7 +277,7 @@ def hot_articles(request):
                 )
             return JsonResponse({"hot_articles": hot_articles}, status=200)
         elif request.method == "PUT":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = request.headers["token"]
             if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body["hot_articles"], list):
@@ -313,7 +313,7 @@ def word_of_the_day(request):
                 status=200,
             )
         elif request.method == "PUT":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = request.headers["token"]
             if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body["word_of_the_day"], int):
@@ -337,7 +337,7 @@ def carousel(request):
                 {"carousel": eval(item.carousel) if item.carousel else []}, status=200
             )
         elif request.method == "PUT":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = request.headers["token"]
             if token_check(token, settings.JWT_KEY, -1):
                 if isinstance(body["carousel"], list) and isinstance(
@@ -437,7 +437,7 @@ def files(request):
                 url = upload_file(path, key)
                 return JsonResponse({"url": url}, status=200)
             elif request.method == "DELETE":
-                body = demjson.decode(request.body)
+                body = demjson3.decode(request.body)
                 try:
                     suffix = body["url"].split("/", 4)[-1]
                     type = suffix.split("/", 2)[0]
@@ -559,7 +559,7 @@ def searchDailyExpression(request):
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
             if user:
-                body = demjson.decode(request.body)
+                body = demjson3.decode(request.body)
                 word_form = DailyExpressionForm(body)
                 if word_form.is_valid():
                     word = word_form.save(commit=False)
@@ -596,7 +596,7 @@ def manageDailyExpression(request, id):
             if word.exists():
                 word = word[0]
                 if request.method == "PUT":
-                    body = demjson.decode(request.body)
+                    body = demjson3.decode(request.body)
                     for property in body["daily_expression"]:
                         setattr(word, property, body["daily_expression"][property])
                     word.save()
@@ -708,7 +708,7 @@ def manageNotificationUnread(request):
         user = token_check(token, settings.JWT_KEY)
         if user:
             if request.method == "PUT":
-                body = demjson.decode(request.body) if len(request.body) else {}
+                body = demjson3.decode(request.body) if len(request.body) else {}
                 notifications = Notification.objects.filter(recipient_id=user.id)
                 if "notifications" in body:
                     notifications = notifications.filter(id__in=body["notifications"])

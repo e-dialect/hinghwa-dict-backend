@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-import demjson
+import demjson3
 from ..dto.quiz_record import quiz_record
 from django.views import View
 from ...models import Quiz, Paper, QuizRecord
@@ -21,7 +21,7 @@ class QuizRecordAll(View):
     # QZ0401创建答题记录
     def post(self, request):
         token_pass(request.headers)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         record_form = QuizRecordForm(body)
         quiz_id = request.GET["quiz_id"]
         quiz = Quiz.objects.filter(id=quiz_id)

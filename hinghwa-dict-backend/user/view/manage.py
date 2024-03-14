@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.db.models import Sum
 from django.http import JsonResponse
 from django.views import View
@@ -93,7 +93,7 @@ class Manage(View):
         if request_user.id != id:
             raise ForbiddenException
         user = get_user_by_id(id)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         info = body["user"]
         print(info)
         print(info["town"])
@@ -125,7 +125,7 @@ class ManagePassword(View):
         user = get_request_user(request)
         if user.id != id:
             raise ForbiddenException
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         if not user.check_password(body["oldpassword"]):
             raise WrongPassword()
         password_validator(body["newpassword"])
@@ -146,7 +146,7 @@ class ManageEmail(View):
         user = get_request_user(request)
         if user.id != id:
             raise ForbiddenException
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         if not email_check(body["email"], body["code"]):
             raise BadRequestException("验证码错误")
         user.email = body["email"]

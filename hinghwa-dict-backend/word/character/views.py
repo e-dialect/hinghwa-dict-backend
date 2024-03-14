@@ -1,7 +1,7 @@
 import os
 import re
 
-import demjson
+import demjson3
 import xlrd
 from django.conf import settings
 from django.db.models import Q
@@ -30,7 +30,7 @@ def searchCharacters(request):
             characters = [character.id for character in characters]
             return JsonResponse({"characters": characters}, status=200)
         elif request.method == "POST":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
             if user:
@@ -47,7 +47,7 @@ def searchCharacters(request):
             else:
                 return JsonResponse({}, status=401)
         elif request.method == "PUT":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             result = Character.objects.filter(id__in=body["characters"])
             characters = []
             result = filterInOrder(result, body["characters"])
@@ -217,7 +217,7 @@ def manageCharacter(request, id):
                     status=200,
                 )
             elif request.method == "PUT":
-                body = demjson.decode(request.body)
+                body = demjson3.decode(request.body)
                 token = request.headers["token"]
                 if token_check(token, settings.JWT_KEY, -1):
                     body = body["character"]
@@ -250,7 +250,7 @@ def manageCharacter(request, id):
 @csrf_exempt
 def load_character(request):
     try:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         token = request.headers["token"]
         user = token_check(token, settings.JWT_KEY, -1)
         if user:

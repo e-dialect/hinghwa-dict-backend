@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.product_all import product_all
@@ -16,7 +16,7 @@ class ManageAllProducts(View):
     @csrf_exempt
     def post(self, request) -> JsonResponse:
         token = token_pass(request.headers, -1)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         products_form = ProductInfoForm(body)
         if not products_form.is_valid():
             raise BadRequestException()

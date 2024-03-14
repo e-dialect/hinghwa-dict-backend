@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-import demjson
+import demjson3
 from ..dto.paper_all import paper_all
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -15,7 +15,7 @@ class ManageAllPaper(View):
     def post(self, request):
         token_pass(request.headers, -1)
         number = int(request.GET["number"])
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         title = body["title"]
         request_type = request.GET["type"]
         type_list = request_type.split(",")

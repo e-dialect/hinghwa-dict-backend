@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from ...models import List, Word
 from ..dto.list_all import list_all
 from django.http import JsonResponse
@@ -18,7 +18,7 @@ class ManageAllLists(View):
     def post(self, request):
         token = token_pass(request.headers, -1)
         user = token_user(token)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         list_form = ListForm(body)
         if not list_form.is_valid():
             raise BadRequestException()

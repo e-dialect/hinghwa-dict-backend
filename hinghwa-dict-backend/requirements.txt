@@ -1,6 +1,6 @@
 setuptools==69.1.1
 django==5.0.3
-demjson~=2.2.4
+demjson3~=3.0.6
 pyjwt~=2.4.0
 django-cors-headers~=4.3.1
 xlrd~=2.0.1

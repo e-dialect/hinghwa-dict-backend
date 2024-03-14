@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.product_all import product_all
@@ -37,7 +37,7 @@ class ManageSingleProducts(View):
         if not products.exists():
             raise ProductsNotFoundException()
         products = products[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         for key in body:
             setattr(products, key, body[key])
         products.save()

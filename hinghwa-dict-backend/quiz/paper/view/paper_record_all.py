@@ -1,5 +1,4 @@
 from django.http import JsonResponse
-import demjson
 from ..dto.paper_record_dto import paper_record_all
 from django.views import View
 from ...models import Quiz, Paper

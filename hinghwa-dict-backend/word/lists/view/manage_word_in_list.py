@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from ...models import List, Word
 from ..dto.list_all import list_all
 from django.http import JsonResponse
@@ -21,7 +21,7 @@ class ManageListWords(View):
         if not list.exists():
             raise ListsNotFoundException()
         list = list[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         for id in body["words"]:
             word = Word.objects.get(id=id)
             list.words.add(word)
@@ -33,7 +33,7 @@ class ManageListWords(View):
     @csrf_exempt
     def delete(self, request, list_id):
         token_pass(request.headers, -1)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         list = List.objects.filter(id=list_id)
         if not list.exists():
             raise ListsNotFoundException()

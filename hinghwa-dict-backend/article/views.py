@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -70,7 +70,7 @@ class SearchArticle(View):
     def post(self, request) -> JsonResponse:
         token = token_pass(request.headers)
         user = token_user(token)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         article_form = ArticleForm(body)
         if not article_form.is_valid():
             raise BadRequestException()
@@ -90,7 +90,7 @@ class SearchArticle(View):
 
     # AT0202 文章内容批量获取
     def put(self, request) -> JsonResponse:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         result = Article.objects.filter(id__in=body["articles"])
         try:
             token = token_pass(request.headers)
@@ -156,7 +156,7 @@ class ManageArticle(View):
             raise ArticleNotFoundException()
         article = article[0]
         token = token_pass(request.headers, article.author.id)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         body = body["article"]
         article_form = ArticleForm(body)
         for key in body:
@@ -196,7 +196,7 @@ class ManageVisibility(View):
         if not article.exists():
             raise ArticleNotFoundException()
         article = article[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         article.visibility = body["result"]
         if article.visibility:
             content = f"恭喜您的 文章(id={id}) 已通过审核"
@@ -271,7 +271,7 @@ class CommentArticle(View):
         ):
             raise ArticleNotFoundException()
         article = article[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         comment_form = CommentForm(body)
         if not comment_form.is_valid():
             raise BadRequestException()
@@ -292,7 +292,7 @@ class CommentArticle(View):
             article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         comment = Comment.objects.get(id=body["id"])
         if token_pass(request.headers, comment.user.id) or token_pass(
             request.headers, -1
@@ -305,7 +305,7 @@ class CommentArticle(View):
 class SearchComment(View):
     # AT0403 评论内容批量获取
     def put(self, request) -> JsonResponse:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         result = Comment.objects.filter(id__in=body["comments"])
         result = filterInOrder(result, body["comments"])
         comments = []

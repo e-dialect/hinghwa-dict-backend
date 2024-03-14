@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.orders_all import order_all
@@ -46,7 +46,7 @@ class ManageSingleOrder(View):
         user_id = order.user.id
         token = token_pass(request.headers, -1) or token_pass(request.headers, user_id)
         if token:
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
 
             for key in body:
                 setattr(order, key, body[key])

@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
@@ -32,7 +32,7 @@ class SearchMusic(View):
     def post(self, request) -> JsonResponse:
         token = token_pass(request.headers)
         user = token_user(token)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         music_form = MusicForm(body)
         if not music_form.is_valid():
             raise BadRequestException()
@@ -43,7 +43,7 @@ class SearchMusic(View):
 
     # MC0202 音乐批量获取
     def put(self, request) -> JsonResponse:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         result = Music.objects.filter(id__in=body["music"])
         result = filterInOrder(result, body["music"])
         musics = []
@@ -73,7 +73,7 @@ class ManageMusic(View):
             raise MusicNotFoundException()
         music = music[0]
         token = token_pass(request.headers, music.contributor.id)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         body = body["music"]
         music_form = MusicForm(body)
         for key in body:

@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.conf import settings
 from django.views import View
@@ -40,7 +40,7 @@ class SingleQuiz(View):
     # QZ0103 修改单个测试
     def put(self, request, id) -> JsonResponse:
         try:
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = token_pass(request.headers)
             user = token_user(token)
             quiz = Quiz.objects.filter(id=id)
@@ -107,7 +107,7 @@ class MultiQuiz(View):
 
     # QZ0102 增加单个测试
     def post(self, request) -> JsonResponse:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         token = token_pass(request.headers)
         user = token_user(token)
         quiz_form = QuizForm(body)
@@ -142,7 +142,7 @@ class ManageVisibility(View):
         if not quiz.exists():
             raise QuizNotFoundException()
         quiz = quiz[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         quiz.visibility = body["result"]
         if quiz.visibility:
             content = f"问题(id={id})已通过审核"

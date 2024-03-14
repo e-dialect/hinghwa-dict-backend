@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.contrib.auth.models import User
 from django.http import JsonResponse
 from django.views import View
@@ -27,7 +27,7 @@ class Forget(View):
     # LG0202 重置密码
     def put(self, request, id):
         # 检查验证码并重置用户密码
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         user = check_request_user(request, id)
         if user.username != body["username"]:
             raise ForbiddenException("用户名不匹配")
