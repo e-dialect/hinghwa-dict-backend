@@ -216,8 +216,8 @@ LOGGING = {
     "formatters": {
         "standard": {
             "format": "[%(asctime)s] [%(levelname)s] : "
-                      "[%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] "
-                      "- %(message)s"
+            "[%(filename)s:%(lineno)d] [%(module)s:%(funcName)s] "
+            "- %(message)s"
         },
         "simple": {"format": "%(levelname)s %(module)s %(lineno)d %(message)s"},
         "verbose": {
