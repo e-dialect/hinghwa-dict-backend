@@ -1,4 +1,3 @@
-import demjson
 from django.http import JsonResponse
 from ..dto.paper_all import paper_all
 from django.views import View

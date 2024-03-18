@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
 from django.http import JsonResponse
@@ -18,7 +18,7 @@ class Notifications(View):
         user = get_request_user(request)
         if not user.id:
             raise UnauthorizedException()
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         if len(body["recipients"]) == 1 and body["recipients"][0] == -1:
             recipients = None
         else:

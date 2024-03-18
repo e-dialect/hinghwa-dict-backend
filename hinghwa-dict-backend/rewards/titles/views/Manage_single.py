@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.title_all import title_all
@@ -37,7 +37,7 @@ class ManageSingleTitle(View):
         if not title.exists():
             raise TitleNotFoundException()
         title = title[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         for key in body:
             setattr(title, key, body[key])
         title.save()

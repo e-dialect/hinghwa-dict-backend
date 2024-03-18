@@ -1,5 +1,5 @@
 from django.http import JsonResponse
-import demjson
+import demjson3
 from ..dto.quiz_record import quiz_record
 from django.views import View
 from ...models import Paper, QuizRecord, PaperRecord
@@ -27,7 +27,7 @@ class QuizRecordSingle(View):
     # QZ0404更改特定答题记录
     def put(self, request, record_id):
         token_pass(request.headers, -1)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         if body["paper_record"] != "":
             paper = PaperRecord.objects.filter(id=body["paper_record"])
             if not paper.exists():

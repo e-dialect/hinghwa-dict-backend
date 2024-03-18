@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from ..dto.title_all import title_all
@@ -40,7 +40,7 @@ class ManageAllTitles(View):
     @csrf_exempt
     def post(self, request) -> JsonResponse:
         token = token_pass(request.headers, -1)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         title_form = TitleInfoForm(body)
         if not title_form.is_valid():
             raise BadRequestException()

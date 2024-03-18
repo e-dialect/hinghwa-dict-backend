@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 import requests
 from django.conf import settings
 from django.http import JsonResponse
@@ -39,7 +39,7 @@ class OpenId:
 class WechatLogin(View):
     # LG0102 微信登录
     def post(self, request):
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         jscode = body["jscode"]
         openid = OpenId(jscode).get_openid()
         user_info = UserInfo.objects.filter(wechat__contains=openid)
@@ -54,7 +54,7 @@ class WechatLogin(View):
 class WechatRegister(View):
     # US0102 新建用户（微信）
     def post(self, request):
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         user_form = UserFormByWechat(body)
         jscode = body["jscode"]
         #   获取微信信息
@@ -86,7 +86,7 @@ class BindWechat(View):
     # US0304 绑定微信
     def put(self, request, id) -> JsonResponse:
         user = check_request_user(request, id)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         jscode = body["jscode"]
         openid = OpenId(jscode).get_openid()
         if UserInfo.objects.filter(wechat=openid).exists():
@@ -117,7 +117,7 @@ class WechatManage(View):
         user = check_request_user(request, id)
         if user.id != id:
             raise ForbiddenException
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         jscode = body["jscode"]
         openid = OpenId(jscode).get_openid()
         #   基于jscode获取的用户

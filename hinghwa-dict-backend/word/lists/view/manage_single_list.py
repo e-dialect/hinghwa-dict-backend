@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from ...models import List, Word
 from ..dto.list_all import list_all
 from django.http import JsonResponse
@@ -30,7 +30,7 @@ class ManageSingleLists(View):
         if not list.exists():
             raise ListsNotFoundException()
         list = list[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         for key in body:
             if key != "words":
                 setattr(list, key, body[key])

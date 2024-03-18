@@ -1,7 +1,7 @@
 import csv
 import os
 
-import demjson
+import demjson3
 import xlrd
 import re
 from django.conf import settings
@@ -79,7 +79,7 @@ def searchWords(request):
             return JsonResponse({"result": result, "words": words}, status=200)
         # WD0102 管理员上传新词语
         elif request.method == "POST":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             token = request.headers["token"]
             user = token_check(token, settings.JWT_KEY, -1)
             if user:
@@ -110,7 +110,7 @@ def searchWords(request):
                 return JsonResponse({}, status=401)
         # WD0202 词语内容批量获取
         elif request.method == "PUT":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             words = []
             result = Word.objects.filter(id__in=body["words"])
             result = filterInOrder(result, body["words"])
@@ -161,7 +161,7 @@ class ManageWord(View):
             raise WordNotFoundException()
         word = word[0]
         token = token_pass(request.headers, word.contributor.id)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         body = body["word"]
         word_form = WordForm(body)
         item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
@@ -212,7 +212,7 @@ class ManageWord(View):
 def load_word(request):
     try:
         # WD0301 文件批量添加
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         file = body["file"]
         sheet = open(os.path.join("material", "word", file))
         lines = sheet.readlines()
@@ -419,7 +419,7 @@ class PhoneticOrdering(View):
 
 class DictionarySearch(View):
     def post(self, request) -> JsonResponse:
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         query = r"^"
         length = 0
         if body["order"]:

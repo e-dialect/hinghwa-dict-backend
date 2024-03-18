@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.conf import settings
 from django.contrib.auth import authenticate
 from django.http import JsonResponse
@@ -33,7 +33,7 @@ def router_users(request):
 
         # US0101 新建用户
         elif request.method == "POST":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             user_form = UserForm(body)
             code = body["code"]
             if user_form.is_valid():
@@ -68,7 +68,7 @@ def router_users(request):
 def login(request):
     try:
         if request.method == "POST":
-            body = demjson.decode(request.body)
+            body = demjson3.decode(request.body)
             username = body["username"]
             password = body["password"]
             user = authenticate(username=username, password=password)

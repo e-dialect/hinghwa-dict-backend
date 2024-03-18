@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views import View
 from ...models import Cert
@@ -17,7 +17,7 @@ class AllCert(View):
     # QZ0502创建证书
     def post(self, request):
         token_pass(request.headers, -1)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         cert_form = CertForm(body["cert"])
         if not cert_form.is_valid():
             raise BadRequestException()

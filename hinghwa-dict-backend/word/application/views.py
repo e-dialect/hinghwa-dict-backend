@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.conf import settings
 from django.http import JsonResponse
 from django.views import View
@@ -39,7 +39,7 @@ class MultiApplication(View):
         """
         try:
             user = token_user(token_pass(request.headers, 0))  # user = 操作用户
-            body = demjson.decode(request.body)  # body = 申请内容
+            body = demjson3.decode(request.body)  # body = 申请内容
 
             # 检查申请修改的词语是否存在（为0表示新建词语）
             word = Word.objects.filter(id=body["word"])
@@ -112,7 +112,7 @@ class SingleApplication(View):
         application = find_application(id)
         application.verifier = user
         feedback = None
-        body = demjson.decode(request.body)  # body = 申请内容
+        body = demjson3.decode(request.body)  # body = 申请内容
         if not "result" in body:
             raise BadRequestException("缺少result字段")
 

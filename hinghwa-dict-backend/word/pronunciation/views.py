@@ -2,7 +2,7 @@ import os
 import shutil
 import time
 import datetime
-import demjson
+import demjson3
 import numpy as np
 import pydub
 from django.conf import settings
@@ -101,7 +101,7 @@ class SearchPronunciations(View):
     def post(self, request) -> JsonResponse:
         token = token_pass(request.headers)
         user = token_user(token)
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         body = body["pronunciation"]
         pronunciation_form = PronunciationForm(body)
         if not pronunciation_form.is_valid():
@@ -308,7 +308,7 @@ class ManagePronunciation(View):
     def put(self, request, id):
         token_pass(request.headers, -1)
         pronunciation = get_pronunciation_by_id(id)
-        body = demjson.decode(request.body) if len(request.body) else {}
+        body = demjson3.decode(request.body) if len(request.body) else {}
         if "pronunciation" not in body:
             return BadRequestException("缺少pronunciation字段")
         pronunciation_form = PronunciationForm(body["pronunciation"])
@@ -327,7 +327,7 @@ class ManagePronunciation(View):
     def delete(self, request, id):
         token_pass(request.headers, -1)
         pronunciation = get_pronunciation_by_id(id)
-        body = demjson.decode(request.body) if len(request.body) else {}
+        body = demjson3.decode(request.body) if len(request.body) else {}
         if "message" in body:
             message = body["message"]
         else:
@@ -349,7 +349,7 @@ class ManageApproval(View):
     def post(self, request, id):
         token_pass(request.headers, -1)
         verifier = get_request_user(request)
-        body = demjson.decode(request.body) if len(request.body) else {}
+        body = demjson3.decode(request.body) if len(request.body) else {}
         if "result" in body:
             result = body["result"]
         else:
@@ -384,7 +384,7 @@ class ManageApproval(View):
     def put(self, request, id):
         token_pass(request.headers, -1)
         verifier = get_request_user(request)
-        body = demjson.decode(request.body) if len(request.body) else {}
+        body = demjson3.decode(request.body) if len(request.body) else {}
         if "message" in body:
             message = body["message"]
         else:

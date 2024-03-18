@@ -1,4 +1,4 @@
-import demjson
+import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
@@ -29,7 +29,7 @@ class ManageAllOrders(View):
         if not product.exists():
             raise ProductsNotFoundException()
         product = product[0]
-        body = demjson.decode(request.body)
+        body = demjson3.decode(request.body)
         if user.user_info.points_now < product.points:
             return JsonResponse({"msg": "用户积分不足"}, status=403)
         if product.quantity <= 0:
