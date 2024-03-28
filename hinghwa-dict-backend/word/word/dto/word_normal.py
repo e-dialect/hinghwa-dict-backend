@@ -21,6 +21,6 @@ def word_normal(word: Word) -> dict:
         "related_articles": related_articles,
         "standard_ipa": word.standard_ipa,
         "standard_pinyin": word.standard_pinyin,
-        "tags": tags_list
+        "tags": tags_list,
     }
     return response
