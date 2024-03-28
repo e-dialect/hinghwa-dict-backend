@@ -14,6 +14,7 @@ class WordForm(forms.ModelForm):
             "visibility",
             "standard_ipa",
             "standard_pinyin",
+            "tags",
         )
 
 

@@ -1,8 +1,9 @@
+import re
+
 from django.contrib.auth.models import User
 from django.db import models
 
 from article.models import Article
-import re
 
 
 # application是为了修改word而产生的
@@ -36,6 +37,7 @@ class Word(models.Model):
     related_articles = models.ManyToManyField(
         Article, related_name="related_words", verbose_name="相关帖子", blank=True
     )
+    tags = models.TextField(verbose_name="标签", blank=True, default="[]")
 
     def __str__(self):
         return self.word
