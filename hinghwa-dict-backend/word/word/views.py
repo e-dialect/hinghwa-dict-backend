@@ -232,7 +232,7 @@ def load_word(request):
                     print("load character {}".format(word.id))
             else:
                 raise Exception("add fail in {}".format(dic))
-        PhoneticOrdering.sign = True  #   词语批量上传，音序表需要重建
+        PhoneticOrdering.sign = True  # 词语批量上传，音序表需要重建
         return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
@@ -453,3 +453,19 @@ class DictionarySearch(View):
                 {"words": result, "msg": "请求的词语太多了，请更精确一些"}, status=400
             )
         return JsonResponse({"words": result}, status=200)
+
+
+# WD0203标签查询词语
+def searchWordsByTags(request):
+    try:
+        if request.method == "GET":
+            query = request.GET["tags"]
+            query = re.findall(r"[\u4e00-\u9fa5]+", query)
+            result = []
+            for key in query:
+                words = Word.objects.filter(tags__icontains=key)
+                for word in words:
+                    result.append(word_all(word))
+            return JsonResponse({"total": len(result), "words": result}, status=200)
+    except Exception as e:
+        return JsonResponse({"msg": str(e)}, status=500)
