@@ -13,5 +13,4 @@ urlpatterns = [
     path("/upload_standard", upload_standard),  # WD0302POST
     path("/phonetic_ordering", csrf_exempt(PhoneticOrdering.as_view())),  # WD0501
     path("/dictionary", csrf_exempt(DictionarySearch.as_view())),  # WD0502
-    path("/search", csrf_exempt(searchWordsByTags)),
 ]

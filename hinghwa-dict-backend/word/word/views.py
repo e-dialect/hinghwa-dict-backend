@@ -36,6 +36,10 @@ def searchWords(request):
             words = Word.objects.filter(visibility=True)
             if "contributor" in request.GET:
                 words = words.filter(contributor=request.GET["contributor"])
+            if "tags" in request.GET:
+                query = request.GET["tags"]
+                query = re.findall(r"[\u4e00-\u9fa5]+", query)
+                words = words.filter(tags__icontains=query)
             if "search" in request.GET:
                 result = []
                 key = request.GET["search"].replace(" ", "")
@@ -453,19 +457,3 @@ class DictionarySearch(View):
                 {"words": result, "msg": "请求的词语太多了，请更精确一些"}, status=400
             )
         return JsonResponse({"words": result}, status=200)
-
-
-# WD0203标签查询词语
-def searchWordsByTags(request):
-    try:
-        if request.method == "GET":
-            query = request.GET["tags"]
-            query = re.findall(r"[\u4e00-\u9fa5]+", query)
-            result = []
-            for key in query:
-                words = Word.objects.filter(tags__icontains=key)
-                for word in words:
-                    result.append(word_all(word))
-            return JsonResponse({"total": len(result), "words": result}, status=200)
-    except Exception as e:
-        return JsonResponse({"msg": str(e)}, status=500)
