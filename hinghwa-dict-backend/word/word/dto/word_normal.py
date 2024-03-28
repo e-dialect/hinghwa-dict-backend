@@ -1,3 +1,5 @@
+import json
+
 from ...models import Word
 
 
@@ -9,6 +11,7 @@ def word_normal(word: Word) -> dict:
         {"id": article.id, "title": article.title}
         for article in word.related_articles.all()
     ]
+    tags_list = json.loads(word.tags.replace("'", '"'))
     response = {
         "word": word.word,
         "definition": word.definition,
@@ -18,5 +21,6 @@ def word_normal(word: Word) -> dict:
         "related_articles": related_articles,
         "standard_ipa": word.standard_ipa,
         "standard_pinyin": word.standard_pinyin,
+        "tags": tags_list,
     }
     return response
