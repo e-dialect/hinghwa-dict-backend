@@ -4,8 +4,8 @@
     {
       "item": [
         {
-          "id": "4e0a6bd7-6d95-4976-bff8-bc2d504a952f",
-          "name": "LG0101 账号密码登录(登录用户admin)",
+          "id": "37063468-0451-40c7-8031-0c0591bf31d8",
+          "name": "LG0101 账号密码登录 (登录用户admin)",
           "request": {
             "url": {
               "protocol": "http",
@@ -29,7 +29,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -69,7 +69,7 @@
                   "            wrap: false",
                   "          });",
                   "",
-                  "          ",
+                  "",
                   "          if (false && undefined !== undefined) {",
                   "            if (Array.isArray(value)) {",
                   "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
@@ -88,7 +88,7 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.environment.set(`token`, value);console.log('已设置环境变量【token】，值为 【' + value + '】')",
+                  "        pm.environment.set(`token`, value);console.log('___label_placeholder__processor___', '已设置环境变量【token】，值为 【' + value + '】')",
                   "      } catch(e) {",
                   "        e.message = '提取变量【token】出错: ' + e.message;",
                   "        throw e;",
@@ -101,9 +101,6 @@
           ],
           "responseDefinition": {
             "id": 4183271,
-            "createdAt": "2021-07-29T14:43:37.000Z",
-            "updatedAt": "2021-08-12T16:27:18.000Z",
-            "deletedAt": null,
             "apiDetailId": 5318056,
             "name": "成功",
             "code": 200,
@@ -131,6 +128,13 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-07-29T14:43:37.000Z",
+            "updatedAt": "2021-08-12T16:27:18.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -166,17 +170,22 @@
             "httpApiMethod": "post",
             "httpApiCaseName": "登录用户admin",
             "id": "92188925-d283-4d07-8900-401b3592006d",
-            "type": "http"
+            "type": "http",
+            "name": "LG0101 账号密码登录 (登录用户admin)",
+            "relatedId": 1072212,
+            "blockId": "92188925-d283-4d07-8900-401b3592006d"
           },
           "type": "http",
           "protocolProfileBehavior": {
             "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
           }
         },
         {
-          "id": "9379c321-bcc6-455f-b314-8996fd266676",
-          "name": "WD0401 申请更新(WD0401 申请更新)",
+          "id": "08795d61-071f-45f2-b36c-9ea24d2890dc",
+          "name": "WD0401 申请更新 (WD0401 申请更新)",
           "request": {
             "url": {
               "protocol": "http",
@@ -201,7 +210,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -212,7 +221,8 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"standard_ipa\": \"consequat et aliquip eu\",\n        \"standard_pinyin\": \"ut proident laboris\",\n        \"related_words\": [\n        ],\n        \"mandarin\": [\n            \"议\",\n            \"它\",\n            \"织\",\n            \"提\"\n        ],\n        \"word\": \"生\",\n        \"related_articles\": [\n\n        ],\n        \"definition\": \"照少资状外受影出两强派约调音强。心山市的青求社什部三术许。导决合从门目新很斗约反龙么决后。军派单局代酸目收干科选圆书派示。员级义层系七方持有型九音手阶。林十率由程不无技出活两义。\",\n        \"visibility\": false,\n        \"annotation\": \"和头海易近东度基据海严里生共。直段没向象所亲发管米走七火。北便响采儿流出公相则打社况它产。业人命人原般查快最系除王花选现号二。江节证新社才般议政场清加交他权价力。\"\n    },\n    \"word\": 0,\n    \"reason\": \"in\"\n}",
+              "raw": "{\n    \"content\": {\n        \"word\": \"果\",\n        \"definition\": \"写往个出手术心队面商参极任。叫定现头看无精置安性千市多六。清般究领保层战器金养济交华。\",\n        \"annotation\": \"确家事具中非多约面观南格治府节。备张厂层组事真儿五却接报些那产须。事白利合构要学手运且农着广统适温条。形住布她再少战须儿至收更支年气划它电。是响必养军厂县交置间着价百该传满音响。\",\n        \"mandarin\": [\n            \"照\"\n        ],\n        \"related_words\": [\n           \n        ],\n        \"related_articles\": [\n           \n        ],\n        \"visibility\": false,\n        \"standard_ipa\": \"tempor\",\n        \"standard_pinyin\": \"sed amet in exercitation\",\n        \"tags\": \"置\"\n    },\n    \"word\": 0,\n    \"reason\": \"velit ipsum quis\"\n}",
+              "generateMode": "normal",
               "type": "application/json"
             },
             "type": "http"
@@ -241,7 +251,7 @@
                   "            wrap: false",
                   "          });",
                   "",
-                  "          ",
+                  "",
                   "          if (false && undefined !== undefined) {",
                   "            if (Array.isArray(value)) {",
                   "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
@@ -260,7 +270,7 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`id`, value);console.log('已设置临时变量【id】，值为 【' + value + '】')",
+                  "        pm.variables.set(`id`, value);console.log('___label_placeholder__processor___', '已设置临时变量【id】，值为 【' + value + '】')",
                   "      } catch(e) {",
                   "        e.message = '提取变量【id】出错: ' + e.message;",
                   "        throw e;",
@@ -273,9 +283,6 @@
           ],
           "responseDefinition": {
             "id": 25794940,
-            "createdAt": "2022-03-10T09:51:45.000Z",
-            "updatedAt": "2022-03-17T11:33:33.000Z",
-            "deletedAt": null,
             "apiDetailId": 13560281,
             "name": "成功",
             "code": 200,
@@ -295,6 +302,13 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2022-03-10T09:51:45.000Z",
+            "updatedAt": "2022-03-17T11:33:33.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -311,17 +325,22 @@
             "httpApiMethod": "post",
             "httpApiCaseName": "WD0401 申请更新",
             "id": "f19d5cf6-75c2-43ff-b38d-3eb602341043",
-            "type": "http"
+            "type": "http",
+            "name": "WD0401 申请更新 (WD0401 申请更新)",
+            "relatedId": 1072212,
+            "blockId": "f19d5cf6-75c2-43ff-b38d-3eb602341043"
           },
           "type": "http",
           "protocolProfileBehavior": {
             "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
           }
         },
         {
-          "id": "dda722ca-71b5-4415-8b37-7def9b6f4289",
-          "name": "WD0402 查看单个申请内容(WD0402 查看单个申请内容)",
+          "id": "39db880b-6e4e-4e2c-998b-d75dabb81739",
+          "name": "WD0402 查看单个申请内容 (WD0402 查看单个申请内容)",
           "request": {
             "url": {
               "protocol": "http",
@@ -338,7 +357,14 @@
                 "1"
               ],
               "query": [],
-              "variable": []
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "string",
+                  "value": "{{id}}",
+                  "key": "id"
+                }
+              ]
             },
             "header": [
               {
@@ -347,7 +373,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -359,9 +385,6 @@
           "event": [],
           "responseDefinition": {
             "id": 25800538,
-            "createdAt": "2022-03-10T10:01:48.000Z",
-            "updatedAt": "2022-07-17T02:47:41.000Z",
-            "deletedAt": null,
             "apiDetailId": 13562145,
             "name": "成功",
             "code": 200,
@@ -384,6 +407,12 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2022-03-10T10:01:48.000Z",
+            "updatedAt": "2022-07-17T02:47:41.000Z",
+            "deletedAt": null,
+            "folderId": 0,
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -569,6 +598,16 @@
                       ]
                     },
                     "title": "相关词语id列表"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "词语标签",
+                    "mock": {
+                      "mock": "@cword"
+                    }
                   }
                 },
                 "x-apifox-orders": [
@@ -579,7 +618,8 @@
                   "related_words",
                   "related_articles",
                   "standard_ipa",
-                  "standard_pinyin"
+                  "standard_pinyin",
+                  "tags"
                 ],
                 "required": [
                   "word",
@@ -589,7 +629,8 @@
                   "related_words",
                   "related_articles",
                   "standard_ipa",
-                  "standard_pinyin"
+                  "standard_pinyin",
+                  "tags"
                 ],
                 "title": "application_all_content",
                 "name": "application_all_content"
@@ -609,17 +650,22 @@
             "httpApiMethod": "get",
             "httpApiCaseName": "WD0402 查看单个申请内容",
             "id": "50155165-4ba1-4e46-9e5c-fb60c534dfb4",
-            "type": "http"
+            "type": "http",
+            "name": "WD0402 查看单个申请内容 (WD0402 查看单个申请内容)",
+            "relatedId": 1072212,
+            "blockId": "50155165-4ba1-4e46-9e5c-fb60c534dfb4"
           },
           "type": "http",
           "protocolProfileBehavior": {
             "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
           }
         },
         {
-          "id": "5e876e34-126c-46c3-9f31-3cdaf9d73e6c",
-          "name": "WD0403 查看多个申请(WD0403 查看多个申请)",
+          "id": "f9bc89e7-3f6f-4bec-aacb-e6d66cf55286",
+          "name": "WD0403 查看多个申请 (WD0403 查看多个申请)",
           "request": {
             "url": {
               "protocol": "http",
@@ -644,7 +690,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -656,9 +702,6 @@
           "event": [],
           "responseDefinition": {
             "id": 25801174,
-            "createdAt": "2022-03-10T10:04:45.000Z",
-            "updatedAt": "2022-03-10T10:04:45.000Z",
-            "deletedAt": null,
             "apiDetailId": 13562708,
             "name": "成功",
             "code": 200,
@@ -680,6 +723,12 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2022-03-10T10:04:45.000Z",
+            "updatedAt": "2022-03-10T10:04:45.000Z",
+            "deletedAt": null,
+            "folderId": 0,
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -814,6 +863,16 @@
                   },
                   "standard_pinyin": {
                     "type": "string"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "description": "词语标签",
+                    "mock": {
+                      "mock": "@cword"
+                    }
                   }
                 },
                 "required": [
@@ -822,7 +881,8 @@
                   "annotation",
                   "mandarin",
                   "standard_ipa",
-                  "standard_pinyin"
+                  "standard_pinyin",
+                  "tags"
                 ],
                 "x-apifox-orders": [
                   "word",
@@ -830,7 +890,8 @@
                   "annotation",
                   "standard_ipa",
                   "standard_pinyin",
-                  "mandarin"
+                  "mandarin",
+                  "tags"
                 ],
                 "title": "application_simple_content",
                 "name": "application_simple_content"
@@ -848,17 +909,22 @@
             "httpApiMethod": "get",
             "httpApiCaseName": "WD0403 查看多个申请",
             "id": "99d077e3-b7f8-466f-ba04-04154bb69228",
-            "type": "http"
+            "type": "http",
+            "name": "WD0403 查看多个申请 (WD0403 查看多个申请)",
+            "relatedId": 1072212,
+            "blockId": "99d077e3-b7f8-466f-ba04-04154bb69228"
           },
           "type": "http",
           "protocolProfileBehavior": {
             "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
           }
         },
         {
-          "id": "40e3485d-13e7-448a-af62-f74a9c4dc968",
-          "name": "WD0404 审核申请(WD0404 审核申请)",
+          "id": "22a58cfc-45bf-4871-abd5-627b72d0e830",
+          "name": "WD0404 审核申请 (WD0404 审核申请)",
           "request": {
             "url": {
               "protocol": "http",
@@ -875,7 +941,14 @@
                 "1"
               ],
               "query": [],
-              "variable": []
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "string",
+                  "value": "{{id}}",
+                  "key": "id"
+                }
+              ]
             },
             "header": [
               {
@@ -884,7 +957,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               },
               {
                 "key": "Content-Type",
@@ -924,7 +997,7 @@
                   "            wrap: false",
                   "          });",
                   "",
-                  "          ",
+                  "",
                   "          if (false && undefined !== undefined) {",
                   "            if (Array.isArray(value)) {",
                   "              value = Number(undefined) >= 0 ? value[undefined] : value[value.length + Number(undefined)];",
@@ -943,7 +1016,7 @@
                   "            break;",
                   "        }",
                   "      ",
-                  "        pm.variables.set(`word`, value);console.log('已设置临时变量【word】，值为 【' + value + '】')",
+                  "        pm.variables.set(`word`, value);console.log('___label_placeholder__processor___', '已设置临时变量【word】，值为 【' + value + '】')",
                   "      } catch(e) {",
                   "        e.message = '提取变量【word】出错: ' + e.message;",
                   "        throw e;",
@@ -956,9 +1029,6 @@
           ],
           "responseDefinition": {
             "id": 25804150,
-            "createdAt": "2022-03-10T10:09:50.000Z",
-            "updatedAt": "2022-04-22T03:53:00.000Z",
-            "deletedAt": null,
             "apiDetailId": 13563705,
             "name": "成功",
             "code": 200,
@@ -978,6 +1048,12 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2022-03-10T10:09:50.000Z",
+            "updatedAt": "2022-04-22T03:53:00.000Z",
+            "deletedAt": null,
+            "folderId": 0,
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -1007,17 +1083,22 @@
             "httpApiMethod": "put",
             "httpApiCaseName": "WD0404 审核申请",
             "id": "2f94f91d-865b-4b21-9783-ddefa42a4754",
-            "type": "http"
+            "type": "http",
+            "name": "WD0404 审核申请 (WD0404 审核申请)",
+            "relatedId": 1072212,
+            "blockId": "2f94f91d-865b-4b21-9783-ddefa42a4754"
           },
           "type": "http",
           "protocolProfileBehavior": {
             "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
           }
         },
         {
-          "id": "5df8f3d9-ae55-43ef-af50-6e3ab1e68f01",
-          "name": "WD0101 获取字词的内容(WD0101 获取字词的内容)",
+          "id": "a2888c59-aef8-45be-be55-6c76a7d15c44",
+          "name": "WD0101 获取字词的内容 (WD0101 获取字词的内容)",
           "request": {
             "url": {
               "protocol": "http",
@@ -1033,7 +1114,14 @@
                 "1"
               ],
               "query": [],
-              "variable": []
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "string",
+                  "value": "{{word}}",
+                  "key": "id"
+                }
+              ]
             },
             "header": [
               {
@@ -1042,7 +1130,7 @@
               },
               {
                 "key": "User-Agent",
-                "value": "Apifox/1.0.0 (https://www.apifox.cn)"
+                "value": "Apifox/1.0.0 (https://apifox.com)"
               }
             ],
             "method": "GET",
@@ -1054,9 +1142,6 @@
           "event": [],
           "responseDefinition": {
             "id": 4275808,
-            "createdAt": "2021-07-31T14:51:29.000Z",
-            "updatedAt": "2022-07-15T15:41:46.000Z",
-            "deletedAt": null,
             "apiDetailId": 5349889,
             "name": "成功",
             "code": 200,
@@ -1077,6 +1162,22 @@
             "defaultEnable": true,
             "projectId": 0,
             "ordering": 1,
+            "unpackerId": "",
+            "unpackerSetting": "",
+            "createdAt": "2021-07-31T14:51:29.000Z",
+            "updatedAt": "2022-07-15T15:41:46.000Z",
+            "deletedAt": null,
+            "folderId": 0,
+            "responseExamples": [
+              {
+                "id": 3877865,
+                "name": "成功示例",
+                "data": "{\n    \"word\": {\n        \"id\": 0,\n        \"word\": \"例子\",\n        \"definition\": \"这仅仅是一个样例\",\n        \"contributor\": {\n            \"nickname\": \"用户昵称\",\n            \"avatar\": \"http://dummyimage.com/100x100\",\n            \"id\": 0\n        },\n        \"annotation\": \"\",\n        \"mandarin\": [],\n        \"related_words\": [],\n        \"related_articles\": [],\n        \"views\": 100\n    }\n}",
+                "apiDetailId": 5349889,
+                "responseId": 4275808,
+                "ordering": 1
+              }
+            ],
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -1171,6 +1272,10 @@
                       "required": [
                         "id",
                         "word"
+                      ],
+                      "x-apifox-orders": [
+                        "id",
+                        "word"
                       ]
                     },
                     "title": "相关词语id列表"
@@ -1190,6 +1295,10 @@
                         }
                       },
                       "required": [
+                        "id",
+                        "title"
+                      ],
+                      "x-apifox-orders": [
                         "id",
                         "title"
                       ]
@@ -1212,6 +1321,13 @@
                       "null"
                     ],
                     "title": "ipa对应语音"
+                  },
+                  "tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    },
+                    "title": "标签"
                   }
                 },
                 "required": [
@@ -1226,7 +1342,23 @@
                   "standard_ipa",
                   "standard_pinyin",
                   "views",
-                  "source"
+                  "source",
+                  "tags"
+                ],
+                "x-apifox-orders": [
+                  "id",
+                  "word",
+                  "definition",
+                  "contributor",
+                  "annotation",
+                  "mandarin",
+                  "related_words",
+                  "related_articles",
+                  "views",
+                  "standard_ipa",
+                  "standard_pinyin",
+                  "source",
+                  "tags"
                 ],
                 "title": "word_all",
                 "name": "word_all"
@@ -1247,12 +1379,17 @@
             "httpApiMethod": "get",
             "httpApiCaseName": "WD0101 获取字词的内容",
             "id": "ebf613c3-a59c-4510-906b-03360b256246",
-            "type": "http"
+            "type": "http",
+            "name": "WD0101 获取字词的内容 (WD0101 获取字词的内容)",
+            "relatedId": 1072212,
+            "blockId": "ebf613c3-a59c-4510-906b-03360b256246"
           },
           "type": "http",
           "protocolProfileBehavior": {
             "useWhatWGUrlParser": false,
-            "disableUrlEncoding": false
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
           }
         }
       ],
@@ -1356,6 +1493,10 @@
             "required": [
               "id",
               "word"
+            ],
+            "x-apifox-orders": [
+              "id",
+              "word"
             ]
           },
           "title": "相关词语id列表"
@@ -1375,6 +1516,10 @@
               }
             },
             "required": [
+              "id",
+              "title"
+            ],
+            "x-apifox-orders": [
               "id",
               "title"
             ]
@@ -1397,6 +1542,13 @@
             "null"
           ],
           "title": "ipa对应语音"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "标签"
         }
       },
       "required": [
@@ -1411,7 +1563,23 @@
         "standard_ipa",
         "standard_pinyin",
         "views",
-        "source"
+        "source",
+        "tags"
+      ],
+      "x-apifox-orders": [
+        "id",
+        "word",
+        "definition",
+        "contributor",
+        "annotation",
+        "mandarin",
+        "related_words",
+        "related_articles",
+        "views",
+        "standard_ipa",
+        "standard_pinyin",
+        "source",
+        "tags"
       ],
       "title": "word_all",
       "name": "word_all"
@@ -1479,11 +1647,34 @@
         },
         "standard_pinyin": {
           "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "标签",
+          "mock": {
+            "mock": "@cword"
+          }
         }
       },
       "required": [
         "standard_ipa",
-        "standard_pinyin"
+        "standard_pinyin",
+        "tags"
+      ],
+      "x-apifox-orders": [
+        "word",
+        "definition",
+        "annotation",
+        "mandarin",
+        "related_words",
+        "related_articles",
+        "visibility",
+        "standard_ipa",
+        "standard_pinyin",
+        "tags"
       ],
       "title": "[入] word_update",
       "name": "[入] word_update"
@@ -1616,6 +1807,16 @@
         },
         "standard_pinyin": {
           "type": "string"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "description": "词语标签",
+          "mock": {
+            "mock": "@cword"
+          }
         }
       },
       "required": [
@@ -1624,7 +1825,8 @@
         "annotation",
         "mandarin",
         "standard_ipa",
-        "standard_pinyin"
+        "standard_pinyin",
+        "tags"
       ],
       "x-apifox-orders": [
         "word",
@@ -1632,7 +1834,8 @@
         "annotation",
         "standard_ipa",
         "standard_pinyin",
-        "mandarin"
+        "mandarin",
+        "tags"
       ],
       "title": "application_simple_content",
       "name": "application_simple_content"
@@ -1791,6 +1994,16 @@
             ]
           },
           "title": "相关词语id列表"
+        },
+        "tags": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "title": "词语标签",
+          "mock": {
+            "mock": "@cword"
+          }
         }
       },
       "x-apifox-orders": [
@@ -1801,7 +2014,8 @@
         "related_words",
         "related_articles",
         "standard_ipa",
-        "standard_pinyin"
+        "standard_pinyin",
+        "tags"
       ],
       "required": [
         "word",
@@ -1811,7 +2025,8 @@
         "related_words",
         "related_articles",
         "standard_ipa",
-        "standard_pinyin"
+        "standard_pinyin",
+        "tags"
       ],
       "title": "application_all_content",
       "name": "application_all_content"
@@ -1829,133 +2044,99 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "329436d6-3c6f-4c96-9f0b-2517d277c58b",
+      "id": "fff740ea-9baa-4849-81bc-9ffb63689eed",
       "name": "测试环境",
-      "baseUrl": "http://127.0.0.1:8000",
-      "baseUrls": {
-        "default": "http://127.0.0.1:8000"
-      },
       "values": [
         {
           "type": "any",
-          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTY5MTMzNDQxOC4xNzgyMjZ9.G4VOuMCrE_SwF3qw1Nq8fIwILC2AhUmQ3TlTmv3vnjs",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcxMzYzMDQ0Ni43OTQyNzR9.yawkemkmnzv0UzfLdJmVlBrd6M725aSIj6jG9pxP1yk",
           "key": "token",
+          "isBindInitial": false,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "87",
+          "value": "",
           "key": "quiz_id",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "word_id_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "word_id_1",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "token_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "word_id_3",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "2",
+          "value": "",
           "key": "user_id",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "17",
+          "value": "",
           "key": "article_id",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "comment_id_1",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "comment_id_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
           "value": "",
           "key": "like_num_2",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": 6,
+          "value": "",
           "key": "num_pre",
+          "isBindInitial": true,
           "initialValue": ""
         },
         {
           "type": "any",
-          "value": "7",
+          "value": "",
           "key": "num_later",
+          "isBindInitial": true,
           "initialValue": ""
-        },
-        {
-          "type": "any",
-          "value": "2",
-          "key": "id",
-          "initialValue": "2"
-        },
-        {
-          "type": "any",
-          "value": "13",
-          "key": "music_id",
-          "initialValue": "13"
-        },
-        {
-          "type": "any",
-          "value": "undefined",
-          "key": "rewards_id",
-          "initialValue": "undefined"
-        },
-        {
-          "type": "any",
-          "value": "undefined",
-          "key": "title_id",
-          "initialValue": "undefined"
-        },
-        {
-          "type": "any",
-          "value": "SP000011",
-          "key": "products_id",
-          "initialValue": "SP000011"
-        },
-        {
-          "type": "any",
-          "value": "DD000024",
-          "key": "order_id",
-          "isBindInitial": false,
-          "initialValue": "undefined"
-        },
-        {
-          "type": "any",
-          "value": "JL000039",
-          "key": "transaction_id",
-          "initialValue": "JL000039"
         }
       ]
     },
@@ -1971,9 +2152,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "e362dfca-4c10-492d-9417-57d2a77ff8dc",
-      "baseUrl": "",
-      "baseUrls": {},
+      "id": "f5b23e66-9c5d-45e6-914d-786f85704ede",
       "values": []
     },
     "parameter": {
@@ -1984,5 +2163,13 @@
     }
   },
   "isServerBuild": false,
-  "isTestFlowControl": false
+  "isTestFlowControl": false,
+  "projectOptions": {
+    "enableJsonc": false,
+    "enableBigint": false,
+    "responseValidate": true,
+    "isDefaultUrlEncoding": 2,
+    "enableTestScenarioSetting": false,
+    "enableYAPICompatScript": false
+  }
 }
