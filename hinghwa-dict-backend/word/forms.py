@@ -52,6 +52,7 @@ class ApplicationForm(forms.ModelForm):
             "mandarin",
             "standard_ipa",
             "standard_pinyin",
+            "tags",
         )
 
 

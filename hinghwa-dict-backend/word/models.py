@@ -105,6 +105,7 @@ class Application(models.Model):
         verbose_name="相关帖子",
         blank=True,
     )
+    tags = models.TextField(verbose_name="标签", blank=True, default="[]")
 
     def granted(self):
         return self.verifier is not None

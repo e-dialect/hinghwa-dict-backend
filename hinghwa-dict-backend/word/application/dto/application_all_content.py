@@ -1,4 +1,6 @@
 # 用于application_all
+import json
+
 from ...models import Application
 
 
@@ -10,6 +12,7 @@ def application_all_content(application: Application) -> dict:
         {"id": article.id, "title": article.title}
         for article in application.related_articles.all()
     ]
+    tags_list = json.loads(application.tags.replace("'", '"'))
     response = {
         "word": application.content_word,
         "definition": application.definition,
@@ -19,5 +22,6 @@ def application_all_content(application: Application) -> dict:
         "related_articles": related_articles,
         "standard_ipa": application.standard_ipa,
         "standard_pinyin": application.standard_pinyin,
+        "tags": tags_list,
     }
     return response
