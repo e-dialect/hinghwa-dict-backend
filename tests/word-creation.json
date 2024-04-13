@@ -4,7 +4,7 @@
     {
       "item": [
         {
-          "id": "37063468-0451-40c7-8031-0c0591bf31d8",
+          "id": "86495a5b-3928-4204-9a57-2e54bbd2aa2a",
           "name": "LG0101 账号密码登录 (登录用户admin)",
           "request": {
             "url": {
@@ -184,7 +184,7 @@
           }
         },
         {
-          "id": "08795d61-071f-45f2-b36c-9ea24d2890dc",
+          "id": "4f10163a-3ba4-4d60-a1a2-74ddb76b042b",
           "name": "WD0401 申请更新 (WD0401 申请更新)",
           "request": {
             "url": {
@@ -221,7 +221,7 @@
             "baseUrl": "http://127.0.0.1:8000",
             "body": {
               "mode": "raw",
-              "raw": "{\n    \"content\": {\n        \"word\": \"果\",\n        \"definition\": \"写往个出手术心队面商参极任。叫定现头看无精置安性千市多六。清般究领保层战器金养济交华。\",\n        \"annotation\": \"确家事具中非多约面观南格治府节。备张厂层组事真儿五却接报些那产须。事白利合构要学手运且农着广统适温条。形住布她再少战须儿至收更支年气划它电。是响必养军厂县交置间着价百该传满音响。\",\n        \"mandarin\": [\n            \"照\"\n        ],\n        \"related_words\": [\n           \n        ],\n        \"related_articles\": [\n           \n        ],\n        \"visibility\": false,\n        \"standard_ipa\": \"tempor\",\n        \"standard_pinyin\": \"sed amet in exercitation\",\n        \"tags\": \"置\"\n    },\n    \"word\": 0,\n    \"reason\": \"velit ipsum quis\"\n}",
+              "raw": "{\n    \"content\": {\n        \"word\": \"候\",\n        \"definition\": \"团路行达千观可口术低从适团华什低油。海在技以方进争开离了月往治品许是查。压细最车方会量者最比算至这制。好必花认已强容或化应联办查。原叫身十难历回无实什出十术。且完边能准研派干战别增家里了状年听段。元领火信任认四单实才常元理声走电。\",\n        \"annotation\": \"要常达装子制土例以然林清后很家六。必离影收不达六争江十日确断规出素。验只特我当形连之果维务才第越党。也知林间十手学标次之什观又全务会应七。层每值路很型万间斗示权感气清只门工。\",\n        \"mandarin\": [\n            \"报\"\n        ],\n        \"related_words\": [\n        \n        ],\n        \"related_articles\": [\n            \n        ],\n        \"visibility\": true,\n        \"standard_ipa\": \"proident consectetur Duis\",\n        \"standard_pinyin\": \"ut sed consequat\",\n        \"tags\": [\n            \"in dolore ex\"\n        ]\n    },\n    \"word\": 0,\n    \"reason\": \"consectetur incididunt dolor adipisicing\"\n}",
               "generateMode": "normal",
               "type": "application/json"
             },
@@ -339,7 +339,7 @@
           }
         },
         {
-          "id": "39db880b-6e4e-4e2c-998b-d75dabb81739",
+          "id": "2fe45714-d9e0-452a-a2d7-d960539691d4",
           "name": "WD0402 查看单个申请内容 (WD0402 查看单个申请内容)",
           "request": {
             "url": {
@@ -413,6 +413,7 @@
             "updatedAt": "2022-07-17T02:47:41.000Z",
             "deletedAt": null,
             "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -664,7 +665,7 @@
           }
         },
         {
-          "id": "f9bc89e7-3f6f-4bec-aacb-e6d66cf55286",
+          "id": "c886c4d2-4cd6-48fa-9605-47c1ca420666",
           "name": "WD0403 查看多个申请 (WD0403 查看多个申请)",
           "request": {
             "url": {
@@ -729,6 +730,7 @@
             "updatedAt": "2022-03-10T10:04:45.000Z",
             "deletedAt": null,
             "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {
               "1077996": {
                 "type": "object",
@@ -893,8 +895,7 @@
                   "mandarin",
                   "tags"
                 ],
-                "title": "application_simple_content",
-                "name": "application_simple_content"
+                "title": "application_simple_content"
               }
             }
           },
@@ -923,7 +924,7 @@
           }
         },
         {
-          "id": "22a58cfc-45bf-4871-abd5-627b72d0e830",
+          "id": "6a55d147-d233-4293-ac94-72b41243a77f",
           "name": "WD0404 审核申请 (WD0404 审核申请)",
           "request": {
             "url": {
@@ -1054,6 +1055,7 @@
             "updatedAt": "2022-04-22T03:53:00.000Z",
             "deletedAt": null,
             "folderId": 0,
+            "responseExamples": [],
             "schemaDefinitions": {}
           },
           "requestDefinition": {
@@ -1097,7 +1099,7 @@
           }
         },
         {
-          "id": "a2888c59-aef8-45be-be55-6c76a7d15c44",
+          "id": "51c59b98-7b28-47eb-a3d4-9e682a4bf9f4",
           "name": "WD0101 获取字词的内容 (WD0101 获取字词的内容)",
           "request": {
             "url": {
@@ -1837,8 +1839,7 @@
         "mandarin",
         "tags"
       ],
-      "title": "application_simple_content",
-      "name": "application_simple_content"
+      "title": "application_simple_content"
     },
     "7392060": {
       "type": "object",
@@ -2044,7 +2045,7 @@
       "default": "http://127.0.0.1:8000"
     },
     "variable": {
-      "id": "fff740ea-9baa-4849-81bc-9ffb63689eed",
+      "id": "6866887b-3266-4d55-9810-2d2319bcd70f",
       "name": "测试环境",
       "values": [
         {
@@ -2152,7 +2153,7 @@
     "baseUrl": "",
     "baseUrls": {},
     "variable": {
-      "id": "f5b23e66-9c5d-45e6-914d-786f85704ede",
+      "id": "24f25c76-3683-429d-87e5-27e1741de6e6",
       "values": []
     },
     "parameter": {
