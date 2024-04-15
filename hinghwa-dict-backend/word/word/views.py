@@ -36,6 +36,10 @@ def searchWords(request):
             words = Word.objects.filter(visibility=True)
             if "contributor" in request.GET:
                 words = words.filter(contributor=request.GET["contributor"])
+            if "tags" in request.GET:
+                query = request.GET["tags"]
+                query = re.findall(r"[\u4e00-\u9fa5]+", query)
+                words = words.filter(tags__icontains=query)
             if "search" in request.GET:
                 result = []
                 key = request.GET["search"].replace(" ", "")
@@ -232,7 +236,7 @@ def load_word(request):
                     print("load character {}".format(word.id))
             else:
                 raise Exception("add fail in {}".format(dic))
-        PhoneticOrdering.sign = True  #   词语批量上传，音序表需要重建
+        PhoneticOrdering.sign = True  # 词语批量上传，音序表需要重建
         return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)

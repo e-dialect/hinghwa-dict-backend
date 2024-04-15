@@ -14,6 +14,7 @@ class WordForm(forms.ModelForm):
             "visibility",
             "standard_ipa",
             "standard_pinyin",
+            "tags",
         )
 
 
@@ -51,6 +52,7 @@ class ApplicationForm(forms.ModelForm):
             "mandarin",
             "standard_ipa",
             "standard_pinyin",
+            "tags",
         )
 
 

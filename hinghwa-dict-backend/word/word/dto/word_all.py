@@ -1,7 +1,9 @@
 # 可用于WD0101 WD0201
-from ...models import Word
+import json
+
 from user.dto.user_simple import user_simple
 from word.word.views import word2pronunciation
+from ...models import Word
 
 
 def word_all(word: Word) -> dict:
@@ -14,6 +16,7 @@ def word_all(word: Word) -> dict:
     ]
     user = word.contributor
     source = word2pronunciation(word)
+    tags_list = json.loads(word.tags.replace("'", '"'))
     response = {
         "id": word.id,
         "word": word.word,
@@ -27,5 +30,6 @@ def word_all(word: Word) -> dict:
         "related_articles": related_articles,
         "views": word.views,
         "source": source,
+        "tags": tags_list,
     }
     return response
