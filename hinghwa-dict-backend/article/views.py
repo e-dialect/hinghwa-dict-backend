@@ -131,9 +131,9 @@ class ManageArticle(View):
                 me = {"liked": False, "is_author": False}
                 return JsonResponse({"article": article, "me": me}, status=200)
         if (
-            not article.visibility
-            and not user.is_superuser
-            and not user == article.author
+                not article.visibility
+                and not user.is_superuser
+                and not user == article.author
         ):
             raise ArticleNotFoundException()
         article.views += 1
@@ -254,11 +254,19 @@ class CommentArticle(View):
 
         article = Article.objects.filter(id=id)
         if not article.exists() or not (
-            article[0].visibility or user.is_superuser or user == article[0].author
+                article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
         article = article[0]
-        comments = [comment_normal(comment) for comment in article.comments.all()]
+        comments = []
+        for comment in article.comments.all():
+            me = {"like": comment.like_users.filter(id=user.id).exists()}
+            comments.append(
+                {
+                    "comment": comment_all(comment),
+                    "me": me,
+                }
+            )
         return JsonResponse({"comments": comments}, status=200)
 
     # AT0401 发表文章评论
@@ -267,7 +275,7 @@ class CommentArticle(View):
         user = token_user(token)
         article = Article.objects.filter(id=id)
         if not article.exists() or not (
-            article[0].visibility or user.is_superuser or user == article[0].author
+                article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
         article = article[0]
@@ -289,13 +297,13 @@ class CommentArticle(View):
         user = token_user(token)
         article = Article.objects.filter(id=id)
         if not article.exists() or not (
-            article[0].visibility or user.is_superuser or user == article[0].author
+                article[0].visibility or user.is_superuser or user == article[0].author
         ):
             raise ArticleNotFoundException()
         body = demjson3.decode(request.body)
         comment = Comment.objects.get(id=body["id"])
         if token_pass(request.headers, comment.user.id) or token_pass(
-            request.headers, -1
+                request.headers, -1
         ):
             # 应原注释要求，超级管理员也能删
             comment.delete()
