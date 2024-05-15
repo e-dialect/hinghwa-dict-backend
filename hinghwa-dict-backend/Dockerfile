@@ -1,4 +1,4 @@
-FROM python:3.8.11
+FROM python:3.10
 
 WORKDIR /usr/src/HinghwaDict-backend
 
