@@ -157,7 +157,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 APPEND_SLASH = False
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:*",
     "https://api.pxm.edialect.top:*",
@@ -188,6 +187,15 @@ CORS_ALLOW_HEADERS = (
     "x-token",
     "token",
 )
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:*",
+    "https://api.pxm.edialect.top",
+    "https://api.pxm.test.edialect.top",
+    "https://pxm.edialect.top:*",
+    "https://localhost:*",
+]
+
 # parameter of Tencent cos
 COS_SECRET_ID = env.str(
     "COS_SECRET_ID", "DEFAULT_COS_SECRET_ID"
