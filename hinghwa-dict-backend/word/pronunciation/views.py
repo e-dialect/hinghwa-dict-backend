@@ -366,6 +366,7 @@ class ManageApproval(View):
         pronunciation.save()
         pro = f"语音(id={id})"
         contributor = pronunciation.contributor
+        transaction = None
         if result:
             content = f"恭喜您，您的语音{pro}审核通过"
             transaction = manage_points_in_pronunciation(contributor.id)
@@ -378,7 +379,7 @@ class ManageApproval(View):
             action_object=pronunciation,
             title=f"【通知】语音（{pronunciation.word.word}）审核结果",
         )
-        return JsonResponse(transaction, status=200)
+        return JsonResponse(transaction if transaction else {}, status=200)
 
     # PN0105 更改审核结果
     def put(self, request, id):
