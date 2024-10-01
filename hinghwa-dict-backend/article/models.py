@@ -4,7 +4,10 @@ from django.db import models
 
 class Article(models.Model):
     author = models.ForeignKey(
-        User, on_delete=models.CASCADE, related_name="articles", verbose_name="作者"
+        User,
+        on_delete=models.CASCADE,
+        related_name="articles",
+        verbose_name="作者"
     )
     views = models.IntegerField(default=0, verbose_name="阅读量", editable=False)
     like_users = models.ManyToManyField(

@@ -19,7 +19,7 @@ from utils.token import get_request_user, token_pass, token_user
 from user.dto.user_simple import user_simple
 from utils.exception.types.bad_request import (
     BadRequestException,
-    PronunciationRankWithoutDays,
+    RankWithoutDays,
     InvalidPronunciation,
 )
 from utils.exception.types.not_found import (
@@ -55,7 +55,7 @@ class SearchPronunciations(View):
     # PN0201 发音的批量获取
     def get(self, request) -> JsonResponse:
         if ("token" in request.headers) and token_check(
-            request.headers["token"], settings.JWT_KEY, -1
+                request.headers["token"], settings.JWT_KEY, -1
         ):
             pronunciations = Pronunciation.objects.all()
         else:
@@ -155,7 +155,7 @@ def combinePronunciation(request, ipa):
                 os.makedirs(dir)
             time = timezone.now().__format__("%Y_%m_%d")
             filename = (
-                time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
+                    time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
             )
             path = os.path.join(dir, filename)
             result = MergeAudio(results, path)
@@ -277,7 +277,7 @@ def combinePronunciationV2(request):
                 os.makedirs(dir)
             time = timezone.now().__format__("%Y_%m_%d")
             filename = (
-                time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
+                    time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
             )
             path = os.path.join(dir, filename)
             result = MergeAudio(results, path)
@@ -498,7 +498,7 @@ class PronunciationRanking(View):
         page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
         pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
         if not days:
-            raise PronunciationRankWithoutDays()
+            raise RankWithoutDays()
         days = int(days)
         try:
             token = token_pass(request.headers)
