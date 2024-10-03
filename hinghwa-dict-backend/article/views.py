@@ -452,8 +452,7 @@ class ArticleRanking(View):
             # 查询发布时间在规定开始时间之后的
             result = (
                 Article.objects.filter(
-                    Q(publish_time__gt=start_date)
-                    & Q(visibility=True)
+                    Q(publish_time__gt=start_date) & Q(visibility=True)
                 )
                 .values("author_id")
                 .annotate(

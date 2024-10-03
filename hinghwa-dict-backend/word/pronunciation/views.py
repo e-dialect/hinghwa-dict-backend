@@ -55,7 +55,7 @@ class SearchPronunciations(View):
     # PN0201 发音的批量获取
     def get(self, request) -> JsonResponse:
         if ("token" in request.headers) and token_check(
-                request.headers["token"], settings.JWT_KEY, -1
+            request.headers["token"], settings.JWT_KEY, -1
         ):
             pronunciations = Pronunciation.objects.all()
         else:
@@ -155,7 +155,7 @@ def combinePronunciation(request, ipa):
                 os.makedirs(dir)
             time = timezone.now().__format__("%Y_%m_%d")
             filename = (
-                    time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
+                time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
             )
             path = os.path.join(dir, filename)
             result = MergeAudio(results, path)
@@ -277,7 +277,7 @@ def combinePronunciationV2(request):
                 os.makedirs(dir)
             time = timezone.now().__format__("%Y_%m_%d")
             filename = (
-                    time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
+                time + "_" + ("".join([item["pinyin"] for item in results])) + ".mp3"
             )
             path = os.path.join(dir, filename)
             result = MergeAudio(results, path)
