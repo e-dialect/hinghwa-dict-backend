@@ -1,0 +1,297 @@
+{
+  "apifoxCli": "1.1.0",
+  "item": [
+    {
+      "item": [
+        {
+          "id": "e9dbe642-1c2b-4d55-be47-8da1086b9cf4",
+          "name": "AT0203 文章上传榜单",
+          "request": {
+            "url": {
+              "protocol": "http",
+              "port": "8000",
+              "path": [
+                "articles",
+                "ranking"
+              ],
+              "host": [
+                "127",
+                "0",
+                "0",
+                "1"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "days",
+                  "value": ""
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "disabled": false,
+                  "key": "pagesize",
+                  "value": "10"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "token",
+                "value": "{{token}}"
+              },
+              {
+                "key": "User-Agent",
+                "value": "Apifox/1.0.0 (https://apifox.com)"
+              }
+            ],
+            "method": "GET",
+            "baseUrl": "http://127.0.0.1:8000",
+            "body": {},
+            "auth": {
+              "type": "noauth",
+              "noauth": []
+            },
+            "type": "http"
+          },
+          "response": [],
+          "event": [],
+          "responseDefinition": {
+            "id": 539399074,
+            "name": "没有发送天数",
+            "code": 400,
+            "contentType": "json",
+            "jsonSchema": {
+              "type": "object",
+              "properties": {}
+            },
+            "defaultEnable": true,
+            "ordering": 2,
+            "description": "",
+            "mediaType": "",
+            "headers": [],
+            "schemaDefinitions": {}
+          },
+          "requestDefinition": {
+            "jsonSchema": {}
+          },
+          "overrideRequesterOptions": {
+            "strictSSL": false,
+            "followRedirects": false
+          },
+          "metaInfo": {
+            "httpApiId": 220125505,
+            "httpApiCaseId": 200386435,
+            "httpApiName": "AT0203 文章上传榜单",
+            "httpApiPath": "/articles/ranking",
+            "httpApiMethod": "get",
+            "httpApiCaseName": "AT0203 文章上传榜单",
+            "id": "e9dbe642-1c2b-4d55-be47-8da1086b9cf4",
+            "type": "http",
+            "name": "AT0203 文章上传榜单",
+            "relatedId": 5179481,
+            "blockId": "e9dbe642-1c2b-4d55-be47-8da1086b9cf4"
+          },
+          "type": "http",
+          "protocolProfileBehavior": {
+            "useWhatWGUrlParser": false,
+            "disableUrlEncoding": false,
+            "disabledSystemHeaders": {},
+            "disableCookies": false
+          }
+        }
+      ],
+      "name": "文章上传榜单 AT0203-400 未传天数"
+    }
+  ],
+  "info": {
+    "name": "文章上传榜单 AT0203-400 未传天数"
+  },
+  "dataSchemas": {},
+  "mockRules": {
+    "rules": [],
+    "enableSystemRule": true
+  },
+  "environment": {
+    "id": 510825,
+    "name": "测试环境",
+    "baseUrl": "http://127.0.0.1:8000",
+    "baseUrls": {
+      "default": "http://127.0.0.1:8000"
+    },
+    "variable": {
+      "id": "572b4526-4bab-463a-aeb2-7ae9103d6963",
+      "name": "测试环境",
+      "values": [
+        {
+          "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6ImFkbWluIiwiaWQiOjEsImV4cCI6MTcyODM5ODk0Ny40MTU2NjV9.4c5CVN-LWxpREsVtGTqvwdt4gbFyITZDPfDPt4sE8O8",
+          "key": "token",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "16",
+          "key": "quiz_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_2",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_1",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VybmFtZSI6InVzZXJfdGVzdCIsImlkIjoyLCJleHAiOjE3MjgzOTg5NDguMTc2MTQ3fQ.ecCkA9W42cgfh7D1fGi4wU9ys8cGXO6UNf_SZ5nkgNM",
+          "key": "token_2",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "word_id_3",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "3",
+          "key": "user_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "10",
+          "key": "article_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_1",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "comment_id_2",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_2",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "num_pre",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "num_later",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "",
+          "key": "like_num_1",
+          "isBindInitial": true,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "SJ000006",
+          "key": "paper_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "DJ000002",
+          "key": "paper_record_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "undefined",
+          "key": "quiz_record_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "3",
+          "key": "word_id",
+          "isBindInitial": false,
+          "initialValue": ""
+        },
+        {
+          "type": "any",
+          "value": "2",
+          "key": "user_id_2",
+          "isBindInitial": false,
+          "initialValue": ""
+        }
+      ]
+    },
+    "type": "normal",
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "globals": {
+    "baseUrl": "",
+    "baseUrls": {},
+    "variable": {
+      "id": "e941a7f7-b2f4-44ff-9c68-33172417a3c0",
+      "values": []
+    },
+    "parameter": {
+      "header": [],
+      "query": [],
+      "body": [],
+      "cookie": []
+    }
+  },
+  "isServerBuild": false,
+  "isTestFlowControl": false,
+  "projectOptions": {
+    "enableJsonc": false,
+    "enableBigint": false,
+    "responseValidate": true,
+    "isDefaultUrlEncoding": 2,
+    "enableTestScenarioSetting": false,
+    "enableYAPICompatScript": false
+  }
+}

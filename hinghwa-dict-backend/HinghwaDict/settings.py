@@ -318,6 +318,11 @@ CACHES = {
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "pronunciation_ranking_cache_table",
     },
+    "article_ranking": {
+        "TIMEOUT": 900,
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "article_ranking_cache_table",
+    },
 }
 SIMPLEUI_LOGO = "https://hinghwa.cn/img/blue.7169aa26.svg"
 SIMPLEUI_HOME_INFO = False

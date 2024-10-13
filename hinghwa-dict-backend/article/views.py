@@ -1,4 +1,5 @@
 import demjson3
+import datetime
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
@@ -11,9 +12,12 @@ from website.views import (
     sendNotification,
 )
 from .forms import ArticleForm, CommentForm
+from django.db.models import Q, Count, Max
+from user.dto.user_simple import user_simple
 from .models import Article, Comment
 from django.conf import settings
 from .dto.article_all import article_all
+from django.core.cache import caches
 from .dto.article_normal import article_normal
 from .dto.comment_normal import comment_normal
 from .dto.comment_likes import comment_likes
@@ -22,7 +26,9 @@ from django.views import View
 from utils.exception.types.bad_request import (
     BadRequestException,
     ReturnUsersNumException,
+    RankWithoutDays,
 )
+from django.core.paginator import Paginator
 from utils.exception.types.not_found import (
     ArticleNotFoundException,
     CommentNotFoundException,
@@ -78,7 +84,7 @@ class SearchArticle(View):
         article.update_time = timezone.now()
         article.author = user
         article.save()
-        content = f"我创建了文章(id={article.id}),请及时去审核"
+        content = f"我创建了文章(id={article.id}),请及时审核"
         sendNotification(
             article.author,
             None,
@@ -372,3 +378,106 @@ class LikeComment(View):
                 raise ReturnUsersNumException()
             return int(request.GET["return_users_num"])
         return None
+
+
+class ArticleRanking(View):
+    # AT0203 文章上传榜单
+    def get(self, request) -> JsonResponse:
+        days = request.GET["days"]  # 要多少天的榜单
+        page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
+        pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
+        if not days:
+            raise RankWithoutDays()
+        days = int(days)
+        try:
+            token = token_pass(request.headers)
+            user: User = token_user(token)
+            my_id = user.id
+        except:
+            my_id = 0
+        my_amount = 0
+        my_rank = 0
+        rank_count = 0
+        result_json_list = []
+        paginator = Pages(self.get_rank_queries(days), pagesize)
+        current_page = paginator.get_page(page)
+        adjacent_pages = list(
+            paginator.get_adjacent_pages(current_page, adjancent_pages=3)
+        )
+
+        for rank_q in self.get_rank_queries(days):
+            con_id = rank_q["author_id"]
+            amount = rank_q["article_count"]
+            rank_count = rank_count + 1
+            if con_id == my_id:
+                my_amount = amount
+                my_rank = rank_count
+            result_json_list.append(
+                {
+                    "author": user_simple(User.objects.filter(id=con_id)[0]),
+                    "amount": amount,
+                }
+            )
+        # 发送给前端
+        return JsonResponse(
+            {
+                "ranking": result_json_list,
+                "me": {"amount": my_amount, "rank": my_rank},
+                "pagination": {
+                    "total_pages": paginator.num_pages,
+                    "current_page": current_page.number,
+                    "page_size": pagesize,
+                    "previous_page": current_page.has_previous(),
+                    "next_page": current_page.has_next(),
+                    "adjacent_pages": adjacent_pages,
+                },
+            },
+            status=200,
+        )
+
+    @classmethod
+    def get_rank_queries(cls, days):
+        rank_cache = caches["article_ranking"]
+        rank_queries = rank_cache.get(str(days))
+        if rank_queries is None:
+            # 发现缓存中没有要查询的天数的榜单，更新榜单，并把更新的表格录入到数据库缓存中article_ranking表的对应位置
+            rank_queries = cls.update_rank(days)
+            rank_cache.set(str(days), rank_queries)
+        return rank_queries
+
+    @classmethod
+    def update_rank(cls, search_days):  # 不包括存储在数据库中
+        if search_days != 0:
+            start_date = timezone.now() - datetime.timedelta(days=search_days)
+            # 查询发布时间在规定开始时间之后的
+            result = (
+                Article.objects.filter(
+                    Q(publish_time__gt=start_date) & Q(visibility=True)
+                )
+                .values("author_id")
+                .annotate(
+                    article_count=Count("author_id"),
+                    last_date=Max("publish_time"),
+                )
+                .order_by("-article_count", "-last_date")
+            )
+        else:
+            result = (
+                Article.objects.filter(visibility=True)
+                .values("author_id")
+                .annotate(
+                    article_count=Count("author_id"),
+                    last_date=Max("publish_time"),
+                )
+                .order_by("-article_count", "-last_date")
+            )
+        return result  # 返回的是Queries
+
+
+class Pages(Paginator):
+    # 对原有的Paginator类进行扩展，获取当前页的相邻页面
+    def get_adjacent_pages(self, current_page, adjancent_pages=3):
+        current_page = current_page.number
+        start_page = max(current_page - adjancent_pages, 1)  # 前面的页码数
+        end_page = min(current_page + adjancent_pages, self.num_pages)  # 后面的页码数
+        return range(start_page, end_page + 1)

@@ -19,7 +19,7 @@ from utils.token import get_request_user, token_pass, token_user
 from user.dto.user_simple import user_simple
 from utils.exception.types.bad_request import (
     BadRequestException,
-    PronunciationRankWithoutDays,
+    RankWithoutDays,
     InvalidPronunciation,
 )
 from utils.exception.types.not_found import (
@@ -498,7 +498,7 @@ class PronunciationRanking(View):
         page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
         pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
         if not days:
-            raise PronunciationRankWithoutDays()
+            raise RankWithoutDays()
         days = int(days)
         try:
             token = token_pass(request.headers)
