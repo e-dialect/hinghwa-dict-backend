@@ -49,7 +49,6 @@ class QuizRecordAll(View):
         record.quiz = quiz
         record.contributor = contributor
         record.timestamp = timezone.now()
-        print("test")
         record.save()
         return JsonResponse(quiz_record(record), status=200)
 

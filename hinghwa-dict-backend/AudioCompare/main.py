@@ -49,7 +49,6 @@ def audio_matcher(args: Arg):
             if filename not in a:
                 a[filename] = []
             a[filename].append((os.path.split(match.file2)[-1], match.score))
-            # print(match)
     for file1 in a.keys():
         a[file1].sort(key=lambda x: x[1], reverse=True)
         ans[file1] = a[file1][0][0] if a[file1][0][1] > 0 else None

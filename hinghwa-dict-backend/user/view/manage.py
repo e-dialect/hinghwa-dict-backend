@@ -95,9 +95,6 @@ class Manage(View):
         user = get_user_by_id(id)
         body = demjson3.decode(request.body)
         info = body["user"]
-        print(info)
-        print(info["town"])
-        print(info["county"])
         user_info_form = UserInfoForm(info)
         if not user_info_form.is_valid:
             raise ValueError

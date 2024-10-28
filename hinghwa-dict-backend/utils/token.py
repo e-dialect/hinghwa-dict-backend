@@ -101,7 +101,6 @@ def get_request_user(request: request) -> User:
             return AnonymousUser()
         # get user
         user = User.objects.get(id=info["id"])
-        print(user.username)
         # exam username
         if user.username != info["username"]:
             return AnonymousUser()

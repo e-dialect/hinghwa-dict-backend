@@ -341,7 +341,6 @@ class Matcher(object):
             else:
                 with open(os.path.join(os.getcwd(), "submit结果存储.pkl"), "rb") as f:
                     dir2_results = pickle.load(f)
-                print(len(dir2_results))
             # Wait for pool to finish processing
             # pool.close()
             # pool.join()

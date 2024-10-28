@@ -795,7 +795,6 @@ def test(request):
                     if ipa not in dic:
                         dic[ipa] = []
                     dic[ipa].append(music[start:end])
-                print(line[0])
         sum = 0
         for i in dic.values():
             sum += len(i)
@@ -805,7 +804,6 @@ def test(request):
             for i, music in zip(range(1, len(musics)), musics[1:]):
                 path = os.path.join(result, ipa + f"-{i}.mp3")
                 music.export(path, format="mp3")
-            print(idx)
         return JsonResponse({}, status=200)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
