@@ -2,6 +2,7 @@
 import math
 import os
 import random
+import time
 
 import demjson3
 import jwt
@@ -483,6 +484,17 @@ def openUrl(request, type, id, Y, M, D, X):
 
 import shutil
 
+
+class HinghwaBackgroundScheduler(BackgroundScheduler):
+    def _process_jobs(self):
+        while True:
+            try:
+                return super()._process_jobs()
+            except Exception as e:
+                print(f"Error processing jobs: {e}")
+                time.sleep(5)
+
+
 try:
 
     def random_word_of_the_day():
@@ -497,12 +509,11 @@ try:
         print("remove the audio buffer in public files")
 
     def register(fun, id, replace_existing):
-        scheduler = BackgroundScheduler()
+        scheduler = HinghwaBackgroundScheduler(timezone=settings.TIME_ZONE)
         scheduler.add_jobstore(DjangoJobStore(), "default")
         register_job(
             scheduler, "cron", id=id, hour=0, replace_existing=replace_existing
         )(fun)
-        register_events(scheduler)
         scheduler.start()
 
     try:
