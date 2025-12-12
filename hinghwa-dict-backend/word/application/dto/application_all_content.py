@@ -14,11 +14,10 @@ def application_all_content(application: Application) -> dict:
     ]
     # Handle empty or malformed tags field
     try:
-        tags_str = application.tags.strip() if application.tags else "[]"
-        if not tags_str:
+        if not application.tags or not application.tags.strip():
             tags_list = []
         else:
-            tags_list = json.loads(tags_str.replace("'", '"'))
+            tags_list = json.loads(application.tags.replace("'", '"'))
     except (json.JSONDecodeError, ValueError):
         tags_list = []
 
