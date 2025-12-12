@@ -5,7 +5,16 @@ from ...models import Application
 
 
 def application_simple_content(application: Application) -> dict:
-    tags_list = json.loads(application.tags.replace("'", '"'))
+    # Handle empty or malformed tags field
+    try:
+        tags_str = application.tags.strip() if application.tags else "[]"
+        if not tags_str or tags_str == "":
+            tags_list = []
+        else:
+            tags_list = json.loads(tags_str.replace("'", '"'))
+    except (json.JSONDecodeError, ValueError):
+        tags_list = []
+
     response = {
         "word": application.content_word,
         "definition": application.definition,
