@@ -207,7 +207,8 @@ class PronunciationAdmin(admin.ModelAdmin):
         if "_approve" in request.POST:
             # Approve the pronunciation
             approval_reason = request.POST.get("approval_reason", "").strip()
-            if not obj.visibility or obj.verifier != request.user:
+            # Only send notification if state is actually changing
+            if not obj.visibility:
                 obj.visibility = True
                 obj.verifier = request.user
                 obj.save()
@@ -232,7 +233,8 @@ class PronunciationAdmin(admin.ModelAdmin):
         elif "_reject" in request.POST:
             # Reject the pronunciation
             approval_reason = request.POST.get("approval_reason", "").strip()
-            if obj.visibility or obj.verifier != request.user:
+            # Only send notification if state is actually changing
+            if obj.visibility:
                 obj.visibility = False
                 obj.verifier = request.user
                 obj.save()
@@ -404,12 +406,23 @@ class ApplicationAdmin(admin.ModelAdmin):
         if "_approve" in request.POST:
             # Approve the application
             approval_reason = request.POST.get("approval_reason", "").strip()
-            if not obj.verifier or obj.verifier != request.user:
+            # Only process if state is actually changing
+            if not obj.verifier:
                 obj.verifier = request.user
                 obj.save()
 
-                # Send notification with reason (if notification system is set up for Application)
-                # Currently Application doesn't have notification configured, but keeping the structure
+                # Send notification with reason
+                content = f"恭喜您的词条申请(id={obj.id}) 已审核通过"
+                if approval_reason:
+                    content += f"\n\n审核意见：{approval_reason}"
+                sendNotification(
+                    None,
+                    [obj.contributor],
+                    content=content,
+                    target=obj,
+                    title="【通知】词条申请审核结果",
+                )
+
                 self.message_user(
                     request, f"词条申请 {obj.id} 已审核通过", messages.SUCCESS
                 )
@@ -417,14 +430,24 @@ class ApplicationAdmin(admin.ModelAdmin):
 
         elif "_reject" in request.POST:
             # Reject the application
-            # Note: For Application, rejection is indicated by having verifier but no actual approval
-            # The system uses notifications to store rejection reasons
             approval_reason = request.POST.get("approval_reason", "").strip()
-            if not obj.verifier or obj.verifier != request.user:
+            # Only process if state is actually changing
+            if not obj.verifier:
                 obj.verifier = request.user
                 obj.save()
 
-                # Send notification with reason (if notification system is set up)
+                # Send notification with reason
+                content = f"很遗憾，您的词条申请(id={obj.id}) 未通过审核"
+                if approval_reason:
+                    content += f"\n\n审核意见：{approval_reason}"
+                sendNotification(
+                    None,
+                    [obj.contributor],
+                    content=content,
+                    target=obj,
+                    title="【通知】词条申请审核结果",
+                )
+
                 self.message_user(
                     request, f"词条申请 {obj.id} 审核不通过", messages.WARNING
                 )
@@ -455,9 +478,6 @@ class ApplicationAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(url)
         else:
             # No more pending, go back to list
-            url = reverse("admin:word_application_changelist")
-            self.message_user(request, "没有更多待审核的申请", messages.INFO)
-            return HttpResponseRedirect(url)
             url = reverse("admin:word_application_changelist")
             self.message_user(request, "没有更多待审核的申请", messages.INFO)
             return HttpResponseRedirect(url)

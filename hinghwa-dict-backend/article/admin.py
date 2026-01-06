@@ -151,18 +151,21 @@ class ArticleAdmin(admin.ModelAdmin):
             return redirect(reverse("admin:article_article_changelist"))
 
     def pass_visibility(self, request, queryset):
+        updated = 0
         for article in queryset:
+            was_visible = article.visibility
             article.visibility = True
             article.save()
-            # Send notification
-            sendNotification(
-                None,
-                [article.author],
-                content=f"恭喜您的文章(id={article.id}) 已通过审核",
-                action_object=article,
-                title="【通知】文章审核结果",
-            )
-        updated = len(queryset)
+            # Send notification only if the article was not previously visible
+            if not was_visible:
+                updated += 1
+                sendNotification(
+                    None,
+                    [article.author],
+                    content=f"恭喜您的文章(id={article.id}) 已通过审核",
+                    action_object=article,
+                    title="【通知】文章审核结果",
+                )
         self.message_user(
             request,
             ngettext(
@@ -177,18 +180,20 @@ class ArticleAdmin(admin.ModelAdmin):
     pass_visibility.short_description = "所选 文章 通过审核"
 
     def withdraw_visibility(self, request, queryset):
+        updated = 0
         for article in queryset:
-            article.visibility = False
-            article.save()
-            # Send notification
-            sendNotification(
-                None,
-                [article.author],
-                content=f"很遗憾，您的文章(id={article.id}) 未通过审核",
-                action_object=article,
-                title="【通知】文章审核结果",
-            )
-        updated = len(queryset)
+            if article.visibility:
+                article.visibility = False
+                article.save()
+                updated += 1
+                # Send notification
+                sendNotification(
+                    None,
+                    [article.author],
+                    content=f"很遗憾，您的文章(id={article.id}) 未通过审核",
+                    action_object=article,
+                    title="【通知】文章审核结果",
+                )
         self.message_user(
             request,
             ngettext(

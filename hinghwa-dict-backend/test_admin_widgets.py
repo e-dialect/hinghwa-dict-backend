@@ -10,10 +10,9 @@ import django
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HinghwaDict.settings')
 django.setup()
 
-from django import forms
-from article.admin import ArticleAdmin, ArticleAdminForm
-from music.admin import MusicAdmin, MusicAdminForm
-from word.admin import WordAdmin, WordAdminForm, PronunciationAdmin, PronunciationAdminForm, ApplicationAdmin, ApplicationAdminForm
+from article.admin import ArticleAdminForm
+from music.admin import MusicAdminForm
+from word.admin import WordAdminForm, PronunciationAdminForm, ApplicationAdminForm
 from utils.admin.widgets import MarkdownEditorWidget, AudioPlayerWidget
 
 def test_widget_configuration():
