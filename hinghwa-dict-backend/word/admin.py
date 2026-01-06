@@ -116,6 +116,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 class PronunciationAdmin(admin.ModelAdmin):
     form = PronunciationAdminForm
+    change_form_template = "admin/word/pronunciation/change_form.html"
     list_display = [
         "id",
         "word",
@@ -133,6 +134,83 @@ class PronunciationAdmin(admin.ModelAdmin):
     ordering = ["-id", "-views"]
     list_per_page = 50
     raw_id_fields = ("contributor", "word")
+
+    def response_change(self, request, obj):
+        """Handle custom approval buttons on the change form."""
+        if "_approve" in request.POST:
+            # Approve the pronunciation
+            if not obj.visibility:
+                obj.visibility = True
+                obj.verifier = request.user
+                obj.save()
+
+                # Send notification
+                content = f"恭喜您的语音(id={obj.id}) 已通过审核"
+                sendNotification(
+                    None,
+                    [obj.contributor],
+                    content=content,
+                    target=obj,
+                    title="【通知】语音审核结果",
+                )
+
+                self.message_user(
+                    request, f"语音 {obj.id} 已审核通过", messages.SUCCESS
+                )
+            return self._get_next_pronunciation_redirect(request, obj)
+
+        elif "_reject" in request.POST:
+            # Reject/withdraw approval
+            if obj.visibility:
+                obj.visibility = False
+                obj.verifier = None
+                obj.save()
+
+                # Send notification
+                content = f"很遗憾，您的语音(id={obj.id}) 审核已被撤销"
+                sendNotification(
+                    None,
+                    [obj.contributor],
+                    content=content,
+                    target=obj,
+                    title="【通知】语音审核结果",
+                )
+
+                self.message_user(
+                    request, f"语音 {obj.id} 审核已撤销", messages.WARNING
+                )
+            return self._get_next_pronunciation_redirect(request, obj)
+
+        return super().response_change(request, obj)
+
+    def _get_next_pronunciation_redirect(self, request, obj):
+        """Redirect to the next pending pronunciation for review."""
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+
+        # Try to find next pending pronunciation
+        next_pronunciation = (
+            Pronunciation.objects.filter(visibility=False, id__gt=obj.id)
+            .order_by("id")
+            .first()
+        )
+
+        if next_pronunciation:
+            # Redirect to next pending pronunciation
+            url = reverse(
+                "admin:word_pronunciation_change", args=[next_pronunciation.pk]
+            )
+            self.message_user(
+                request,
+                f"已跳转到下一个待审核语音 (ID: {next_pronunciation.id})",
+                messages.INFO,
+            )
+            return HttpResponseRedirect(url)
+        else:
+            # No more pending, go back to list
+            url = reverse("admin:word_pronunciation_changelist")
+            self.message_user(request, "没有更多待审核的语音", messages.INFO)
+            return HttpResponseRedirect(url)
 
     def pass_visibility(self, request, queryset):
         for pro in queryset:
@@ -206,6 +284,7 @@ class ApplicationAdminForm(forms.ModelForm):
 
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
+    change_form_template = "admin/word/application/change_form.html"
     list_display = ["id", "word", "reason", "contributor", "granted", "verifier"]
     list_filter = ["contributor", "verifier", "word"]
     search_fields = [
@@ -219,6 +298,59 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_per_page = 50
     filter_horizontal = ["related_words", "related_articles"]
     raw_id_fields = ("contributor", "verifier", "word")
+
+    def response_change(self, request, obj):
+        """Handle custom approval buttons on the change form."""
+        if "_approve" in request.POST:
+            # Approve the application
+            if not obj.verifier:
+                obj.verifier = request.user
+                obj.save()
+
+                self.message_user(
+                    request, f"词条申请 {obj.id} 已审核通过", messages.SUCCESS
+                )
+            return self._get_next_application_redirect(request, obj)
+
+        elif "_reject" in request.POST:
+            # Reject/withdraw approval
+            if obj.verifier:
+                obj.verifier = None
+                obj.save()
+
+                self.message_user(
+                    request, f"词条申请 {obj.id} 审核已撤销", messages.WARNING
+                )
+            return self._get_next_application_redirect(request, obj)
+
+        return super().response_change(request, obj)
+
+    def _get_next_application_redirect(self, request, obj):
+        """Redirect to the next pending application for review."""
+        from django.http import HttpResponseRedirect
+        from django.urls import reverse
+
+        # Try to find next pending application
+        next_application = (
+            Application.objects.filter(verifier__isnull=True, id__gt=obj.id)
+            .order_by("id")
+            .first()
+        )
+
+        if next_application:
+            # Redirect to next pending application
+            url = reverse("admin:word_application_change", args=[next_application.pk])
+            self.message_user(
+                request,
+                f"已跳转到下一个待审核申请 (ID: {next_application.id})",
+                messages.INFO,
+            )
+            return HttpResponseRedirect(url)
+        else:
+            # No more pending, go back to list
+            url = reverse("admin:word_application_changelist")
+            self.message_user(request, "没有更多待审核的申请", messages.INFO)
+            return HttpResponseRedirect(url)
 
 
 class WordsInlineAdmin(admin.TabularInline):
