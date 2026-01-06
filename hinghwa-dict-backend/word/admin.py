@@ -129,11 +129,37 @@ class PronunciationAdmin(admin.ModelAdmin):
         "granted",
         "verifier",
     ]
-    list_filter = ["contributor", "visibility", "county"]
+    list_filter = ["contributor", "visibility", "county", "verifier"]
     search_fields = ["word__word", "contributor__username", "pinyin", "id", "ipa"]
     ordering = ["-id", "-views"]
     list_per_page = 50
     raw_id_fields = ("contributor", "word")
+
+    def get_approval_notifications(self, obj):
+        """Get approval-related notifications for this pronunciation."""
+        from notifications.models import Notification
+        from django.contrib.contenttypes.models import ContentType
+
+        ct = ContentType.objects.get_for_model(obj)
+        notifications = Notification.objects.filter(
+            target_content_type=ct, target_object_id=obj.id, verb__icontains="审核"
+        ).order_by("-timestamp")
+
+        return notifications
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        """Add approval notifications to the context."""
+        extra_context = extra_context or {}
+
+        if object_id:
+            from word.models import Pronunciation
+
+            obj = Pronunciation.objects.get(pk=object_id)
+            extra_context["approval_notifications"] = self.get_approval_notifications(
+                obj
+            )
+
+        return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
         """Handle custom approval buttons on the change form."""
@@ -304,6 +330,32 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_per_page = 50
     filter_horizontal = ["related_words", "related_articles"]
     raw_id_fields = ("contributor", "verifier", "word")
+
+    def get_approval_notifications(self, obj):
+        """Get approval-related notifications for this application."""
+        from notifications.models import Notification
+        from django.contrib.contenttypes.models import ContentType
+
+        ct = ContentType.objects.get_for_model(obj)
+        notifications = Notification.objects.filter(
+            target_content_type=ct, target_object_id=obj.id, verb__icontains="审核"
+        ).order_by("-timestamp")
+
+        return notifications
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        """Add approval notifications to the context."""
+        extra_context = extra_context or {}
+
+        if object_id:
+            from word.models import Application
+
+            obj = Application.objects.get(pk=object_id)
+            extra_context["approval_notifications"] = self.get_approval_notifications(
+                obj
+            )
+
+        return super().change_view(request, object_id, form_url, extra_context)
 
     def response_change(self, request, obj):
         """Handle custom approval buttons on the change form."""

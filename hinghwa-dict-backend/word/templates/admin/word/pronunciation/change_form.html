@@ -18,6 +18,21 @@
             {% endif %}
         </p>
         
+        {% if approval_notifications %}
+        <div style="clear: both; padding: 10px 0; margin-bottom: 10px; border: 1px solid #ddd; border-radius: 4px; background: #f9f9f9;">
+            <div style="padding: 10px;">
+                <strong>审核历史记录：</strong>
+                {% for notif in approval_notifications %}
+                <div style="margin: 10px 0; padding: 10px; background: white; border-left: 3px solid {% if '通过' in notif.description %}#4CAF50{% else %}#f44336{% endif %};">
+                    <div style="font-size: 12px; color: #666;">{{ notif.timestamp|date:"Y-m-d H:i:s" }}</div>
+                    <div style="font-weight: bold; margin-top: 5px;">{{ notif.verb }}</div>
+                    <div style="margin-top: 5px; white-space: pre-wrap;">{{ notif.description }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        
         <div style="clear: both; padding: 10px 0;">
             <label for="approval_reason" style="display: block; margin-bottom: 5px;"><strong>审核理由：</strong></label>
             <textarea name="approval_reason" id="approval_reason" rows="3" style="width: 100%; max-width: 600px; padding: 5px;" placeholder="请输入审核通过或不通过的理由（可选）"></textarea>
