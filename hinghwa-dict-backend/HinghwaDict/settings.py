@@ -207,8 +207,15 @@ COS_BUCKET = env.str("COS_BUCKET", "DEFAULT_COS_BUCKET")  # BucketName-APPID
 COS_REGION = env.str("COS_REGION", "DEFAULT_COS_REGION")
 
 # parameter of wechat login
+# 小程序 AppID and Secret
 APP_ID = env.str("APP_ID", "DEFAULT_APP_ID")
 APP_SECRECT = env.str("APP_SECRECT", "DEFAULT_APP_SECRECT")
+
+# 网页版微信 OAuth AppID and Secret (如果与小程序相同，可不配置)
+WEB_APP_ID = env.str("WEB_APP_ID", env.str("APP_ID", "DEFAULT_APP_ID"))
+WEB_APP_SECRET = env.str(
+    "WEB_APP_SECRET", env.str("APP_SECRECT", "DEFAULT_APP_SECRECT")
+)
 
 # parameter of jwt
 JWT_KEY = env.str("JWT_KEY", "DEFAULT_JWT_KEY")
