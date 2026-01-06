@@ -305,7 +305,7 @@ class ManagePronunciation(View):
         # Add approval history for admin users
         if "token" in request.headers:
             user = token_check(request.headers["token"], settings.JWT_KEY, -1)
-            if user:
+            if user and user.is_superuser:
                 # User is admin, include approval notifications
                 from notifications.models import Notification
                 from django.contrib.contenttypes.models import ContentType
