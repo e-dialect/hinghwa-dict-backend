@@ -5,7 +5,11 @@ from django import forms
 
 from .models import Word, Character, Pronunciation, Application, List
 from website.views import sendNotification
-from utils.admin.widgets import AudioPlayerWidget, MarkdownEditorWidget
+from utils.admin.widgets import (
+    AudioPlayerWidget,
+    MarkdownEditorWidget,
+    IPAKeyboardWidget,
+)
 
 
 class VerifierListFilter(admin.SimpleListFilter):
@@ -59,6 +63,8 @@ class WordAdminForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             "annotation": MarkdownEditorWidget(),
+            "standard_ipa": IPAKeyboardWidget(),
+            "standard_pinyin": IPAKeyboardWidget(),
         }
 
 
@@ -70,6 +76,8 @@ class PronunciationAdminForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             "source": AudioPlayerWidget(),
+            "ipa": IPAKeyboardWidget(),
+            "pinyin": IPAKeyboardWidget(),
         }
 
 
@@ -137,7 +145,20 @@ class WordAdmin(admin.ModelAdmin):
     actions = ["pass_visibility", "withdraw_visibility"]
 
 
+class CharacterAdminForm(forms.ModelForm):
+    """Custom form for Character admin with IPA keyboard."""
+
+    class Meta:
+        model = Character
+        fields = "__all__"
+        widgets = {
+            "ipa": IPAKeyboardWidget(),
+            "pinyin": IPAKeyboardWidget(),
+        }
+
+
 class CharacterAdmin(admin.ModelAdmin):
+    form = CharacterAdminForm
     list_display = ["id", "character", "pinyin", "ipa", "traditional", "county", "town"]
     list_filter = ["county"]
     search_fields = [
@@ -356,6 +377,8 @@ class ApplicationAdminForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             "annotation": MarkdownEditorWidget(),
+            "standard_ipa": IPAKeyboardWidget(),
+            "standard_pinyin": IPAKeyboardWidget(),
         }
 
 
