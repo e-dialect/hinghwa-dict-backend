@@ -20,19 +20,19 @@ reference = {}
 target = {}
 #   取出参考文件的数据，建立字，繁体字映射关系
 for i in range(1, reference_sheet.nrows):
-    reference[
-        reference_sheet.cell(i, 0).value + reference_sheet.cell(i, 5).value
-    ] = reference_sheet.cell(i, 8).value
+    reference[reference_sheet.cell(i, 0).value + reference_sheet.cell(i, 5).value] = (
+        reference_sheet.cell(i, 8).value
+    )
 for i in range(1, target_sheet.nrows):
-    target[
-        target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value
-    ] = target_sheet.cell(i, 8).value
+    target[target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value] = (
+        target_sheet.cell(i, 8).value
+    )
     if reference.__contains__(
         target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value
     ):
-        target[
-            target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value
-        ] = reference[target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value]
+        target[target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value] = (
+            reference[target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value]
+        )
 for i in range(1, target_sheet.nrows):
     output_file.write(
         str(target.get(target_sheet.cell(i, 0).value + target_sheet.cell(i, 5).value))

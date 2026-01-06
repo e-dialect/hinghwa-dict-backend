@@ -299,9 +299,9 @@ class ManagePronunciation(View):
         pronunciation = get_pronunciation_by_id(id)
         pronunciation.views += 1
         pronunciation.save()
-        
+
         result = {"pronunciation": pronunciation_all(pronunciation)}
-        
+
         # Add approval history for admin users
         if "token" in request.headers:
             user = token_check(request.headers["token"], settings.JWT_KEY, -1)
@@ -309,27 +309,31 @@ class ManagePronunciation(View):
                 # User is admin, include approval notifications
                 from notifications.models import Notification
                 from django.contrib.contenttypes.models import ContentType
-                
+
                 ct = ContentType.objects.get_for_model(pronunciation)
                 notifications = Notification.objects.filter(
-                    action_object_content_type=ct, 
-                    action_object_object_id=pronunciation.id, 
-                    verb__icontains="审核"
+                    action_object_content_type=ct,
+                    action_object_object_id=pronunciation.id,
+                    verb__icontains="审核",
                 ).order_by("-timestamp")
-                
+
                 approval_history = []
                 for notif in notifications:
-                    approval_history.append({
-                        "id": notif.id,
-                        "timestamp": notif.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
-                        "verb": notif.verb,
-                        "description": notif.description,
-                        "actor": notif.actor.username if notif.actor else "系统",
-                        "recipient": notif.recipient.username if notif.recipient else None,
-                    })
-                
+                    approval_history.append(
+                        {
+                            "id": notif.id,
+                            "timestamp": notif.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                            "verb": notif.verb,
+                            "description": notif.description,
+                            "actor": notif.actor.username if notif.actor else "系统",
+                            "recipient": (
+                                notif.recipient.username if notif.recipient else None
+                            ),
+                        }
+                    )
+
                 result["approval_history"] = approval_history
-        
+
         return JsonResponse(result, status=200)
 
     # PN0103 更改发音信息

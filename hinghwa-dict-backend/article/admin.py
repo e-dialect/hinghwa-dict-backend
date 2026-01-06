@@ -50,7 +50,9 @@ class ArticleAdmin(admin.ModelAdmin):
         ct = ContentType.objects.get_for_model(obj)
         # Article uses action_object field (see article/views.py)
         notifications = Notification.objects.filter(
-            action_object_content_type=ct, action_object_object_id=obj.id, verb__icontains="审核"
+            action_object_content_type=ct,
+            action_object_object_id=obj.id,
+            verb__icontains="审核",
         ).order_by("-timestamp")
 
         return notifications
@@ -141,9 +143,7 @@ class ArticleAdmin(admin.ModelAdmin):
         if next_article:
             # Redirect to the next unreviewed article
             return redirect(
-                reverse(
-                    "admin:article_article_change", args=[next_article.id]
-                )
+                reverse("admin:article_article_change", args=[next_article.id])
             )
         else:
             # No more unreviewed articles, return to list

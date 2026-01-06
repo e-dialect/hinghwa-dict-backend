@@ -153,20 +153,20 @@ class ManageArticle(View):
             else {"liked": False, "is_author": False}
         )
         article_data = article_all(article)
-        
+
         # Add approval history for admins
         response_data = {"article": article_data, "me": me}
         if user and user.is_superuser:
             from notifications.models import Notification
             from django.contrib.contenttypes.models import ContentType
-            
+
             ct = ContentType.objects.get_for_model(article)
             notifications = Notification.objects.filter(
-                action_object_content_type=ct, 
-                action_object_object_id=article.id, 
-                verb__icontains="审核"
+                action_object_content_type=ct,
+                action_object_object_id=article.id,
+                verb__icontains="审核",
             ).order_by("-timestamp")
-            
+
             approval_history = [
                 {
                     "id": n.id,
@@ -179,7 +179,7 @@ class ManageArticle(View):
                 for n in notifications
             ]
             response_data["approval_history"] = approval_history
-        
+
         return JsonResponse(response_data, status=200)
 
     # AT0103 更新文章内容
