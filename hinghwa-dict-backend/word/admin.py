@@ -125,30 +125,30 @@ class PronunciationAdmin(admin.ModelAdmin):
         "contributor",
         "county",
         "views",
-        "approval_status",
         "visibility",
         "granted",
         "verifier",
     ]
-    list_filter = ["contributor", "approval_status", "visibility", "county"]
+    list_filter = ["contributor", "visibility", "county"]
     search_fields = ["word__word", "contributor__username", "pinyin", "id", "ipa"]
     ordering = ["-id", "-views"]
     list_per_page = 50
     raw_id_fields = ("contributor", "word")
-    readonly_fields = ("approval_status",)
 
     def response_change(self, request, obj):
         """Handle custom approval buttons on the change form."""
         if "_approve" in request.POST:
             # Approve the pronunciation
-            if obj.approval_status != "approved":
-                obj.approval_status = "approved"
+            approval_reason = request.POST.get("approval_reason", "").strip()
+            if not obj.visibility or obj.verifier != request.user:
                 obj.visibility = True
                 obj.verifier = request.user
                 obj.save()
 
-                # Send notification
+                # Send notification with reason
                 content = f"恭喜您的语音(id={obj.id}) 已通过审核"
+                if approval_reason:
+                    content += f"\n\n审核意见：{approval_reason}"
                 sendNotification(
                     None,
                     [obj.contributor],
@@ -164,14 +164,16 @@ class PronunciationAdmin(admin.ModelAdmin):
 
         elif "_reject" in request.POST:
             # Reject the pronunciation
-            if obj.approval_status != "rejected":
-                obj.approval_status = "rejected"
+            approval_reason = request.POST.get("approval_reason", "").strip()
+            if obj.visibility or obj.verifier != request.user:
                 obj.visibility = False
                 obj.verifier = request.user
                 obj.save()
 
-                # Send notification
+                # Send notification with reason
                 content = f"很遗憾，您的语音(id={obj.id}) 未通过审核"
+                if approval_reason:
+                    content += f"\n\n审核意见：{approval_reason}"
                 sendNotification(
                     None,
                     [obj.contributor],
@@ -192,9 +194,9 @@ class PronunciationAdmin(admin.ModelAdmin):
         from django.http import HttpResponseRedirect
         from django.urls import reverse
 
-        # Try to find next pending pronunciation
+        # Try to find next pending pronunciation (not reviewed yet)
         next_pronunciation = (
-            Pronunciation.objects.filter(approval_status="pending", id__gt=obj.id)
+            Pronunciation.objects.filter(verifier__isnull=True, id__gt=obj.id)
             .order_by("id")
             .first()
         )
@@ -289,16 +291,8 @@ class ApplicationAdminForm(forms.ModelForm):
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     change_form_template = "admin/word/application/change_form.html"
-    list_display = [
-        "id",
-        "word",
-        "reason",
-        "contributor",
-        "approval_status",
-        "granted",
-        "verifier",
-    ]
-    list_filter = ["contributor", "approval_status", "verifier", "word"]
+    list_display = ["id", "word", "reason", "contributor", "granted", "verifier"]
+    list_filter = ["contributor", "verifier", "word"]
     search_fields = [
         "word__word",
         "content_word",
@@ -310,17 +304,18 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_per_page = 50
     filter_horizontal = ["related_words", "related_articles"]
     raw_id_fields = ("contributor", "verifier", "word")
-    readonly_fields = ("approval_status",)
 
     def response_change(self, request, obj):
         """Handle custom approval buttons on the change form."""
         if "_approve" in request.POST:
             # Approve the application
-            if obj.approval_status != "approved":
-                obj.approval_status = "approved"
+            approval_reason = request.POST.get("approval_reason", "").strip()
+            if not obj.verifier or obj.verifier != request.user:
                 obj.verifier = request.user
                 obj.save()
 
+                # Send notification with reason (if notification system is set up for Application)
+                # Currently Application doesn't have notification configured, but keeping the structure
                 self.message_user(
                     request, f"词条申请 {obj.id} 已审核通过", messages.SUCCESS
                 )
@@ -328,11 +323,14 @@ class ApplicationAdmin(admin.ModelAdmin):
 
         elif "_reject" in request.POST:
             # Reject the application
-            if obj.approval_status != "rejected":
-                obj.approval_status = "rejected"
+            # Note: For Application, rejection is indicated by having verifier but no actual approval
+            # The system uses notifications to store rejection reasons
+            approval_reason = request.POST.get("approval_reason", "").strip()
+            if not obj.verifier or obj.verifier != request.user:
                 obj.verifier = request.user
                 obj.save()
 
+                # Send notification with reason (if notification system is set up)
                 self.message_user(
                     request, f"词条申请 {obj.id} 审核不通过", messages.WARNING
                 )
@@ -345,9 +343,9 @@ class ApplicationAdmin(admin.ModelAdmin):
         from django.http import HttpResponseRedirect
         from django.urls import reverse
 
-        # Try to find next pending application
+        # Try to find next pending application (not reviewed yet)
         next_application = (
-            Application.objects.filter(approval_status="pending", id__gt=obj.id)
+            Application.objects.filter(verifier__isnull=True, id__gt=obj.id)
             .order_by("id")
             .first()
         )

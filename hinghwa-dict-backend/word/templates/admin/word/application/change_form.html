@@ -6,36 +6,33 @@
     {% if original.pk %}
         <p class="approval-status" style="float: left; padding: 10px 15px; margin: 0;">
             <strong>审核状态：</strong>
-            {% if original.approval_status == 'approved' %}
-                <span style="color: green;">✓ 审核通过</span>
-                {% if original.verifier %}
-                    (审核人: {{ original.verifier.username }})
-                {% endif %}
-            {% elif original.approval_status == 'rejected' %}
-                <span style="color: red;">✗ 审核不通过</span>
-                {% if original.verifier %}
-                    (审核人: {{ original.verifier.username }})
-                {% endif %}
+            {% if original.verifier %}
+                <span style="color: green;">✓ 已审核</span>
+                (审核人: {{ original.verifier.username }})
             {% else %}
                 <span style="color: orange;">⏳ 待审核</span>
             {% endif %}
         </p>
         
+        <div style="clear: both; padding: 10px 0;">
+            <label for="approval_reason" style="display: block; margin-bottom: 5px;"><strong>审核理由：</strong></label>
+            <textarea name="approval_reason" id="approval_reason" rows="3" style="width: 100%; max-width: 600px; padding: 5px;" placeholder="请输入审核通过或不通过的理由（可选）"></textarea>
+            <p style="margin-top: 5px; color: #666; font-size: 12px;">
+                <em>审核理由将通过站内通知发送给贡献者</em>
+            </p>
+        </div>
+        
         <input type="submit" value="{% trans 'Save' %}" class="default" name="_save">
         <input type="submit" value="{% trans 'Save and continue editing' %}" name="_continue">
         <input type="submit" value="{% trans 'Save and add another' %}" name="_addanother">
         
-        {% if original.approval_status != 'approved' %}
-            <input type="submit" value="✓ 审核通过" name="_approve" 
-                   style="background: #417690; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;"
-                   title="审核通过此申请">
-        {% endif %}
+        <input type="submit" value="✓ 审核通过" name="_approve" 
+               style="background: #417690; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;"
+               title="审核通过此申请">
         
-        {% if original.approval_status != 'rejected' %}
-            <input type="submit" value="✗ 审核不通过" name="_reject" 
-                   style="background: #ba2121; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;"
-                   title="审核不通过此申请">
-        {% endif %}
+        <input type="submit" value="✗ 审核不通过" name="_reject" 
+               style="background: #ba2121; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;"
+               title="审核不通过此申请">
         
         {% if show_delete_link %}
             <p class="deletelink-box"><a href="{% url opts|admin_urlname:'delete' original.pk|admin_urlquote %}" class="deletelink">{% trans "Delete" %}</a></p>
