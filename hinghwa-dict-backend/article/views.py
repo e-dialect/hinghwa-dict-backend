@@ -162,8 +162,8 @@ class ManageArticle(View):
             
             ct = ContentType.objects.get_for_model(article)
             notifications = Notification.objects.filter(
-                action_content_type=ct, 
-                action_object_id=article.id, 
+                action_object_content_type=ct, 
+                action_object_object_id=article.id, 
                 verb__icontains="审核"
             ).order_by("-timestamp")
             
