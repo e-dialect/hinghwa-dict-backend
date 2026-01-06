@@ -8,6 +8,8 @@ This module provides:
 
 from django import forms
 from django.utils.safestring import mark_safe
+from django.utils.html import format_html, escape
+from django.utils.translation import gettext_lazy as _
 
 
 class MarkdownEditorWidget(forms.Textarea):
@@ -24,20 +26,21 @@ class MarkdownEditorWidget(forms.Textarea):
 
     class Media:
         css = {
-            "all": ("https://cdn.jsdelivr.net/npm/easymde@latest/dist/easymde.min.css",)
+            "all": ("https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css",)
         }
-        js = ("https://cdn.jsdelivr.net/npm/easymde@latest/dist/easymde.min.js",)
+        js = ("https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js",)
 
     def render(self, name, value, attrs=None, renderer=None):
         html = super().render(name, value, attrs, renderer)
-        textarea_id = attrs.get("id", f"id_{name}") if attrs else f"id_{name}"
+        textarea_id = escape(attrs.get("id", f"id_{name}") if attrs else f"id_{name}")
 
         # JavaScript to initialize the markdown editor
-        js = f"""
+        js = format_html(
+            """
         <script>
         (function() {{
             if (typeof EasyMDE !== 'undefined') {{
-                var textarea = document.getElementById('{textarea_id}');
+                var textarea = document.getElementById('{}');
                 if (textarea && !textarea.easyMDEInstance) {{
                     var easyMDE = new EasyMDE({{
                         element: textarea,
@@ -47,7 +50,7 @@ class MarkdownEditorWidget(forms.Textarea):
                                   "link", "image", "|", 
                                   "preview", "side-by-side", "fullscreen", "|",
                                   "guide"],
-                        placeholder: "请输入Markdown格式的内容...",
+                        placeholder: "{}",
                         status: ["lines", "words", "cursor"],
                         renderingConfig: {{
                             codeSyntaxHighlighting: true,
@@ -58,7 +61,10 @@ class MarkdownEditorWidget(forms.Textarea):
             }}
         }})();
         </script>
-        """
+        """,
+            textarea_id,
+            _("请输入Markdown格式的内容..."),
+        )
         return mark_safe(html + js)
 
 
@@ -79,16 +85,23 @@ class AudioPlayerWidget(forms.URLInput):
 
         # Add audio player if there's a value
         if value:
-            audio_player = f"""
+            escaped_value = escape(value)
+            audio_player = format_html(
+                """
             <div style="margin-top: 10px;">
                 <audio controls preload="metadata" style="width: 100%; max-width: 500px;">
-                    <source src="{value}" type="audio/mpeg">
-                    <source src="{value}" type="audio/wav">
-                    <source src="{value}" type="audio/ogg">
-                    您的浏览器不支持音频播放。
+                    <source src="{}" type="audio/mpeg">
+                    <source src="{}" type="audio/wav">
+                    <source src="{}" type="audio/ogg">
+                    {}
                 </audio>
             </div>
-            """
+            """,
+                escaped_value,
+                escaped_value,
+                escaped_value,
+                _("您的浏览器不支持音频播放。"),
+            )
             html = html + audio_player
 
         return mark_safe(html)
