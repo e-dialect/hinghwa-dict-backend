@@ -152,8 +152,35 @@ class ManageArticle(View):
             if user
             else {"liked": False, "is_author": False}
         )
-        article = article_all(article)
-        return JsonResponse({"article": article, "me": me}, status=200)
+        article_data = article_all(article)
+        
+        # Add approval history for admins
+        response_data = {"article": article_data, "me": me}
+        if user and user.is_superuser:
+            from notifications.models import Notification
+            from django.contrib.contenttypes.models import ContentType
+            
+            ct = ContentType.objects.get_for_model(article)
+            notifications = Notification.objects.filter(
+                action_content_type=ct, 
+                action_object_id=article.id, 
+                verb__icontains="审核"
+            ).order_by("-timestamp")
+            
+            approval_history = [
+                {
+                    "id": n.id,
+                    "timestamp": n.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                    "verb": n.verb,
+                    "description": n.description,
+                    "actor": n.actor.username if n.actor else None,
+                    "recipient": n.recipient.username if n.recipient else None,
+                }
+                for n in notifications
+            ]
+            response_data["approval_history"] = approval_history
+        
+        return JsonResponse(response_data, status=200)
 
     # AT0103 更新文章内容
     def put(self, request, id) -> JsonResponse:

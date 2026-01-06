@@ -181,8 +181,9 @@ class PronunciationAdmin(admin.ModelAdmin):
         from django.contrib.contenttypes.models import ContentType
 
         ct = ContentType.objects.get_for_model(obj)
+        # Pronunciation uses action_object field (see word/pronunciation/views.py)
         notifications = Notification.objects.filter(
-            target_content_type=ct, target_object_id=obj.id, verb__icontains="审核"
+            action_content_type=ct, action_object_id=obj.id, verb__icontains="审核"
         ).order_by("-timestamp")
 
         return notifications
