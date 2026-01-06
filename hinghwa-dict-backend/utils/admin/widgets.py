@@ -166,12 +166,18 @@ class IPAKeyboardWidget(forms.TextInput):
             default_attrs.update(attrs)
         super().__init__(default_attrs)
 
+    # Class variable to track if CSS has been included on the page
+    _css_included = False
+
     def render(self, name, value, attrs=None, renderer=None):
         html = super().render(name, value, attrs, renderer)
         textarea_id = escape(attrs.get("id", f"id_{name}") if attrs else f"id_{name}")
 
-        # Embedded CSS styles
-        css = """
+        # Only include CSS once per page render
+        css = ""
+        if not IPAKeyboardWidget._css_included:
+            IPAKeyboardWidget._css_included = True
+            css = """
         <style>
         .ipa-keyboard {
             margin-top: 10px;
@@ -512,47 +518,53 @@ class IPAKeyboardWidget(forms.TextInput):
         js = format_html(
             """
         <script>
-        function toggleIPAKeyboard(inputId) {{
-            var content = document.getElementById('ipa-keyboard-content-' + inputId);
-            if (content.classList.contains('visible')) {{
-                content.classList.remove('visible');
-            }} else {{
-                content.classList.add('visible');
-            }}
-        }}
-        
-        function insertIPAChar(inputId, char, event) {{
-            var input = document.getElementById(inputId);
-            if (!input) return;
-            
-            // Add visual feedback to the clicked button
-            var button = event ? event.target : null;
-            if (button) {{
-                button.classList.add('ipa-keyboard-btn-clicked');
-                setTimeout(function() {{
-                    button.classList.remove('ipa-keyboard-btn-clicked');
-                }}, 300);
+        (function() {{
+            if (!window.toggleIPAKeyboard) {{
+                window.toggleIPAKeyboard = function(inputId) {{
+                    var content = document.getElementById('ipa-keyboard-content-' + inputId);
+                    if (content.classList.contains('visible')) {{
+                        content.classList.remove('visible');
+                    }} else {{
+                        content.classList.add('visible');
+                    }}
+                }};
             }}
             
-            // Get current cursor position
-            var startPos = input.selectionStart;
-            var endPos = input.selectionEnd;
-            var value = input.value;
-            
-            // Insert character at cursor position
-            input.value = value.substring(0, startPos) + char + value.substring(endPos);
-            
-            // Set cursor position after inserted character
-            var newPos = startPos + char.length;
-            input.setSelectionRange(newPos, newPos);
-            
-            // Focus back on input
-            input.focus();
-            
-            // Trigger input event for Django admin change detection
-            var event = new Event('input', {{ bubbles: true }});
-            input.dispatchEvent(event);
-        }}
+            if (!window.insertIPAChar) {{
+                window.insertIPAChar = function(inputId, char, event) {{
+                    var input = document.getElementById(inputId);
+                    if (!input) return;
+                    
+                    // Add visual feedback to the clicked button
+                    var button = event ? event.target : null;
+                    if (button) {{
+                        button.classList.add('ipa-keyboard-btn-clicked');
+                        setTimeout(function() {{
+                            button.classList.remove('ipa-keyboard-btn-clicked');
+                        }}, 300);
+                    }}
+                    
+                    // Get current cursor position
+                    var startPos = input.selectionStart;
+                    var endPos = input.selectionEnd;
+                    var value = input.value;
+                    
+                    // Insert character at cursor position
+                    input.value = value.substring(0, startPos) + char + value.substring(endPos);
+                    
+                    // Set cursor position after inserted character
+                    var newPos = startPos + char.length;
+                    input.setSelectionRange(newPos, newPos);
+                    
+                    // Focus back on input
+                    input.focus();
+                    
+                    // Trigger input event for Django admin change detection
+                    var inputEvent = new Event('input', {{ bubbles: true }});
+                    input.dispatchEvent(inputEvent);
+                }};
+            }}
+        }})();
         </script>
         """
         )
