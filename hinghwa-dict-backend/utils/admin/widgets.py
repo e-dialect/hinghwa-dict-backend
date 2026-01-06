@@ -5,6 +5,7 @@ This module provides:
 - MarkdownEditorWidget: A markdown editor with preview for TextField
 - AudioPlayerWidget: An audio player widget for URLField containing audio files
 - ImagePreviewWidget: An image preview widget for URLField containing image URLs
+- IPAKeyboardWidget: An IPA keyboard widget for phonetic input in text fields
 """
 
 from django import forms
