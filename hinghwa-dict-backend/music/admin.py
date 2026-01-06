@@ -1,13 +1,28 @@
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ngettext
+from django import forms
 from .models import Music
+from utils.admin.widgets import AudioPlayerWidget, ImagePreviewWidget
 
 
 # Register your models here.
 
 
+class MusicAdminForm(forms.ModelForm):
+    """Custom form for Music admin with audio player and image preview."""
+
+    class Meta:
+        model = Music
+        fields = "__all__"
+        widgets = {
+            "source": AudioPlayerWidget(),
+            "cover": ImagePreviewWidget(),
+        }
+
+
 class MusicAdmin(admin.ModelAdmin):
+    form = MusicAdminForm
     list_display = ["id", "title", "artist", "contributor", "like", "visibility"]
     list_filter = ["contributor", "title", "visibility"]
     search_fields = ["title", "artist", "contributor__username", "id"]
