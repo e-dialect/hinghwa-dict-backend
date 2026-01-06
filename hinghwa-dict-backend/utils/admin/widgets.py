@@ -166,99 +166,98 @@ class IPAKeyboardWidget(forms.TextInput):
             default_attrs.update(attrs)
         super().__init__(default_attrs)
 
-    class Media:
-        css = {
-            "all": (
-                "data:text/css;charset=utf-8,"
-                ".ipa-keyboard { "
-                "margin-top: 10px; "
-                "padding: 10px; "
-                "background: #f8f9fa; "
-                "border: 1px solid #dee2e6; "
-                "border-radius: 4px; "
-                "}"
-                ".ipa-keyboard-section { "
-                "margin-bottom: 10px; "
-                "}"
-                ".ipa-keyboard-section:last-child { "
-                "margin-bottom: 0; "
-                "}"
-                ".ipa-keyboard-title { "
-                "font-weight: bold; "
-                "font-size: 13px; "
-                "margin-bottom: 5px; "
-                "color: #495057; "
-                "display: block; "
-                "}"
-                ".ipa-keyboard-btn { "
-                "display: inline-block; "
-                "padding: 6px 10px; "
-                "margin: 3px 4px; "
-                "background: #fff; "
-                "border: 2px solid #ced4da; "
-                "border-radius: 4px; "
-                "cursor: pointer; "
-                "font-size: 15px; "
-                "font-weight: 500; "
-                "transition: all 0.15s ease; "
-                "user-select: none; "
-                "min-width: 35px; "
-                "text-align: center; "
-                "box-shadow: 0 1px 2px rgba(0,0,0,0.05); "
-                "}"
-                ".ipa-keyboard-btn:hover { "
-                "background: #e3f2fd; "
-                "border-color: #007bff; "
-                "transform: translateY(-1px); "
-                "box-shadow: 0 2px 4px rgba(0,123,255,0.2); "
-                "}"
-                ".ipa-keyboard-btn:active { "
-                "transform: scale(0.96) translateY(0); "
-                "background: #007bff; "
-                "color: white; "
-                "border-color: #0056b3; "
-                "box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset; "
-                "}"
-                ".ipa-keyboard-btn-clicked { "
-                "animation: btnClick 0.3s ease; "
-                "}"
-                "@keyframes btnClick { "
-                "0% { "
-                "background: #007bff; "
-                "color: white; "
-                "border-color: #0056b3; "
-                "transform: scale(0.96); "
-                "}"
-                "100% { "
-                "background: #fff; "
-                "color: inherit; "
-                "border-color: #ced4da; "
-                "transform: scale(1); "
-                "}"
-                "}"
-                ".ipa-keyboard-toggle { "
-                "cursor: pointer; "
-                "color: #007bff; "
-                "text-decoration: underline; "
-                "font-size: 12px; "
-                "display: inline-block; "
-                "margin-bottom: 8px; "
-                "}"
-                ".ipa-keyboard-toggle:hover { "
-                "color: #0056b3; "
-                "}"
-                ".ipa-keyboard-content { "
-                "display: none; "
-                "}"
-                ".ipa-keyboard-content.visible { "
-                "display: block; "
-                "}"
-            )
-        }
-
     def render(self, name, value, attrs=None, renderer=None):
         html = super().render(name, value, attrs, renderer)
         textarea_id = escape(attrs.get("id", f"id_{name}") if attrs else f"id_{name}")
+
+        # Embedded CSS styles
+        css = """
+        <style>
+        .ipa-keyboard {
+            margin-top: 10px;
+            padding: 10px;
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 4px;
+        }
+        .ipa-keyboard-section {
+            margin-bottom: 10px;
+        }
+        .ipa-keyboard-section:last-child {
+            margin-bottom: 0;
+        }
+        .ipa-keyboard-title {
+            font-weight: bold;
+            font-size: 13px;
+            margin-bottom: 5px;
+            color: #495057;
+            display: block;
+        }
+        .ipa-keyboard-btn {
+            display: inline-block;
+            padding: 6px 10px;
+            margin: 3px 4px;
+            background: #fff;
+            border: 2px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+            transition: all 0.15s ease;
+            user-select: none;
+            min-width: 35px;
+            text-align: center;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .ipa-keyboard-btn:hover {
+            background: #e3f2fd;
+            border-color: #007bff;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 4px rgba(0,123,255,0.2);
+        }
+        .ipa-keyboard-btn:active {
+            transform: scale(0.96) translateY(0);
+            background: #007bff;
+            color: white;
+            border-color: #0056b3;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset;
+        }
+        .ipa-keyboard-btn-clicked {
+            animation: btnClick 0.3s ease;
+        }
+        @keyframes btnClick {
+            0% {
+                background: #007bff;
+                color: white;
+                border-color: #0056b3;
+                transform: scale(0.96);
+            }
+            100% {
+                background: #fff;
+                color: inherit;
+                border-color: #ced4da;
+                transform: scale(1);
+            }
+        }
+        .ipa-keyboard-toggle {
+            cursor: pointer;
+            color: #007bff;
+            text-decoration: underline;
+            font-size: 12px;
+            display: inline-block;
+            margin-bottom: 8px;
+        }
+        .ipa-keyboard-toggle:hover {
+            color: #0056b3;
+        }
+        .ipa-keyboard-content {
+            display: none;
+        }
+        .ipa-keyboard-content.visible {
+            display: block;
+        }
+        </style>
+        """
 
         # IPA character groups as specified in the issue
         ipa_consonants = ["ʰ", "ʦ", "ɬ", "θ", "ŋ", "β", "ɣ", "ʔ", "Ø"]
@@ -558,4 +557,4 @@ class IPAKeyboardWidget(forms.TextInput):
         """
         )
 
-        return mark_safe(html + keyboard_html + js)
+        return mark_safe(css + html + keyboard_html + js)
