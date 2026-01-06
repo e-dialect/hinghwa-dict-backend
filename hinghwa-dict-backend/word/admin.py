@@ -1,15 +1,40 @@
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ngettext
+from django import forms
 
 from .models import Word, Character, Pronunciation, Application, List
 from website.views import sendNotification
+from utils.admin.widgets import AudioPlayerWidget, MarkdownEditorWidget
 
 
 # Register your models here.
 
 
+class WordAdminForm(forms.ModelForm):
+    """Custom form for Word admin with markdown editor for annotation."""
+
+    class Meta:
+        model = Word
+        fields = "__all__"
+        widgets = {
+            "annotation": MarkdownEditorWidget(),
+        }
+
+
+class PronunciationAdminForm(forms.ModelForm):
+    """Custom form for Pronunciation admin with audio player."""
+
+    class Meta:
+        model = Pronunciation
+        fields = "__all__"
+        widgets = {
+            "source": AudioPlayerWidget(),
+        }
+
+
 class WordAdmin(admin.ModelAdmin):
+    form = WordAdminForm
     list_display = [
         "id",
         "word",
@@ -90,6 +115,7 @@ class CharacterAdmin(admin.ModelAdmin):
 
 
 class PronunciationAdmin(admin.ModelAdmin):
+    form = PronunciationAdminForm
     list_display = [
         "id",
         "word",
@@ -167,7 +193,19 @@ class PronunciationAdmin(admin.ModelAdmin):
     actions = ["pass_visibility", "withdraw_visibility"]
 
 
+class ApplicationAdminForm(forms.ModelForm):
+    """Custom form for Application admin with markdown editor for annotation."""
+
+    class Meta:
+        model = Application
+        fields = "__all__"
+        widgets = {
+            "annotation": MarkdownEditorWidget(),
+        }
+
+
 class ApplicationAdmin(admin.ModelAdmin):
+    form = ApplicationAdminForm
     list_display = ["id", "word", "reason", "contributor", "granted", "verifier"]
     list_filter = ["contributor", "verifier", "word"]
     search_fields = [

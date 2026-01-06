@@ -1,10 +1,24 @@
 from django.contrib import admin
 from django.contrib import messages
 from django.utils.translation import ngettext
+from django import forms
 from .models import Article, Comment
+from utils.admin.widgets import MarkdownEditorWidget
+
+
+class ArticleAdminForm(forms.ModelForm):
+    """Custom form for Article admin with markdown editor."""
+
+    class Meta:
+        model = Article
+        fields = "__all__"
+        widgets = {
+            "content": MarkdownEditorWidget(),
+        }
 
 
 class ArticleAdmin(admin.ModelAdmin):
+    form = ArticleAdminForm
     list_display = [
         "id",
         "author",
