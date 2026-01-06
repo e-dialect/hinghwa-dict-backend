@@ -2,154 +2,169 @@
 
 ## 概述
 
-本项目为 Django Admin 添加了自定义前端工具，以增强内容编辑和展示体验。
+本项目为 Django Admin 添加了自定义前端工具，包括自定义 Widget（Markdown 编辑器、音频播放器、图片预览）和完整的审核工作流程，以增强内容编辑和管理体验。
 
 ## 功能特性
 
-### 1. Markdown 编辑器
+### 1. 自定义 Widget
 
-为以下模型的字段添加了 Markdown 编辑器（使用 EasyMDE）：
+#### Markdown 编辑器
+为以下模型添加了 Markdown 编辑器（使用 EasyMDE v2.18.0）：
+- **Article**: `content` 字段
+- **Word**: `annotation` 字段  
+- **Application**: `annotation` 字段
 
-- **Article 模型**：`content` 字段
-- **Word 模型**：`annotation` 字段
-- **Application 模型**：`annotation` 字段
+功能：实时预览、语法高亮、工具栏、全屏模式、并排预览、字数统计
 
-**功能特点**：
-- 实时预览
-- 语法高亮
-- 工具栏包含常用 Markdown 格式化选项（粗体、斜体、标题、列表、链接、图片等）
-- 全屏编辑模式
-- 并排预览模式
-- 字数统计和光标位置显示
+#### 音频播放器
+为以下模型添加了 HTML5 音频播放器：
+- **Music**: `source` 字段
+- **Pronunciation**: `source` 字段
 
-### 2. 音频播放器
+功能：直接播放音频文件（MP3、WAV、OGG）、保留 URL 输入框
 
-为以下模型的字段添加了音频播放器：
+#### 图片预览
+为以下模型添加了图片预览：
+- **Article**: `cover` 字段（300x300px）
+- **Music**: `cover` 字段（300x300px）
+- **UserInfo**: `avatar` 字段（200x200px）
 
-- **Music 模型**：`source` 字段
-- **Pronunciation 模型**：`source` 字段
+功能：自动显示图片、可配置尺寸、加载失败提示
 
-**功能特点**：
-- 直接在 Admin 界面中播放音频文件
-- 支持多种音频格式（MP3、WAV、OGG）
-- 保留 URL 输入框，同时显示音频播放器
-- 响应式设计，适配不同屏幕尺寸
+### 2. 审核工作流程
 
-### 3. 图片预览
+#### Pronunciation（语音）审核
+- **审核状态**：基于 `verifier` + `visibility` 字段
+  - 待审核：`verifier=None`
+  - 审核通过：`verifier存在 + visibility=True`
+  - 审核不通过：`verifier存在 + visibility=False`
+- **详情页功能**：
+  - 显示当前审核状态和审核人
+  - 审核理由输入框
+  - "审核通过"/"审核不通过"按钮
+  - 审核历史记录（显示所有相关通知）
+  - 自动跳转到下一个待审核项
+- **列表页功能**：
+  - 自定义审核人筛选器（未审核/已审核全部/具体审核人）
+- **通知**：审核操作会发送站内通知给贡献者，包含审核理由
 
-为以下模型的字段添加了图片预览：
+#### Application（词条申请）审核
+- **审核状态**：基于 `verifier` 字段
+  - 待审核：`verifier=None`
+  - 已审核：`verifier存在`
+- **详情页功能**：同 Pronunciation
+- **列表页功能**：同 Pronunciation
+- **通知**：审核操作会发送站内通知给贡献者
 
-- **Article 模型**：`cover` 字段（文章封面）
-- **Music 模型**：`cover` 字段（音乐封面）
-- **UserInfo 模型**：`avatar` 字段（用户头像）
-
-**功能特点**：
-- 直接在 Admin 界面中预览图片
-- 可配置预览图片的最大宽度和高度
-- 图片加载失败时显示友好提示
-- 保留 URL 输入框，同时显示图片预览
-- 美观的边框和圆角样式
+#### Article（文章）审核
+- **审核状态**：基于 `visibility` 字段
+  - 待审核：`visibility=False`
+  - 审核通过：`visibility=True`
+- **详情页功能**：
+  - 显示当前审核状态
+  - 审核理由输入框
+  - "审核通过"/"审核不通过"按钮
+  - 审核历史记录
+  - 自动跳转到下一个待审核文章
+- **列表页功能**：
+  - 是否审核筛选器
+- **通知**：审核操作会发送站内通知给作者
+- **批量操作**：支持批量审核通过/不通过（只对状态变化的项发送通知）
 
 ## 技术实现
 
-### 自定义 Widget 模块
-
-创建了 `utils/admin/widgets.py` 模块，包含三个自定义 Widget：
-
-1. **MarkdownEditorWidget**：继承自 `forms.Textarea`
-   - 使用 EasyMDE（SimpleMDE 的后继者）
-   - 通过 CDN 加载 CSS 和 JavaScript
-   - 自动初始化编辑器
-
-2. **AudioPlayerWidget**：继承自 `forms.URLInput`
-   - 使用 HTML5 `<audio>` 元素
-   - 自动检测音频 URL 并显示播放器
-   - 无需额外的 JavaScript 库
-
-3. **ImagePreviewWidget**：继承自 `forms.URLInput`
-   - 使用 HTML5 `<img>` 元素
-   - 自动检测图片 URL 并显示预览
-   - 支持自定义预览图片尺寸
-   - 包含错误处理机制
-
-### Admin 表单定制
-
-为每个需要自定义 Widget 的模型创建了对应的 ModelForm：
+### Widget 模块 (`utils/admin/widgets.py`)
 
 ```python
-# 示例：Article Admin
+from utils.admin.widgets import MarkdownEditorWidget, AudioPlayerWidget, ImagePreviewWidget
+
+# 使用示例
 class ArticleAdminForm(forms.ModelForm):
     class Meta:
         model = Article
         fields = "__all__"
         widgets = {
             "content": MarkdownEditorWidget(),
+            "cover": ImagePreviewWidget(max_width=300, max_height=300),
         }
-
-class ArticleAdmin(admin.ModelAdmin):
-    form = ArticleAdminForm
-    # ... 其他配置
 ```
+
+**Widget 实现**：
+- `MarkdownEditorWidget`: 继承 `forms.Textarea`，通过 CDN 加载 EasyMDE
+- `AudioPlayerWidget`: 继承 `forms.URLInput`，使用 HTML5 `<audio>` 元素
+- `ImagePreviewWidget`: 继承 `forms.URLInput`，使用 HTML5 `<img>` 元素
+
+### 审核功能实现
+
+**通知集成**：
+- Pronunciation: 使用 `action_object` 字段关联
+- Application: 使用 `target` 字段关联
+- Article: 使用 `action_object` 字段关联
+- 审核历史通过查询 `notifications` 表获取
+
+**自定义筛选器**：
+```python
+class VerifierListFilter(admin.SimpleListFilter):
+    title = "审核人"
+    parameter_name = "verifier_status"
+    
+    def lookups(self, request, model_admin):
+        return [
+            ("unreviewed", "未审核"),
+            ("reviewed_all", "已审核（全部）"),
+            # 动态添加所有审核人
+        ]
+```
+
+**自动跳转逻辑**：
+审核后查找下一个待审核项（`verifier__isnull=True` 或 `visibility=False`），如果有则跳转，否则返回列表页。
 
 ## 使用方法
 
-### 查看效果
+### 启动服务
+```bash
+cd hinghwa-dict-backend
+python manage.py runserver
+```
 
-1. 启动 Django 开发服务器：
-   ```bash
-   cd hinghwa-dict-backend
-   python manage.py runserver
-   ```
+访问：`http://127.0.0.1:8000/admin/`
 
-2. 访问 Admin 界面：`http://127.0.0.1:8000/admin/`
+### 审核工作流程
 
-3. 编辑以下任一模型以查看自定义 Widget：
-   - **文章**（Article）：在编辑页面会看到 Markdown 编辑器
-   - **音乐**（Music）：在编辑页面会看到音频播放器
-   - **词语**（Word）：在附注字段会看到 Markdown 编辑器
-   - **语音**（Pronunciation）：在编辑页面会看到音频播放器
+1. 在列表页使用筛选器选择"未审核"项
+2. 点击进入详情页
+3. 播放音频/查看内容/编辑字段
+4. 在审核理由框输入审核意见
+5. 点击"审核通过"或"审核不通过"按钮
+6. 系统自动保存、发送通知、跳转到下一项
+7. 重复步骤 3-6 直到完成所有审核
 
-### Markdown 编辑器使用
+### API 集成（仅管理员）
 
-- 点击工具栏按钮插入 Markdown 语法
-- 点击"预览"按钮查看渲染效果
-- 点击"并排"按钮同时查看编辑和预览
-- 点击"全屏"按钮进入全屏编辑模式
-- 使用 Markdown 语法编写内容，如：
-  ```markdown
-  # 标题
-  **粗体** *斜体*
-  - 列表项
-  [链接](http://example.com)
-  ![图片](http://example.com/image.jpg)
-  ```
+管理员访问以下接口时会返回 `approval_history` 字段：
+- `GET /word/pronunciation/{id}`
+- `GET /word/application/{id}`
+- `GET /article/{id}`
 
-### 音频播放器使用
+## 安全性
 
-- 在 `source` 字段输入音频文件的 URL
-- 保存后，页面会自动显示音频播放器
-- 点击播放按钮即可播放音频
-- 支持的音频格式：MP3、WAV、OGG
+- 所有用户输入通过 `format_html()` 和 `escape()` 转义，防止 XSS
+- JavaScript 变量正确转义
+- EasyMDE 使用固定版本（v2.18.0），不使用 `@latest`
+- 审核历史 API 仅对 `is_superuser=True` 的用户开放
+- CodeQL 扫描：0 个安全漏洞
 
-### 图片预览使用
+## 依赖
 
-- 在图片 URL 字段（如 `cover`、`avatar`）输入图片的 URL
-- 保存后，页面会自动显示图片预览
-- 如果图片加载失败，会显示友好的错误提示
-- 支持的图片格式：JPG、PNG、GIF、WebP 等所有浏览器支持的格式
+- Django 5.0.3
+- django-notifications-hq 1.8.3
+- django-simpleui 2023.3.1
+- EasyMDE 2.18.0（CDN）
+- Python 3.10-3.12
 
-## 优势
+## 扩展指南
 
-1. **无缝集成**：完全集成在 Django Admin 中，无需离开 Admin 界面
-2. **轻量级**：使用 CDN 加载资源，不增加项目体积
-3. **易于扩展**：可以轻松为其他模型字段添加相同的功能
-4. **用户友好**：提供直观的编辑和预览体验
-5. **最小侵入**：仅修改需要自定义的 Admin 类，不影响其他功能
-
-## 维护和扩展
-
-### 为其他字段添加 Markdown 编辑器
-
+### 添加新的 Markdown 字段
 ```python
 from utils.admin.widgets import MarkdownEditorWidget
 
@@ -158,55 +173,40 @@ class YourModelAdminForm(forms.ModelForm):
         model = YourModel
         fields = "__all__"
         widgets = {
-            "your_markdown_field": MarkdownEditorWidget(),
+            "your_field": MarkdownEditorWidget(),
         }
-
-class YourModelAdmin(admin.ModelAdmin):
-    form = YourModelAdminForm
-    # ... 其他配置
 ```
 
-### 为其他字段添加音频播放器
+### 添加新的审核模型
 
+1. 确保模型有审核相关字段（`verifier` 和/或 `visibility`）
+2. 创建自定义模板 `admin/{app}/{model}/change_form.html`
+3. 在 Admin 类中添加审核方法：
 ```python
-from utils.admin.widgets import AudioPlayerWidget
-
-class YourModelAdminForm(forms.ModelForm):
-    class Meta:
-        model = YourModel
-        fields = "__all__"
-        widgets = {
-            "your_audio_url_field": AudioPlayerWidget(),
-        }
-
-class YourModelAdmin(admin.ModelAdmin):
-    form = YourModelAdminForm
-    # ... 其他配置
+def approve_{model}(self, request, object_id):
+    obj = self.get_object(request, object_id)
+    approval_reason = request.POST.get("approval_reason", "")
+    
+    if not obj.visibility:  # 状态改变时
+        obj.visibility = True
+        obj.verifier = request.user
+        obj.save()
+        
+        # 发送通知
+        sendNotification(
+            None,
+            [obj.contributor],
+            content=f"您的{model}(id={obj.id}) 已通过审核\n\n审核意见：{approval_reason}",
+            action_object=obj,
+            title="【通知】审核结果",
+        )
+    
+    # 查找下一个待审核项并跳转
+    next_obj = Model.objects.filter(verifier__isnull=True).first()
+    if next_obj:
+        return HttpResponseRedirect(f"../{next_obj.id}/change/")
+    return HttpResponseRedirect("../")
 ```
-
-### 为其他字段添加图片预览
-
-```python
-from utils.admin.widgets import ImagePreviewWidget
-
-class YourModelAdminForm(forms.ModelForm):
-    class Meta:
-        model = YourModel
-        fields = "__all__"
-        widgets = {
-            "your_image_url_field": ImagePreviewWidget(max_width=400, max_height=400),
-        }
-
-class YourModelAdmin(admin.ModelAdmin):
-    form = YourModelAdminForm
-    # ... 其他配置
-```
-
-## 依赖
-
-- Django 5.0.3
-- django-simpleui 2023.3.1（可选，用于增强 Admin 界面外观）
-- EasyMDE（通过 CDN 加载）
 
 ## 许可证
 
