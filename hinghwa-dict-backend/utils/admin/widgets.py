@@ -24,9 +24,7 @@ class MarkdownEditorWidget(forms.Textarea):
 
     class Media:
         css = {
-            "all": (
-                "https://cdn.jsdelivr.net/npm/easymde@latest/dist/easymde.min.css",
-            )
+            "all": ("https://cdn.jsdelivr.net/npm/easymde@latest/dist/easymde.min.css",)
         }
         js = ("https://cdn.jsdelivr.net/npm/easymde@latest/dist/easymde.min.js",)
 
