@@ -192,25 +192,49 @@ class IPAKeyboardWidget(forms.TextInput):
                 "}"
                 ".ipa-keyboard-btn { "
                 "display: inline-block; "
-                "padding: 4px 8px; "
-                "margin: 2px; "
+                "padding: 6px 10px; "
+                "margin: 3px 4px; "
                 "background: #fff; "
-                "border: 1px solid #ced4da; "
-                "border-radius: 3px; "
+                "border: 2px solid #ced4da; "
+                "border-radius: 4px; "
                 "cursor: pointer; "
-                "font-size: 14px; "
-                "transition: all 0.2s; "
+                "font-size: 15px; "
+                "font-weight: 500; "
+                "transition: all 0.15s ease; "
                 "user-select: none; "
-                "min-width: 30px; "
+                "min-width: 35px; "
                 "text-align: center; "
+                "box-shadow: 0 1px 2px rgba(0,0,0,0.05); "
                 "}"
                 ".ipa-keyboard-btn:hover { "
-                "background: #007bff; "
-                "color: white; "
+                "background: #e3f2fd; "
                 "border-color: #007bff; "
+                "transform: translateY(-1px); "
+                "box-shadow: 0 2px 4px rgba(0,123,255,0.2); "
                 "}"
                 ".ipa-keyboard-btn:active { "
-                "transform: scale(0.95); "
+                "transform: scale(0.96) translateY(0); "
+                "background: #007bff; "
+                "color: white; "
+                "border-color: #0056b3; "
+                "box-shadow: 0 1px 2px rgba(0,0,0,0.1) inset; "
+                "}"
+                ".ipa-keyboard-btn-clicked { "
+                "animation: btnClick 0.3s ease; "
+                "}"
+                "@keyframes btnClick { "
+                "0% { "
+                "background: #007bff; "
+                "color: white; "
+                "border-color: #0056b3; "
+                "transform: scale(0.96); "
+                "}"
+                "100% { "
+                "background: #fff; "
+                "color: inherit; "
+                "border-color: #ced4da; "
+                "transform: scale(1); "
+                "}"
                 "}"
                 ".ipa-keyboard-toggle { "
                 "cursor: pointer; "
@@ -409,7 +433,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -420,7 +444,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -431,7 +455,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -442,7 +466,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -453,7 +477,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -464,7 +488,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -475,7 +499,7 @@ class IPAKeyboardWidget(forms.TextInput):
             mark_safe(
                 "".join(
                     format_html(
-                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}')\">{}</span>",
+                        "<span class=\"ipa-keyboard-btn\" onclick=\"insertIPAChar('{}', '{}', event)\">{}</span>",
                         textarea_id,
                         escape(char),
                         char,
@@ -498,9 +522,18 @@ class IPAKeyboardWidget(forms.TextInput):
             }}
         }}
         
-        function insertIPAChar(inputId, char) {{
+        function insertIPAChar(inputId, char, event) {{
             var input = document.getElementById(inputId);
             if (!input) return;
+            
+            // Add visual feedback to the clicked button
+            var button = event ? event.target : null;
+            if (button) {{
+                button.classList.add('ipa-keyboard-btn-clicked');
+                setTimeout(function() {{
+                    button.classList.remove('ipa-keyboard-btn-clicked');
+                }}, 300);
+            }}
             
             // Get current cursor position
             var startPos = input.selectionStart;
