@@ -1,5 +1,6 @@
 import demjson3
 import requests
+from urllib.parse import urlparse
 from django.conf import settings
 from django.http import JsonResponse
 from django.utils import timezone
@@ -19,15 +20,24 @@ from user.dto.user_all import user_all
 
 
 class OpenId:
+    """
+    微信小程序登录凭证校验
+    用于获取用户的 openid 和 session_key
+    """
+
     def __init__(self, jscode):
         self.url = "https://api.weixin.qq.com/sns/jscode2session"
         self.app_id = settings.APP_ID
         self.app_secret = settings.APP_SECRECT
         self.jscode = jscode
+        # Cache the API response to avoid multiple requests with same jscode
         self.response_data = None
 
     def _fetch_data(self):
-        """Fetch data from WeChat API if not already fetched"""
+        """
+        Fetch data from WeChat API if not already fetched
+        Caches the response to avoid redundant API calls
+        """
         if self.response_data is None:
             url = (
                 f"{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}"
@@ -239,6 +249,15 @@ class WechatWebLogin(View):
 class WechatWebRegister(View):
     """Web/H5 WeChat OAuth registration with one-click"""
 
+    @staticmethod
+    def _is_valid_url(url: str) -> bool:
+        """Check if a string is a valid HTTP/HTTPS URL"""
+        try:
+            result = urlparse(url)
+            return all([result.scheme in ["http", "https"], result.netloc])
+        except Exception:
+            return False
+
     def post(self, request):
         body = demjson3.decode(request.body)
         code = body["code"]
@@ -253,7 +272,9 @@ class WechatWebRegister(View):
         # Get WeChat user info for nickname and avatar
         try:
             wechat_user_info = wechat_auth.get_user_info()
-        except:
+        except Exception as e:
+            # If WeChat API fails, continue with empty user info
+            # User can still complete registration without WeChat data
             wechat_user_info = {}
 
         # Validate required fields
@@ -289,9 +310,11 @@ class WechatWebRegister(View):
         user_info.wechat = openid
 
         if avatar:
-            if avatar.startswith("http"):
+            # Validate if avatar is a URL
+            if self._is_valid_url(avatar):
                 user_info.avatar = avatar
             else:
+                # Assume it's base64 encoded image data
                 user_info.avatar = uploadAvatar(user.id, avatar, suffix="png")
 
         if "telephone" in body:
