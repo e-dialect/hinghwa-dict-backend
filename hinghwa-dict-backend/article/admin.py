@@ -3,17 +3,18 @@ from django.contrib import messages
 from django.utils.translation import ngettext
 from django import forms
 from .models import Article, Comment
-from utils.admin.widgets import MarkdownEditorWidget
+from utils.admin.widgets import MarkdownEditorWidget, ImagePreviewWidget
 
 
 class ArticleAdminForm(forms.ModelForm):
-    """Custom form for Article admin with markdown editor."""
+    """Custom form for Article admin with markdown editor and image preview."""
 
     class Meta:
         model = Article
         fields = "__all__"
         widgets = {
             "content": MarkdownEditorWidget(),
+            "cover": ImagePreviewWidget(),
         }
 
 

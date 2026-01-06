@@ -35,11 +35,26 @@
 - 保留 URL 输入框，同时显示音频播放器
 - 响应式设计，适配不同屏幕尺寸
 
+### 3. 图片预览
+
+为以下模型的字段添加了图片预览：
+
+- **Article 模型**：`cover` 字段（文章封面）
+- **Music 模型**：`cover` 字段（音乐封面）
+- **UserInfo 模型**：`avatar` 字段（用户头像）
+
+**功能特点**：
+- 直接在 Admin 界面中预览图片
+- 可配置预览图片的最大宽度和高度
+- 图片加载失败时显示友好提示
+- 保留 URL 输入框，同时显示图片预览
+- 美观的边框和圆角样式
+
 ## 技术实现
 
 ### 自定义 Widget 模块
 
-创建了 `utils/admin/widgets.py` 模块，包含两个自定义 Widget：
+创建了 `utils/admin/widgets.py` 模块，包含三个自定义 Widget：
 
 1. **MarkdownEditorWidget**：继承自 `forms.Textarea`
    - 使用 EasyMDE（SimpleMDE 的后继者）
@@ -47,6 +62,15 @@
    - 自动初始化编辑器
 
 2. **AudioPlayerWidget**：继承自 `forms.URLInput`
+   - 使用 HTML5 `<audio>` 元素
+   - 自动检测音频 URL 并显示播放器
+   - 无需额外的 JavaScript 库
+
+3. **ImagePreviewWidget**：继承自 `forms.URLInput`
+   - 使用 HTML5 `<img>` 元素
+   - 自动检测图片 URL 并显示预览
+   - 支持自定义预览图片尺寸
+   - 包含错误处理机制
    - 使用 HTML5 `<audio>` 元素
    - 自动检测音频 URL 并显示播放器
    - 无需额外的 JavaScript 库
@@ -110,6 +134,13 @@ class ArticleAdmin(admin.ModelAdmin):
 - 点击播放按钮即可播放音频
 - 支持的音频格式：MP3、WAV、OGG
 
+### 图片预览使用
+
+- 在图片 URL 字段（如 `cover`、`avatar`）输入图片的 URL
+- 保存后，页面会自动显示图片预览
+- 如果图片加载失败，会显示友好的错误提示
+- 支持的图片格式：JPG、PNG、GIF、WebP 等所有浏览器支持的格式
+
 ## 优势
 
 1. **无缝集成**：完全集成在 Django Admin 中，无需离开 Admin 界面
@@ -149,6 +180,24 @@ class YourModelAdminForm(forms.ModelForm):
         fields = "__all__"
         widgets = {
             "your_audio_url_field": AudioPlayerWidget(),
+        }
+
+class YourModelAdmin(admin.ModelAdmin):
+    form = YourModelAdminForm
+    # ... 其他配置
+```
+
+### 为其他字段添加图片预览
+
+```python
+from utils.admin.widgets import ImagePreviewWidget
+
+class YourModelAdminForm(forms.ModelForm):
+    class Meta:
+        model = YourModel
+        fields = "__all__"
+        widgets = {
+            "your_image_url_field": ImagePreviewWidget(max_width=400, max_height=400),
         }
 
 class YourModelAdmin(admin.ModelAdmin):

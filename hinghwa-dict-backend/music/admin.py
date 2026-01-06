@@ -3,20 +3,21 @@ from django.contrib import messages
 from django.utils.translation import ngettext
 from django import forms
 from .models import Music
-from utils.admin.widgets import AudioPlayerWidget
+from utils.admin.widgets import AudioPlayerWidget, ImagePreviewWidget
 
 
 # Register your models here.
 
 
 class MusicAdminForm(forms.ModelForm):
-    """Custom form for Music admin with audio player."""
+    """Custom form for Music admin with audio player and image preview."""
 
     class Meta:
         model = Music
         fields = "__all__"
         widgets = {
             "source": AudioPlayerWidget(),
+            "cover": ImagePreviewWidget(),
         }
 
 

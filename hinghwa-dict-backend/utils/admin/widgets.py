@@ -4,6 +4,7 @@ Custom widgets for Django admin interface to enhance content editing and display
 This module provides:
 - MarkdownEditorWidget: A markdown editor with preview for TextField
 - AudioPlayerWidget: An audio player widget for URLField containing audio files
+- ImagePreviewWidget: An image preview widget for URLField containing image URLs
 """
 
 from django import forms
@@ -103,5 +104,44 @@ class AudioPlayerWidget(forms.URLInput):
                 _("您的浏览器不支持音频播放。"),
             )
             html = html + audio_player
+
+        return mark_safe(html)
+
+
+class ImagePreviewWidget(forms.URLInput):
+    """
+    A custom widget that displays an image preview for image URL fields.
+    Shows both the URL input field and a preview of the image.
+    """
+
+    def __init__(self, attrs=None, max_width=300, max_height=300):
+        default_attrs = {"class": "vURLField"}
+        if attrs:
+            default_attrs.update(attrs)
+        super().__init__(default_attrs)
+        self.max_width = max_width
+        self.max_height = max_height
+
+    def render(self, name, value, attrs=None, renderer=None):
+        html = super().render(name, value, attrs, renderer)
+
+        # Add image preview if there's a value
+        if value:
+            escaped_value = escape(value)
+            image_preview = format_html(
+                """
+            <div style="margin-top: 10px;">
+                <img src="{}" alt="{}" style="max-width: {}px; max-height: {}px; border: 1px solid #ddd; border-radius: 4px; padding: 5px; display: block;" 
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                <p style="display: none; color: #666; font-style: italic;">{}</p>
+            </div>
+            """,
+                escaped_value,
+                _("图片预览"),
+                self.max_width,
+                self.max_height,
+                _("图片加载失败或URL无效"),
+            )
+            html = html + image_preview
 
         return mark_safe(html)
