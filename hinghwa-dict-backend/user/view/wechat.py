@@ -95,6 +95,10 @@ class WechatRegister(View):
             # Set empty email for WeChat-only registration
             if not user.email:
                 user.email = ""
+            # Save user first before creating UserInfo
+            user.save()
+
+            # Now create UserInfo with saved user
             user_info = UserInfo.objects.create(user=user, nickname=user.username)
             user_info.wechat = openid
             if "nickname" in body:
@@ -104,7 +108,6 @@ class WechatRegister(View):
             # Add phone number if provided
             if "telephone" in body:
                 user_info.telephone = body["telephone"]
-            user.save()
             user_info.save()
             return JsonResponse(
                 {"id": user.id, "token": generate_token(user)}, status=200
@@ -273,6 +276,9 @@ class WechatWebRegister(View):
         if not user.email:
             user.email = ""
 
+        # Save user first
+        user.save()
+
         # Create user info with WeChat data
         nickname = (
             body.get("nickname") or wechat_user_info.get("nickname") or user.username
@@ -291,7 +297,6 @@ class WechatWebRegister(View):
         if "telephone" in body:
             user_info.telephone = body["telephone"]
 
-        user.save()
         user_info.save()
         return JsonResponse({"id": user.id, "token": generate_token(user)}, status=200)
 
