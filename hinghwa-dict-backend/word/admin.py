@@ -219,7 +219,7 @@ class PronunciationAdmin(admin.ModelAdmin):
                     None,
                     [obj.contributor],
                     content=content,
-                    target=obj,
+                    action_object=obj,
                     title="【通知】语音审核结果",
                 )
 
@@ -244,7 +244,7 @@ class PronunciationAdmin(admin.ModelAdmin):
                     None,
                     [obj.contributor],
                     content=content,
-                    target=obj,
+                    action_object=obj,
                     title="【通知】语音审核结果",
                 )
 
@@ -292,7 +292,7 @@ class PronunciationAdmin(admin.ModelAdmin):
                     None,
                     [pro.contributor],
                     content=content,
-                    target=pro,
+                    action_object=pro,
                     title="【通知】语音审核结果",
                 )
             pro.visibility = True
@@ -315,12 +315,12 @@ class PronunciationAdmin(admin.ModelAdmin):
     def withdraw_visibility(self, request, queryset):
         for pro in queryset:
             if pro.visibility:
-                content = f"很遗憾，您的语音(id={id}) 没通过审核"
+                content = f"很遗憾，您的语音(id={pro.id}) 没通过审核"
                 sendNotification(
                     None,
                     [pro.contributor],
                     content=content,
-                    target=pro,
+                    action_object=pro,
                     title="【通知】语音审核结果",
                 )
             pro.visibility = False
@@ -377,6 +377,7 @@ class ApplicationAdmin(admin.ModelAdmin):
         from django.contrib.contenttypes.models import ContentType
 
         ct = ContentType.objects.get_for_model(obj)
+        # For Application, notifications use target (matching existing application/views.py)
         notifications = Notification.objects.filter(
             target_content_type=ct, target_object_id=obj.id, verb__icontains="审核"
         ).order_by("-timestamp")

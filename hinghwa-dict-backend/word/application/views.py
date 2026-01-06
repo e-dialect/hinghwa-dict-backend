@@ -100,7 +100,40 @@ class SingleApplication(View):
         """
         application = find_application(id)
         token_pass(request.headers, application.contributor.id)  # 仅限申请人
-        return JsonResponse({"application": application_all(application)}, status=200)
+        
+        result = {"application": application_all(application)}
+        
+        # Add approval history for admin users
+        from website.views import token_check
+        if "token" in request.headers:
+            user = token_check(request.headers["token"], settings.JWT_KEY, -1)
+            if user:
+                # User is admin, include approval notifications
+                from notifications.models import Notification
+                from django.contrib.contenttypes.models import ContentType
+                
+                ct = ContentType.objects.get_for_model(application)
+                # For Application, notifications use target (not action_object)
+                notifications = Notification.objects.filter(
+                    target_content_type=ct, 
+                    target_object_id=application.id, 
+                    verb__icontains="审核"
+                ).order_by("-timestamp")
+                
+                approval_history = []
+                for notif in notifications:
+                    approval_history.append({
+                        "id": notif.id,
+                        "timestamp": notif.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                        "verb": notif.verb,
+                        "description": notif.description,
+                        "actor": notif.actor.username if notif.actor else "系统",
+                        "recipient": notif.recipient.username if notif.recipient else None,
+                    })
+                
+                result["approval_history"] = approval_history
+        
+        return JsonResponse(result, status=200)
 
     def put(self, request, id) -> JsonResponse:
         """
