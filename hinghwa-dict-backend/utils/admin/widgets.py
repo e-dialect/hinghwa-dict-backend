@@ -166,19 +166,14 @@ class IPAKeyboardWidget(forms.TextInput):
             default_attrs.update(attrs)
         super().__init__(default_attrs)
 
-    # Class variable to track if CSS has been included on the page
-    _css_included = False
-
     def render(self, name, value, attrs=None, renderer=None):
         html = super().render(name, value, attrs, renderer)
         textarea_id = escape(attrs.get("id", f"id_{name}") if attrs else f"id_{name}")
 
-        # Only include CSS once per page render
-        css = ""
-        if not IPAKeyboardWidget._css_included:
-            IPAKeyboardWidget._css_included = True
-            css = """
-        <style>
+        # Include CSS with a unique ID so browser can deduplicate
+        # Using an ID ensures CSS is only applied once even if multiple widgets render
+        css = """
+        <style id="ipa-keyboard-styles">
         .ipa-keyboard {
             margin-top: 10px;
             padding: 10px;
