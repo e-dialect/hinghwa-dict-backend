@@ -8,6 +8,46 @@ from website.views import sendNotification
 from utils.admin.widgets import AudioPlayerWidget, MarkdownEditorWidget
 
 
+class VerifierListFilter(admin.SimpleListFilter):
+    """Custom filter for verifier field with special options."""
+
+    title = "审核人"
+    parameter_name = "verifier_status"
+
+    def lookups(self, request, model_admin):
+        """Return a list of tuples for filter options."""
+        # Get all verifiers who have reviewed items
+        from django.contrib.auth.models import User
+
+        verifiers = (
+            User.objects.filter(verified_pronunciations__isnull=False).distinct()
+            | User.objects.filter(verified_applications__isnull=False).distinct()
+        )
+
+        # Build the filter options
+        options = [
+            ("unreviewed", "未审核"),
+            ("reviewed", "已审核（全部）"),
+        ]
+
+        # Add individual verifiers
+        for verifier in verifiers.distinct():
+            options.append((f"user_{verifier.id}", f"{verifier.username}"))
+
+        return options
+
+    def queryset(self, request, queryset):
+        """Return the filtered queryset."""
+        if self.value() == "unreviewed":
+            return queryset.filter(verifier__isnull=True)
+        elif self.value() == "reviewed":
+            return queryset.filter(verifier__isnull=False)
+        elif self.value() and self.value().startswith("user_"):
+            user_id = self.value().split("_")[1]
+            return queryset.filter(verifier__id=user_id)
+        return queryset
+
+
 # Register your models here.
 
 
@@ -129,7 +169,7 @@ class PronunciationAdmin(admin.ModelAdmin):
         "granted",
         "verifier",
     ]
-    list_filter = ["contributor", "visibility", "county", "verifier"]
+    list_filter = ["contributor", "visibility", "county", VerifierListFilter]
     search_fields = ["word__word", "contributor__username", "pinyin", "id", "ipa"]
     ordering = ["-id", "-views"]
     list_per_page = 50
@@ -318,7 +358,7 @@ class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     change_form_template = "admin/word/application/change_form.html"
     list_display = ["id", "word", "reason", "contributor", "granted", "verifier"]
-    list_filter = ["contributor", "verifier", "word"]
+    list_filter = ["contributor", VerifierListFilter, "word"]
     search_fields = [
         "word__word",
         "content_word",
