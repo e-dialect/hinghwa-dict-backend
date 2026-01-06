@@ -87,6 +87,20 @@ class Application(models.Model):
         verbose_name="审核人",
         editable=False,
     )
+
+    # 审核状态：pending(待审核), approved(通过), rejected(不通过)
+    APPROVAL_STATUS_CHOICES = [
+        ("pending", "待审核"),
+        ("approved", "审核通过"),
+        ("rejected", "审核不通过"),
+    ]
+    approval_status = models.CharField(
+        max_length=20,
+        choices=APPROVAL_STATUS_CHOICES,
+        default="pending",
+        verbose_name="审核状态",
+    )
+
     # 修改内容
     content_word = models.CharField(max_length=60, verbose_name="词", blank=True)
     definition = models.TextField(verbose_name="注释", blank=True)
@@ -166,6 +180,20 @@ class Pronunciation(models.Model):
         verbose_name="审核人",
         editable=False,
     )
+
+    # 审核状态：pending(待审核), approved(通过), rejected(不通过)
+    APPROVAL_STATUS_CHOICES = [
+        ("pending", "待审核"),
+        ("approved", "审核通过"),
+        ("rejected", "审核不通过"),
+    ]
+    approval_status = models.CharField(
+        max_length=20,
+        choices=APPROVAL_STATUS_CHOICES,
+        default="pending",
+        verbose_name="审核状态",
+    )
+
     views = models.IntegerField(default=0, verbose_name="访问量", editable=False)
     upload_time = models.DateTimeField(
         verbose_name="上传时间", blank=False, null=True, auto_now_add=True

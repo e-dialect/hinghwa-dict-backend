@@ -6,8 +6,13 @@
     {% if original.pk %}
         <p class="approval-status" style="float: left; padding: 10px 15px; margin: 0;">
             <strong>审核状态：</strong>
-            {% if original.visibility %}
-                <span style="color: green;">✓ 已通过审核</span>
+            {% if original.approval_status == 'approved' %}
+                <span style="color: green;">✓ 审核通过</span>
+                {% if original.verifier %}
+                    (审核人: {{ original.verifier.username }})
+                {% endif %}
+            {% elif original.approval_status == 'rejected' %}
+                <span style="color: red;">✗ 审核不通过</span>
                 {% if original.verifier %}
                     (审核人: {{ original.verifier.username }})
                 {% endif %}
@@ -20,16 +25,16 @@
         <input type="submit" value="{% trans 'Save and continue editing' %}" name="_continue">
         <input type="submit" value="{% trans 'Save and add another' %}" name="_addanother">
         
-        {% if not original.visibility %}
+        {% if original.approval_status != 'approved' %}
             <input type="submit" value="✓ 审核通过" name="_approve" 
                    style="background: #417690; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;"
                    title="审核通过并标记为可见">
         {% endif %}
         
-        {% if original.visibility %}
-            <input type="submit" value="✗ 撤销审核" name="_reject" 
+        {% if original.approval_status != 'rejected' %}
+            <input type="submit" value="✗ 审核不通过" name="_reject" 
                    style="background: #ba2121; color: white; padding: 10px 15px; border: none; border-radius: 4px; cursor: pointer; margin-left: 5px;"
-                   title="撤销审核并标记为不可见">
+                   title="审核不通过并标记为不可见">
         {% endif %}
         
         {% if show_delete_link %}

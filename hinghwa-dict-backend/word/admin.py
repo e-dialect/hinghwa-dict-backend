@@ -125,21 +125,24 @@ class PronunciationAdmin(admin.ModelAdmin):
         "contributor",
         "county",
         "views",
+        "approval_status",
         "visibility",
         "granted",
         "verifier",
     ]
-    list_filter = ["contributor", "visibility", "county"]
+    list_filter = ["contributor", "approval_status", "visibility", "county"]
     search_fields = ["word__word", "contributor__username", "pinyin", "id", "ipa"]
     ordering = ["-id", "-views"]
     list_per_page = 50
     raw_id_fields = ("contributor", "word")
+    readonly_fields = ("approval_status",)
 
     def response_change(self, request, obj):
         """Handle custom approval buttons on the change form."""
         if "_approve" in request.POST:
             # Approve the pronunciation
-            if not obj.visibility:
+            if obj.approval_status != "approved":
+                obj.approval_status = "approved"
                 obj.visibility = True
                 obj.verifier = request.user
                 obj.save()
@@ -160,14 +163,15 @@ class PronunciationAdmin(admin.ModelAdmin):
             return self._get_next_pronunciation_redirect(request, obj)
 
         elif "_reject" in request.POST:
-            # Reject/withdraw approval
-            if obj.visibility:
+            # Reject the pronunciation
+            if obj.approval_status != "rejected":
+                obj.approval_status = "rejected"
                 obj.visibility = False
-                obj.verifier = None
+                obj.verifier = request.user
                 obj.save()
 
                 # Send notification
-                content = f"很遗憾，您的语音(id={obj.id}) 审核已被撤销"
+                content = f"很遗憾，您的语音(id={obj.id}) 未通过审核"
                 sendNotification(
                     None,
                     [obj.contributor],
@@ -177,7 +181,7 @@ class PronunciationAdmin(admin.ModelAdmin):
                 )
 
                 self.message_user(
-                    request, f"语音 {obj.id} 审核已撤销", messages.WARNING
+                    request, f"语音 {obj.id} 审核不通过", messages.WARNING
                 )
             return self._get_next_pronunciation_redirect(request, obj)
 
@@ -190,7 +194,7 @@ class PronunciationAdmin(admin.ModelAdmin):
 
         # Try to find next pending pronunciation
         next_pronunciation = (
-            Pronunciation.objects.filter(visibility=False, id__gt=obj.id)
+            Pronunciation.objects.filter(approval_status="pending", id__gt=obj.id)
             .order_by("id")
             .first()
         )
@@ -285,8 +289,16 @@ class ApplicationAdminForm(forms.ModelForm):
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     change_form_template = "admin/word/application/change_form.html"
-    list_display = ["id", "word", "reason", "contributor", "granted", "verifier"]
-    list_filter = ["contributor", "verifier", "word"]
+    list_display = [
+        "id",
+        "word",
+        "reason",
+        "contributor",
+        "approval_status",
+        "granted",
+        "verifier",
+    ]
+    list_filter = ["contributor", "approval_status", "verifier", "word"]
     search_fields = [
         "word__word",
         "content_word",
@@ -298,12 +310,14 @@ class ApplicationAdmin(admin.ModelAdmin):
     list_per_page = 50
     filter_horizontal = ["related_words", "related_articles"]
     raw_id_fields = ("contributor", "verifier", "word")
+    readonly_fields = ("approval_status",)
 
     def response_change(self, request, obj):
         """Handle custom approval buttons on the change form."""
         if "_approve" in request.POST:
             # Approve the application
-            if not obj.verifier:
+            if obj.approval_status != "approved":
+                obj.approval_status = "approved"
                 obj.verifier = request.user
                 obj.save()
 
@@ -313,13 +327,14 @@ class ApplicationAdmin(admin.ModelAdmin):
             return self._get_next_application_redirect(request, obj)
 
         elif "_reject" in request.POST:
-            # Reject/withdraw approval
-            if obj.verifier:
-                obj.verifier = None
+            # Reject the application
+            if obj.approval_status != "rejected":
+                obj.approval_status = "rejected"
+                obj.verifier = request.user
                 obj.save()
 
                 self.message_user(
-                    request, f"词条申请 {obj.id} 审核已撤销", messages.WARNING
+                    request, f"词条申请 {obj.id} 审核不通过", messages.WARNING
                 )
             return self._get_next_application_redirect(request, obj)
 
@@ -332,7 +347,7 @@ class ApplicationAdmin(admin.ModelAdmin):
 
         # Try to find next pending application
         next_application = (
-            Application.objects.filter(verifier__isnull=True, id__gt=obj.id)
+            Application.objects.filter(approval_status="pending", id__gt=obj.id)
             .order_by("id")
             .first()
         )
@@ -348,6 +363,9 @@ class ApplicationAdmin(admin.ModelAdmin):
             return HttpResponseRedirect(url)
         else:
             # No more pending, go back to list
+            url = reverse("admin:word_application_changelist")
+            self.message_user(request, "没有更多待审核的申请", messages.INFO)
+            return HttpResponseRedirect(url)
             url = reverse("admin:word_application_changelist")
             self.message_user(request, "没有更多待审核的申请", messages.INFO)
             return HttpResponseRedirect(url)
