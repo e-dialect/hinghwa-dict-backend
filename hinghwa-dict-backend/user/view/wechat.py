@@ -1,5 +1,6 @@
 import demjson3
 import requests
+from urllib.parse import urlparse
 from django.conf import settings
 from django.http import JsonResponse
 from django.utils import timezone
@@ -19,21 +20,45 @@ from user.dto.user_all import user_all
 
 
 class OpenId:
+    """
+    微信小程序登录凭证校验
+    用于获取用户的 openid 和 session_key
+    """
+
     def __init__(self, jscode):
         self.url = "https://api.weixin.qq.com/sns/jscode2session"
         self.app_id = settings.APP_ID
         self.app_secret = settings.APP_SECRECT
         self.jscode = jscode
+        # Cache the API response to avoid multiple requests with same jscode
+        self.response_data = None
+
+    def _fetch_data(self):
+        """
+        Fetch data from WeChat API if not already fetched
+        Caches the response to avoid redundant API calls
+        """
+        if self.response_data is None:
+            url = (
+                f"{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}"
+                f"&grant_type=authorization_code"
+            )
+            res = requests.get(url)
+            data = res.json()
+            if "errcode" in data:
+                raise NotFoundException(
+                    f"微信登录失败: {data.get('errmsg', '未知错误')}"
+                )
+            self.response_data = data
 
     def get_openid(self) -> str:
-        url = (
-            f"{self.url}?appid={self.app_id}&secret={self.app_secret}&js_code={self.jscode}"
-            f"&grant_type=authorization_code"
-        )
-        res = requests.get(url)
-        openid = res.json()["openid"]
-        # session_key = res.json()["session_key"]
-        return openid.strip()
+        self._fetch_data()
+        return self.response_data["openid"].strip()
+
+    def get_session_key(self) -> str:
+        """Get session_key for decrypting phone number and other sensitive data"""
+        self._fetch_data()
+        return self.response_data.get("session_key", "")
 
 
 class WechatLogin(View):
@@ -66,20 +91,37 @@ class WechatRegister(View):
             if user_form["username"].errors:
                 return JsonResponse({"msg": "用户名重复"}, status=409)
             else:
-                return JsonResponse({"msg": "请求有误"}, status=400)
+                # Provide more detailed error information
+                error_details = []
+                for field, errors in user_form.errors.items():
+                    error_details.append(f"{field}: {', '.join(errors)}")
+                return JsonResponse(
+                    {"msg": "表单验证失败", "errors": error_details}, status=400
+                )
         else:
             user = user_form.save(commit=False)
             password_validator(user_form.cleaned_data["password"])
             user.set_password(user_form.cleaned_data["password"])
+            # Set empty email for WeChat-only registration
+            if not user.email:
+                user.email = ""
+            # Save user first before creating UserInfo
+            user.save()
+
+            # Now create UserInfo with saved user
             user_info = UserInfo.objects.create(user=user, nickname=user.username)
             user_info.wechat = openid
             if "nickname" in body:
                 user_info.nickname = body["nickname"]
             if "avatar" in body:
                 user_info.avatar = uploadAvatar(user.id, body["avatar"], suffix="png")
-            user.save()
+            # Add phone number if provided
+            if "telephone" in body:
+                user_info.telephone = body["telephone"]
             user_info.save()
-            return JsonResponse({}, status=200)
+            return JsonResponse(
+                {"id": user.id, "token": generate_token(user)}, status=200
+            )
 
 
 class BindWechat(View):
@@ -134,3 +176,170 @@ class WechatManage(View):
             },
             status=200,
         )
+
+
+class WechatWebAuth:
+    """Handle Web/H5 WeChat OAuth authentication"""
+
+    def __init__(self, code):
+        self.code = code
+        self.app_id = (
+            settings.WEB_APP_ID if hasattr(settings, "WEB_APP_ID") else settings.APP_ID
+        )
+        self.app_secret = (
+            settings.WEB_APP_SECRET
+            if hasattr(settings, "WEB_APP_SECRET")
+            else settings.APP_SECRECT
+        )
+        self.response_data = None
+
+    def _fetch_access_token(self):
+        """Fetch access token from WeChat Web OAuth API"""
+        if self.response_data is None:
+            url = (
+                f"https://api.weixin.qq.com/sns/oauth2/access_token"
+                f"?appid={self.app_id}&secret={self.app_secret}"
+                f"&code={self.code}&grant_type=authorization_code"
+            )
+            res = requests.get(url)
+            data = res.json()
+            if "errcode" in data:
+                raise NotFoundException(
+                    f"微信网页授权失败: {data.get('errmsg', '未知错误')}"
+                )
+            self.response_data = data
+
+    def get_openid(self) -> str:
+        """Get user's openid from WeChat Web OAuth"""
+        self._fetch_access_token()
+        return self.response_data["openid"].strip()
+
+    def get_user_info(self) -> dict:
+        """Get user info including nickname, avatar, etc."""
+        self._fetch_access_token()
+        access_token = self.response_data["access_token"]
+        openid = self.response_data["openid"]
+        url = f"https://api.weixin.qq.com/sns/userinfo?access_token={access_token}&openid={openid}&lang=zh_CN"
+        res = requests.get(url)
+        user_info = res.json()
+        if "errcode" in user_info:
+            raise NotFoundException(
+                f"获取微信用户信息失败: {user_info.get('errmsg', '未知错误')}"
+            )
+        return user_info
+
+
+class WechatWebLogin(View):
+    """Web/H5 WeChat OAuth login"""
+
+    def post(self, request):
+        body = demjson3.decode(request.body)
+        code = body["code"]
+        wechat_auth = WechatWebAuth(code)
+        openid = wechat_auth.get_openid()
+        user_info = UserInfo.objects.filter(wechat__contains=openid)
+        if not user_info.exists():
+            raise NotFoundException("当前微信未绑定账号")
+        user = user_info[0].user
+        user.last_login = timezone.now()
+        user.save()
+        return JsonResponse({"token": generate_token(user), "id": user.id}, status=200)
+
+
+class WechatWebRegister(View):
+    """Web/H5 WeChat OAuth registration with one-click"""
+
+    @staticmethod
+    def _is_valid_url(url: str) -> bool:
+        """Check if a string is a valid HTTP/HTTPS URL"""
+        try:
+            result = urlparse(url)
+            return all([result.scheme in ["http", "https"], result.netloc])
+        except Exception:
+            return False
+
+    def post(self, request):
+        body = demjson3.decode(request.body)
+        code = body["code"]
+        wechat_auth = WechatWebAuth(code)
+        openid = wechat_auth.get_openid()
+
+        # Check if WeChat already bound
+        user_info = UserInfo.objects.filter(wechat__contains=openid)
+        if user_info.exists():
+            return JsonResponse({"msg": "该微信已绑定账户"}, status=409)
+
+        # Get WeChat user info for nickname and avatar
+        try:
+            wechat_user_info = wechat_auth.get_user_info()
+        except Exception as e:
+            # If WeChat API fails, continue with empty user info
+            # User can still complete registration without WeChat data
+            wechat_user_info = {}
+
+        # Validate required fields
+        user_form = UserFormByWechat(body)
+        if not user_form.is_valid():
+            if user_form["username"].errors:
+                return JsonResponse({"msg": "用户名重复"}, status=409)
+            else:
+                error_details = []
+                for field, errors in user_form.errors.items():
+                    error_details.append(f"{field}: {', '.join(errors)}")
+                return JsonResponse(
+                    {"msg": "表单验证失败", "errors": error_details}, status=400
+                )
+
+        # Create user
+        user = user_form.save(commit=False)
+        password_validator(user_form.cleaned_data["password"])
+        user.set_password(user_form.cleaned_data["password"])
+        if not user.email:
+            user.email = ""
+
+        # Save user first
+        user.save()
+
+        # Create user info with WeChat data
+        nickname = (
+            body.get("nickname") or wechat_user_info.get("nickname") or user.username
+        )
+        avatar = body.get("avatar") or wechat_user_info.get("headimgurl") or ""
+
+        user_info = UserInfo.objects.create(user=user, nickname=nickname)
+        user_info.wechat = openid
+
+        if avatar:
+            # Validate if avatar is a URL
+            if self._is_valid_url(avatar):
+                user_info.avatar = avatar
+            else:
+                # Assume it's base64 encoded image data
+                user_info.avatar = uploadAvatar(user.id, avatar, suffix="png")
+
+        if "telephone" in body:
+            user_info.telephone = body["telephone"]
+
+        user_info.save()
+        return JsonResponse({"id": user.id, "token": generate_token(user)}, status=200)
+
+
+class BindWechatWeb(View):
+    """Bind Web/H5 WeChat OAuth to existing account"""
+
+    def put(self, request, id) -> JsonResponse:
+        user = check_request_user(request, id)
+        body = demjson3.decode(request.body)
+        code = body["code"]
+        wechat_auth = WechatWebAuth(code)
+        openid = wechat_auth.get_openid()
+
+        if UserInfo.objects.filter(wechat=openid).exists():
+            return JsonResponse({"msg": "该微信已绑定其他账号"}, status=409)
+        if len(user.user_info.wechat):
+            if not body.get("overwrite", False):
+                return JsonResponse({"msg": "该账户已绑定微信"}, status=409)
+
+        user.user_info.wechat = openid
+        user.user_info.save()
+        return JsonResponse({}, status=200)

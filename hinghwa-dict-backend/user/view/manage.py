@@ -150,6 +150,18 @@ class ManageEmail(View):
         user.save()
         return JsonResponse({"user": user_all(user)}, status=200)
 
+    # US0306 解绑邮箱
+    def delete(self, request, id) -> JsonResponse:
+        user = get_request_user(request)
+        if user.id != id:
+            raise ForbiddenException
+        # 确保至少绑定了微信
+        if not user.user_info.wechat:
+            return JsonResponse({"msg": "未绑定微信，无法解绑邮箱"}, status=403)
+        user.email = ""
+        user.save()
+        return JsonResponse({"user": user_all(user)}, status=200)
+
 
 class ManagePoints(View):
     # US0204 获取用户积分信息
