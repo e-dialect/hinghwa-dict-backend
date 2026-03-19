@@ -7,14 +7,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-def simpleUserInfo(user: User):
-    return {
-        "nickname": user.user_info.nickname,
-        "avatar": user.user_info.avatar,
-        "id": user.id,
-    }
-
-
 class globalVar:
     email_code = {}
 

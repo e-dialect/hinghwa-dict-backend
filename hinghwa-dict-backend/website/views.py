@@ -20,8 +20,8 @@ from .models import Website, DailyExpression
 from .notification.dto import notification_normal
 from .notification.utils import sendNotification, readNotification
 from .storage import upload_file, delete_file
+from user.dto.user_simple import user_simple
 from .utils import (
-    simpleUserInfo,
     globalVar,
     email_check,
     token_check,
@@ -105,7 +105,7 @@ def announcements(request):
                             "cover": article.cover,
                             "visibility": article.visibility,
                         },
-                        "author": simpleUserInfo(article.author),
+                        "author": user_simple(article.author),
                     }
                 )
             return JsonResponse({"announcements": announcements}, status=200)
@@ -154,7 +154,7 @@ def hot_articles(request):
                             "cover": article.cover,
                             "visibility": article.visibility,
                         },
-                        "author": simpleUserInfo(article.author),
+                        "author": user_simple(article.author),
                     }
                 )
             return JsonResponse({"hot_articles": hot_articles}, status=200)

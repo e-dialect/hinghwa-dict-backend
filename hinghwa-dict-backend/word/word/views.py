@@ -11,7 +11,8 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views import View
 from article.models import Article
-from website.utils import evaluate, token_check, simpleUserInfo, filterInOrder
+from website.utils import evaluate, token_check, filterInOrder
+from user.dto.user_simple import user_simple
 from ..forms import WordForm
 from ..models import Word, User
 from .word2pronunciation import word2pronunciation
@@ -118,7 +119,7 @@ def searchWords(request):
                 words.append(
                     {
                         "word": word_simple(word),
-                        "contributor": simpleUserInfo(word.contributor),
+                        "contributor": user_simple(word.contributor),
                         "pronunciation": {"url": pronunciation, "tts": "null"},
                     }
                 )
