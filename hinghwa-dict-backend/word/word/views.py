@@ -11,12 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.views import View
 from article.models import Article
-from website.views import (
-    evaluate,
-    token_check,
-    simpleUserInfo,
-    filterInOrder,
-)
+from website.utils import evaluate, token_check, simpleUserInfo, filterInOrder
 from ..forms import WordForm
 from ..models import Word, User
 from .word2pronunciation import word2pronunciation

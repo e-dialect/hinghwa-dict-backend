@@ -27,7 +27,9 @@ from utils.exception.types.not_found import (
     WordNotFoundException,
 )
 
-from website.views import token_check, sendNotification, simpleUserInfo, upload_file
+from website.utils import token_check, simpleUserInfo
+from website.notification.utils import sendNotification
+from website.storage import upload_file
 from ..forms import PronunciationForm
 from ..models import Word, Character, Pronunciation, split
 from django.utils import timezone

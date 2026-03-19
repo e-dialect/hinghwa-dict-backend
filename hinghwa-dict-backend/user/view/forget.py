@@ -7,7 +7,7 @@ from utils.PasswordValidation import password_validator
 from utils.exception.types.forbidden import ForbiddenException
 from utils.exception.types.not_found import NotBoundEmail
 from utils.token import check_request_user
-from website.views import email_check
+from website.utils import email_check
 
 
 class Forget(View):

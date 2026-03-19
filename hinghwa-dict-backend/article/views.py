@@ -4,13 +4,8 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import User
-from website.views import (
-    evaluate,
-    token_check,
-    simpleUserInfo,
-    filterInOrder,
-    sendNotification,
-)
+from website.utils import evaluate, token_check, simpleUserInfo, filterInOrder
+from website.notification.utils import sendNotification
 from .forms import ArticleForm, CommentForm
 from django.db.models import Q, Count, Max
 from user.dto.user_simple import user_simple

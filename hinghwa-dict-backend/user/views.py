@@ -9,7 +9,7 @@ from utils.PasswordValidation import password_validator
 from utils.exception.types.not_found import NotBoundEmail
 from utils.token import generate_token
 from utils.Upload import uploadAvatar
-from website.views import email_check, token_check
+from website.utils import email_check, token_check
 from word.pronunciation.dto.pronunciation_simple import pronunciation_simple
 from .forms import UserForm
 from .models import UserInfo, User
