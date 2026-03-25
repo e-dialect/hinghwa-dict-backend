@@ -1,5 +1,7 @@
 # 兴化语记（后端）
 
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/e-dialect/hinghwa-dict-backend)
+
 ## 项目简介
 
 兴化语记是 [E方言](https://edialect.top) 中`莆仙方言公共服务包` 的别称，主要服务对象包括福建省莆田市及其周边地区的莆仙方言使用者。
