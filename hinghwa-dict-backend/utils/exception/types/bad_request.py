@@ -30,12 +30,12 @@ class InsufficientQuiz(BadRequestException):
         super().__init__(msg)
 
 
-class PronunciationRankWithoutDays(BadRequestException):
+class RankWithoutDays(BadRequestException):
     """
     发音排名请求没有发送天数异常
     """
 
-    def __init__(self, msg="发音排名请求没有发送天数"):
+    def __init__(self, msg="排名请求没有发送天数"):
         super().__init__(msg)
 
 

@@ -1,6 +1,7 @@
 import demjson3
 from django.contrib.auth.models import User
 from django.core.paginator import Paginator
+from django.db.models import Q
 from django.http import JsonResponse
 from django.views import View
 from notifications.models import Notification
@@ -29,11 +30,20 @@ class Notifications(View):
 
     # WS0802 filter notifications
     def get(self, request):
+        user = get_request_user(request)
+        if not user.id:
+            raise UnauthorizedException()
         notifications = Notification.objects.all()
+        if not user.is_staff:
+            notifications = notifications.filter(
+                Q(actor_object_id=user.id) | Q(recipient_id=user.id)
+            )
         if "from" in request.GET:
             notifications = notifications.filter(actor_object_id=request.GET["from"])
-        if "to" in request.GET:
+        elif "to" in request.GET:
             notifications = notifications.filter(recipient_id=request.GET["to"])
+        else:
+            notifications = notifications.filter(recipient_id=user.id)
         if "unread" in request.GET:
             if request.GET["unread"] in ["True", "true", "1"]:
                 notifications = notifications.filter(unread=True)

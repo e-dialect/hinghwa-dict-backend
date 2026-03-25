@@ -1,18 +1,34 @@
+# Core Django
 django==5.0.3
-demjson3~=3.0.6
-pyjwt~=2.4.0
 django-cors-headers~=4.3.1
-xlrd~=2.0.1
-cos-python-sdk-v5
-apscheduler==3.7.0
+django-simpleui==2023.3.1
+
+# Django Extensions
 django_apscheduler
 django-notifications-hq==1.8.3
-pydub==0.25.1
-ffmpeg==1.4
-ffprobe==0.5
+
+# Utilities
+demjson3~=3.0.6
+pyjwt~=2.4.0
 python-environ==0.4.54
-numpy~=1.23.0
+
+# Data Processing
+xlrd~=2.0.1
+numpy>=1.26.0,<2.0.0  # Python 3.12+ compatible, avoid numpy 2.x for compatibility
 requests
 requests_toolbelt==0.10.1
-django-simpleui==2023.3.1
+
+# Audio Processing
+pydub==0.25.1
+# Note: ffmpeg and ffprobe are system utilities, not Python packages
+# Install via system package manager: apt-get install ffmpeg (Linux) or brew install ffmpeg (macOS)
+# The obsolete Python packages 'ffmpeg==1.4' and 'ffprobe==0.5' have been removed
+
+# Cloud Storage
+cos-python-sdk-v5
+
+# Job Scheduling
+apscheduler==3.7.0
+
+# Development Tools
 black==24.3.0

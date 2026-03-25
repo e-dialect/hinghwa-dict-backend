@@ -19,7 +19,7 @@ from utils.token import get_request_user, token_pass, token_user
 from user.dto.user_simple import user_simple
 from utils.exception.types.bad_request import (
     BadRequestException,
-    PronunciationRankWithoutDays,
+    RankWithoutDays,
     InvalidPronunciation,
 )
 from utils.exception.types.not_found import (
@@ -299,10 +299,42 @@ class ManagePronunciation(View):
         pronunciation = get_pronunciation_by_id(id)
         pronunciation.views += 1
         pronunciation.save()
-        return JsonResponse(
-            {"pronunciation": pronunciation_all(pronunciation)},
-            status=200,
-        )
+
+        result = {"pronunciation": pronunciation_all(pronunciation)}
+
+        # Add approval history for admin users
+        if "token" in request.headers:
+            user = token_check(request.headers["token"], settings.JWT_KEY, -1)
+            if user and user.is_superuser:
+                # User is admin, include approval notifications
+                from notifications.models import Notification
+                from django.contrib.contenttypes.models import ContentType
+
+                ct = ContentType.objects.get_for_model(pronunciation)
+                notifications = Notification.objects.filter(
+                    action_object_content_type=ct,
+                    action_object_object_id=pronunciation.id,
+                    verb__icontains="审核",
+                ).order_by("-timestamp")
+
+                approval_history = []
+                for notif in notifications:
+                    approval_history.append(
+                        {
+                            "id": notif.id,
+                            "timestamp": notif.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+                            "verb": notif.verb,
+                            "description": notif.description,
+                            "actor": notif.actor.username if notif.actor else "系统",
+                            "recipient": (
+                                notif.recipient.username if notif.recipient else None
+                            ),
+                        }
+                    )
+
+                result["approval_history"] = approval_history
+
+        return JsonResponse(result, status=200)
 
     # PN0103 更改发音信息
     def put(self, request, id):
@@ -366,6 +398,7 @@ class ManageApproval(View):
         pronunciation.save()
         pro = f"语音(id={id})"
         contributor = pronunciation.contributor
+        transaction = None
         if result:
             content = f"恭喜您，您的语音{pro}审核通过"
             transaction = manage_points_in_pronunciation(contributor.id)
@@ -378,7 +411,7 @@ class ManageApproval(View):
             action_object=pronunciation,
             title=f"【通知】语音（{pronunciation.word.word}）审核结果",
         )
-        return JsonResponse(transaction, status=200)
+        return JsonResponse(transaction if transaction else {}, status=200)
 
     # PN0105 更改审核结果
     def put(self, request, id):
@@ -498,7 +531,7 @@ class PronunciationRanking(View):
         page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
         pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
         if not days:
-            raise PronunciationRankWithoutDays()
+            raise RankWithoutDays()
         days = int(days)
         try:
             token = token_pass(request.headers)

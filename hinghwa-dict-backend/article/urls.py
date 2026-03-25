@@ -13,4 +13,5 @@ urlpatterns = [
     path("/comments/<int:id>/like", csrf_exempt(LikeComment.as_view())),
     path("/comments/<int:id>", csrf_exempt(CommentDetail.as_view())),
     path("/comments", csrf_exempt(SearchComment.as_view())),
+    path("/ranking", csrf_exempt(ArticleRanking.as_view())),  # AT0203文章榜单
 ]

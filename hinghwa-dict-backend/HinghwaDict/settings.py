@@ -157,7 +157,6 @@ CORS_ORIGIN_ALLOW_ALL = True
 APPEND_SLASH = False
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ORIGIN_ALLOW_ALL = True
 CORS_ORIGIN_WHITELIST = (
     "http://127.0.0.1:*",
     "https://api.pxm.edialect.top:*",
@@ -188,6 +187,15 @@ CORS_ALLOW_HEADERS = (
     "x-token",
     "token",
 )
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://127.0.0.1:*",
+    "https://api.pxm.edialect.top",
+    "https://api.pxm.test.edialect.top",
+    "https://pxm.edialect.top:*",
+    "https://localhost:*",
+]
+
 # parameter of Tencent cos
 COS_SECRET_ID = env.str(
     "COS_SECRET_ID", "DEFAULT_COS_SECRET_ID"
@@ -199,8 +207,15 @@ COS_BUCKET = env.str("COS_BUCKET", "DEFAULT_COS_BUCKET")  # BucketName-APPID
 COS_REGION = env.str("COS_REGION", "DEFAULT_COS_REGION")
 
 # parameter of wechat login
+# 小程序 AppID and Secret
 APP_ID = env.str("APP_ID", "DEFAULT_APP_ID")
 APP_SECRECT = env.str("APP_SECRECT", "DEFAULT_APP_SECRECT")
+
+# 网页版微信 OAuth AppID and Secret (如果与小程序相同，可不配置)
+WEB_APP_ID = env.str("WEB_APP_ID", env.str("APP_ID", "DEFAULT_APP_ID"))
+WEB_APP_SECRET = env.str(
+    "WEB_APP_SECRET", env.str("APP_SECRECT", "DEFAULT_APP_SECRECT")
+)
 
 # parameter of jwt
 JWT_KEY = env.str("JWT_KEY", "DEFAULT_JWT_KEY")
@@ -309,6 +324,11 @@ CACHES = {
         "TIMEOUT": 900,
         "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         "LOCATION": "pronunciation_ranking_cache_table",
+    },
+    "article_ranking": {
+        "TIMEOUT": 900,
+        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
+        "LOCATION": "article_ranking_cache_table",
     },
 }
 SIMPLEUI_LOGO = "https://hinghwa.cn/img/blue.7169aa26.svg"

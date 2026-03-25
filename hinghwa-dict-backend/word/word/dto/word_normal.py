@@ -11,7 +11,15 @@ def word_normal(word: Word) -> dict:
         {"id": article.id, "title": article.title}
         for article in word.related_articles.all()
     ]
-    tags_list = json.loads(word.tags.replace("'", '"'))
+    # Handle empty or malformed tags field
+    try:
+        if not word.tags or not word.tags.strip():
+            tags_list = []
+        else:
+            tags_list = json.loads(word.tags.replace("'", '"'))
+    except (json.JSONDecodeError, ValueError):
+        tags_list = []
+
     response = {
         "word": word.word,
         "definition": word.definition,
