@@ -385,7 +385,7 @@ class ApplicationAdminForm(forms.ModelForm):
 class ApplicationAdmin(admin.ModelAdmin):
     form = ApplicationAdminForm
     change_form_template = "admin/word/application/change_form.html"
-    list_display = ["id", "word", "reason", "contributor", "granted", "verifier"]
+    list_display = ["id", "word", "reason", "contributor", "get_approval_status", "verifier"]
     list_filter = ["contributor", VerifierListFilter, "word"]
     search_fields = [
         "word__word",
@@ -432,8 +432,9 @@ class ApplicationAdmin(admin.ModelAdmin):
             # Approve the application
             approval_reason = request.POST.get("approval_reason", "").strip()
             # Only process if state is actually changing
-            if not obj.verifier:
+            if obj.approved is not True:
                 obj.verifier = request.user
+                obj.approved=True
                 obj.save()
 
                 # Send notification with reason
@@ -457,8 +458,9 @@ class ApplicationAdmin(admin.ModelAdmin):
             # Reject the application
             approval_reason = request.POST.get("approval_reason", "").strip()
             # Only process if state is actually changing
-            if not obj.verifier:
+            if obj.approved is not False:
                 obj.verifier = request.user
+                obj.approved = False
                 obj.save()
 
                 # Send notification with reason
@@ -506,7 +508,15 @@ class ApplicationAdmin(admin.ModelAdmin):
             url = reverse("admin:word_application_changelist")
             self.message_user(request, "没有更多待审核的申请", messages.INFO)
             return HttpResponseRedirect(url)
-
+        
+    def get_approval_status(self, obj):
+        if obj.approved is True:
+            return "已通过"
+        elif obj.approved is False:
+            return "已拒绝"
+        else:
+            return "待审核"
+    get_approval_status.short_description = "审核状态"
 
 class WordsInlineAdmin(admin.TabularInline):
     model = List.words.through
