@@ -1,24 +1,17 @@
-version: "3.6"
-services: 
-    hinghwadict-backend:
-        build: .
-        image: "sheeplin/${SERVICE_NAME}"
-        container_name: "${SERVICE_NAME}"
-        restart: unless-stopped
-        labels: 
-            - "traefik.http.routers.${SERVICE_NAME}.rule=Host(`${HOST_ADDRESS}`)"
-            - "traefik.http.services.${SERVICE_NAME}.loadbalancer.server.port=8000"
-            - "traefik.http.routers.${SERVICE_NAME}.entrypoints=websecure"
-            - "traefik.http.routers.${SERVICE_NAME}.tls=true"
-            - "traefik.http.routers.${SERVICE_NAME}.tls.certresolver=tencentcloud"
-            - "traefik.http.routers.${SERVICE_NAME}.middlewares=${SERVICE_NAME}-compress"
-            - "traefik.http.middlewares.${SERVICE_NAME}-compress.compress=true"
-        networks: 
-            - traefik-global-proxy
-        volumes:
-           - ../../data/db.sqlite3:/usr/src/HinghwaDict-backend/db.sqlite3
-           - ../../data/media:/usr/src/HinghwaDict-backend/media
-           - ../../data/logs:/usr/src/HinghwaDict-backend/logs
-networks:
-  traefik-global-proxy:
-    external: true
+version: "3.8"
+
+services:
+  web:
+    build: .
+    container_name: hinghwa-dict-local
+    # 这一步最关键：把当前目录同步到容器，改代码即刻生效
+    volumes:
+      - .:/usr/src/HinghwaDict-backend
+    ports:
+      - "8000:8000"
+    # 模拟交互式终端，方便看日志
+    stdin_open: true
+    tty: true
+    # 如果有数据库文件，Docker会自动在容器内创建
+    environment:
+      - PYTHONUNBUFFERED=1
