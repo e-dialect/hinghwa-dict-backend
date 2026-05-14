@@ -364,7 +364,7 @@ class CommentDetail(View):
         me["is_author"] = user == comment.user if user else False
         # 检查文章作者是否回复了该评论
         article_author = comment.article.author
-        has_author_reply = comment.sons.filter(user=article_author).exist()
+        has_author_reply = comment.sons.filter(user=article_author).exists() 
         me["author_replied"] = has_author_reply
 
         me["like"] = comment.like_users.filter(id=user.id).exists()
