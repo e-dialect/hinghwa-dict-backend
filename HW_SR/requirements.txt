@@ -1,0 +1,23 @@
+# requirements.txt，虚拟环境安装依赖文件
+# 数据读取与处理 (Excel/结构化数据)
+pandas>=2.1.0
+openpyxl>=3.1.2
+
+# 向量检索引擎 (FAISS)
+faiss-cpu>=1.8.0
+
+# 语义嵌入模型 (bge向量生成)
+sentence-transformers>=2.6.0
+numpy>=1.26.0
+
+# API网络请求 (DeepSeek接口调用)
+requests>=2.31.0
+
+# Web 框架封装层
+Django>=5.0,<6.0
+
+# 安全配置 (隐藏API Key，.env文件)
+python-dotenv>=1.0.0
+
+# 可选：GPU版Faiss（有GPU时添加，比faiss-cpu快10-100倍）
+# faiss-gpu>=1.8.0
