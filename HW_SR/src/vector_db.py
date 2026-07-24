@@ -7,13 +7,16 @@ import pickle
 from typing import List, Dict
 from tqdm import tqdm
 
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# 保证 HW_SR 根目录在 sys.path 中（无论从哪个工作目录运行）
+_PROJ_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _PROJ_ROOT not in sys.path:
+    sys.path.insert(0, _PROJ_ROOT)
 from src.data_loader import load_excel_data, exact_match_search, get_full_df, FIELD_MAPPING
 from src.encoder import encode_entry, encode_query, VECTOR_DIM
 
 # ====================== 配置 ======================
-INDEX_PATH = "models/dialect_faiss.index"  # FAISS索引保存路径
-ID_MAP_PATH = "models/entry_id_map.pkl"    # 词条ID映射路径
+INDEX_PATH = os.path.join(_PROJ_ROOT, "models", "dialect_faiss.index")  # FAISS索引保存路径（绝对路径）
+ID_MAP_PATH = os.path.join(_PROJ_ROOT, "models", "entry_id_map.pkl")    # 词条ID映射路径（绝对路径）
 # ===================================================
 
 def build_faiss_index() -> tuple[faiss.IndexFlatIP, List[str]]:
@@ -30,7 +33,7 @@ def build_faiss_index() -> tuple[faiss.IndexFlatIP, List[str]]:
     index.add(vectors_np)
     
     # 保存索引
-    os.makedirs("models", exist_ok=True)
+    os.makedirs(os.path.join(_PROJ_ROOT, "models"), exist_ok=True)
     faiss.write_index(index, INDEX_PATH)
     with open(ID_MAP_PATH, "wb") as f:
         pickle.dump(entry_ids, f)

@@ -7,7 +7,9 @@ import pandas as pd
 
 
 # ====================== 核心配置：Django ORM 数据源 ======================
-DJANGO_SETTINGS_MODULE = "django_service.config.settings"
+# 运行模式：在主 hinghwa-dict-backend Django 进程内直接调用时由 apps.get_model 动态获取；
+# 若作为独立脚本运行，则回退到 HW_SR 自身的 Django settings。
+_FALLBACK_DJANGO_SETTINGS = "django_service.config.settings"
 
 FIELD_MAPPING = {
     "dialect_word": "方言词",
@@ -24,15 +26,27 @@ FULL_DF: pd.DataFrame = None
 _DJANGO_READY = False
 
 
+def _get_word_model():
+    """动态获取主项目 Word 模型（兼容主 Django 进程内直接调用）。"""
+    from django.apps import apps
+    return apps.get_model("word", "Word")
+
+
 def _ensure_django() -> None:
+    """确保 Django ORM 已初始化。
+    若已在主 Django 进程内运行则跳过（避免重复设置 settings），否则按独立配置初始化。"""
     global _DJANGO_READY
     if _DJANGO_READY:
         return
 
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", DJANGO_SETTINGS_MODULE)
-    import django
     from django.apps import apps
 
+    if apps.ready:
+        _DJANGO_READY = True
+        return
+
+    import django
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", _FALLBACK_DJANGO_SETTINGS)
     if not apps.ready:
         django.setup()
     _DJANGO_READY = True
@@ -69,7 +83,7 @@ def _normalize_word_word_item(item: dict) -> dict:
 
 def _fetch_word_word_rows() -> List[dict]:
     _ensure_django()
-    from django_service.api.models import WordWord
+    WordWord = _get_word_model()
 
     rows: List[dict] = []
     queryset = WordWord.objects.order_by("id").values(
@@ -101,7 +115,7 @@ def _fetch_word_word_rows() -> List[dict]:
 def get_word_word_dto_by_id(word_id: int | str) -> dict | None:
     """按 word_word 表主键反查并返回完整 DTO。"""
     _ensure_django()
-    from django_service.api.models import WordWord
+    WordWord = _get_word_model()
 
     try:
         pk = int(word_id)
@@ -130,7 +144,7 @@ def get_word_word_dto_by_id(word_id: int | str) -> dict | None:
 def get_word_word_dtos_by_word(word: int | str) -> List[dict]:
     """按方言词反查并返回完整 DTO 列表。"""
     _ensure_django()
-    from django_service.api.models import WordWord
+    WordWord = _get_word_model()
 
     word_text = str(word).strip()
     if not word_text:

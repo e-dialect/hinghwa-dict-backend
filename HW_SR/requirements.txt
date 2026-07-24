@@ -17,8 +17,15 @@ requests>=2.31.0
 Django>=5.0,<6.0
 django-cors-headers>=4.3.1
 
-# 安全配置 (隐藏API Key，.env文件) —— 与主项目对齐使用 environ
+# 环境变量管理（与主项目对齐）
 django-environ>=0.11.2
+python-dotenv>=1.0.0
+
+# 进度条（索引构建/向量生成时使用）
+tqdm>=4.66.0
+
+# 字符串相似度（IPA精准匹配）
+python-Levenshtein>=0.25.0
 
 # 可选：GPU版Faiss（有GPU时添加，比faiss-cpu快10-100倍）
 # faiss-gpu>=1.8.0

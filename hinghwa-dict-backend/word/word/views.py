@@ -1,10 +1,11 @@
 import csv
 import os
+import sys
+from pathlib import Path
 
 import demjson3
 import xlrd
 import re
-import requests
 from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
@@ -28,33 +29,43 @@ from .dto.word_simple import word_simple
 from utils.exception.types.not_found import WordNotFoundException
 from utils.exception.types.forbidden import ForbiddenException
 
+# ========================= HW_SR 本地集成 =========================
+# 将 HW_SR 源码目录注入 Python 路径，使得可以直接 import demo 等模块
+_HW_SR_PATH = str(Path(__file__).resolve().parent.parent.parent.parent / "HW_SR")
+if _HW_SR_PATH not in sys.path:
+    sys.path.insert(0, _HW_SR_PATH)
 
-def _hw_sr_search(key):
+_sr_manager = None
+
+
+def _get_sr_manager():
+    """懒加载单例：首次调用时初始化 HW_SR 的语义检索引擎（加载 BGE 模型 + FAISS 索引）。"""
+    global _sr_manager
+    if _sr_manager is None:
+        from demo import ExtensibleFusionQueryManager
+        _sr_manager = ExtensibleFusionQueryManager()
+    return _sr_manager
+
+
+def _sr_local_search(key):
     """
-    调用 HW_SR 语义检索服务，返回主项目数据库中与 key 语义匹配的 Word 对象列表。
-    返回 [] 表示 HW_SR 不可用或无匹配结果（调用方需回退到原有检索逻辑）。
+    本地直接调用 HW_SR ExtensibleFusionQueryManager 进行语义检索，
+    返回主项目数据库中与 key 语义匹配的 Word 对象列表（保持语义排序）。
+    返回 [] 表示无匹配结果或异常（调用方回退到原有字符串匹配逻辑）。
     """
     try:
-        sr_url = getattr(settings, "HW_SR_SEARCH_URL", "http://127.0.0.1:8001/api/query/")
-        timeout = getattr(settings, "HW_SR_SEARCH_TIMEOUT", 10)
-        resp = requests.get(sr_url, params={"query": key}, timeout=timeout)
-        if resp.status_code != 200:
+        manager = _get_sr_manager()
+        result = manager.query_detail(key)
+        if not result or not result.get("results"):
             return []
-        data = resp.json()
-        if not data.get("ok"):
-            return []
-        results = data.get("results", [])
-        if not results:
-            return []
-        # 按语义相似度顺序提取词文本
-        sr_words = [r.get("word", "") for r in results if r.get("word")]
+        sr_words = [r.get("word", "") for r in result["results"] if r.get("word")]
         if not sr_words:
             return []
-        # 在主项目数据库中按词文本查找 Word 对象，保持语义检索排序
         word_map = {w.word: w for w in Word.objects.filter(word__in=sr_words, visibility=True)}
         return [word_map[w] for w in sr_words if w in word_map]
     except Exception:
         return []
+# ==================================================================
 
 
 @csrf_exempt
@@ -71,8 +82,8 @@ def searchWords(request):
                 words = words.filter(tags__icontains=query)
             if "search" in request.GET:
                 key = request.GET["search"].replace(" ", "")
-                # 优先走 HW_SR 语义检索
-                sr_words = _hw_sr_search(key)
+                # 优先走 HW_SR 语义检索（本地直接调用，不走 HTTP）
+                sr_words = _sr_local_search(key)
                 if sr_words:
                     # 语义检索成功：与前置过滤（visibility / contributor / tags）取交集
                     filtered_ids = set(words.values_list("id", flat=True))

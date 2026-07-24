@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import logging
+import os
 import sys
 from pathlib import Path
 
@@ -70,10 +71,15 @@ TEMPLATES = [
 WSGI_APPLICATION = "django_service.config.wsgi.application"
 ASGI_APPLICATION = "django_service.config.asgi.application"
 
+# 确保 DB_NAME 总是相对于 BASE_DIR 的绝对路径
+_db_name = env("DB_NAME")
+if not os.path.isabs(_db_name):
+    _db_name = str(BASE_DIR / _db_name)
+
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": env("DB_NAME"),
+        "NAME": _db_name,
     }
 }
 
