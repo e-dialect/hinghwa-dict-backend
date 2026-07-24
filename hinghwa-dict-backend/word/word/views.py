@@ -29,8 +29,7 @@ from .dto.word_simple import word_simple
 from utils.exception.types.not_found import WordNotFoundException
 from utils.exception.types.forbidden import ForbiddenException
 
-# ========================= HW_SR 本地集成 =========================
-# 将 HW_SR 源码目录注入 Python 路径，使得可以直接 import demo 等模块
+
 _HW_SR_PATH = str(Path(__file__).resolve().parent.parent.parent.parent / "HW_SR")
 if _HW_SR_PATH not in sys.path:
     sys.path.insert(0, _HW_SR_PATH)
