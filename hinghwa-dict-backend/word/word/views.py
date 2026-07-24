@@ -4,6 +4,7 @@ import os
 import demjson3
 import xlrd
 import re
+import requests
 from django.conf import settings
 from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
@@ -28,6 +29,34 @@ from utils.exception.types.not_found import WordNotFoundException
 from utils.exception.types.forbidden import ForbiddenException
 
 
+def _hw_sr_search(key):
+    """
+    调用 HW_SR 语义检索服务，返回主项目数据库中与 key 语义匹配的 Word 对象列表。
+    返回 [] 表示 HW_SR 不可用或无匹配结果（调用方需回退到原有检索逻辑）。
+    """
+    try:
+        sr_url = getattr(settings, "HW_SR_SEARCH_URL", "http://127.0.0.1:8001/api/query/")
+        timeout = getattr(settings, "HW_SR_SEARCH_TIMEOUT", 10)
+        resp = requests.get(sr_url, params={"query": key}, timeout=timeout)
+        if resp.status_code != 200:
+            return []
+        data = resp.json()
+        if not data.get("ok"):
+            return []
+        results = data.get("results", [])
+        if not results:
+            return []
+        # 按语义相似度顺序提取词文本
+        sr_words = [r.get("word", "") for r in results if r.get("word")]
+        if not sr_words:
+            return []
+        # 在主项目数据库中按词文本查找 Word 对象，保持语义检索排序
+        word_map = {w.word: w for w in Word.objects.filter(word__in=sr_words, visibility=True)}
+        return [word_map[w] for w in sr_words if w in word_map]
+    except Exception:
+        return []
+
+
 @csrf_exempt
 def searchWords(request):
     try:
@@ -41,43 +70,51 @@ def searchWords(request):
                 query = re.findall(r"[\u4e00-\u9fa5]+", query)
                 words = words.filter(tags__icontains=query)
             if "search" in request.GET:
-                result = []
                 key = request.GET["search"].replace(" ", "")
-                if not key[0].encode("utf-8").isalnum():
-                    weights = [4, 2, 3, 1, 0.5, 0.5]
-                    alpha = 1
+                # 优先走 HW_SR 语义检索
+                sr_words = _hw_sr_search(key)
+                if sr_words:
+                    # 语义检索成功：与前置过滤（visibility / contributor / tags）取交集
+                    filtered_ids = set(words.values_list("id", flat=True))
+                    words = [w for w in sr_words if w.id in filtered_ids][:200]
                 else:
-                    weights = [2, 1, 1.5, 0.5, 3, 3]
-                    alpha = 1
-                for word in words:
-                    if word.id == 4694 or word.id == 97:
-                        t = 1
-                    score = evaluate(
-                        list(
-                            zip(
-                                [
-                                    word.word,
-                                    word.definition,
-                                    word.mandarin,
-                                    word.annotation,
-                                    word.standard_pinyin,
-                                    word.standard_ipa,
-                                ],
-                                weights,
-                            )
-                        ),
-                        key,
-                        alpha=alpha,
-                    )
-                    if score > 0:
-                        result.append((word, score))
-                result.sort(key=lambda a: a[1], reverse=True)
-                if len(result) > 200:
-                    result = result[:200]
-                if len(result):
-                    words = list(zip(*result))[0]
-                else:
-                    words = []
+                    # 回退：原有加权字符串匹配检索
+                    result = []
+                    if not key[0].encode("utf-8").isalnum():
+                        weights = [4, 2, 3, 1, 0.5, 0.5]
+                        alpha = 1
+                    else:
+                        weights = [2, 1, 1.5, 0.5, 3, 3]
+                        alpha = 1
+                    for word in words:
+                        if word.id == 4694 or word.id == 97:
+                            t = 1
+                        score = evaluate(
+                            list(
+                                zip(
+                                    [
+                                        word.word,
+                                        word.definition,
+                                        word.mandarin,
+                                        word.annotation,
+                                        word.standard_pinyin,
+                                        word.standard_ipa,
+                                    ],
+                                    weights,
+                                )
+                            ),
+                            key,
+                            alpha=alpha,
+                        )
+                        if score > 0:
+                            result.append((word, score))
+                    result.sort(key=lambda a: a[1], reverse=True)
+                    if len(result) > 200:
+                        result = result[:200]
+                    if len(result):
+                        words = list(zip(*result))[0]
+                    else:
+                        words = []
             result = [word_all(word) for word in words]
             words = [word.id for word in words]
             return JsonResponse({"result": result, "words": words}, status=200)

@@ -15,9 +15,10 @@ requests>=2.31.0
 
 # Web 框架封装层
 Django>=5.0,<6.0
+django-cors-headers>=4.3.1
 
-# 安全配置 (隐藏API Key，.env文件)
-python-dotenv>=1.0.0
+# 安全配置 (隐藏API Key，.env文件) —— 与主项目对齐使用 environ
+django-environ>=0.11.2
 
 # 可选：GPU版Faiss（有GPU时添加，比faiss-cpu快10-100倍）
 # faiss-gpu>=1.8.0

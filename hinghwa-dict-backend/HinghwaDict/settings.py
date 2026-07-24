@@ -336,3 +336,8 @@ SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_ACTION = False
 SIMPLEUI_ANALYSIS = False
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# ==================== HW_SR 语义检索服务 ====================
+# HW_SR 检索服务地址（独立 Django 服务，默认运行在 8001 端口）
+HW_SR_SEARCH_URL = env("HW_SR_SEARCH_URL", default="http://127.0.0.1:8001/api/query/")
+HW_SR_SEARCH_TIMEOUT = env("HW_SR_SEARCH_TIMEOUT", default=10)

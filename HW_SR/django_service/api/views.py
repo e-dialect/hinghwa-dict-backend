@@ -6,19 +6,24 @@ from typing import Any, Dict, Optional
 from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 
-from demo import ExtensibleFusionQueryManager
-from src.data_loader import get_word_word_dto_by_id, get_word_word_dtos_by_word
-from src.result_formatter import format_result
+_MANAGER: Optional[Any] = None
 
 
-_MANAGER: Optional[ExtensibleFusionQueryManager] = None
-
-
-def get_manager() -> ExtensibleFusionQueryManager:
+def get_manager() -> Any:
     global _MANAGER
     if _MANAGER is None:
+        # Delay heavy imports until first real query to keep Django boot lightweight.
+        from demo import ExtensibleFusionQueryManager
+
         _MANAGER = ExtensibleFusionQueryManager()
     return _MANAGER
+
+
+def _load_data_helpers() -> tuple[Any, Any, Any]:
+    from src.data_loader import get_word_word_dto_by_id, get_word_word_dtos_by_word
+    from src.result_formatter import format_result
+
+    return get_word_word_dto_by_id, get_word_word_dtos_by_word, format_result
 
 
 def _with_cors(response: JsonResponse) -> JsonResponse:
@@ -57,6 +62,7 @@ def _extract_query_text(request: HttpRequest) -> str:
 
 
 def _dto_to_api_payload(dto: Dict[str, Any]) -> Dict[str, Any]:
+    _, _, format_result = _load_data_helpers()
     return {
         "ok": True,
         "query_key": dto.get("id"),
@@ -69,6 +75,7 @@ def _dto_to_api_payload(dto: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def _dto_list_to_api_payload(query_key: str, dtos: list[Dict[str, Any]], query_type: str) -> Dict[str, Any]:
+    _, _, format_result = _load_data_helpers()
     return {
         "ok": True,
         "query_key": query_key,
@@ -91,7 +98,12 @@ def query_by_id_view(request: HttpRequest, word_id: int) -> JsonResponse:
     if request.method == "OPTIONS":
         return _options_response()
 
-    dto = get_word_word_dto_by_id(word_id)
+    try:
+        get_word_word_dto_by_id, _, _ = _load_data_helpers()
+        dto = get_word_word_dto_by_id(word_id)
+    except Exception as exc:
+        return _json_response(503, {"ok": False, "error": f"服务依赖未就绪: {exc}"})
+
     if dto is None:
         return _json_response(404, {"ok": False, "error": f"未找到 id={word_id} 对应的词条"})
 
@@ -107,11 +119,20 @@ def query_by_word_view(request: HttpRequest, word: str) -> JsonResponse:
     if not query_word:
         return _json_response(400, {"ok": False, "error": "word 路径参数不能为空"})
 
-    dtos = get_word_word_dtos_by_word(query_word)
+    try:
+        _, get_word_word_dtos_by_word, _ = _load_data_helpers()
+        dtos = get_word_word_dtos_by_word(query_word)
+    except Exception as exc:
+        return _json_response(503, {"ok": False, "error": f"服务依赖未就绪: {exc}"})
+
     if dtos:
         return _json_response(200, _dto_list_to_api_payload(query_word, dtos, "word"))
 
-    result = get_manager().query_detail(query_word)
+    try:
+        result = get_manager().query_detail(query_word)
+    except Exception as exc:
+        return _json_response(503, {"ok": False, "error": f"检索服务暂不可用: {exc}"})
+
     return _json_response(200, {"ok": True, "query_key": query_word, "query_type": "general", **result})
 
 
@@ -124,5 +145,9 @@ def query_view(request: HttpRequest, query: str = "") -> JsonResponse:
     if not query_text:
         return _json_response(400, {"ok": False, "error": "query 参数或路径参数不能为空"})
 
-    result = get_manager().query_detail(query_text)
+    try:
+        result = get_manager().query_detail(query_text)
+    except Exception as exc:
+        return _json_response(503, {"ok": False, "error": f"检索服务暂不可用: {exc}"})
+
     return _json_response(200, {"ok": True, **result})
