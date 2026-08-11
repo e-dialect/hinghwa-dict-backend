@@ -10,13 +10,13 @@ django-notifications-hq==1.8.3
 # Utilities
 demjson3~=3.0.6
 pyjwt~=2.4.0
-python-environ==0.4.54
+django-environ==0.14.0
 
 # Data Processing
 xlrd~=2.0.1
 numpy>=1.26.0,<2.0.0  # Python 3.12+ compatible, avoid numpy 2.x for compatibility
 requests
-requests_toolbelt==0.10.1
+requests_toolbelt==1.0.0
 
 # Audio Processing
 pydub==0.25.1
@@ -29,6 +29,7 @@ cos-python-sdk-v5
 
 # Job Scheduling
 apscheduler==3.7.0
+setuptools<81  # apscheduler 3.7 imports pkg_resources
 
 # Development Tools
 black==24.3.0

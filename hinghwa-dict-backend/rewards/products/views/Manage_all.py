@@ -15,7 +15,7 @@ class ManageAllProducts(View):
     # RE0101 上传新商品
     @csrf_exempt
     def post(self, request) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         body = demjson3.decode(request.body)
         products_form = ProductInfoForm(body)
         if not products_form.is_valid():
