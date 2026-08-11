@@ -160,7 +160,7 @@ class ManageWord(View):
         if not word.exists:
             raise WordNotFoundException()
         word = word[0]
-        token = token_pass(request.headers, word.contributor.id)
+        token_pass(request.headers, word.contributor.id)
         body = demjson3.decode(request.body)
         body = body["word"]
         word_form = WordForm(body)
@@ -199,7 +199,7 @@ class ManageWord(View):
         if not word.exists:
             raise WordNotFoundException()
         word = word[0]
-        token = token_pass(request.headers, word.contributor.id)
+        token_pass(request.headers, word.contributor.id)
         item = re.split("[^a-z]", str(word.standard_pinyin))  # 去括号引号
         item = [x for x in item if x]
         PhoneticOrdering.root.delete(item, PhoneticOrdering.root.trie)

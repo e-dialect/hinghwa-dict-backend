@@ -39,7 +39,7 @@ class ManageAllTitles(View):
     # RE0201上传新头衔
     @csrf_exempt
     def post(self, request) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         body = demjson3.decode(request.body)
         title_form = TitleInfoForm(body)
         if not title_form.is_valid():

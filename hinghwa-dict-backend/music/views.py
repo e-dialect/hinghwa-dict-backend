@@ -73,7 +73,7 @@ class ManageMusic(View):
         if not music.exists():
             raise MusicNotFoundException()
         music = music[0]
-        token = token_pass(request.headers, music.contributor.id)
+        token_pass(request.headers, music.contributor.id)
         body = demjson3.decode(request.body)
         body = body["music"]
         music_form = MusicForm(body)
@@ -91,7 +91,7 @@ class ManageMusic(View):
         if not music.exists():
             raise MusicNotFoundException()
         music = music[0]
-        token = token_pass(request.headers, music.contributor.id)
+        token_pass(request.headers, music.contributor.id)
         music.delete()
         return JsonResponse({}, status=200)
 
@@ -125,7 +125,7 @@ class LikeMusic(View):
 class VisibilityMusic(View):
     # MC0105 设置音乐可见性
     def put(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         music = Music.objects.filter(id=id)
         if not music.exists():
             raise MusicNotFoundException()
