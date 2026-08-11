@@ -14,15 +14,17 @@ jobs:
   e2e:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v7
       - name: Install ffmpeg
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
           packages: ffmpeg
       - name: Set up Python 3.10
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v7
         with:
           python-version: "3.10"
+          cache: pip
+          cache-dependency-path: hinghwa-dict-backend/requirements.txt
       - name: Install dependencies
         run: |
           cd hinghwa-dict-backend
@@ -42,7 +44,7 @@ jobs:
           echo -e "from django.contrib.auth.models import User\nuser=User.objects.create_user('user_test','user_test@user_test.com','123456')\nuser.set_password('123456')\nuser.save()\nexit()" | python manage.py shell
           echo -e "from django.contrib.auth.models import User\nuser=User.objects.create_user('user_test_old_password','user_test_old_password@user_test_old_password.com','12')\nuser.set_password('12')\nuser.save()\nexit()"| python manage.py shell
           python3 manage.py runserver &
-      - uses: actions/setup-node@v3
+      - uses: actions/setup-node@v7
         with:
           node-version: "16.x"
       - name: Install apifox cli
