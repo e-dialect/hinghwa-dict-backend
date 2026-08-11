@@ -2,7 +2,8 @@ import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from website.views import token_check, simpleUserInfo, filterInOrder
+from website.utils import token_check, filterInOrder
+from user.dto.user_simple import user_simple
 from .forms import MusicForm
 from .models import Music
 from django.conf import settings
@@ -51,7 +52,7 @@ class SearchMusic(View):
             musics.append(
                 {
                     "music": music_normal(music),
-                    "contributor": simpleUserInfo(music.contributor),
+                    "contributor": user_simple(music.contributor),
                 }
             )
         return JsonResponse({"music": musics}, status=200)

@@ -4,7 +4,7 @@ from django.utils.translation import ngettext
 from django import forms
 
 from .models import Word, Character, Pronunciation, Application, List
-from website.views import sendNotification
+from website.notification.utils import sendNotification
 from utils.admin.widgets import (
     AudioPlayerWidget,
     MarkdownEditorWidget,

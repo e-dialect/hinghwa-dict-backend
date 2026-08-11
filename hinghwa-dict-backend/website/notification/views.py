@@ -10,7 +10,7 @@ from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import get_request_user
 from website.notification.dto import notification_normal
-from website.views import sendNotification
+from website.notification.utils import sendNotification
 
 
 class Notifications(View):

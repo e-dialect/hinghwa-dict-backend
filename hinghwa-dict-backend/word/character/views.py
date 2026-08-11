@@ -9,7 +9,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from .dto.character_simple import character_simple
-from website.views import token_check, filterInOrder
+from website.utils import token_check, filterInOrder
 from ..forms import CharacterForm
 from ..models import Word, Character, Pronunciation
 from .dto.character_normal import character_normal

@@ -13,7 +13,7 @@ from utils.exception.types.bad_request import BadRequestException
 from utils.exception.types.forbidden import ForbiddenException
 from utils.exception.types.unauthorized import WrongPassword
 from utils.token import get_request_user, generate_token
-from website.views import email_check
+from website.utils import email_check
 from utils.exception.types.not_found import UserNotFoundException
 from user.models import UserInfo, User
 from utils.token import token_pass, token_user
