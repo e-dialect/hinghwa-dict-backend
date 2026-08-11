@@ -188,7 +188,7 @@ class ManageArticle(View):
         if not article.exists():
             raise ArticleNotFoundException()
         article = article[0]
-        token = token_pass(request.headers, article.author.id)
+        token_pass(request.headers, article.author.id)
         body = demjson3.decode(request.body)
         body = body["article"]
         article_form = ArticleForm(body)
@@ -216,7 +216,7 @@ class ManageArticle(View):
         if not article.exists():
             raise ArticleNotFoundException()
         article = article[0]
-        token = token_pass(request.headers, article.author.id)
+        token_pass(request.headers, article.author.id)
         article.delete()
         return JsonResponse({}, status=200)
 
@@ -224,7 +224,7 @@ class ManageArticle(View):
 class ManageVisibility(View):
     # AT0105 文章审核
     def put(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         article = Article.objects.filter(id=id)
         if not article.exists():
             raise ArticleNotFoundException()
