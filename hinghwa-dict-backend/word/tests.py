@@ -7,6 +7,7 @@ from django.contrib.messages.storage.fallback import FallbackStorage
 from django.http import HttpResponseRedirect
 from django.test import RequestFactory, TestCase
 
+from user.models import UserInfo
 from word.admin import ApplicationAdmin
 from word.application.dto.application_all import application_all
 from word.application.dto.application_simple import application_simple
@@ -21,6 +22,8 @@ class ApplicationApprovalResultTests(TestCase):
         self.reviewer = User.objects.create_superuser(
             "reviewer", email="reviewer@example.com", password="password"
         )
+        UserInfo.objects.create(user=self.contributor)
+        UserInfo.objects.create(user=self.reviewer)
         self.application = Application.objects.create(
             contributor=self.contributor,
             content_word="测试",
