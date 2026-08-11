@@ -19,7 +19,7 @@ from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 from .notification.dto import notification_normal
 from .notification.utils import sendNotification, readNotification
-from .storage import upload_file, delete_file
+from .storage import FileTooLargeError, upload_file, delete_file, validate_file_size
 from user.dto.user_simple import user_simple
 from .utils import (
     globalVar,
@@ -244,6 +244,12 @@ def files(request):
         if user:
             if request.method == "POST":
                 file = request.FILES.get("file")
+                if file is None:
+                    return JsonResponse({"msg": "缺少文件"}, status=400)
+                try:
+                    validate_file_size(file)
+                except FileTooLargeError as error:
+                    return JsonResponse({"msg": str(error)}, status=413)
                 type = str(file.content_type).split("/")[0]
                 if file._name.find(".") != -1:
                     suffix = file._name.rsplit(".")[-1]
