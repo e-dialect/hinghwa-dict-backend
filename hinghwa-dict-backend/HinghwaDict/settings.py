@@ -150,6 +150,7 @@ DEFAULT_FROM_EMAIL = env.str("DEFAULT_FROM_EMAIL", "DEFAULT_DEFAULT_FROM_EMAIL")
 # 媒体图片下载到media/下
 MEDIA_URL = "/media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MAX_UPLOAD_SIZE = env.int("MAX_UPLOAD_SIZE", default=20 * 1024 * 1024)
 
 # 跨域访问设置
 CORS_ORIGIN_ALLOW_ALL = True
