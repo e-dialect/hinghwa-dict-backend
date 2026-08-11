@@ -153,6 +153,7 @@ class SingleApplication(View):
         body = demjson3.decode(request.body)  # body = 申请内容
         if not "result" in body:
             raise BadRequestException("缺少result字段")
+        application.approved = body["result"]
 
         if body["result"]:
             # 通过申请
