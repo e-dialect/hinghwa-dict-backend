@@ -7,3 +7,9 @@ logs
 .env
 db.sqlite3
 venv
+semantic_search_data/
+.model_cache/
+*.faiss
+*.pkl
+*.pickle
+*.index

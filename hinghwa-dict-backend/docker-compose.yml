@@ -19,6 +19,16 @@ services:
            - ../../data/db.sqlite3:/usr/src/HinghwaDict-backend/db.sqlite3
            - ../../data/media:/usr/src/HinghwaDict-backend/media
            - ../../data/logs:/usr/src/HinghwaDict-backend/logs
+           - ../../data/semantic-search:/usr/src/HinghwaDict-backend/semantic_search_data
+    semantic-index-worker:
+        build: .
+        image: "sheeplin/${SERVICE_NAME}"
+        container_name: "${SERVICE_NAME}-semantic-index-worker"
+        command: ["python", "manage.py", "semantic_index_worker"]
+        restart: unless-stopped
+        volumes:
+           - ../../data/db.sqlite3:/usr/src/HinghwaDict-backend/db.sqlite3
+           - ../../data/semantic-search:/usr/src/HinghwaDict-backend/semantic_search_data
 networks:
   traefik-global-proxy:
     external: true

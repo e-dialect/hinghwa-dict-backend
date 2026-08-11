@@ -1,7 +1,6 @@
 import csv
+import logging
 import os
-import sys
-from pathlib import Path
 
 import demjson3
 import xlrd
@@ -28,43 +27,47 @@ from .dto.word_all import word_all
 from .dto.word_simple import word_simple
 from utils.exception.types.not_found import WordNotFoundException
 from utils.exception.types.forbidden import ForbiddenException
+from word.search import SearchUnavailable, semantic_search_word_ids
+
+logger = logging.getLogger(__name__)
 
 
-_HW_SR_PATH = str(Path(__file__).resolve().parent.parent.parent.parent / "HW_SR")
-if _HW_SR_PATH not in sys.path:
-    sys.path.insert(0, _HW_SR_PATH)
+def _legacy_search_words(words, key):
+    result = []
+    compact_key = key.replace(" ", "")
+    if not compact_key:
+        return list(words)
+    if not compact_key[0].encode("utf-8").isalnum():
+        weights = [4, 2, 3, 1, 0.5, 0.5]
+    else:
+        weights = [2, 1, 1.5, 0.5, 3, 3]
+    for word in words:
+        score = evaluate(
+            list(
+                zip(
+                    [
+                        word.word,
+                        word.definition,
+                        word.mandarin,
+                        word.annotation,
+                        word.standard_pinyin,
+                        word.standard_ipa,
+                    ],
+                    weights,
+                )
+            ),
+            compact_key,
+            alpha=1,
+        )
+        if score > 0:
+            result.append((word, score))
+    result.sort(key=lambda item: item[1], reverse=True)
+    return [word for word, _ in result[:200]]
 
-_sr_manager = None
 
-
-def _get_sr_manager():
-    """懒加载单例：首次调用时初始化 HW_SR 的语义检索引擎（加载 BGE 模型 + FAISS 索引）。"""
-    global _sr_manager
-    if _sr_manager is None:
-        from demo import ExtensibleFusionQueryManager
-        _sr_manager = ExtensibleFusionQueryManager()
-    return _sr_manager
-
-
-def _sr_local_search(key):
-    """
-    本地直接调用 HW_SR ExtensibleFusionQueryManager 进行语义检索，
-    返回主项目数据库中与 key 语义匹配的 Word 对象列表（保持语义排序）。
-    返回 [] 表示无匹配结果或异常（调用方回退到原有字符串匹配逻辑）。
-    """
-    try:
-        manager = _get_sr_manager()
-        result = manager.query_detail(key)
-        if not result or not result.get("results"):
-            return []
-        sr_words = [r.get("word", "") for r in result["results"] if r.get("word")]
-        if not sr_words:
-            return []
-        word_map = {w.word: w for w in Word.objects.filter(word__in=sr_words, visibility=True)}
-        return [word_map[w] for w in sr_words if w in word_map]
-    except Exception:
-        return []
-
+def _order_words_by_id(words, word_ids):
+    word_map = {word.id: word for word in words.filter(id__in=word_ids)}
+    return [word_map[word_id] for word_id in word_ids if word_id in word_map]
 
 
 @csrf_exempt
@@ -76,55 +79,32 @@ def searchWords(request):
             if "contributor" in request.GET:
                 words = words.filter(contributor=request.GET["contributor"])
             if "tags" in request.GET:
-                query = request.GET["tags"]
-                query = re.findall(r"[\u4e00-\u9fa5]+", query)
-                words = words.filter(tags__icontains=query)
+                tag_names = re.findall(
+                    r"[\w\u3400-\u9fff]+", request.GET["tags"], re.UNICODE
+                )
+                for tag_name in tag_names:
+                    words = words.filter(tags__icontains=tag_name)
             if "search" in request.GET:
-                key = request.GET["search"].replace(" ", "")
-                # 优先走 HW_SR 语义检索（本地直接调用，不走 HTTP）
-                sr_words = _sr_local_search(key)
-                if sr_words:
-                    # 语义检索成功：与前置过滤（visibility / contributor / tags）取交集
-                    filtered_ids = set(words.values_list("id", flat=True))
-                    words = [w for w in sr_words if w.id in filtered_ids][:200]
-                else:
-                    # 回退：原有加权字符串匹配检索
-                    result = []
-                    if not key[0].encode("utf-8").isalnum():
-                        weights = [4, 2, 3, 1, 0.5, 0.5]
-                        alpha = 1
-                    else:
-                        weights = [2, 1, 1.5, 0.5, 3, 3]
-                        alpha = 1
-                    for word in words:
-                        if word.id == 4694 or word.id == 97:
-                            t = 1
-                        score = evaluate(
-                            list(
-                                zip(
-                                    [
-                                        word.word,
-                                        word.definition,
-                                        word.mandarin,
-                                        word.annotation,
-                                        word.standard_pinyin,
-                                        word.standard_ipa,
-                                    ],
-                                    weights,
-                                )
-                            ),
+                key = request.GET["search"].strip()
+                if key:
+                    try:
+                        filtered_ids = set(words.values_list("id", flat=True))
+                        ranked_ids = semantic_search_word_ids(
                             key,
-                            alpha=alpha,
+                            allowed_ids=filtered_ids,
+                            limit=200,
                         )
-                        if score > 0:
-                            result.append((word, score))
-                    result.sort(key=lambda a: a[1], reverse=True)
-                    if len(result) > 200:
-                        result = result[:200]
-                    if len(result):
-                        words = list(zip(*result))[0]
-                    else:
-                        words = []
+                        words = _order_words_by_id(words, ranked_ids)
+                    except SearchUnavailable as exc:
+                        logger.warning(
+                            "semantic search unavailable; using legacy search: %s", exc
+                        )
+                        words = _legacy_search_words(words, key)
+                    except Exception:
+                        logger.exception(
+                            "unexpected semantic search failure; using legacy search"
+                        )
+                        words = _legacy_search_words(words, key)
             result = [word_all(word) for word in words]
             words = [word.id for word in words]
             return JsonResponse({"result": result, "words": words}, status=200)

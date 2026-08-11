@@ -49,3 +49,11 @@ htmlcov/
 # Temporary files
 *.tmp
 .DS_Store
+
+# Generated semantic-search artifacts and local model cache
+semantic_search_data/
+.model_cache/
+*.faiss
+*.index
+*.pkl
+*.pickle

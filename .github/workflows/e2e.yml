@@ -27,6 +27,11 @@ jobs:
         run: |
           cd hinghwa-dict-backend
           if [ -f requirements.txt ]; then pip3 install -r requirements.txt; fi
+      - name: Run Django unit tests
+        run: |
+          cd hinghwa-dict-backend
+          python3 manage.py makemigrations --check --dry-run
+          python3 manage.py test word.test_semantic_search
       - name: Start django service
         run: |
           cd hinghwa-dict-backend
@@ -57,6 +62,13 @@ jobs:
       - name: Kill django service
         run: |
           pkill -9 -f manage.py
+
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build production image with pinned semantic model
+        run: docker build --tag hinghwa-dict-backend:pr ./hinghwa-dict-backend
 
 
       
