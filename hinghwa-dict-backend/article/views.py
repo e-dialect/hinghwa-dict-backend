@@ -3,7 +3,7 @@ import datetime
 from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AnonymousUser, User
 from website.utils import evaluate, token_check, filterInOrder
 from website.notification.utils import sendNotification
 from .forms import ArticleForm, CommentForm
@@ -32,6 +32,17 @@ from utils.exception.types.not_found import (
 from utils.exception.types.unauthorized import UnauthorizedException
 from utils.token import token_pass, token_user
 from utils.Rewards_action import manage_points_in_article
+
+
+def comment_me(comment, user) -> dict:
+    user_id = getattr(user, "id", None)
+    return {
+        "like": bool(user_id and comment.like_users.filter(id=user_id).exists()),
+        "is_author": bool(user_id and user_id == comment.user_id),
+        "author_replied": comment.sons.filter(
+            user_id=comment.article.author_id
+        ).exists(),
+    }
 
 
 class SearchArticle(View):
@@ -273,7 +284,7 @@ class LikeArticle(View):
 class CommentArticle(View):
     # AT0404 获取文章评论
     def get(self, request, id) -> JsonResponse:
-        user = User()
+        user = AnonymousUser()
         try:
             token = token_pass(request.headers)
             user = token_user(token)
@@ -286,7 +297,10 @@ class CommentArticle(View):
         ):
             raise ArticleNotFoundException()
         article = article[0]
-        comments = [comment_normal(comment) for comment in article.comments.all()]
+        comments = [
+            {**comment_all(comment), "me": comment_me(comment, user)}
+            for comment in article.comments.all()
+        ]
         return JsonResponse({"comments": comments}, status=200)
 
     # AT0401 发表文章评论
@@ -350,21 +364,11 @@ class CommentDetail(View):
         except Comment.DoesNotExist:
             raise CommentNotFoundException(id)
 
-        me = {"like": False}
-
-        # token = token_pass(request.headers)
         user = request.user
-
-        # 检查当前用户是否评论作者
-        me["is_author"] = user == comment.user if user else False
-        # 检查文章作者是否回复了该评论
-        article_author = comment.article.author
-        has_author_reply = comment.sons.filter(user=article_author).exists()
-        me["author_replied"] = has_author_reply
-
-        me["like"] = comment.like_users.filter(id=user.id).exists()
-
-        return JsonResponse({"comment": comment_all(comment), "me": me}, status=200)
+        return JsonResponse(
+            {"comment": comment_all(comment), "me": comment_me(comment, user)},
+            status=200,
+        )
 
 
 class LikeComment(View):
