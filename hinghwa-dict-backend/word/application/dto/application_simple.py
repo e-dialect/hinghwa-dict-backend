@@ -12,6 +12,7 @@ def application_simple(application: Application) -> dict:
         "application": application.id,
         "contributor": user_simple(application.contributor),
         "granted": application.granted(),
+        "approved": application.approved,
         "verifier": user_simple(application.verifier) if application.verifier else None,
     }
     return response
