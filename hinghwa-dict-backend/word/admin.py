@@ -519,12 +519,14 @@ class ApplicationAdmin(admin.ModelAdmin):
     def get_approval_status(self, obj):
         if obj.approved is True:
             return "已通过"
-        elif obj.approved is False:
+        if obj.approved is False:
             return "已拒绝"
-        else:
-            return "待审核"
+        if obj.verifier_id is not None:
+            return "已审核（历史结果未知）"
+        return "待审核"
 
     get_approval_status.short_description = "审核状态"
+    get_approval_status.admin_order_field = "approved"
 
 
 class WordsInlineAdmin(admin.TabularInline):

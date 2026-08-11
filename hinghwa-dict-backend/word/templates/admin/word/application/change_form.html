@@ -12,9 +12,12 @@
             {% elif original.approved is False %}
                 <span style="color: red;">✗ 已拒绝</span>
                 (审核人: {{ original.verifier.username }})
+            {% elif original.verifier %}
+                <span style="color: #666;">✓ 已审核（历史结果未知）</span>
+                (审核人: {{ original.verifier.username }})
             {% else %}
                 <span style="color: orange;">⏳ 待审核</span>
-            {% endif %}    
+            {% endif %}
         </p>
         
         {% if approval_notifications %}
