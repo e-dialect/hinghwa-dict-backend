@@ -303,8 +303,8 @@ class CommentArticle(View):
             raise ArticleNotFoundException()
         article = article[0]
         comments = [
-            {"comment": comment_all(comment), "me": comment_me(comment, user)}
-            for comment in article.comments.filter(parent__isnull=True)
+            {**comment_all(comment), "me": comment_me(comment, user)}
+            for comment in article.comments.all()
         ]
         return JsonResponse({"comments": comments}, status=200)
 

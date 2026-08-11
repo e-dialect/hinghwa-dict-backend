@@ -59,11 +59,11 @@ class CommentViewerStateTests(TestCase):
         response = CommentArticle().get(request, self.article.id)
 
         payload = json.loads(response.content)
-        self.assertEqual(len(payload["comments"]), 1)
+        self.assertEqual(len(payload["comments"]), 2)
         result = payload["comments"][0]
-        self.assertEqual(result["comment"]["id"], self.root_comment.id)
+        self.assertEqual(result["id"], self.root_comment.id)
         self.assertEqual(
-            [child["id"] for child in result["comment"]["children"]],
+            [child["id"] for child in result["children"]],
             [self.child_comment.id],
         )
         self.assertEqual(
