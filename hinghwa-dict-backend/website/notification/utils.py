@@ -24,7 +24,7 @@ def sendNotification(
         sender = User.objects.get(id=2)
     if title is None:
         title = f"【通知】{sender.username} 回复了你"
-    if not isinstance(recipients, (list, tuple)):
+    if isinstance(recipients, User):
         recipients = [recipients]
     result = notify.send(
         sender,

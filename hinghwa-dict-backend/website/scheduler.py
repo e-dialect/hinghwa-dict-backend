@@ -38,9 +38,9 @@ def clear_audio_buffer():
 def register(fun, id, replace_existing):
     scheduler = HinghwaBackgroundScheduler(timezone=settings.TIME_ZONE)
     scheduler.add_jobstore(DjangoJobStore(), "default")
-    register_job(
-        scheduler, "cron", id=id, hour=0, replace_existing=replace_existing
-    )(fun)
+    register_job(scheduler, "cron", id=id, hour=0, replace_existing=replace_existing)(
+        fun
+    )
     scheduler.start()
 
 
