@@ -1,4 +1,5 @@
-from website.views import download_file, random_str
+from website.storage import download_file
+from website.utils import random_str
 from django.utils import timezone
 from utils.exception.types.not_found import NotFoundException
 from urllib.parse import urlparse

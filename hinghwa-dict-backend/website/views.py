@@ -1,133 +1,36 @@
 # -*-coding:utf-8-*-
-import math
 import os
-import random
-import time
 
 import demjson3
-import jwt
-import requests
-from apscheduler.schedulers.background import BackgroundScheduler
 from django.conf import settings
-from django.contrib.auth.models import User
 from django.core.mail import send_mail
+from django.db.models import Q
 from django.http import JsonResponse, HttpResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-from django_apscheduler.jobstores import DjangoJobStore, register_job, register_events
-from notifications.signals import notify
+from notifications.models import Notification
 from pydub import AudioSegment as audio
-from qcloud_cos import CosConfig
-from qcloud_cos import CosS3Client
 
 from article.models import Article
-from word.models import Word
+from word.models import Word, split
+from .audio import split_ipa_from_mp3
 from .forms import DailyExpressionForm
 from .models import Website, DailyExpression
 from .notification.dto import notification_normal
+from .notification.utils import sendNotification, readNotification
+from .storage import upload_file, delete_file
+from user.dto.user_simple import user_simple
+from .utils import (
+    globalVar,
+    email_check,
+    token_check,
+    random_str,
+    filterInOrder,
+)
 
-
-def simpleUserInfo(user: User):
-    return {
-        "nickname": user.user_info.nickname,
-        "avatar": user.user_info.avatar,
-        "id": user.id,
-    }
-
-
-class globalVar:
-    email_code = {}
-
-
-def email_check(email, code):
-    email = str(email)
-    if (
-        (email in globalVar.email_code)
-        and globalVar.email_code[email][0] == code
-        and (timezone.now() - globalVar.email_code[email][1]).seconds < 600
-    ):
-        globalVar.email_code.pop(email)
-        return 1
-    else:
-        return 0
-
-
-def token_check(token, key, id=0):
-    """
-    id=-1表示要求管理员权限
-    id=x表示用户id需要为x
-    id=0表示任意用户都允许通过，
-    成功满足要求的验证则自动刷新时长，100分钟未操作则自动超时
-    :param token:
-    :param key:
-    :param id:
-    :return:
-    """
-    try:
-        info = jwt.decode(token, key, algorithms=["HS256"])
-        if info["exp"] < timezone.now().timestamp():
-            return 0
-        user = User.objects.get(id=info["id"])
-        if user.username == info["username"] and (
-            id == 0 or id == info["id"] or user.is_superuser
-        ):
-            return user
-        else:
-            return 0
-    except:
-        return 0
-
-
-def compare(test, key):
-    total = 0
-    j = 0
-    m = len(key)
-    hint = 0
-    for character in test:
-        if character == key[j]:
-            if j == m - 1:
-                j = 0
-                total += 1
-                hint += 1
-            else:
-                j += 1
-        elif j:
-            total += math.pow(10, j - m)
-            if j > m / 2:
-                hint += 1
-            j = 1 if character == key[0] else 0
-    if j:
-        total += math.pow(10, j - m)
-        if j > m / 2:
-            hint += 1
-    return total + (math.pow(10, hint * math.ceil(m / 2) - len(test)) if hint else 0)
-
-
-def ReLu(x: float):
-    return x if x < 50 else (x - 50) * 0.01 + 50
-
-
-def evaluate(standard, key, alpha=1):
-    total = 0
-    key = str(key).lower()
-    for item, score in standard:
-        item = str(item).lower().replace(" ", "")
-        if len(item) > 0:
-            total += (
-                (compare(item, key) + compare(item[::-1], key[::-1]))
-                * score
-                / math.log(1 + alpha * ReLu(len(item)))
-            )
-    return total
-
-
-def random_str(n=6, digit_only=False):
-    if not digit_only:
-        _str = "1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    else:
-        _str = "1234567890"
-    return "".join(random.choice(_str) for i in range(n))
+# Import scheduler module to ensure background jobs are registered on startup
+from . import scheduler  # noqa: F401
 
 
 @csrf_exempt
@@ -173,28 +76,6 @@ def email(request):
         return JsonResponse({"msg": str(e)}, status=500)
 
 
-def filterInOrder(objs, order) -> list:
-    """
-    将id为order顺序排序objs,len(objs)<=len(order)
-    :param objs:待排序的数组
-    :param order:
-    :return:
-    """
-    mapping = {}
-    num = 0
-    for id in order:
-        mapping[id] = num
-        num += 1
-    result = [0] * len(order)
-    for item in objs:
-        result[mapping[item.id]] = item
-    result1 = []
-    for item in result:
-        if item:
-            result1.append(item)
-    return result1
-
-
 @csrf_exempt
 def announcements(request):
     try:
@@ -224,7 +105,7 @@ def announcements(request):
                             "cover": article.cover,
                             "visibility": article.visibility,
                         },
-                        "author": simpleUserInfo(article.author),
+                        "author": user_simple(article.author),
                     }
                 )
             return JsonResponse({"announcements": announcements}, status=200)
@@ -273,7 +154,7 @@ def hot_articles(request):
                             "cover": article.cover,
                             "visibility": article.visibility,
                         },
-                        "author": simpleUserInfo(article.author),
+                        "author": user_simple(article.author),
                     }
                 )
             return JsonResponse({"hot_articles": hot_articles}, status=200)
@@ -353,50 +234,6 @@ def carousel(request):
                 return JsonResponse({}, status=401)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
-
-
-def download_file(url, type, user_id, filename):
-    try:
-        folder = os.path.join(settings.MEDIA_ROOT, type, user_id)
-        if not os.path.exists(folder):
-            os.makedirs(folder)
-        path = os.path.join(folder, filename)
-        response = requests.get(url)
-        with open(path, "wb") as f:
-            f.write(response.content)
-        key = f'files/{type}/{user_id}/{filename.replace("_", "/")}'
-        url = upload_file(path, key)
-        return url
-    except Exception as e:
-        print("Error occurred when downloading file, error message:")
-        print(e)
-        return None
-
-
-def upload_file(path, key):
-    config = CosConfig(
-        Region=settings.COS_REGION,
-        SecretId=settings.COS_SECRET_ID,
-        SecretKey=settings.COS_SECRET_KEY,
-    )
-    client = CosS3Client(config)
-    response = client.upload_file(
-        Bucket=settings.COS_BUCKET, LocalFilePath=path, Key=key
-    )
-    # if bucket name contains 'test'
-    if settings.COS_BUCKET.find("test") != -1:
-        return f"https://cos.test.edialect.top/{key}"
-    return f"https://cos.edialect.top/{key}"
-
-
-def delete_file(key):
-    config = CosConfig(
-        Region=settings.COS_REGION,
-        SecretId=settings.COS_SECRET_ID,
-        SecretKey=settings.COS_SECRET_KEY,
-    )
-    client = CosS3Client(config)
-    response = client.delete_object(Bucket=settings.COS_BUCKET, Key=key)
 
 
 @csrf_exempt
@@ -480,51 +317,6 @@ def openUrl(request, type, id, Y, M, D, X):
             return JsonResponse({}, status=500)
     except Exception as e:
         return JsonResponse({"msg": str(e)}, status=500)
-
-
-import shutil
-
-
-class HinghwaBackgroundScheduler(BackgroundScheduler):
-    def _process_jobs(self):
-        while True:
-            try:
-                return super()._process_jobs()
-            except Exception as e:
-                print(f"Error processing jobs: {e}")
-                time.sleep(5)
-
-
-try:
-
-    def random_word_of_the_day():
-        all = Word.objects.all()
-        item = Website.objects.get(id=1)
-        item.word_of_the_day = random.choice(all).id
-        item.save()
-        print("update word of the day at 0:00")
-
-    def clear_audio_buffer():
-        shutil.rmtree(os.path.join(settings.MEDIA_ROOT, "audio", "public"))
-        print("remove the audio buffer in public files")
-
-    def register(fun, id, replace_existing):
-        scheduler = HinghwaBackgroundScheduler(timezone=settings.TIME_ZONE)
-        scheduler.add_jobstore(DjangoJobStore(), "default")
-        register_job(
-            scheduler, "cron", id=id, hour=0, replace_existing=replace_existing
-        )(fun)
-        scheduler.start()
-
-    try:
-        register(random_word_of_the_day, "random_word_of_the_day", False)
-        register(clear_audio_buffer, "clear_audio_buffer", False)
-    except Exception:
-        register(random_word_of_the_day, "random_word_of_the_day", True)
-        register(clear_audio_buffer, "clear_audio_buffer", True)
-except Exception as e:
-    print(str(e))
-from django.db.models import Q
 
 
 @csrf_exempt
@@ -636,56 +428,6 @@ def manageDailyExpression(request, id):
         return JsonResponse({"msg": str(msg)}, status=500)
 
 
-from notifications.models import Notification
-
-
-def sendNotification(
-    sender, recipients, content, target=None, action_object=None, title=None
-):
-    """
-    发送站内通知，recipients为列表，若为None表示向管理员发送通知
-    """
-    if recipients is None:
-        transfer = User.objects.get(id=2)
-        result = sendNotification(
-            sender, [transfer], content, target, action_object, title
-        )
-        recipients = User.objects.filter(is_superuser=True)
-        target = Notification.objects.get(id=result[0])
-        sendNotification(transfer, recipients, content, target, action_object, title)
-        return result
-    if sender is None:
-        sender = User.objects.get(id=2)
-    if title is None:
-        title = f"【通知】{sender.username} 回复了你"
-    try:
-        len(recipients)
-    except Exception as e:
-        recipients = [recipients]
-    result = notify.send(
-        sender,
-        recipient=recipients,
-        verb=title,
-        description=content,
-        target=target,
-        action_object=action_object,
-    )
-    return [note.id for note in result[0][1]]
-
-
-def readNotification(notification):
-    if isinstance(notification.target, Notification):
-        notification.target.unread = False
-        notification.target.save()
-        Notification.objects.filter(
-            Q(target_content_type=notification.target_content_type)
-            & Q(target_object_id=notification.target_object_id)
-        ).mark_all_as_read()
-    else:
-        notification.unread = False
-        notification.save()
-
-
 @csrf_exempt
 def manageNotification(request, id):
     try:
@@ -732,53 +474,6 @@ def manageNotificationUnread(request):
             return JsonResponse({}, status=401)
     except Exception as msg:
         return JsonResponse({"msg": str(msg)}, status=500)
-
-
-from word.models import split
-
-
-def isconnect(a, b):
-    return a[1] == b[0] - 1
-
-
-def split_ipa_from_mp3(music, chunks=1):
-    DBFS = [db.dBFS for db in music[:]]
-    n = len(DBFS)
-    a = sorted(enumerate(DBFS), reverse=True, key=lambda a: a[1])
-    mean = a[int(n * 0.85)][1]
-    num = 0.3 * len(DBFS)
-    strip = 0.1 * len(DBFS) / chunks
-    d = [[a[0][0], a[0][0]]]
-    j = 1
-    for i in range(1, chunks):
-        while j < len(DBFS):
-            t = 0
-            for x, y in d:
-                if x - strip < a[j][0] < y + strip:
-                    t = 1
-                    break
-            if not t:
-                d.append([a[j][0], a[j][0]])
-                break
-            j += 1
-    d.sort(key=lambda a: a[0])
-    while num > 0:
-        t = num
-        for i in range(chunks):
-            if max(DBFS[d[i][0] - 1], DBFS[d[i][1] + 1]) >= mean:
-                if DBFS[d[i][0] - 1] >= DBFS[d[i][1] + 1] and (
-                    ~i or not isconnect(d[i - 1], d[i])
-                ):
-                    d[i][0] -= 1
-                    num -= 1
-                elif DBFS[d[i][0] - 1] <= DBFS[d[i][1] + 1] and (
-                    i == chunks - 1 or not isconnect(d[i], d[i + 1])
-                ):
-                    d[i][1] += 1
-                    num -= 1
-        if t == num:
-            break
-    return d
 
 
 @csrf_exempt

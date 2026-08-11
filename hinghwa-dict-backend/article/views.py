@@ -4,13 +4,8 @@ from django.http import JsonResponse
 from django.utils import timezone
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.models import AnonymousUser, User
-from website.views import (
-    evaluate,
-    token_check,
-    simpleUserInfo,
-    filterInOrder,
-    sendNotification,
-)
+from website.utils import evaluate, token_check, filterInOrder
+from website.notification.utils import sendNotification
 from .forms import ArticleForm, CommentForm
 from django.db.models import Q, Count, Max
 from user.dto.user_simple import user_simple
@@ -122,7 +117,7 @@ class SearchArticle(View):
             articles.append(
                 {
                     "article": article_normal(article),
-                    "author": simpleUserInfo(article.author),
+                    "author": user_simple(article.author),
                 }
             )
         return JsonResponse({"articles": articles}, status=200)

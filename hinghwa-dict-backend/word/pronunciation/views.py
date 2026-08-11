@@ -27,7 +27,9 @@ from utils.exception.types.not_found import (
     WordNotFoundException,
 )
 
-from website.views import token_check, sendNotification, simpleUserInfo, upload_file
+from website.utils import token_check
+from website.notification.utils import sendNotification
+from website.storage import upload_file
 from ..forms import PronunciationForm
 from ..models import Word, Character, Pronunciation, split
 from django.utils import timezone
@@ -92,7 +94,7 @@ class SearchPronunciations(View):
             result.append(
                 {
                     "pronunciation": pronunciation_normal(pronunciation),
-                    "contributor": simpleUserInfo(pronunciation.contributor),
+                    "contributor": user_simple(pronunciation.contributor),
                 }
             )
         return JsonResponse({"pronunciation": result, "total": total}, status=200)
