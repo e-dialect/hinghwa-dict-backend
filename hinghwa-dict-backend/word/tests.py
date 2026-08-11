@@ -4,6 +4,7 @@ from unittest.mock import patch
 from django.contrib.admin.sites import AdminSite
 from django.contrib.auth.models import User
 from django.contrib.messages.storage.fallback import FallbackStorage
+from django.core.cache import caches
 from django.http import HttpResponseRedirect
 from django.test import RequestFactory, TestCase
 
@@ -12,7 +13,8 @@ from word.admin import ApplicationAdmin
 from word.application.dto.application_all import application_all
 from word.application.dto.application_simple import application_simple
 from word.application.views import SingleApplication
-from word.models import Application
+from word.models import Application, Pronunciation, Word
+from word.pronunciation.views import PronunciationRanking
 
 
 class ApplicationApprovalResultTests(TestCase):
@@ -108,3 +110,70 @@ class ApplicationApprovalResultTests(TestCase):
 
         self.assertIs(application_all(self.application)["approved"], False)
         self.assertIs(application_simple(self.application)["approved"], False)
+
+
+class PronunciationRankingNumericTests(TestCase):
+    def setUp(self):
+        self.factory = RequestFactory()
+        self.first = self._create_user("first")
+        self.second = self._create_user("second")
+        self.word = Word.objects.create(
+            word="测试",
+            definition="测试词",
+            contributor=self.first,
+        )
+        self._create_pronunciation(self.first)
+        self._create_pronunciation(self.first)
+        self._create_pronunciation(self.second)
+        self._create_pronunciation(self.second, visibility=False)
+        caches["pronunciation_ranking"].clear()
+
+    @staticmethod
+    def _create_user(username):
+        user = User.objects.create_user(username)
+        UserInfo.objects.create(user=user, nickname=username)
+        return user
+
+    def _create_pronunciation(self, contributor, visibility=True):
+        return Pronunciation.objects.create(
+            word=self.word,
+            source="https://example.com/pronunciation.mp3",
+            ipa="test",
+            pinyin="test",
+            county="",
+            town="",
+            contributor=contributor,
+            visibility=visibility,
+        )
+
+    def test_ranking_returns_numeric_amounts_rank_and_pagination(self):
+        request = self.factory.get(
+            "/pronunciation/ranking",
+            {"days": "7", "page": "1", "pageSize": "10"},
+        )
+        with patch("word.pronunciation.views.token_pass", return_value="token"), patch(
+            "word.pronunciation.views.token_user", return_value=self.first
+        ):
+            response = PronunciationRanking().get(request)
+
+        payload = json.loads(response.content)
+        self.assertEqual([item["amount"] for item in payload["ranking"]], [2, 1])
+        self.assertEqual(payload["me"], {"amount": 2, "rank": 1})
+        self.assertEqual(payload["pagination"]["page_size"], 10)
+        self.assertTrue(
+            all(isinstance(item["amount"], int) for item in payload["ranking"])
+        )
+        self.assertIsInstance(payload["me"]["amount"], int)
+        self.assertIsInstance(payload["me"]["rank"], int)
+
+    def test_anonymous_ranking_returns_numeric_zeroes(self):
+        request = self.factory.get(
+            "/pronunciation/ranking",
+            {"days": "7", "page": "1", "pageSize": "10"},
+        )
+        with patch(
+            "word.pronunciation.views.token_pass", side_effect=KeyError("token")
+        ):
+            response = PronunciationRanking().get(request)
+
+        self.assertEqual(json.loads(response.content)["me"], {"amount": 0, "rank": 0})
