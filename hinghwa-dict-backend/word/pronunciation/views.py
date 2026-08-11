@@ -530,8 +530,8 @@ class PronunciationRanking(View):
     # PN0205 语音上传榜单
     def get(self, request) -> JsonResponse:
         days = request.GET["days"]  # 要多少天的榜单
-        page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
-        pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
+        page = int(request.GET.get("page", 1))  # 获取页面数，默认为第1页
+        pagesize = int(request.GET.get("pageSize", 10))  # 获取每页显示数量，默认为10条
         if not days:
             raise RankWithoutDays()
         days = int(days)
