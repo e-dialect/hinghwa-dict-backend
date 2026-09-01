@@ -146,6 +146,7 @@ class Application(models.Model):
         blank=True,
     )
     tags = models.TextField(verbose_name="标签", blank=True, default="[]")
+    approved = models.BooleanField(null=True, verbose_name="审核结果", editable=False)
 
     def granted(self):
         return self.verifier is not None

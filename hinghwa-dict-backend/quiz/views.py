@@ -137,7 +137,7 @@ class RandomQuiz(View):
 class ManageVisibility(View):
     # QZ0105 问题审核
     def put(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         quiz = Quiz.objects.filter(id=id)
         if not quiz.exists():
             raise QuizNotFoundException()

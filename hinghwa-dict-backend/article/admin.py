@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from .models import Article, Comment
 from utils.admin.widgets import MarkdownEditorWidget, ImagePreviewWidget
-from website.views import sendNotification
+from website.notification.utils import sendNotification
 
 
 class ArticleAdminForm(forms.ModelForm):

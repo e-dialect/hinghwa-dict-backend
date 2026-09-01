@@ -6,8 +6,14 @@
     {% if original.pk %}
         <p class="approval-status" style="float: left; padding: 10px 15px; margin: 0;">
             <strong>审核状态：</strong>
-            {% if original.verifier %}
-                <span style="color: green;">✓ 已审核</span>
+            {% if original.approved is True %}
+                <span style="color: green;">✓ 已通过</span>
+                (审核人: {{ original.verifier.username }})
+            {% elif original.approved is False %}
+                <span style="color: red;">✗ 已拒绝</span>
+                (审核人: {{ original.verifier.username }})
+            {% elif original.verifier %}
+                <span style="color: #666;">✓ 已审核（历史结果未知）</span>
                 (审核人: {{ original.verifier.username }})
             {% else %}
                 <span style="color: orange;">⏳ 待审核</span>

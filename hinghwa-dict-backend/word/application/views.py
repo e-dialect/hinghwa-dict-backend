@@ -14,7 +14,7 @@ from utils.exception.types.not_found import (
 )
 from utils.TypeCheking import islist
 from utils.token import token_pass, token_user
-from website.views import sendNotification
+from website.notification.utils import sendNotification
 from ..forms import ApplicationForm
 from ..models import Word, Application
 from word.application.dto.application_simple import application_simple
@@ -104,7 +104,7 @@ class SingleApplication(View):
         result = {"application": application_all(application)}
 
         # Add approval history for admin users
-        from website.views import token_check
+        from website.utils import token_check
 
         if "token" in request.headers:
             user = token_check(request.headers["token"], settings.JWT_KEY, -1)
@@ -153,6 +153,7 @@ class SingleApplication(View):
         body = demjson3.decode(request.body)  # body = 申请内容
         if not "result" in body:
             raise BadRequestException("缺少result字段")
+        application.approved = body["result"]
 
         if body["result"]:
             # 通过申请

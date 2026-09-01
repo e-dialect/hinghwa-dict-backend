@@ -7,11 +7,11 @@ from .comment_normal import comment_normal
 # 返回评论基本信息
 def comment_all(comment: Comment) -> dict:
     user = comment.user
-    comment_like_users = comment.like_users.filter()
+    comment_like_users = comment.like_users.all()
     user_list = []
     for one_user in comment_like_users:
         user_list.append(user_simple(one_user))
-    children = Comment.objects.filter(parent_id=comment.id)
+    children = comment.sons.all()
     children_list = []
     for one_comment in children:
         children_list.append(comment_normal(one_comment))

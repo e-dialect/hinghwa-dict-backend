@@ -2,7 +2,8 @@ import demjson3
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.views import View
-from website.views import token_check, simpleUserInfo, filterInOrder
+from website.utils import token_check, filterInOrder
+from user.dto.user_simple import user_simple
 from .forms import MusicForm
 from .models import Music
 from django.conf import settings
@@ -51,7 +52,7 @@ class SearchMusic(View):
             musics.append(
                 {
                     "music": music_normal(music),
-                    "contributor": simpleUserInfo(music.contributor),
+                    "contributor": user_simple(music.contributor),
                 }
             )
         return JsonResponse({"music": musics}, status=200)
@@ -72,7 +73,7 @@ class ManageMusic(View):
         if not music.exists():
             raise MusicNotFoundException()
         music = music[0]
-        token = token_pass(request.headers, music.contributor.id)
+        token_pass(request.headers, music.contributor.id)
         body = demjson3.decode(request.body)
         body = body["music"]
         music_form = MusicForm(body)
@@ -90,7 +91,7 @@ class ManageMusic(View):
         if not music.exists():
             raise MusicNotFoundException()
         music = music[0]
-        token = token_pass(request.headers, music.contributor.id)
+        token_pass(request.headers, music.contributor.id)
         music.delete()
         return JsonResponse({}, status=200)
 
@@ -124,7 +125,7 @@ class LikeMusic(View):
 class VisibilityMusic(View):
     # MC0105 设置音乐可见性
     def put(self, request, id) -> JsonResponse:
-        token = token_pass(request.headers, -1)
+        token_pass(request.headers, -1)
         music = Music.objects.filter(id=id)
         if not music.exists():
             raise MusicNotFoundException()

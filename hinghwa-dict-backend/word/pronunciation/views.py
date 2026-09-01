@@ -27,7 +27,9 @@ from utils.exception.types.not_found import (
     WordNotFoundException,
 )
 
-from website.views import token_check, sendNotification, simpleUserInfo, upload_file
+from website.utils import token_check
+from website.notification.utils import sendNotification
+from website.storage import upload_file
 from ..forms import PronunciationForm
 from ..models import Word, Character, Pronunciation, split
 from django.utils import timezone
@@ -92,7 +94,7 @@ class SearchPronunciations(View):
             result.append(
                 {
                     "pronunciation": pronunciation_normal(pronunciation),
-                    "contributor": simpleUserInfo(pronunciation.contributor),
+                    "contributor": user_simple(pronunciation.contributor),
                 }
             )
         return JsonResponse({"pronunciation": result, "total": total}, status=200)
@@ -528,8 +530,8 @@ class PronunciationRanking(View):
     # PN0205 语音上传榜单
     def get(self, request) -> JsonResponse:
         days = request.GET["days"]  # 要多少天的榜单
-        page = request.GET.get("page", 1)  # 获取页面数，默认为第1页
-        pagesize = request.GET.get("pageSize", 10)  # 获取每页显示数量，默认为10条
+        page = int(request.GET.get("page", 1))  # 获取页面数，默认为第1页
+        pagesize = int(request.GET.get("pageSize", 10))  # 获取每页显示数量，默认为10条
         if not days:
             raise RankWithoutDays()
         days = int(days)
