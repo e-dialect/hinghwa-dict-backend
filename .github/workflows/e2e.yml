@@ -33,7 +33,7 @@ jobs:
         run: |
           cd hinghwa-dict-backend
           python3 manage.py makemigrations --check --dry-run
-          python3 manage.py test word.test_semantic_search
+          python3 manage.py test
       - name: Start django service
         run: |
           cd hinghwa-dict-backend
