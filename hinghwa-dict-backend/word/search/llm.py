@@ -25,7 +25,7 @@ class DeepSeekQueryParser:
             "你是中文词典搜索重写器。请从用户输入中提取最关键的检索词，返回严格 JSON。"
             '格式必须是 {"keywords":["keyword1","keyword2"]}。'
             "只返回 JSON，不要 Markdown，不要解释，不要额外字段。"
-            "如果没法提取，就返回 {\"keywords\":[]}。"
+            '如果没法提取，就返回 {"keywords":[]}。'
         )
         try:
             payload = {
@@ -42,10 +42,8 @@ class DeepSeekQueryParser:
                 or "r1" in settings.SEMANTIC_SEARCH_LLM_MODEL.lower()
             )
             attempts = [payload]
-            if enable_thinking:
-                attempts.append({**payload, "extra_body": {"chat_template_kwargs": {"enable_thinking": False}}})
-            else:
-                attempts.append({**payload, "extra_body": {"chat_template_kwargs": {"enable_thinking": False}}})
+            extra_body = {"chat_template_kwargs": {"enable_thinking": False}}
+            attempts.append({**payload, "extra_body": extra_body})
 
             last_error = None
             for attempt in attempts:
@@ -60,7 +58,9 @@ class DeepSeekQueryParser:
                         timeout=(1.0, settings.SEMANTIC_SEARCH_LLM_TIMEOUT_SECONDS),
                     )
                     response.raise_for_status()
-                    content = response.json()["choices"][0]["message"]["content"].strip()
+                    content = response.json()["choices"][0]["message"][
+                        "content"
+                    ].strip()
 
                     if content.startswith("```"):
                         content = re.sub(r"^```(?:json)?\s*", "", content, flags=re.I)
@@ -84,10 +84,18 @@ class DeepSeekQueryParser:
                     return " ".join(normalized) or None
                 except requests.HTTPError as exc:
                     last_error = exc
-                    if exc.response is not None and exc.response.status_code in {400, 422}:
+                    if exc.response is not None and exc.response.status_code in {
+                        400,
+                        422,
+                    }:
                         continue
                     raise
-                except (KeyError, TypeError, ValueError, requests.RequestException) as exc:
+                except (
+                    KeyError,
+                    TypeError,
+                    ValueError,
+                    requests.RequestException,
+                ) as exc:
                     last_error = exc
                     continue
 
