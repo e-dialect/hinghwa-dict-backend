@@ -71,6 +71,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Build production image with pinned semantic model
         run: docker build --tag hinghwa-dict-backend:pr ./hinghwa-dict-backend
+      - name: Smoke test semantic model loads in the built image
+        run: |
+          docker run --rm --workdir /usr/src/HinghwaDict-backend \
+            --entrypoint python hinghwa-dict-backend:pr \
+            -c "import os; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HinghwaDict.settings'); import django; django.setup(); from word.search.encoder import BGEEncoder; vec = BGEEncoder().encode_query('hello'); print(vec.shape)"
 
 
       
