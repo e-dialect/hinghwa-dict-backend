@@ -62,6 +62,46 @@ class Word(models.Model):
         verbose_name = "词语"
 
 
+class SemanticIndexState(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "等待构建"
+        BUILDING = "building", "构建中"
+        READY = "ready", "可用"
+        FAILED = "failed", "构建失败"
+
+    singleton_key = models.PositiveSmallIntegerField(
+        primary_key=True,
+        default=1,
+        editable=False,
+    )
+    requested_revision = models.PositiveBigIntegerField(default=1)
+    built_revision = models.PositiveBigIntegerField(default=0)
+    status = models.CharField(
+        max_length=16,
+        choices=Status.choices,
+        default=Status.PENDING,
+    )
+    requested_at = models.DateTimeField(auto_now_add=True)
+    started_at = models.DateTimeField(blank=True, null=True)
+    completed_at = models.DateTimeField(blank=True, null=True)
+    lease_owner = models.CharField(max_length=64, blank=True)
+    lease_expires_at = models.DateTimeField(blank=True, null=True)
+    last_error = models.TextField(blank=True)
+
+    class Meta:
+        verbose_name = "语义检索索引状态"
+        verbose_name_plural = "语义检索索引状态"
+        constraints = [
+            models.CheckConstraint(
+                check=models.Q(singleton_key=1),
+                name="semantic_index_singleton_key_is_one",
+            )
+        ]
+
+    def __str__(self):
+        return f"semantic-index:{self.status}:{self.built_revision}/{self.requested_revision}"
+
+
 class Application(models.Model):
     word = models.ForeignKey(
         Word,

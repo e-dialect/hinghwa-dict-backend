@@ -3,7 +3,14 @@ from django.contrib import messages
 from django.utils.translation import ngettext
 from django import forms
 
-from .models import Word, Character, Pronunciation, Application, List
+from .models import (
+    Application,
+    Character,
+    List,
+    Pronunciation,
+    SemanticIndexState,
+    Word,
+)
 from website.notification.utils import sendNotification
 from utils.admin.widgets import (
     AudioPlayerWidget,
@@ -53,6 +60,35 @@ class VerifierListFilter(admin.SimpleListFilter):
 
 
 # Register your models here.
+
+
+@admin.register(SemanticIndexState)
+class SemanticIndexStateAdmin(admin.ModelAdmin):
+    list_display = (
+        "status",
+        "built_revision",
+        "requested_revision",
+        "requested_at",
+        "completed_at",
+    )
+    readonly_fields = (
+        "singleton_key",
+        "status",
+        "built_revision",
+        "requested_revision",
+        "requested_at",
+        "started_at",
+        "completed_at",
+        "lease_owner",
+        "lease_expires_at",
+        "last_error",
+    )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class WordAdminForm(forms.ModelForm):

@@ -337,3 +337,37 @@ SIMPLEUI_HOME_INFO = False
 SIMPLEUI_HOME_ACTION = False
 SIMPLEUI_ANALYSIS = False
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
+# In-process semantic retrieval. Generated artifacts live outside git and are
+# shared by the web process and semantic_index_worker.
+SEMANTIC_SEARCH_DATA_DIR = env.str(
+    "SEMANTIC_SEARCH_DATA_DIR",
+    os.path.join(BASE_DIR, "semantic_search_data"),
+)
+SEMANTIC_SEARCH_MODEL_NAME = env.str(
+    "SEMANTIC_SEARCH_MODEL_NAME", "BAAI/bge-small-zh-v1.5"
+)
+SEMANTIC_SEARCH_MODEL_REVISION = env.str(
+    "SEMANTIC_SEARCH_MODEL_REVISION",
+    "7999e1d3359715c523056ef9478215996d62a620",
+)
+SEMANTIC_SEARCH_MODEL_CACHE = env.str(
+    "SEMANTIC_SEARCH_MODEL_CACHE",
+    os.environ.get("HF_HOME", os.path.join(BASE_DIR, ".model_cache")),
+)
+SEMANTIC_SEARCH_WORKER_POLL_SECONDS = env.float(
+    "SEMANTIC_SEARCH_WORKER_POLL_SECONDS", 5.0
+)
+SEMANTIC_SEARCH_WORKER_MAX_BACKOFF_SECONDS = env.float(
+    "SEMANTIC_SEARCH_WORKER_MAX_BACKOFF_SECONDS", 300.0
+)
+SEMANTIC_SEARCH_WORKER_LEASE_SECONDS = env.int(
+    "SEMANTIC_SEARCH_WORKER_LEASE_SECONDS", 1800
+)
+SEMANTIC_SEARCH_LLM_ENABLED = env.bool("SEMANTIC_SEARCH_LLM_ENABLED", False)
+SEMANTIC_SEARCH_LLM_API_KEY = env.str("DEEPSEEK_API_KEY", "")
+SEMANTIC_SEARCH_LLM_BASE_URL = env.str("DEEPSEEK_BASE_URL", "https://api.deepseek.com")
+SEMANTIC_SEARCH_LLM_MODEL = env.str("DEEPSEEK_MODEL", "deepseek-v4-flash")
+SEMANTIC_SEARCH_LLM_TIMEOUT_SECONDS = env.float(
+    "SEMANTIC_SEARCH_LLM_TIMEOUT_SECONDS", 3.0
+)
