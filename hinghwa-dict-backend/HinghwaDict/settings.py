@@ -16,6 +16,7 @@ import os
 import time
 
 import environ
+from HinghwaDict.security import load_secret_key
 
 env = environ.Env()
 environ.Env.read_env(".env")
@@ -25,11 +26,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.str("SECRET_KEY", "DEFAULT_SECRET_KEY")
-
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool("DEBUG", default=True)
+
+# Development has an explicit unsafe fallback for local setup. Production
+# (DEBUG=false) fails closed unless the operator supplies SECRET_KEY.
+SECRET_KEY = load_secret_key(env, DEBUG)
 
 ALLOWED_HOSTS = ["*"]
 
