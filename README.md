@@ -20,10 +20,10 @@
 
 ## 音频系统依赖
 
-音频处理需要系统安装 `ffmpeg`、`ffprobe` 和 `lame`。Docker 镜像会安装这些工具；
-Debian/Ubuntu 可执行 `apt-get install ffmpeg lame`，macOS 可执行
-`brew install ffmpeg lame`。MP3 比对默认从 `PATH` 查找 `lame`，也可以将
-`LAME_EXECUTABLE` 设置为一个可执行文件路径。本仓库不再随源码分发 LAME 二进制。
+音频处理沿用既有的 `pydub` + `ffmpeg` 路径，需要系统提供 `ffmpeg` 和
+`ffprobe`。Docker 镜像会安装 `ffmpeg`；Debian/Ubuntu 可执行
+`apt-get install ffmpeg`，macOS 可执行 `brew install ffmpeg`。历史上随源码分发、
+但未被当前运行路径执行的 LAME 二进制已经移除；MP3 解码实现未迁移为直接调用 LAME。
 
 ## 生产环境安全配置
 

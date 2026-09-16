@@ -18,8 +18,9 @@ path on different terms.
 Third-party dependencies and copied components retain their own terms. In
 particular, `hinghwa-dict-backend/AudioCompare/` includes BSD-3-Clause
 AudioCompare code and a matplotlib-derived fragment under its adjacent
-license. LAME is now a separately installed system dependency; the historical
-vendored 3.98.4 executable and its removal are recorded for compliance in
+license. The historical vendored LAME 3.98.4 executable has been removed after
+verifying that the existing `pydub`/`ffmpeg` runtime path does not depend on it;
+the executable and its removal are recorded for compliance in
 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md). The BGE model used by the
 semantic-search integration is obtained separately and retains its upstream
 terms; the repository AGPL does not relicense model weights. Exact paths,
@@ -48,8 +49,8 @@ authority.
 第三方二进制；目前没有可审计记录证明项目有权以不同条款重许可全部路径。
 
 第三方依赖和复制组件保留各自条款。`AudioCompare/` 中包括采用 BSD-3-Clause 的
-AudioCompare 代码和带相邻许可证的 matplotlib 派生片段。LAME 现为单独安装的系统
-依赖；历史上随仓库分发的 3.98.4 可执行文件及其移除记录见
+AudioCompare 代码和带相邻许可证的 matplotlib 派生片段。确认现有 `pydub`/`ffmpeg`
+运行路径不依赖历史 LAME 3.98.4 可执行文件后，该文件已移除；相关历史与移除记录见
 [`THIRD_PARTY_NOTICES.md`](./THIRD_PARTY_NOTICES.md)。软件许可证不自动授权数据库
 内容、词典、语料、录音、用户内容、模型权重、生成索引、商标或 Logo；仓库路径
 边界见 [`ASSET_BOUNDARIES.md`](./ASSET_BOUNDARIES.md)。

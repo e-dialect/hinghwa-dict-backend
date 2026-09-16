@@ -29,10 +29,10 @@ assert that the local files are byte-identical to that revision.
 ## LAME 3.98.4
 
 - Historical path: `hinghwa-dict-backend/AudioCompare/lame`.
-- Current status: removed from the current tree on 2026-09-16. The application
-  now resolves a separately installed `lame` executable from `PATH` or the
-  `LAME_EXECUTABLE` environment variable. The repository no longer distributes
-  this platform-specific executable.
+- Current status: removed from the current tree on 2026-09-16 after a real MP3
+  regression check confirmed that the existing application path decodes MP3
+  through its pre-existing `pydub`/`ffmpeg` implementation without executing
+  the vendored file. Runtime behavior was not migrated to direct LAME execution.
 - Historical binary identification: 32-bit GNU/Linux executable embedding
   version strings `3.98.4` and `LAME3.98r` and its own LGPL notice.
 - Historical binary SHA-256:
@@ -67,6 +67,7 @@ commercial license unless the relevant rightsholder separately authorizes it.
 ---
 
 根目录 AGPL 声明不覆盖或替换上述第三方条款。`AudioCompare/` 的主体代码和其中的
-matplotlib 派生片段适用各自的相邻许可证；历史 LAME 二进制已从当前代码树移除，
-系统安装的 LAME 仍适用其自身许可证；构建时下载的 BGE 模型继续适用上游条款。
+matplotlib 派生片段适用各自的相邻许可证；实际回归确认现有 `pydub`/`ffmpeg` 路径
+不执行历史 LAME 二进制后，该二进制已从当前代码树移除，音频运行逻辑没有迁移为直接
+调用 LAME；构建时下载的 BGE 模型继续适用上游条款。
 除非相关权利人另行授权，这些内容均不属于替代商业许可证的授权范围。
