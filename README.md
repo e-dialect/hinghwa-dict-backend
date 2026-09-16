@@ -18,6 +18,13 @@
 
 词语查询的语义检索部署与索引维护见 [语义检索说明](docs/SEMANTIC_SEARCH.md)。
 
+## 音频系统依赖
+
+音频处理沿用既有的 `pydub` + `ffmpeg` 路径，需要系统提供 `ffmpeg` 和
+`ffprobe`。Docker 镜像会安装 `ffmpeg`；Debian/Ubuntu 可执行
+`apt-get install ffmpeg`，macOS 可执行 `brew install ffmpeg`。历史上随源码分发、
+但未被当前运行路径执行的 LAME 二进制已经移除；MP3 解码实现未迁移为直接调用 LAME。
+
 ## 生产环境安全配置
 
 本地开发默认 `DEBUG=true`，并使用一个明确标记为不安全、仅供开发的 Django
@@ -30,3 +37,13 @@
 - [ ] 完善项目文档
 - [ ] 开源本项目
 - [ ] 从本项目迁移至通用的方言服务包后端
+
+## 许可证
+
+本仓库中由 e-dialect 有权授权的原创软件代码，除另有说明外采用
+**GNU Affero General Public License v3.0 only（`AGPL-3.0-only`）**。
+AGPL 允许商业使用，但使用者须遵守其全部条款；无法或不希望遵守这些条款的组织，
+可以联系维护者了解替代商业许可。数据、词典内容、语料、录音、模型权重、商标、
+Logo 和第三方组件不自动适用该许可证。详见 [`LICENSING.md`](LICENSING.md)、
+[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) 和
+[`ASSET_BOUNDARIES.md`](ASSET_BOUNDARIES.md)。
