@@ -28,19 +28,30 @@ assert that the local files are byte-identical to that revision.
 
 ## LAME 3.98.4
 
-- Local path: `hinghwa-dict-backend/AudioCompare/lame`.
-- Identification: the bundled 32-bit GNU/Linux executable embeds version
-  strings `3.98.4` and `LAME3.98r` and its own LGPL notice.
+- Historical path: `hinghwa-dict-backend/AudioCompare/lame`.
+- Current status: removed from the current tree on 2026-09-16. The application
+  now resolves a separately installed `lame` executable from `PATH` or the
+  `LAME_EXECUTABLE` environment variable. The repository no longer distributes
+  this platform-specific executable.
+- Historical binary identification: 32-bit GNU/Linux executable embedding
+  version strings `3.98.4` and `LAME3.98r` and its own LGPL notice.
+- Historical binary SHA-256:
+  `e4c437fe6498c08be16ffaa1542dc07f91dd6b183f29c4f191cf426321868388`.
 - Upstream release: <https://sourceforge.net/projects/lame/files/lame/3.98.4/>
+- Official source archive: `lame-3.98.4.tar.gz`; SHA-256 verified on
+  2026-09-16:
+  `ac3144c76617223a9be4aaa3e28a66b51bcab28141050c3af04cb06836f772c8`.
 - Audited source mirror tag: `RELEASE__3_98_4`, commit
   `26e6bdb494ba926b0ec27f040aeacac7120236f8` at
   <https://github.com/enzo1982/lame/tree/RELEASE__3_98_4>.
 - License: GNU Library/Lesser General Public License version 2 or any later
   version (`LGPL-2.0-or-later`); the version 2 license text from that fixed tag
   is preserved in `hinghwa-dict-backend/AudioCompare/LICENSE.LAME`.
-- Corresponding source: obtain the unmodified release source from the upstream
-  release link above or the fixed mirror tag. The repository does not claim to
-  have built or modified this executable.
+- Historical corresponding-source reference: the unmodified 3.98.4 release at
+  the upstream link above and the fixed source mirror tag. The repository does
+  not claim to have built or modified the historical executable. Git history
+  is retained, so this record and `LICENSE.LAME` remain available for auditing
+  earlier revisions even though the executable is absent from the current tree.
 
 ## BAAI/bge-small-zh-v1.5
 
@@ -55,7 +66,7 @@ commercial license unless the relevant rightsholder separately authorizes it.
 
 ---
 
-根目录 AGPL 声明不覆盖或替换上述第三方条款。`AudioCompare/` 的主体代码、其中的
-matplotlib 派生片段和 LAME 二进制分别适用其相邻许可证；构建时下载的 BGE 模型也
-继续适用模型上游发布的条款。除非相关权利人另行授权，这些内容均不属于替代商业
-许可证的授权范围。
+根目录 AGPL 声明不覆盖或替换上述第三方条款。`AudioCompare/` 的主体代码和其中的
+matplotlib 派生片段适用各自的相邻许可证；历史 LAME 二进制已从当前代码树移除，
+系统安装的 LAME 仍适用其自身许可证；构建时下载的 BGE 模型继续适用上游条款。
+除非相关权利人另行授权，这些内容均不属于替代商业许可证的授权范围。

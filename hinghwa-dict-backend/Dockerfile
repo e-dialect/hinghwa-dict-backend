@@ -12,7 +12,7 @@ RUN sed -i 's@deb.debian.org@repo.huaweicloud.com@g' /etc/apt/sources.list.d/deb
 
 # Install system dependencies
 RUN apt-get update && \
-    apt-get install -y ffmpeg && \
+    apt-get install -y ffmpeg lame && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 

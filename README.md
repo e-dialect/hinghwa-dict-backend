@@ -18,6 +18,13 @@
 
 词语查询的语义检索部署与索引维护见 [语义检索说明](docs/SEMANTIC_SEARCH.md)。
 
+## 音频系统依赖
+
+音频处理需要系统安装 `ffmpeg`、`ffprobe` 和 `lame`。Docker 镜像会安装这些工具；
+Debian/Ubuntu 可执行 `apt-get install ffmpeg lame`，macOS 可执行
+`brew install ffmpeg lame`。MP3 比对默认从 `PATH` 查找 `lame`，也可以将
+`LAME_EXECUTABLE` 设置为一个可执行文件路径。本仓库不再随源码分发 LAME 二进制。
+
 ## 未来规划
 
 - [ ] 完善项目文档

@@ -1,17 +1,30 @@
 import struct
 import numpy as np
-import tempfile
 import shutil
-import pydub
 import os
+import subprocess
 import time
+
+
+def resolve_lame_executable():
+    """Return the configured/system LAME executable or fail with guidance."""
+    configured = os.environ.get("LAME_EXECUTABLE")
+    executable = shutil.which(configured or "lame")
+    if executable is None:
+        setting = configured or "lame"
+        raise RuntimeError(
+            "MP3 decoding requires a LAME executable. "
+            f"Could not find {setting!r}; install LAME on PATH or set "
+            "LAME_EXECUTABLE to an executable path."
+        )
+    return executable
 
 
 class InputFile:
     def __init__(self, filename):
         """Open an Audio file with the given file path.
         Supported formats: WAVE, MP3.
-        All MP3 files will be converted to WAVE using the LAME program
+        All MP3 files will be converted to WAVE using a system LAME program.
 
         This document http://www-mmsp.ece.mcgill.ca/documents/AudioFormats/WAVE/WAVE.html
         was used as a spec for files. We implement a limited subset
@@ -21,8 +34,6 @@ class InputFile:
 
         At the end of this constructor. self.wav_file will be positioned
         at the first byte of audio data in the file."""
-        lame = os.path.join(os.path.dirname(os.path.abspath(__file__)), "lame")
-
         original_name = filename
         self.wav_file = open(filename, "rb")
         # try to use lame to convert
@@ -31,7 +42,7 @@ class InputFile:
             os.makedirs(self.workingdir)
         if not self.__is_wave_file(self.wav_file):
             self.wav_file.close()
-            canonical_form = os.path.join(self.workingdir, str(time.time()))
+            canonical_form = os.path.join(self.workingdir, str(time.time()) + ".wav")
 
             # make sure the filename has a ".mp3" extension before sending to lame
             if filename[-4:] != ".mp3":
@@ -41,16 +52,23 @@ class InputFile:
                 )
                 shutil.copyfile(filename, temp_file_name)
                 filename = temp_file_name
-            # Use lame to make a wav representation of the mp3 file to be analyzed
-            lame = [lame, "--silent", "--decode", filename, canonical_form]
-
-            music = pydub.AudioSegment.from_file(filename)
-            music.export(canonical_form, format="wav")
+            # Use the configured or PATH-resolved LAME executable. The project
+            # intentionally does not ship a platform-specific binary.
+            lame = resolve_lame_executable()
+            try:
+                subprocess.run(
+                    [lame, "--silent", "--decode", filename, canonical_form],
+                    check=True,
+                )
+            except subprocess.CalledProcessError as exc:
+                raise IOError(
+                    f"{original_name!r} could not be decoded by LAME"
+                ) from exc
 
             if not os.path.exists(canonical_form):
                 raise IOError("{f} 's format is not supported".format(f=original_name))
 
-            # At this point, we should be confident that "lame" create a correct WAVE file
+            # At this point, LAME has created the WAVE file used for analysis.
             self.wav_file = open(canonical_form, "rb")
 
         # At this point, audio file should have the canonical form(WAVE)

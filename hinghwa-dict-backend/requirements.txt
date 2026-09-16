@@ -24,8 +24,9 @@ Levenshtein==0.27.3
 
 # Audio Processing
 pydub==0.25.1
-# Note: ffmpeg and ffprobe are system utilities, not Python packages
-# Install via system package manager: apt-get install ffmpeg (Linux) or brew install ffmpeg (macOS)
+# Note: ffmpeg, ffprobe, and lame are system utilities, not Python packages
+# Debian/Ubuntu: apt-get install ffmpeg lame; macOS: brew install ffmpeg lame
+# LAME may instead be selected explicitly with the LAME_EXECUTABLE environment variable.
 # The obsolete Python packages 'ffmpeg==1.4' and 'ffprobe==0.5' have been removed
 
 # Cloud Storage
