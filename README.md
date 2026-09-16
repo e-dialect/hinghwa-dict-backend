@@ -25,6 +25,13 @@ Debian/Ubuntu 可执行 `apt-get install ffmpeg lame`，macOS 可执行
 `brew install ffmpeg lame`。MP3 比对默认从 `PATH` 查找 `lame`，也可以将
 `LAME_EXECUTABLE` 设置为一个可执行文件路径。本仓库不再随源码分发 LAME 二进制。
 
+## 生产环境安全配置
+
+本地开发默认 `DEBUG=true`，并使用一个明确标记为不安全、仅供开发的 Django
+`SECRET_KEY`。生产部署必须同时设置 `DEBUG=false` 和随机生成的 `SECRET_KEY`；
+缺少后者时应用会拒绝启动。真实密钥只能通过部署环境或密钥管理服务注入，不得写入
+仓库、镜像、Issue、PR 或聊天记录。
+
 ## 未来规划
 
 - [ ] 完善项目文档
