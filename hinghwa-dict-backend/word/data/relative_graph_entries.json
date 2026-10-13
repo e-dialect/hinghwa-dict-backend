@@ -1,0 +1,31 @@
+{
+  "catalog_version": 1,
+  "source": {
+    "relationship_graph": "莆仙话亲属称谓关系图 v1.0（莆田腔版本，莆仙乡音社，2026-02-01；原图 https://github.com/user-attachments/assets/3aacc81d-7607-45d6-815c-7721fdf7c905；backend issue https://github.com/e-dialect/hinghwa-dict-backend/issues/390）",
+    "frontend_inventory": "hinghwa-dict-web/src/components/Tools/relative.js；仅盘点关系图中 ID 为 null 的节点，不据关系节点推导读音或释义",
+    "database_snapshot": "兴化语记当前数据.sqlite3；2026-10-12 精确词形查询；仅作已有词条交叉核对，不是发音或释义来源"
+  },
+  "entries": [
+    {"word": "姆妈", "status": "pending", "relationship": "伯祖母", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "伯妈", "status": "pending", "relationship": "伯祖母", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿姆", "status": "pending", "relationship": "堂伯母/伯母", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "姑妈", "status": "pending", "relationship": "姑祖母", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "姑丈公", "status": "pending", "relationship": "姑祖父", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "姨丈公", "status": "pending", "relationship": "姨祖父", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "老父", "status": "pending", "relationship": "父亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿爸", "status": "pending", "relationship": "父亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿负", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿奶", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿嫡", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "娘奶", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿妸", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "依妸", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "妈妈", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "妈阿", "status": "pending", "relationship": "母亲", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿弟妇", "status": "pending", "relationship": "弟妇", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿丈", "status": "existing", "database_id": 6115, "relationship": "姐夫", "reason": "快照已有词条 6115；现存释义、IPA、拼音需人工对照图及词典校正，不作为待补新词"},
+    {"word": "表兄弟", "status": "pending", "relationship": "表兄弟", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "大伯", "status": "pending", "relationship": "伯兄（丈夫的哥哥）", "reason": "来源图仅标注关系角色；未找到足以确认本地读音和释义的来源"},
+    {"word": "阿妗囝", "status": "pending", "relationship": "舅弟妇", "reason": "前端修正错误解绑后纳入方言词形清单；来源图仅能支持关系角色，读音和释义待可靠来源复核"}
+  ]
+}
