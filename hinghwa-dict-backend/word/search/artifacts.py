@@ -5,6 +5,8 @@ import hashlib
 import json
 import os
 import threading
+import time
+import math
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
@@ -16,7 +18,7 @@ from django.conf import settings
 from word.models import Word
 
 from .encoder import BGEEncoder
-from .exceptions import SearchUnavailable
+from .exceptions import SearchUnavailable, SourceScanLimit
 
 MANIFEST_SCHEMA_VERSION = 1
 
@@ -43,7 +45,7 @@ def _parse_string_list(raw_value: str) -> list[str]:
     return [raw_value.strip()] if raw_value.strip() else []
 
 
-def export_visible_entries() -> list[dict]:
+def iter_visible_entries():
     queryset = (
         Word.objects.filter(visibility=True)
         .order_by("id")
@@ -57,20 +59,64 @@ def export_visible_entries() -> list[dict]:
             "standard_pinyin",
         )
     )
-    entries = []
-    for item in queryset:
-        entries.append(
-            {
-                "id": int(item["id"]),
-                "word": str(item["word"] or "").strip(),
-                "definition": str(item["definition"] or "").strip(),
-                "annotation": str(item["annotation"] or "").strip(),
-                "mandarin": _parse_string_list(item["mandarin"]),
-                "standard_ipa": str(item["standard_ipa"] or "").strip(),
-                "standard_pinyin": str(item["standard_pinyin"] or "").strip(),
-            }
+    for item in queryset.iterator(chunk_size=256):
+        yield {
+            "id": int(item["id"]),
+            "word": str(item["word"] or "").strip(),
+            "definition": str(item["definition"] or "").strip(),
+            "annotation": str(item["annotation"] or "").strip(),
+            "mandarin": _parse_string_list(item["mandarin"]),
+            "standard_ipa": str(item["standard_ipa"] or "").strip(),
+            "standard_pinyin": str(item["standard_pinyin"] or "").strip(),
+        }
+
+
+def export_visible_entries() -> list[dict]:
+    return list(iter_visible_entries())
+
+
+def _scan_deadline():
+    budget = float(settings.SEMANTIC_SEARCH_SOURCE_SCAN_SECONDS)
+    if not math.isfinite(budget) or not 0 < budget <= 30:
+        raise SourceScanLimit(
+            "source scan budget must be positive and at most 30 seconds"
         )
-    return entries
+    return time.monotonic() + budget
+
+
+def _check_scan_deadline(deadline):
+    if time.monotonic() > deadline:
+        raise SourceScanLimit("semantic source/checksum scan exceeded its time budget")
+
+
+def source_digest() -> str:
+    """Hash exactly the canonical visible-row snapshot encoded by a build."""
+    deadline = _scan_deadline()
+    digest = hashlib.sha256(b"[")
+    separator = b""
+    for entry in iter_visible_entries():
+        digest.update(separator)
+        digest.update(_canonical_json_bytes(entry))
+        separator = b","
+        _check_scan_deadline(deadline)
+    digest.update(b"]")
+    return digest.hexdigest()
+
+
+def artifact_file_digest(path: Path) -> str:
+    deadline = _scan_deadline()
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+            _check_scan_deadline(deadline)
+    return digest.hexdigest()
+
+
+def discard_unpublished_artifacts(manifest: dict) -> None:
+    artifact_dir = Path(settings.SEMANTIC_SEARCH_DATA_DIR)
+    for key in ("entries_file", "index_file"):
+        _safe_artifact_path(artifact_dir, manifest[key]).unlink(missing_ok=True)
 
 
 def _get_faiss():

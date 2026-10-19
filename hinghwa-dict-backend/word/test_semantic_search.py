@@ -14,6 +14,7 @@ from word.search.artifacts import (
     ArtifactBundle,
     ArtifactRepository,
     build_semantic_artifacts,
+    source_digest,
 )
 from word.search.exceptions import SearchUnavailable
 from word.search.llm import DeepSeekQueryParser
@@ -331,7 +332,7 @@ class WorkerTests(TransactionTestCase):
     @mock.patch("word.search.worker.build_semantic_artifacts")
     @mock.patch("word.search.worker.publish_semantic_manifest")
     def test_initial_build_marks_index_ready(self, publish, build):
-        build.return_value = {"entry_count": 0}
+        build.return_value = {"entry_count": 0, "entries_sha256": source_digest()}
         self.assertTrue(SemanticIndexWorker(worker_id="first").run_once())
         publish.assert_called_once_with(build.return_value)
         state = SemanticIndexState.objects.get(singleton_key=1)
@@ -356,7 +357,7 @@ class WorkerTests(TransactionTestCase):
             if first_build:
                 first_build = False
                 request_index_rebuild()
-            return {"entry_count": 1}
+            return {"entry_count": 1, "entries_sha256": source_digest()}
 
         build.side_effect = build_once
         worker = SemanticIndexWorker(worker_id="test-worker")
@@ -379,7 +380,7 @@ class WorkerTests(TransactionTestCase):
             state = SemanticIndexState.objects.get(singleton_key=1)
             state.lease_owner = "second"
             state.save(update_fields=["lease_owner"])
-            return {"entry_count": 0}
+            return {"entry_count": 0, "entries_sha256": source_digest()}
 
         build.side_effect = steal_lease
         with self.assertRaisesRegex(RuntimeError, "lost its lease"):
@@ -403,7 +404,10 @@ class WorkerTests(TransactionTestCase):
     @mock.patch("word.search.worker.build_semantic_artifacts")
     @mock.patch("word.search.worker.publish_semantic_manifest")
     def test_worker_retries_a_failed_revision(self, publish, build):
-        build.side_effect = [RuntimeError("temporary"), {"entry_count": 0}]
+        build.side_effect = [
+            RuntimeError("temporary"),
+            {"entry_count": 0, "entries_sha256": source_digest()},
+        ]
         worker = SemanticIndexWorker(worker_id="test-worker")
         with self.assertRaisesRegex(RuntimeError, "temporary"):
             worker.run_once()
@@ -411,7 +415,9 @@ class WorkerTests(TransactionTestCase):
         state = SemanticIndexState.objects.get(singleton_key=1)
         self.assertEqual(state.status, SemanticIndexState.Status.READY)
         self.assertEqual(state.built_revision, 1)
-        publish.assert_called_once_with({"entry_count": 0})
+        publish.assert_called_once_with(
+            {"entry_count": 0, "entries_sha256": source_digest()}
+        )
 
 
 class SearchWordsIntegrationTests(TestCase):
