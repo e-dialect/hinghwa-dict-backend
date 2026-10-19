@@ -20,7 +20,7 @@ class PackageIsolationTests(unittest.TestCase):
     def test_start_failure_surfaces_only_validated_marker_fields(self):
         marker = (
             b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
-            b'"exceptionClass":"RuntimeError","filename":"apps.py","line":42}'
+            b'"exceptionClass":"RuntimeError","filename":"probe.py","line":42}'
         )
         error = subprocess.CalledProcessError(
             1,
@@ -33,7 +33,7 @@ class PackageIsolationTests(unittest.TestCase):
                 probe.execute(["docker", "start", "--attach", "container"])
         self.assertEqual(
             str(raised.exception),
-            "Package probe failed at stage=django-setup exception=RuntimeError frame=apps.py:42",
+            "Package probe failed at stage=django-setup exception=RuntimeError frame=probe.py:42",
         )
         self.assertNotIn("stdout-secret", str(raised.exception))
         self.assertNotIn("stderr-secret", str(raised.exception))
@@ -70,9 +70,77 @@ class PackageIsolationTests(unittest.TestCase):
         self.assertIsNone(probe.parse_failure_marker(unsafe_filename, b""))
         valid = (
             b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
-            b'"exceptionClass":"RuntimeError","filename":"apps.py","line":42}'
+            b'"exceptionClass":"RuntimeError","filename":"probe.py","line":42}'
         )
         self.assertIsNone(probe.parse_failure_marker(valid, valid))
+        duplicate_key = (
+            b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
+            b'"exceptionClass":"RuntimeError","filename":"probe.py",'
+            b'"filename":"probe.py","line":42}'
+        )
+        self.assertIsNone(probe.parse_failure_marker(duplicate_key, b""))
+        secret_identifiers = (
+            b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
+            b'"exceptionClass":"SyntheticSecretTokenABC123",'
+            b'"filename":"SyntheticSecretTokenABC123.py","line":42}'
+        )
+        self.assertIsNone(probe.parse_failure_marker(secret_identifiers, b""))
+
+    def test_probe_failure_emitter_only_uses_controlled_frame_and_exception_names(self):
+        class SyntheticSecretTokenABC123(Exception):
+            pass
+
+        safe = image_probe.safe_failure(
+            SyntheticSecretTokenABC123("exception-message-secret"),
+            [
+                SimpleNamespace(
+                    filename="/private/SyntheticSecretTokenABC123.py", lineno=98765
+                ),
+                SimpleNamespace(filename=image_probe.__file__, lineno=219),
+            ],
+        )
+        self.assertEqual(
+            safe,
+            {
+                "stage": "probe-start",
+                "exceptionClass": "Exception",
+                "filename": "probe.py",
+                "line": 219,
+            },
+        )
+        serialized = json.dumps(safe)
+        self.assertNotIn("SyntheticSecretTokenABC123", serialized)
+        self.assertNotIn("exception-message-secret", serialized)
+
+        unknown_frame = image_probe.safe_failure(
+            RuntimeError("another-secret"),
+            [SimpleNamespace(filename="/private/another-secret/settings.py", lineno=7)],
+        )
+        self.assertEqual(unknown_frame["filename"], "unknown")
+        self.assertEqual(unknown_frame["line"], 0)
+        self.assertNotIn("another-secret", json.dumps(unknown_frame))
+
+    def test_cleanup_failure_remains_a_blocking_probe_failure(self):
+        calls = []
+
+        def fake_execute(args, timeout=300):
+            calls.append(args)
+            if args[:3] == ["docker", "image", "inspect"]:
+                return b"123456" if "{{.Size}}" in args else IMAGE_ID.encode()
+            if args[:2] == ["docker", "history"]:
+                return b"12.3MB\n0B\n"
+            if args[:2] == ["docker", "start"]:
+                raise RuntimeError("synthetic probe failure")
+            if args[:3] == ["docker", "rm", "--force"]:
+                raise RuntimeError("synthetic cleanup failure")
+            return b""
+
+        with patch.object(probe, "execute", fake_execute), patch.object(
+            probe, "migration_tree", return_value={}
+        ):
+            with self.assertRaisesRegex(RuntimeError, "synthetic cleanup failure"):
+                probe.run_probe("image", SHA)
+        self.assertTrue(any(args[:3] == ["docker", "rm", "--force"] for args in calls))
 
     def test_probe_uses_image_id_no_network_and_only_disposable_mount(self):
         calls = []

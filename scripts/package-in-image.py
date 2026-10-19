@@ -4,13 +4,11 @@ import hashlib
 import json
 import os
 import importlib.metadata
-import re
 import stat
 import subprocess
 import sys
 import traceback
 from pathlib import Path
-
 
 STAGES = (
     "probe-start",
@@ -25,6 +23,36 @@ STAGES = (
     "semantic-model-smoke",
     "build-receipt",
 )
+SAFE_EXCEPTION_CLASSES = {
+    "AppRegistryNotReady",
+    "AssertionError",
+    "AttributeError",
+    "DataError",
+    "DatabaseError",
+    "FileNotFoundError",
+    "ImportError",
+    "ImproperlyConfigured",
+    "IndexError",
+    "IntegrityError",
+    "InterfaceError",
+    "JSONDecodeError",
+    "KeyError",
+    "MemoryError",
+    "ModuleNotFoundError",
+    "NameError",
+    "NotSupportedError",
+    "ObjectDoesNotExist",
+    "OperationalError",
+    "OSError",
+    "PermissionError",
+    "ProgrammingError",
+    "RuntimeError",
+    "TimeoutError",
+    "TypeError",
+    "UnicodeDecodeError",
+    "UnicodeError",
+    "ValueError",
+}
 _stage = "probe-start"
 
 
@@ -37,14 +65,21 @@ def set_stage(stage):
 
 def safe_failure(exc, frames):
     filename, line = "unknown", 0
+    probe_file = Path(__file__).resolve()
     if frames:
-        candidate = Path(frames[-1].filename).name
-        if re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", candidate) and candidate not in {".", ".."}:
-            filename = candidate
-        if isinstance(frames[-1].lineno, int) and 1 <= frames[-1].lineno <= 10_000_000:
-            line = frames[-1].lineno
+        for frame in frames:
+            try:
+                is_probe_frame = Path(frame.filename).resolve() == probe_file
+            except (OSError, RuntimeError):
+                is_probe_frame = False
+            if (
+                is_probe_frame
+                and isinstance(frame.lineno, int)
+                and 1 <= frame.lineno <= 10_000_000
+            ):
+                filename, line = "probe.py", frame.lineno
     exception_class = type(exc).__name__
-    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,79}", exception_class):
+    if exception_class not in SAFE_EXCEPTION_CLASSES:
         exception_class = "Exception"
     return {
         "stage": _stage if _stage in STAGES else "probe-start",
@@ -220,5 +255,9 @@ if __name__ == "__main__":
         main()
     except Exception as exc:
         failure = safe_failure(exc, traceback.extract_tb(exc.__traceback__))
-        print("BACKEND_PACKAGE_FAILURE=" + json.dumps(failure, sort_keys=True), file=sys.stderr, flush=True)
+        print(
+            "BACKEND_PACKAGE_FAILURE=" + json.dumps(failure, sort_keys=True),
+            file=sys.stderr,
+            flush=True,
+        )
         raise SystemExit(1) from None

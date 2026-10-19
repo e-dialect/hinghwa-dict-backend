@@ -10,7 +10,6 @@ import subprocess
 import tempfile
 import uuid
 
-
 FAILURE_MARKER = b"BACKEND_PACKAGE_FAILURE="
 FAILURE_STAGES = {
     "probe-start",
@@ -25,6 +24,47 @@ FAILURE_STAGES = {
     "semantic-model-smoke",
     "build-receipt",
 }
+SAFE_EXCEPTION_CLASSES = {
+    "AppRegistryNotReady",
+    "AssertionError",
+    "AttributeError",
+    "DataError",
+    "DatabaseError",
+    "Exception",
+    "FileNotFoundError",
+    "ImportError",
+    "ImproperlyConfigured",
+    "IndexError",
+    "IntegrityError",
+    "InterfaceError",
+    "JSONDecodeError",
+    "KeyError",
+    "MemoryError",
+    "ModuleNotFoundError",
+    "NameError",
+    "NotSupportedError",
+    "ObjectDoesNotExist",
+    "OperationalError",
+    "OSError",
+    "PermissionError",
+    "ProgrammingError",
+    "RuntimeError",
+    "TimeoutError",
+    "TypeError",
+    "TimeoutExpired",
+    "UnicodeDecodeError",
+    "UnicodeError",
+    "ValueError",
+}
+
+
+def unique_json_object(pairs):
+    result = {}
+    for key, value in pairs:
+        if key in result:
+            raise ValueError("Duplicate marker field")
+        result[key] = value
+    return result
 
 
 def parse_failure_marker(stdout, stderr):
@@ -38,8 +78,10 @@ def parse_failure_marker(stdout, stderr):
     if len(candidates) != 1:
         return None
     try:
-        payload = json.loads(candidates[0].decode("ascii"))
-    except (UnicodeDecodeError, json.JSONDecodeError):
+        payload = json.loads(
+            candidates[0].decode("ascii"), object_pairs_hook=unique_json_object
+        )
+    except (UnicodeDecodeError, json.JSONDecodeError, ValueError):
         return None
     if not isinstance(payload, dict) or set(payload) != {
         "stage",
@@ -54,17 +96,20 @@ def parse_failure_marker(stdout, stderr):
     line = payload["line"]
     if not isinstance(stage, str) or stage not in FAILURE_STAGES:
         return None
-    if not isinstance(exception_class, str) or not re.fullmatch(
-        r"[A-Za-z][A-Za-z0-9_]{0,79}", exception_class
+    if (
+        not isinstance(exception_class, str)
+        or exception_class not in SAFE_EXCEPTION_CLASSES
     ):
+        return None
+    if not isinstance(filename, str) or filename not in {"probe.py", "unknown"}:
         return None
     if (
-        not isinstance(filename, str)
-        or not re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", filename)
-        or filename in {".", ".."}
+        isinstance(line, bool)
+        or not isinstance(line, int)
+        or not 0 <= line <= 10_000_000
     ):
         return None
-    if isinstance(line, bool) or not isinstance(line, int) or not 0 <= line <= 10_000_000:
+    if (filename == "unknown" and line != 0) or (filename == "probe.py" and line == 0):
         return None
     return {
         "stage": stage,
@@ -90,8 +135,9 @@ def execute(args, timeout=300):
                     )
                 ) from None
             raise RuntimeError(
-                "Package probe failed at stage=docker-start-attach exception=CalledProcessError exit={}"
-                .format(exc.returncode)
+                "Package probe failed at stage=docker-start-attach exception=CalledProcessError exit={}".format(
+                    exc.returncode
+                )
             ) from None
         raise RuntimeError(
             "Package probe operation failed; diagnostics withheld"
@@ -99,7 +145,7 @@ def execute(args, timeout=300):
     except (subprocess.SubprocessError, OSError) as exc:
         if args[:2] == ["docker", "start"]:
             exception_class = type(exc).__name__
-            if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,79}", exception_class):
+            if exception_class not in SAFE_EXCEPTION_CLASSES:
                 exception_class = "SubprocessError"
             raise RuntimeError(
                 "Package probe failed at stage=docker-start-attach exception={}".format(
