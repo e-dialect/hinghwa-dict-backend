@@ -4,10 +4,54 @@ import hashlib
 import json
 import os
 import importlib.metadata
+import re
 import stat
 import subprocess
 import sys
+import traceback
 from pathlib import Path
+
+
+STAGES = (
+    "probe-start",
+    "read-migration-manifest",
+    "verify-migrations",
+    "import-settings",
+    "configure-synthetic-settings",
+    "verify-model-snapshot",
+    "django-setup",
+    "verify-runtime",
+    "migrate-synthetic-sqlite",
+    "semantic-model-smoke",
+    "build-receipt",
+)
+_stage = "probe-start"
+
+
+def set_stage(stage):
+    global _stage
+    if stage not in STAGES:
+        raise ValueError("Unknown package probe stage")
+    _stage = stage
+
+
+def safe_failure(exc, frames):
+    filename, line = "unknown", 0
+    if frames:
+        candidate = Path(frames[-1].filename).name
+        if re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", candidate) and candidate not in {".", ".."}:
+            filename = candidate
+        if isinstance(frames[-1].lineno, int) and 1 <= frames[-1].lineno <= 10_000_000:
+            line = frames[-1].lineno
+    exception_class = type(exc).__name__
+    if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,79}", exception_class):
+        exception_class = "Exception"
+    return {
+        "stage": _stage if _stage in STAGES else "probe-start",
+        "exceptionClass": exception_class,
+        "filename": filename,
+        "line": line,
+    }
 
 
 def digest(data):
@@ -43,9 +87,11 @@ def regular_file_bytes(directory):
 
 
 def main():
+    set_stage("read-migration-manifest")
     expected = json.loads(Path("/probe/migrations.json").read_text())
     actual = []
     root = Path("/usr/src/HinghwaDict-backend")
+    set_stage("verify-migrations")
     for name, checksum in expected["entries"]:
         target = root / name
         assert target.is_relative_to(root) and ".." not in target.parts
@@ -60,8 +106,10 @@ def main():
     sys.path.insert(0, str(root))
     # Import the image's settings, then override only disposable probe storage/logging.
     # Never import a production environment/configuration or expose credentials.
+    set_stage("import-settings")
     import HinghwaDict.settings as settings
 
+    set_stage("configure-synthetic-settings")
     settings.DATABASES["default"]["NAME"] = "/tmp/package-smoke.sqlite3"
     settings.MEDIA_ROOT = "/tmp/package-media"
     settings.SAVED_PINYIN = "/tmp/package-audio"
@@ -73,6 +121,7 @@ def main():
         settings.SEMANTIC_SEARCH_MODEL_REVISION
         == "7999e1d3359715c523056ef9478215996d62a620"
     )
+    set_stage("verify-model-snapshot")
     snapshot = (
         Path(settings.SEMANTIC_SEARCH_MODEL_CACHE)
         / "models--BAAI--bge-small-zh-v1.5/snapshots"
@@ -82,7 +131,9 @@ def main():
 
     import django
 
+    set_stage("django-setup")
     django.setup()
+    set_stage("verify-runtime")
     assert django.get_version() == "5.0.3"
     from django.core.management import call_command
     from django.db import connection
@@ -125,6 +176,7 @@ def main():
     }
 
     assert not Path("/tmp/package-smoke.sqlite3").exists()
+    set_stage("migrate-synthetic-sqlite")
     call_command("migrate", interactive=False, verbosity=0)
     executor = MigrationExecutor(connection)
     assert not executor.migration_plan(executor.loader.graph.leaf_nodes())
@@ -136,10 +188,12 @@ def main():
     user.delete()
     with connection.cursor() as cursor:
         assert cursor.execute("PRAGMA integrity_check").fetchall() == [("ok",)]
+    set_stage("semantic-model-smoke")
     vector = BGEEncoder().encode_query("synthetic package smoke")
     assert vector.shape == (512,) and np.isfinite(vector).all()
     assert float(np.linalg.norm(vector)) > 0
     connection.close()
+    set_stage("build-receipt")
     result = {
         "result": "PASS",
         "torchCPU": cpu,
@@ -162,4 +216,9 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception as exc:
+        failure = safe_failure(exc, traceback.extract_tb(exc.__traceback__))
+        print("BACKEND_PACKAGE_FAILURE=" + json.dumps(failure, sort_keys=True), file=sys.stderr, flush=True)
+        raise SystemExit(1) from None

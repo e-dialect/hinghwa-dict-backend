@@ -17,6 +17,63 @@ IMAGE_ID = "sha256:" + "c" * 64
 
 
 class PackageIsolationTests(unittest.TestCase):
+    def test_start_failure_surfaces_only_validated_marker_fields(self):
+        marker = (
+            b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
+            b'"exceptionClass":"RuntimeError","filename":"apps.py","line":42}'
+        )
+        error = subprocess.CalledProcessError(
+            1,
+            ["docker", "start", "--attach", "container"],
+            output=b"stdout-secret\n" + marker,
+            stderr=b"stderr-secret\n",
+        )
+        with patch.object(probe.subprocess, "check_output", side_effect=error):
+            with self.assertRaises(RuntimeError) as raised:
+                probe.execute(["docker", "start", "--attach", "container"])
+        self.assertEqual(
+            str(raised.exception),
+            "Package probe failed at stage=django-setup exception=RuntimeError frame=apps.py:42",
+        )
+        self.assertNotIn("stdout-secret", str(raised.exception))
+        self.assertNotIn("stderr-secret", str(raised.exception))
+
+    def test_start_failure_without_valid_marker_redacts_all_output(self):
+        error = subprocess.CalledProcessError(
+            17,
+            ["docker", "start", "--attach", "container"],
+            output=b"stdout-secret",
+            stderr=b"stderr-secret",
+        )
+        with patch.object(probe.subprocess, "check_output", side_effect=error):
+            with self.assertRaises(RuntimeError) as raised:
+                probe.execute(["docker", "start", "--attach", "container"])
+        self.assertEqual(
+            str(raised.exception),
+            "Package probe failed at stage=docker-start-attach exception=CalledProcessError exit=17",
+        )
+        self.assertNotIn("stdout-secret", str(raised.exception))
+        self.assertNotIn("stderr-secret", str(raised.exception))
+
+    def test_failure_marker_rejects_extra_fields_invalid_values_and_duplicates(self):
+        secret_payload = (
+            b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
+            b'"exceptionClass":"RuntimeError","filename":"apps.py",'
+            b'"line":42,"message":"secret"}'
+        )
+        unsafe_filename = (
+            b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
+            b'"exceptionClass":"RuntimeError","filename":"/private/key",'
+            b'"line":42}'
+        )
+        self.assertIsNone(probe.parse_failure_marker(secret_payload, b""))
+        self.assertIsNone(probe.parse_failure_marker(unsafe_filename, b""))
+        valid = (
+            b'BACKEND_PACKAGE_FAILURE={"stage":"django-setup",'
+            b'"exceptionClass":"RuntimeError","filename":"apps.py","line":42}'
+        )
+        self.assertIsNone(probe.parse_failure_marker(valid, valid))
+
     def test_probe_uses_image_id_no_network_and_only_disposable_mount(self):
         calls = []
 

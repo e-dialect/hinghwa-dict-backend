@@ -11,10 +11,101 @@ import tempfile
 import uuid
 
 
+FAILURE_MARKER = b"BACKEND_PACKAGE_FAILURE="
+FAILURE_STAGES = {
+    "probe-start",
+    "read-migration-manifest",
+    "verify-migrations",
+    "import-settings",
+    "configure-synthetic-settings",
+    "verify-model-snapshot",
+    "django-setup",
+    "verify-runtime",
+    "migrate-synthetic-sqlite",
+    "semantic-model-smoke",
+    "build-receipt",
+}
+
+
+def parse_failure_marker(stdout, stderr):
+    candidates = []
+    for stream in (stdout, stderr):
+        if not isinstance(stream, bytes):
+            continue
+        for line in stream[-65536:].splitlines():
+            if line.startswith(FAILURE_MARKER) and len(line) <= 512:
+                candidates.append(line[len(FAILURE_MARKER) :])
+    if len(candidates) != 1:
+        return None
+    try:
+        payload = json.loads(candidates[0].decode("ascii"))
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        return None
+    if not isinstance(payload, dict) or set(payload) != {
+        "stage",
+        "exceptionClass",
+        "filename",
+        "line",
+    }:
+        return None
+    stage = payload["stage"]
+    exception_class = payload["exceptionClass"]
+    filename = payload["filename"]
+    line = payload["line"]
+    if not isinstance(stage, str) or stage not in FAILURE_STAGES:
+        return None
+    if not isinstance(exception_class, str) or not re.fullmatch(
+        r"[A-Za-z][A-Za-z0-9_]{0,79}", exception_class
+    ):
+        return None
+    if (
+        not isinstance(filename, str)
+        or not re.fullmatch(r"[A-Za-z0-9_.-]{1,80}", filename)
+        or filename in {".", ".."}
+    ):
+        return None
+    if isinstance(line, bool) or not isinstance(line, int) or not 0 <= line <= 10_000_000:
+        return None
+    return {
+        "stage": stage,
+        "exceptionClass": exception_class,
+        "filename": filename,
+        "line": line,
+    }
+
+
 def execute(args, timeout=300):
     try:
         return subprocess.check_output(args, stderr=subprocess.PIPE, timeout=timeout)
-    except (subprocess.SubprocessError, OSError):
+    except subprocess.CalledProcessError as exc:
+        if args[:2] == ["docker", "start"]:
+            failure = parse_failure_marker(exc.output, exc.stderr)
+            if failure:
+                raise RuntimeError(
+                    "Package probe failed at stage={} exception={} frame={}:{}".format(
+                        failure["stage"],
+                        failure["exceptionClass"],
+                        failure["filename"],
+                        failure["line"],
+                    )
+                ) from None
+            raise RuntimeError(
+                "Package probe failed at stage=docker-start-attach exception=CalledProcessError exit={}"
+                .format(exc.returncode)
+            ) from None
+        raise RuntimeError(
+            "Package probe operation failed; diagnostics withheld"
+        ) from None
+    except (subprocess.SubprocessError, OSError) as exc:
+        if args[:2] == ["docker", "start"]:
+            exception_class = type(exc).__name__
+            if not re.fullmatch(r"[A-Za-z][A-Za-z0-9_]{0,79}", exception_class):
+                exception_class = "SubprocessError"
+            raise RuntimeError(
+                "Package probe failed at stage=docker-start-attach exception={}".format(
+                    exception_class
+                )
+            ) from None
         raise RuntimeError(
             "Package probe operation failed; diagnostics withheld"
         ) from None
