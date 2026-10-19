@@ -2,13 +2,7 @@ import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { hash } from './release-image.mjs'
 
-export const releaseBaseImage = {
-  image: 'docker.io/library/python:3.10-slim-bookworm',
-  platform: 'linux/amd64',
-  manifestDigest: 'sha256:db6ee5170ebce0f4d165af242e8e77addc08bd9ffc37e8b1815752cf027aa4f8',
-  configDigest: 'sha256:fbff8a8ef46816a3d6872b3f98c4548892422e6686c0b38703575149dfa0b38a',
-  pythonVersion: '3.10.22',
-}
+export { releaseBaseImage } from './release-image.mjs'
 export const torchCPUWheel = {
   version: '2.14.1+cpu',
   url: 'https://download-r2.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp310-cp310-manylinux_2_28_x86_64.whl',

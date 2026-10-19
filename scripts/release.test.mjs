@@ -12,6 +12,8 @@ function fixture(change = {}) {
     'org.opencontainers.image.source': 'https://github.com/e-dialect/hinghwa-dict-backend',
     'org.opencontainers.image.version': `sha-${sha}`,
     'org.opencontainers.image.created': date,
+    'org.opencontainers.image.base.name': releaseBaseImage.image,
+    'org.opencontainers.image.base.digest': releaseBaseImage.manifestDigest,
   } }, ...change }))
   const raw = Buffer.from(JSON.stringify({ mediaType: 'application/vnd.oci.image.manifest.v1+json', config: { digest: hash(config), size: config.length } }))
   return { config, raw, digest: hash(raw) }
@@ -24,6 +26,17 @@ test('manifest hashes actual raw config and accepts only correct identity', () =
   assert.throws(() => verifyImage(f.raw, f.config, f.digest, 'b'.repeat(40), date))
   const arm = fixture({ architecture: 'arm64' })
   assert.throws(() => verifyImage(arm.raw, arm.config, arm.digest, sha, date))
+})
+test('raw config must bind both exact base labels', () => {
+  for (const key of ['org.opencontainers.image.base.name', 'org.opencontainers.image.base.digest']) {
+    for (const replacement of [undefined, 'untrusted-base']) {
+      const labels = JSON.parse(fixture().config).config.Labels
+      if (replacement === undefined) delete labels[key]
+      else labels[key] = replacement
+      const f = fixture({ config: { Labels: labels } })
+      assert.throws(() => verifyImage(f.raw, f.config, f.digest, sha, date), /Image label mismatch/)
+    }
+  }
 })
 test('unknown registry access fails closed and only new-package 404 is absent', async () => {
   const old = globalThis.fetch
