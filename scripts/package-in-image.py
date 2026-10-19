@@ -123,7 +123,7 @@ def regular_file_bytes(directory):
 
 def main():
     set_stage("read-migration-manifest")
-    expected = json.loads(Path("/probe/migrations.json").read_text())
+    expected = json.loads(Path("/migrations.json").read_text())
     actual = []
     root = Path("/usr/src/HinghwaDict-backend")
     set_stage("verify-migrations")

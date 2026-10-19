@@ -196,10 +196,14 @@ def run_probe(image, sha):
     with tempfile.TemporaryDirectory(prefix="backend-package-") as directory:
         os.chmod(directory, 0o700)
         probe = Path(directory)
-        (probe / "migrations.json").write_text(json.dumps(migration_tree(sha)))
-        (probe / "probe.py").write_bytes(
+        migration_file = probe / "migrations.json"
+        migration_file.write_text(json.dumps(migration_tree(sha)))
+        probe_file = probe / "probe.py"
+        probe_file.write_bytes(
             Path(__file__).with_name("package-in-image.py").read_bytes()
         )
+        os.chmod(migration_file, 0o644)
+        os.chmod(probe_file, 0o644)
         try:
             execute(
                 [
@@ -225,7 +229,9 @@ def run_probe(image, sha):
                     "--tmpfs",
                     "/tmp:rw,nosuid,size=512m",
                     "--mount",
-                    f"type=bind,src={directory},dst=/probe,readonly",
+                    f"type=bind,src={probe_file},dst=/probe.py,readonly",
+                    "--mount",
+                    f"type=bind,src={migration_file},dst=/migrations.json,readonly",
                     "--env",
                     "DEBUG=false",
                     "--env",
@@ -239,7 +245,7 @@ def run_probe(image, sha):
                     "--entrypoint",
                     "python",
                     image_id,
-                    "/probe/probe.py",
+                    "/probe.py",
                 ]
             )
             output = execute(

@@ -2,6 +2,7 @@ import importlib.util
 import json
 from pathlib import Path
 import subprocess
+import stat
 import tempfile
 from types import SimpleNamespace
 import unittest
@@ -152,15 +153,32 @@ class PackageIsolationTests(unittest.TestCase):
             if args[:2] == ["docker", "history"]:
                 return b"12.3MB\n0B\n"
             if args[:2] == ["docker", "create"]:
-                self.assertEqual(args[-2:], [IMAGE_ID, "/probe/probe.py"])
+                self.assertEqual(args[-2:], [IMAGE_ID, "/probe.py"])
                 self.assertIn("--read-only", args)
                 self.assertEqual(args[args.index("--network") + 1], "none")
+                self.assertEqual(args[args.index("--cap-drop") + 1], "ALL")
+                self.assertNotIn("--cap-add", args)
                 mounts = [arg for arg in args if arg.startswith("type=bind,")]
-                self.assertEqual(len(mounts), 1)
-                self.assertTrue(mounts[0].endswith(",dst=/probe,readonly"))
-                directory = mounts[0].split("src=", 1)[1].split(",", 1)[0]
-                self.assertTrue(Path(directory, "migrations.json").is_file())
-                self.assertTrue(Path(directory, "probe.py").is_file())
+                self.assertEqual(len(mounts), 2)
+                mounted_files = {}
+                for mount in mounts:
+                    parts = mount.split(",")
+                    self.assertEqual(parts[-1], "readonly")
+                    fields = dict(part.split("=", 1) for part in parts[:-1])
+                    self.assertEqual(fields["type"], "bind")
+                    source = Path(fields["src"])
+                    target = fields["dst"]
+                    self.assertEqual(stat.S_IMODE(source.stat().st_mode), 0o644)
+                    self.assertEqual(stat.S_IMODE(source.parent.stat().st_mode), 0o700)
+                    self.assertEqual(
+                        set(p.name for p in source.parent.iterdir()),
+                        {"migrations.json", "probe.py"},
+                    )
+                    mounted_files[target] = source.name
+                self.assertEqual(
+                    mounted_files,
+                    {"/probe.py": "probe.py", "/migrations.json": "migrations.json"},
+                )
                 return b"synthetic-container"
             if args[:2] == ["docker", "start"]:
                 return b'library output\nBACKEND_PACKAGE_RECEIPT={"result":"PASS"}\n'
