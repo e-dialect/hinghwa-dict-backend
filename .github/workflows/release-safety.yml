@@ -40,10 +40,11 @@ jobs:
           stamp = int(subprocess.check_output(['git', 'show', '-s', '--format=%ct', os.environ['SOURCE_SHA']]))
           print('BUILD_DATE=' + datetime.datetime.fromtimestamp(stamp, datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
           PYTHON
-      - name: Build original backend image locally without registry publication
+      - name: Build CPU-only release image locally without registry publication
         uses: docker/build-push-action@v6
         with:
           context: ./hinghwa-dict-backend
+          file: ./hinghwa-dict-backend/Dockerfile.release
           platforms: linux/amd64
           push: false
           load: true

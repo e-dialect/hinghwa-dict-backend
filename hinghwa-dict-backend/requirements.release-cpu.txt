@@ -1,0 +1,3 @@
+# Release-only constraint. Keep the upstream patch observed in PR #409.
+# Official cp310 Linux amd64 CPU wheel; SHA is fixed in Dockerfile.release.
+torch==2.14.1+cpu

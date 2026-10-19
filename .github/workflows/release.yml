@@ -274,6 +274,7 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           context: ./hinghwa-dict-backend
+          file: ./hinghwa-dict-backend/Dockerfile.release
           platforms: linux/amd64
           push: false
           load: true

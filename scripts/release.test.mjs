@@ -1,6 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { torchCPUWheel } from './release-contract.mjs'
 import { hash, verifyImage, existingImageDigest, verifiedRuntimeImage, verifyPublicPull } from './release-image.mjs'
 
 const sha = 'a'.repeat(40)
@@ -173,11 +174,16 @@ test('newer quality run is rejected against bound IDs even for the same SHA', as
   await assert.rejects(authorize({ expected: changed }), /changed after authorization/)
 })
 test('only complete backend synthetic receipts authorize the smoke-tested config ID', () => {
-  const good = { result: 'PASS', cleanup: 'PASS', sourceSHA: sha, migrationTreeDigest: 'sha256:' + 'f'.repeat(64), djangoVersion: '5.0.3', semanticModel: { name: 'BAAI/bge-small-zh-v1.5', revision: '7999e1d3359715c523056ef9478215996d62a620' }, modelLoadedOffline: true, emptySQLiteMigrated: true, sqliteIntegrity: true, syntheticUserRoundtrip: true, noPendingMigrations: true, network: 'none', productionDataUsed: false, imageId: 'sha256:' + 'c'.repeat(64) }
+  const good = { result: 'PASS', cleanup: 'PASS', sourceSHA: sha, migrationTreeDigest: 'sha256:' + 'f'.repeat(64), djangoVersion: '5.0.3', semanticModel: { name: 'BAAI/bge-small-zh-v1.5', revision: '7999e1d3359715c523056ef9478215996d62a620' }, modelLoadedOffline: true, emptySQLiteMigrated: true, sqliteIntegrity: true, syntheticUserRoundtrip: true, noPendingMigrations: true, network: 'none', productionDataUsed: false, imageId: 'sha256:' + 'c'.repeat(64), torchCPU: { version: '2.14.1+cpu', cuda: null, cudaAvailable: false, forbiddenDistributions: [] }, dependenciesConsistent: true, imageExpandedBytes: 123456, layerSizesHuman: ['12.3MB', '0B'], components: { versions: { torch: '2.14.1+cpu' }, regularFileBytesNoSymlinks: { torch: 123, semanticModelCache: 456, static: 789 } } }
   assert.equal(verifiedRuntimeImage(good, sha, good.migrationTreeDigest), good.imageId)
   for (const change of [
     { cleanup: 'FAIL' }, { sourceSHA: 'b'.repeat(40) }, { migrationTreeDigest: '' }, { djangoVersion: '4.2' },
-    { semanticModel: { ...good.semanticModel, revision: 'main' } }, { network: 'default' }, { productionDataUsed: true },
+    { semanticModel: { ...good.semanticModel, revision: 'main' } },
+    { torchCPU: { ...good.torchCPU, version: '2.14.1' } }, { torchCPU: { ...good.torchCPU, cuda: '13.0' } },
+    { torchCPU: { ...good.torchCPU, forbiddenDistributions: ['nvidia-cublas'] } }, { dependenciesConsistent: false },
+    { imageExpandedBytes: 0 }, { imageExpandedBytes: '12345' }, { layerSizesHuman: [] },
+    { components: { ...good.components, versions: { torch: '2.14.1' } } },
+    { components: { ...good.components, regularFileBytesNoSymlinks: { torch: 0, semanticModelCache: 456, static: 789 } } }, { network: 'default' }, { productionDataUsed: true },
     ...['modelLoadedOffline', 'emptySQLiteMigrated', 'sqliteIntegrity', 'syntheticUserRoundtrip', 'noPendingMigrations'].map(flag => ({ [flag]: false })),
   ]) assert.throws(() => verifiedRuntimeImage({ ...good, ...change }, sha, good.migrationTreeDigest))
 })
@@ -200,4 +206,17 @@ test('public package evidence uses anonymous credentials and exact digest only',
     globalThis.fetch = async () => ({ ok: false })
     await assert.rejects(verifyPublicPull(digest), /public visibility/)
   } finally { globalThis.fetch = previous }
+})
+
+test('release recipe fixes the official wheel hash and constraint used by its manifest contract', () => {
+  const recipe = readFileSync(new URL('../hinghwa-dict-backend/Dockerfile.release', import.meta.url), 'utf8')
+  const constraint = readFileSync(new URL('../hinghwa-dict-backend/requirements.release-cpu.txt', import.meta.url), 'utf8')
+  assert.ok(recipe.includes(`${torchCPUWheel.url}#sha256=${torchCPUWheel.sha256}`))
+  assert.ok(constraint.split('\n').includes(`torch==${torchCPUWheel.version}`))
+  assert.ok(recipe.includes('pip check'))
+  assert.ok(recipe.includes('torch.version.cuda is None'))
+  for (const workflow of ['release.yml', 'release-safety.yml']) {
+    const content = readFileSync(new URL(`../.github/workflows/${workflow}`, import.meta.url), 'utf8')
+    assert.ok(content.includes('file: ./hinghwa-dict-backend/Dockerfile.release'))
+  }
 })

@@ -3,12 +3,43 @@
 import hashlib
 import json
 import os
+import importlib.metadata
+import stat
+import subprocess
 import sys
 from pathlib import Path
 
 
 def digest(data):
     return "sha256:" + hashlib.sha256(data).hexdigest()
+
+
+def cpu_profile(torch, packages):
+    assert torch.__version__ == "2.14.1+cpu", "Unexpected release torch version"
+    assert torch.version.cuda is None, "CUDA build is not a CPU release"
+    assert not torch.cuda.is_available(), "CUDA must be unavailable"
+    forbidden = sorted(
+        name
+        for name in packages
+        if name.lower().replace("_", "-").startswith(("nvidia-", "cuda-", "triton"))
+    )
+    assert not forbidden, "CUDA/Triton packages must not be installed"
+    return {
+        "version": torch.__version__,
+        "cuda": torch.version.cuda,
+        "cudaAvailable": False,
+        "forbiddenDistributions": forbidden,
+    }
+
+
+def regular_file_bytes(directory):
+    # Apparent component content size, not a disk usage/capacity guarantee.
+    # Skip symlinks so the HF snapshot links do not double-count its blobs.
+    return sum(
+        entry.lstat().st_size
+        for entry in Path(directory).rglob("*")
+        if stat.S_ISREG(entry.lstat().st_mode)
+    )
 
 
 def main():
@@ -59,6 +90,39 @@ def main():
     from django.contrib.auth import get_user_model
     from word.search.encoder import BGEEncoder
     import numpy as np
+    import torch
+
+    packages = {
+        distribution.metadata["Name"]: distribution.version
+        for distribution in importlib.metadata.distributions()
+    }
+    cpu = cpu_profile(torch, packages)
+    subprocess.run(
+        [sys.executable, "-m", "pip", "check"],
+        check=True,
+        capture_output=True,
+        timeout=60,
+    )
+    components = {
+        "versions": {
+            name: importlib.metadata.version(name)
+            for name in [
+                "torch",
+                "sentence-transformers",
+                "transformers",
+                "numpy",
+                "faiss-cpu",
+                "django",
+            ]
+        },
+        "regularFileBytesNoSymlinks": {
+            "torch": regular_file_bytes(Path(torch.__file__).parent),
+            "semanticModelCache": regular_file_bytes(
+                settings.SEMANTIC_SEARCH_MODEL_CACHE
+            ),
+            "static": regular_file_bytes("/static"),
+        },
+    }
 
     assert not Path("/tmp/package-smoke.sqlite3").exists()
     call_command("migrate", interactive=False, verbosity=0)
@@ -78,6 +142,9 @@ def main():
     connection.close()
     result = {
         "result": "PASS",
+        "torchCPU": cpu,
+        "dependenciesConsistent": True,
+        "components": components,
         "migrationTreeDigest": expected["digest"],
         "djangoVersion": django.get_version(),
         "semanticModel": {

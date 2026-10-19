@@ -2,7 +2,7 @@ import assert from 'node:assert/strict'
 import { execFileSync } from 'node:child_process'
 import { appendFile, readFile, writeFile } from 'node:fs/promises'
 import { existingImageDigest, inspectImage, verifyImage, verifiedRuntimeImage, verifyPublicPull } from './release-image.mjs'
-import { migrationTree, qualityBindings, semanticModel } from './release-contract.mjs'
+import { migrationTree, qualityBindings, semanticModel, torchCPUWheel } from './release-contract.mjs'
 
 const sha = process.env.SOURCE_SHA
 const date = process.env.BUILD_DATE
@@ -42,6 +42,8 @@ if (process.argv[2] === 'prepare') {
     branch: 'develop', sourceSHA: sha, platform: 'linux/amd64', publicPullVerified,
     quality: { policy: 'all-latest-trusted-workflows-v1', runs: ciRuns },
     djangoVersion: receipt.djangoVersion, semanticModel,
+    build: { profile: 'cpu-only', dockerfile: 'hinghwa-dict-backend/Dockerfile.release', torchCPUWheel },
+    imageSize: { expandedBytes: receipt.imageExpandedBytes, layerSizesHuman: receipt.layerSizesHuman, components: receipt.components },
     migrations,
     validation: { syntheticPackage: receipt },
     productionReadiness: { approved: false, existingDataUpgradeVerified: false, workerTopologyApproved: false },

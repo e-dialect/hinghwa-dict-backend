@@ -45,6 +45,16 @@ def run_probe(image, sha):
         .strip()
     )
     assert re.fullmatch("sha256:[0-9a-f]{64}", image_id)
+    image_expanded_bytes = int(
+        execute(["docker", "image", "inspect", "--format", "{{.Size}}", image_id])
+    )
+    assert image_expanded_bytes > 0, "Missing actual expanded image size"
+    history_sizes = (
+        execute(["docker", "history", "--no-trunc", "--format", "{{.Size}}", image_id])
+        .decode()
+        .splitlines()
+    )
+    assert history_sizes, "Missing actual layer size evidence"
     name = "backend-package-" + uuid.uuid4().hex
     with tempfile.TemporaryDirectory(prefix="backend-package-") as directory:
         os.chmod(directory, 0o700)
@@ -116,7 +126,14 @@ def run_probe(image, sha):
             )
             assert not remaining.strip(), "Probe container cleanup failed"
     receipt.update(
-        {"cleanup": "PASS", "sourceSHA": sha, "imageId": image_id, "network": "none"}
+        {
+            "cleanup": "PASS",
+            "sourceSHA": sha,
+            "imageId": image_id,
+            "network": "none",
+            "imageExpandedBytes": image_expanded_bytes,
+            "layerSizesHuman": history_sizes,
+        }
     )
     return receipt
 

@@ -135,6 +135,18 @@ export function verifiedRuntimeImage(receipt, sourceSHA, migrationTreeDigest) {
     name: 'BAAI/bge-small-zh-v1.5', revision: '7999e1d3359715c523056ef9478215996d62a620',
   })
   for (const flag of ['modelLoadedOffline', 'emptySQLiteMigrated', 'sqliteIntegrity', 'syntheticUserRoundtrip', 'noPendingMigrations']) assert.equal(receipt[flag], true, flag)
+  assert.deepEqual(receipt.torchCPU, {
+    version: '2.14.1+cpu', cuda: null, cudaAvailable: false, forbiddenDistributions: [],
+  })
+  assert.equal(receipt.dependenciesConsistent, true)
+  assert.ok(Number.isSafeInteger(receipt.imageExpandedBytes) && receipt.imageExpandedBytes > 0, 'Actual expanded image size required')
+  assert.ok(Array.isArray(receipt.layerSizesHuman) && receipt.layerSizesHuman.length > 0)
+  for (const size of receipt.layerSizesHuman) assert.match(size, /^[0-9]+(?:\.[0-9]+)?(?:B|kB|MB|GB|TB)$/)
+  assert.equal(receipt.components?.versions?.torch, '2.14.1+cpu')
+  for (const component of ['torch', 'semanticModelCache', 'static']) {
+    const size = receipt.components?.regularFileBytesNoSymlinks?.[component]
+    assert.ok(Number.isSafeInteger(size) && size > 0, `Actual component content size required: ${component}`)
+  }
   assert.equal(receipt.network, 'none')
   assert.equal(receipt.productionDataUsed, false)
   assert.match(receipt.imageId ?? '', /^sha256:[0-9a-f]{64}$/)

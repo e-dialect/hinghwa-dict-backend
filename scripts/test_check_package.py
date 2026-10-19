@@ -2,6 +2,8 @@ import importlib.util
 import json
 from pathlib import Path
 import subprocess
+import tempfile
+from types import SimpleNamespace
 import unittest
 from unittest.mock import patch
 
@@ -21,7 +23,9 @@ class PackageIsolationTests(unittest.TestCase):
         def fake_execute(args, timeout=300):
             calls.append(args)
             if args[:3] == ["docker", "image", "inspect"]:
-                return IMAGE_ID.encode()
+                return b"123456" if "{{.Size}}" in args else IMAGE_ID.encode()
+            if args[:2] == ["docker", "history"]:
+                return b"12.3MB\n0B\n"
             if args[:2] == ["docker", "create"]:
                 self.assertEqual(args[-2:], [IMAGE_ID, "/probe/probe.py"])
                 self.assertIn("--read-only", args)
@@ -53,6 +57,8 @@ class PackageIsolationTests(unittest.TestCase):
             receipt = probe.run_probe("mutable-tag-is-resolved-once", SHA)
         self.assertEqual(receipt["imageId"], IMAGE_ID)
         self.assertEqual(receipt["cleanup"], "PASS")
+        self.assertEqual(receipt["imageExpandedBytes"], 123456)
+        self.assertEqual(receipt["layerSizesHuman"], ["12.3MB", "0B"])
         self.assertTrue(any(args[:3] == ["docker", "rm", "--force"] for args in calls))
 
     def test_failed_probe_always_cleans_up_and_emits_no_receipt(self):
@@ -61,7 +67,9 @@ class PackageIsolationTests(unittest.TestCase):
         def fake_execute(args, timeout=300):
             calls.append(args)
             if args[:3] == ["docker", "image", "inspect"]:
-                return IMAGE_ID.encode()
+                return b"123456" if "{{.Size}}" in args else IMAGE_ID.encode()
+            if args[:2] == ["docker", "history"]:
+                return b"12.3MB\n0B\n"
             if args[:2] == ["docker", "start"]:
                 raise RuntimeError("synthetic probe failure")
             return b""
@@ -94,6 +102,46 @@ class PackageIsolationTests(unittest.TestCase):
                 for name, _ in actual["entries"]
             )
         )
+
+
+image_spec = importlib.util.spec_from_file_location(
+    "package_in_image", Path(__file__).with_name("package-in-image.py")
+)
+image_probe = importlib.util.module_from_spec(image_spec)
+image_spec.loader.exec_module(image_probe)
+
+
+class CPUProfileTests(unittest.TestCase):
+    def torch(self, version="2.14.1+cpu", cuda=None, available=False):
+        return SimpleNamespace(
+            __version__=version,
+            version=SimpleNamespace(cuda=cuda),
+            cuda=SimpleNamespace(is_available=lambda: available),
+        )
+
+    def test_only_cpu_torch_without_cuda_packages_passes(self):
+        actual = image_probe.cpu_profile(
+            self.torch(), {"torch": "2.14.1+cpu", "numpy": "1.26.4"}
+        )
+        self.assertEqual(actual["version"], "2.14.1+cpu")
+        self.assertEqual(actual["forbiddenDistributions"], [])
+        for torch in [
+            self.torch(version="2.14.1"),
+            self.torch(cuda="13.0"),
+            self.torch(available=True),
+        ]:
+            with self.assertRaises(AssertionError):
+                image_probe.cpu_profile(torch, {})
+        for package in ["nvidia-cublas", "NVIDIA_CUDNN_CU13", "cuda-toolkit", "triton"]:
+            with self.assertRaises(AssertionError):
+                image_probe.cpu_profile(self.torch(), {package: "synthetic"})
+
+    def test_component_content_sizes_skip_huggingface_symlink_duplicates(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            (root / "blob").write_bytes(b"1234567")
+            (root / "snapshot").symlink_to(root / "blob")
+            self.assertEqual(image_probe.regular_file_bytes(root), 7)
 
 
 if __name__ == "__main__":
