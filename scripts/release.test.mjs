@@ -187,13 +187,15 @@ test('newer quality run is rejected against bound IDs even for the same SHA', as
   await assert.rejects(authorize({ expected: changed }), /changed after authorization/)
 })
 test('only complete backend synthetic receipts authorize the smoke-tested config ID', () => {
-  const good = { result: 'PASS', cleanup: 'PASS', sourceSHA: sha, migrationTreeDigest: 'sha256:' + 'f'.repeat(64), djangoVersion: '5.0.3', semanticModel: { name: 'BAAI/bge-small-zh-v1.5', revision: '7999e1d3359715c523056ef9478215996d62a620' }, modelLoadedOffline: true, emptySQLiteMigrated: true, sqliteIntegrity: true, syntheticUserRoundtrip: true, noPendingMigrations: true, network: 'none', productionDataUsed: false, imageId: 'sha256:' + 'c'.repeat(64), torchCPU: { version: '2.14.1+cpu', cuda: null, cudaAvailable: false, forbiddenDistributions: [] }, dependenciesConsistent: true, imageExpandedBytes: 123456, layerSizesHuman: ['12.3MB', '0B'], components: { versions: { torch: '2.14.1+cpu' }, regularFileBytesNoSymlinks: { torch: 123, semanticModelCache: 456, static: 789 } } }
+  const good = { result: 'PASS', cleanup: 'PASS', sourceSHA: sha, migrationTreeDigest: 'sha256:' + 'f'.repeat(64), djangoVersion: '5.0.3', semanticModel: { name: 'BAAI/bge-small-zh-v1.5', revision: '7999e1d3359715c523056ef9478215996d62a620' }, modelLoadedOffline: true, emptySQLiteMigrated: true, sqliteIntegrity: true, syntheticUserRoundtrip: true, noPendingMigrations: true, network: 'none', productionDataUsed: false, imageId: 'sha256:' + 'c'.repeat(64), torchCPU: { version: '2.14.1+cpu', cuda: null, cudaAvailable: false, forbiddenDistributions: [] }, dependenciesConsistent: true, nativeSmoke: { faissCPUSearch: true, ffmpegAudioRoundtrip: true }, resourceEvidence: { peakRSSBytes: 123456, scope: 'single synthetic CI process, not host total/steady/production' }, imageExpandedBytes: 123456, layerSizesHuman: ['12.3MB', '0B'], components: { versions: { torch: '2.14.1+cpu' }, regularFileBytesNoSymlinks: { torch: 123, semanticModelCache: 456, static: 789 } } }
   assert.equal(verifiedRuntimeImage(good, sha, good.migrationTreeDigest), good.imageId)
   for (const change of [
     { cleanup: 'FAIL' }, { sourceSHA: 'b'.repeat(40) }, { migrationTreeDigest: '' }, { djangoVersion: '4.2' },
     { semanticModel: { ...good.semanticModel, revision: 'main' } },
     { torchCPU: { ...good.torchCPU, version: '2.14.1' } }, { torchCPU: { ...good.torchCPU, cuda: '13.0' } },
     { torchCPU: { ...good.torchCPU, forbiddenDistributions: ['nvidia-cublas'] } }, { dependenciesConsistent: false },
+    { nativeSmoke: undefined }, { nativeSmoke: { ...good.nativeSmoke, faissCPUSearch: false } }, { nativeSmoke: { ...good.nativeSmoke, ffmpegAudioRoundtrip: false } },
+    { resourceEvidence: undefined }, ...[0, -1, 1.5, '12345', Number.MAX_SAFE_INTEGER + 1].map(peakRSSBytes => ({ resourceEvidence: { ...good.resourceEvidence, peakRSSBytes } })), { resourceEvidence: { ...good.resourceEvidence, scope: 'production capacity PASS' } },
     { imageExpandedBytes: 0 }, { imageExpandedBytes: '12345' }, { layerSizesHuman: [] },
     { components: { ...good.components, versions: { torch: '2.14.1' } } },
     { components: { ...good.components, regularFileBytesNoSymlinks: { torch: 0, semanticModelCache: 456, static: 789 } } }, { network: 'default' }, { productionDataUsed: true },

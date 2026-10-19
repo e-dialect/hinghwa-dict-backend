@@ -44,6 +44,7 @@ if (process.argv[2] === 'prepare') {
     djangoVersion: receipt.djangoVersion, semanticModel,
     build: { profile: 'cpu-only', dockerfile: 'hinghwa-dict-backend/Dockerfile.release', baseImage: releaseBaseImage, torchCPUWheel },
     imageSize: { expandedBytes: receipt.imageExpandedBytes, layerSizesHuman: receipt.layerSizesHuman, components: receipt.components },
+    resourceEvidence: receipt.resourceEvidence,
     migrations,
     validation: { syntheticPackage: receipt },
     productionReadiness: { approved: false, existingDataUpgradeVerified: false, workerTopologyApproved: false },

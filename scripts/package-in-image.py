@@ -3,6 +3,7 @@
 import hashlib
 import json
 import os
+import resource
 import importlib.metadata
 import stat
 import subprocess
@@ -21,6 +22,7 @@ STAGES = (
     "verify-runtime",
     "migrate-synthetic-sqlite",
     "semantic-model-smoke",
+    "native-smoke",
     "build-receipt",
 )
 SAFE_EXCEPTION_CLASSES = {
@@ -119,6 +121,84 @@ def regular_file_bytes(directory):
         for entry in Path(directory).rglob("*")
         if stat.S_ISREG(entry.lstat().st_mode)
     )
+
+
+RESOURCE_SCOPE = "single synthetic CI process, not host total/steady/production"
+
+
+def process_resource_evidence():
+    assert sys.platform == "linux", "Peak RSS unit contract requires Linux"
+    peak_kib = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    assert type(peak_kib) is int and peak_kib > 0, "Invalid peak RSS"
+    return {"peakRSSBytes": peak_kib * 1024, "scope": RESOURCE_SCOPE}
+
+
+def native_smoke(np):
+    import faiss
+
+    vectors = np.asarray([[1.0, 0.0], [0.0, 1.0]], dtype="float32")
+    index = faiss.IndexFlatL2(2)
+    index.add(vectors)
+    distances, ids = index.search(vectors[:1], 1)
+    assert ids.shape == (1, 1) and int(ids[0, 0]) == 0
+    assert np.isfinite(distances).all() and float(distances[0, 0]) == 0.0
+    # All subprocess output stays captured; only synthetic status is emitted.
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-nostdin",
+            "-v",
+            "error",
+            "-f",
+            "lavfi",
+            "-i",
+            "anullsrc=r=16000:cl=mono",
+            "-t",
+            "0.1",
+            "-c:a",
+            "pcm_s16le",
+            "/tmp/package-native.wav",
+        ],
+        check=True,
+        capture_output=True,
+        timeout=60,
+    )
+    audio = subprocess.run(
+        [
+            "ffprobe",
+            "-v",
+            "error",
+            "-show_entries",
+            "stream=codec_type,sample_rate",
+            "-of",
+            "json",
+            "/tmp/package-native.wav",
+        ],
+        check=True,
+        capture_output=True,
+        timeout=60,
+    )
+    streams = json.loads(audio.stdout)["streams"]
+    assert len(streams) == 1 and streams[0]["codec_type"] == "audio"
+    assert streams[0]["sample_rate"] == "16000"
+    subprocess.run(
+        [
+            "ffmpeg",
+            "-nostdin",
+            "-v",
+            "error",
+            "-i",
+            "/tmp/package-native.wav",
+            "-f",
+            "s16le",
+            "/tmp/package-native.pcm",
+        ],
+        check=True,
+        capture_output=True,
+        timeout=60,
+    )
+    assert Path("/tmp/package-native.pcm").stat().st_size == 3200
+    return {"faissCPUSearch": True, "ffmpegAudioRoundtrip": True}
 
 
 def main():
@@ -227,6 +307,9 @@ def main():
     vector = BGEEncoder().encode_query("synthetic package smoke")
     assert vector.shape == (512,) and np.isfinite(vector).all()
     assert float(np.linalg.norm(vector)) > 0
+    set_stage("native-smoke")
+    native = native_smoke(np)
+    resources = process_resource_evidence()
     connection.close()
     set_stage("build-receipt")
     result = {
@@ -234,6 +317,8 @@ def main():
         "torchCPU": cpu,
         "dependenciesConsistent": True,
         "components": components,
+        "nativeSmoke": native,
+        "resourceEvidence": resources,
         "migrationTreeDigest": expected["digest"],
         "djangoVersion": django.get_version(),
         "semanticModel": {

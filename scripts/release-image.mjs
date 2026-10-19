@@ -148,6 +148,9 @@ export function verifiedRuntimeImage(receipt, sourceSHA, migrationTreeDigest) {
     version: '2.14.1+cpu', cuda: null, cudaAvailable: false, forbiddenDistributions: [],
   })
   assert.equal(receipt.dependenciesConsistent, true)
+  assert.deepEqual(receipt.nativeSmoke, { faissCPUSearch: true, ffmpegAudioRoundtrip: true })
+  assert.ok(Number.isSafeInteger(receipt.resourceEvidence?.peakRSSBytes) && receipt.resourceEvidence.peakRSSBytes > 0, 'Actual Linux process peak RSS required')
+  assert.equal(receipt.resourceEvidence?.scope, 'single synthetic CI process, not host total/steady/production')
   assert.ok(Number.isSafeInteger(receipt.imageExpandedBytes) && receipt.imageExpandedBytes > 0, 'Actual expanded image size required')
   assert.ok(Array.isArray(receipt.layerSizesHuman) && receipt.layerSizesHuman.length > 0)
   for (const size of receipt.layerSizesHuman) assert.match(size, /^[0-9]+(?:\.[0-9]+)?(?:B|kB|MB|GB|TB)$/)

@@ -279,6 +279,32 @@ class CPUProfileTests(unittest.TestCase):
             with self.assertRaises(AssertionError):
                 image_probe.cpu_profile(self.torch(), {package: "synthetic"})
 
+    def test_linux_process_peak_rss_has_explicit_scope_and_bytes(self):
+        with patch.object(image_probe.sys, "platform", "linux"), patch.object(
+            image_probe.resource,
+            "getrusage",
+            return_value=SimpleNamespace(ru_maxrss=321),
+        ) as usage:
+            self.assertEqual(
+                image_probe.process_resource_evidence(),
+                {
+                    "peakRSSBytes": 321 * 1024,
+                    "scope": "single synthetic CI process, not host total/steady/production",
+                },
+            )
+            usage.assert_called_once_with(image_probe.resource.RUSAGE_SELF)
+        for value in [0, -1, 1.5, True]:
+            with patch.object(image_probe.sys, "platform", "linux"), patch.object(
+                image_probe.resource,
+                "getrusage",
+                return_value=SimpleNamespace(ru_maxrss=value),
+            ), self.assertRaises(AssertionError):
+                image_probe.process_resource_evidence()
+        with patch.object(image_probe.sys, "platform", "darwin"), self.assertRaises(
+            AssertionError
+        ):
+            image_probe.process_resource_evidence()
+
     def test_component_content_sizes_skip_huggingface_symlink_duplicates(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory)

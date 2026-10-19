@@ -22,6 +22,7 @@ FAILURE_STAGES = {
     "verify-runtime",
     "migrate-synthetic-sqlite",
     "semantic-model-smoke",
+    "native-smoke",
     "build-receipt",
 }
 SAFE_EXCEPTION_CLASSES = {
