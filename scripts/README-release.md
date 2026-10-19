@@ -1,0 +1,43 @@
+# Backend package publication
+
+This repository publishes an immutable `linux/amd64` GHCR package for the user-approved `develop` branch. Publication is packaging evidence only. It does not authorize a production deployment, an existing SQLite upgrade, a worker topology, or a server command/configuration change.
+
+## Quality contract
+
+The existing workflows remain unchanged, including their push, pull-request and manual triggers. Publisher authorization checks all of these workflows on the exact current `develop` SHA:
+
+| Workflow file | Required job names |
+| --- | --- |
+| `e2e.yml` | `e2e`, `docker-build` |
+| `lint-changed-files.yml` | `lint` |
+| `lint-json.yml` | `lint` |
+| `release-safety.yml` | `Release safety` |
+
+Only the latest trusted push/manual run in repository `e-dialect/hinghwa-dict-backend` (ID `388176151`) may satisfy each workflow. PR and fork runs never authorize publication. Each run's ID, attempt and workflow ID are bound together; all required jobs must have succeeded in that attempt. An additional failed job also fails its workflow. Duplicate/missing jobs, API failures and explicit unsuccessful conclusions fail closed. Pending/missing metadata gets at most 60 seconds, including hanging requests. An earlier workflow completion may therefore produce a failed publisher while another workflow is still running; the last quality workflow's completion triggers a fresh full authorization. Re-running any quality workflow invalidates an earlier attempt binding.
+
+Authorization runs before any checkout/registry credentials and is repeated before registry login and after the exact-image smoke, immediately before publication. Reauthorization requires the same run IDs and attempts. A final second snapshot catches branch changes and reruns during job reads. Concurrent publishers are serialized; all other package writers must honor the immutable SHA tag contract, since GHCR has no cross-writer compare-and-swap guarantee.
+
+Manual publication requires the full current SHA plus a latest trusted quality run ID. It discovers and verifies all other workflow runs rather than trusting a manually selected subset. No separate cached aggregate gate is consumed.
+
+## Image and evidence
+
+The publisher builds the existing Dockerfile and context with its pinned model defaults, and does not modify application code, settings, migrations, Compose or entrypoint. It does not include another checkout's dirty files. A source tag `sha-<full SHA>` is reused only after source/platform/created/version labels and raw registry config identity verify. An existing tag is never intentionally overwritten. The exact local image config ID is bound to the smoke receipt, immutable registry digest and raw registry config digest.
+
+`check-package.py` starts a disposable `--network none`, read-only container by its image ID with only probe inputs mounted read-only. Its only writable state is tmpfs. It imports the image's Django settings and applies synthetic in-process storage/logging/email overrides, a synthetic secret, no production credentials, and no production mounts. The probe verifies every tracked migration file against its exact source bytes, migrates a new temporary SQLite database, checks no pending migrations and SQLite integrity, creates/verifies/deletes a synthetic user, and loads the pinned model cache offline to encode synthetic text. It removes its container and temporary probe directory before emitting success. It does not start `runserver` or a semantic worker. Empty-database migration is not production-data compatibility evidence.
+
+`backend-package-manifest` contains `release/release-manifest.json` and the synthetic receipt. The `hinghwa-backend-package-v1` manifest records every quality run binding, source SHA, image config ID, registry digest, platform, Django version, canonical tracked migration path/content SHA-256 tree, and model name/revision. `productionReadiness` remains false. This contract deliberately does not pretend to satisfy a deployment consumer's single `ciRunId`/`CI gate` or browser/static recovery contract; backend deployment support requires separate review.
+
+Public visibility is already approved for this open-source application. The publisher verifies anonymous access to the exact digest before emitting a successful manifest. GHCR can initially create a private package: a maintainer must apply the approved public visibility in package settings, then rerun publication to reuse the existing SHA image. Failure at this point retains the package but does not report it as publicly accepted. This workflow does not claim to change package visibility or branch protection settings. Maintainers may separately require the existing quality checks and `Release safety` in develop protection.
+
+## Local verification
+
+These commands need only Node and Python and never invoke Docker:
+
+```sh
+node --test scripts/release.test.mjs
+python3 -m unittest discover -s scripts -p 'test_*.py'
+```
+
+The Python test mocks container execution and compares the real tracked migration digest between Python and Node. It does not claim the image probe ran. Real image build, isolated probe, current exact-SHA GitHub quality jobs, registry push/pull and public visibility are accepted only when the future CI run actually completes.
+
+The contributor guide's PR/review workflow still applies before merge (`CONTRIBUTING.md`, “Merge 规范”). The explicit approval of `develop` is the release-branch decision for this packaging change; the old generic master/develop release narrative is not silently rewritten. Production/test isolation, historical `material`/`semantic-search` files, worker participation, backups and old→new→old database compatibility remain separate unresolved decisions. No production registry is enabled by these scripts.
