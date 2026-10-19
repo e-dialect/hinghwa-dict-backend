@@ -35,6 +35,31 @@ from word.test_semantic_search import FakeEncoder
 
 
 class CanonicalSQLiteTests(SimpleTestCase):
+    def test_source_deadline_covers_empty_input_and_iteration_termination(self):
+        for entries, ticks in [((), [0, 10]), (({"id": 1},), [0, 1, 10])]:
+            with self.subTest(entries=entries), self.settings(
+                SEMANTIC_SEARCH_SOURCE_SCAN_SECONDS=2
+            ), mock.patch(
+                "word.search.artifacts.iter_visible_entries", return_value=iter(entries)
+            ), mock.patch(
+                "word.search.artifacts.time.monotonic", side_effect=ticks
+            ):
+                with self.assertRaises(SourceScanLimit):
+                    source_digest()
+
+    def test_file_deadline_covers_empty_file_and_eof_termination(self):
+        with tempfile.TemporaryDirectory() as directory:
+            target = Path(directory) / "synthetic"
+            for content, ticks in [(b"", [0, 10]), (b"synthetic", [0, 1, 10])]:
+                target.write_bytes(content)
+                with self.subTest(content=content), self.settings(
+                    SEMANTIC_SEARCH_SOURCE_SCAN_SECONDS=2
+                ), mock.patch(
+                    "word.search.artifacts.time.monotonic", side_effect=ticks
+                ):
+                    with self.assertRaises(SourceScanLimit):
+                        artifact_file_digest(target)
+
     def test_default_is_unchanged_and_custom_paths_are_absolute_canonical(self):
         self.assertEqual(sqlite_database_path("", "/legacy"), "/legacy/db.sqlite3")
         with self.assertRaises(ImproperlyConfigured):

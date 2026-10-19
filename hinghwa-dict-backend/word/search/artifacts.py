@@ -100,6 +100,7 @@ def source_digest() -> str:
         separator = b","
         _check_scan_deadline(deadline)
     digest.update(b"]")
+    _check_scan_deadline(deadline)
     return digest.hexdigest()
 
 
@@ -110,6 +111,7 @@ def artifact_file_digest(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
             _check_scan_deadline(deadline)
+    _check_scan_deadline(deadline)
     return digest.hexdigest()
 
 
