@@ -11,7 +11,7 @@ The existing workflows remain unchanged, including their push, pull-request and 
 | `e2e.yml` | `e2e`, `docker-build` |
 | `lint-changed-files.yml` | `lint` |
 | `lint-json.yml` | `lint` |
-| `release-safety.yml` | `Release safety` |
+| `release-safety.yml` | `Release safety`, `Package image and synthetic SQLite/BGE smoke` |
 
 Only the latest trusted push/manual run in repository `e-dialect/hinghwa-dict-backend` (ID `388176151`) may satisfy each workflow. PR and fork runs never authorize publication. Each run's ID, attempt and workflow ID are bound together; all required jobs must have succeeded in that attempt. An additional failed job also fails its workflow. Duplicate/missing jobs, API failures and explicit unsuccessful conclusions fail closed. Pending/missing metadata gets at most 60 seconds, including hanging requests. An earlier workflow completion may therefore produce a failed publisher while another workflow is still running; the last quality workflow's completion triggers a fresh full authorization. Re-running any quality workflow invalidates an earlier attempt binding.
 
@@ -20,6 +20,8 @@ Authorization runs before any checkout/registry credentials and is repeated befo
 Manual publication requires the full current SHA plus a latest trusted quality run ID. It discovers and verifies all other workflow runs rather than trusting a manually selected subset. No separate cached aggregate gate is consumed.
 
 ## Image and evidence
+
+The independent package-image job in `release-safety.yml` runs on PRs, develop pushes and manual CI. It builds the original Dockerfile/context for `linux/amd64`, loads the image locally without registry login/publication, and executes the real network-none probe before uploading its synthetic receipt. The publisher requires this job and repeats the probe against its exact publish/reused image. PR quality runs remain ineligible to authorize publication.
 
 The publisher builds the existing Dockerfile and context with its pinned model defaults, and does not modify application code, settings, migrations, Compose or entrypoint. It does not include another checkout's dirty files. A source tag `sha-<full SHA>` is reused only after source/platform/created/version labels and raw registry config identity verify. An existing tag is never intentionally overwritten. The exact local image config ID is bound to the smoke receipt, immutable registry digest and raw registry config digest.
 

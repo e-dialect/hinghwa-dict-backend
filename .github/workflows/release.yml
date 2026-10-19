@@ -52,7 +52,7 @@ jobs:
               { file: 'e2e.yml', jobs: ['e2e', 'docker-build'] },
               { file: 'lint-changed-files.yml', jobs: ['lint'] },
               { file: 'lint-json.yml', jobs: ['lint'] },
-              { file: 'release-safety.yml', jobs: ['Release safety'] },
+              { file: 'release-safety.yml', jobs: ['Release safety', 'Package image and synthetic SQLite/BGE smoke'] },
             ];
             const expected = process.env.EXPECTED_CI_RUNS ? JSON.parse(process.env.EXPECTED_CI_RUNS) : null;
             const controller = new AbortController();
@@ -172,7 +172,7 @@ jobs:
               { file: 'e2e.yml', jobs: ['e2e', 'docker-build'] },
               { file: 'lint-changed-files.yml', jobs: ['lint'] },
               { file: 'lint-json.yml', jobs: ['lint'] },
-              { file: 'release-safety.yml', jobs: ['Release safety'] },
+              { file: 'release-safety.yml', jobs: ['Release safety', 'Package image and synthetic SQLite/BGE smoke'] },
             ];
             const expected = process.env.EXPECTED_CI_RUNS ? JSON.parse(process.env.EXPECTED_CI_RUNS) : null;
             const controller = new AbortController();
@@ -309,7 +309,7 @@ jobs:
               { file: 'e2e.yml', jobs: ['e2e', 'docker-build'] },
               { file: 'lint-changed-files.yml', jobs: ['lint'] },
               { file: 'lint-json.yml', jobs: ['lint'] },
-              { file: 'release-safety.yml', jobs: ['Release safety'] },
+              { file: 'release-safety.yml', jobs: ['Release safety', 'Package image and synthetic SQLite/BGE smoke'] },
             ];
             const expected = process.env.EXPECTED_CI_RUNS ? JSON.parse(process.env.EXPECTED_CI_RUNS) : null;
             const controller = new AbortController();

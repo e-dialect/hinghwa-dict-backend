@@ -39,7 +39,7 @@ const yaml = readFileSync(new URL('../.github/workflows/release.yml', import.met
 const scripts = [...yaml.matchAll(/          script: \|\n([\s\S]*?)(?=\n(?:  publish:|      - name:)|$)/g)].map(match => match[1].split('\n').map(line => line.replace(/^            /, '')).join('\n').trim())
 const AsyncFunction = Object.getPrototypeOf(async function () {}).constructor
 const files = ['e2e.yml', 'lint-changed-files.yml', 'lint-json.yml', 'release-safety.yml']
-const jobNames = [['e2e', 'docker-build'], ['lint'], ['lint'], ['Release safety']]
+const jobNames = [['e2e', 'docker-build'], ['lint'], ['lint'], ['Release safety', 'Package image and synthetic SQLite/BGE smoke']]
 const identity = { full_name: 'e-dialect/hinghwa-dict-backend', id: 388176151 }
 function fakeClock() {
   let now = 0, sequence = 0, scheduled = false
