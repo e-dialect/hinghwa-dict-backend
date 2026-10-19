@@ -1,46 +1,54 @@
-FROM python:3.10-bookworm
+# Exact official Python 3.10 slim-bookworm linux/amd64 manifest; both stages use
+# the same interpreter/ABI. Build tools are deliberately absent from runtime.
+FROM python:3.10-slim-bookworm@sha256:db6ee5170ebce0f4d165af242e8e77addc08bd9ffc37e8b1815752cf027aa4f8 AS dependencies
 
+RUN sed -i 's@deb.debian.org@repo.huaweicloud.com@g' /etc/apt/sources.list.d/debian.sources && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends build-essential libgomp1 && \
+    rm -rf /var/lib/apt/lists/*
+
+WORKDIR /build
+RUN python -m venv /opt/venv
+ENV PATH=/opt/venv/bin:$PATH
+COPY requirements.txt requirements.release-cpu.txt ./
+# Keep the app's original dependency set. The CPU constraint prevents replacing
+# the hash-pinned official wheel with PyPI's CUDA variant during resolution.
+RUN pip install --no-cache-dir -c requirements.release-cpu.txt \
+        'https://download-r2.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp310-cp310-manylinux_2_28_x86_64.whl#sha256=4ce2a6ae7d302bba56ef7c5c92d9f752728896cfe2626a7f3e5293f879e36650' && \
+    pip install --no-cache-dir -c requirements.release-cpu.txt -r requirements.txt && \
+    pip check
+
+FROM python:3.10-slim-bookworm@sha256:db6ee5170ebce0f4d165af242e8e77addc08bd9ffc37e8b1815752cf027aa4f8 AS runtime
+
+LABEL org.opencontainers.image.base.name="docker.io/library/python:3.10-slim-bookworm" \
+      org.opencontainers.image.base.digest="sha256:db6ee5170ebce0f4d165af242e8e77addc08bd9ffc37e8b1815752cf027aa4f8"
+
+RUN sed -i 's@deb.debian.org@repo.huaweicloud.com@g' /etc/apt/sources.list.d/debian.sources && \
+    apt-get update && \
+    apt-get install -y --no-install-recommends ffmpeg libgomp1 && \
+    rm -rf /var/lib/apt/lists/*
+
+COPY --from=dependencies /opt/venv /opt/venv
+ENV PATH=/opt/venv/bin:$PATH
 WORKDIR /usr/src/HinghwaDict-backend
+
+# Check the copied venv against the actual final runtime libraries; CI then
+# exercises real SQLite/model/FAISS rather than assuming the slim ABI is enough.
+RUN pip check && \
+    python -c "import importlib.metadata as m; import shutil; import torch; assert torch.__version__ == '2.14.1+cpu'; assert torch.version.cuda is None; assert not torch.cuda.is_available(); assert not any(d.metadata['Name'].lower().replace('_', '-').startswith(('nvidia-', 'cuda-', 'triton')) for d in m.distributions()); assert all(shutil.which(tool) is None for tool in ('gcc', 'g++', 'make'))"
 
 ARG SEMANTIC_SEARCH_MODEL_NAME=BAAI/bge-small-zh-v1.5
 ARG SEMANTIC_SEARCH_MODEL_REVISION=7999e1d3359715c523056ef9478215996d62a620
 ARG PRELOAD_SEMANTIC_MODEL=true
 ENV HF_HOME=/opt/huggingface
-
-# Update apt sources to use Huawei Cloud mirror
-RUN sed -i 's@deb.debian.org@repo.huaweicloud.com@g' /etc/apt/sources.list.d/debian.sources
-
-# Install system dependencies
-RUN apt-get update && \
-    apt-get install -y ffmpeg && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy and install Python dependencies
-COPY requirements.txt requirements.release-cpu.txt ./
-# Install the hash-pinned official CPU wheel before resolving the original app
-# requirements. The constraint prevents a later resolver step replacing it with
-# the PyPI CUDA build. Original Dockerfile and requirements remain unchanged.
-RUN pip install --no-cache-dir -c requirements.release-cpu.txt \
-        'https://download-r2.pytorch.org/whl/cpu/torch-2.14.1%2Bcpu-cp310-cp310-manylinux_2_28_x86_64.whl#sha256=4ce2a6ae7d302bba56ef7c5c92d9f752728896cfe2626a7f3e5293f879e36650' && \
-    pip install --no-cache-dir -c requirements.release-cpu.txt -r requirements.txt && \
-    pip check && \
-    python -c "import importlib.metadata as m; import torch; assert torch.__version__ == '2.14.1+cpu'; assert torch.version.cuda is None; assert not torch.cuda.is_available(); assert not any(d.metadata['Name'].lower().replace('_', '-').startswith(('nvidia-', 'cuda-', 'triton')) for d in m.distributions())"
-
-# Download the pinned semantic model during the image build so the default
-# deployment can build and serve semantic search immediately. Once the cache is
-# populated, switch back to offline mode for the runtime image.
+# Populate the complete pinned model cache in the final stage, then go offline.
 RUN if [ "$PRELOAD_SEMANTIC_MODEL" = "true" ]; then \
         HF_HUB_OFFLINE=0 python -c "from sentence_transformers import SentenceTransformer; SentenceTransformer('${SEMANTIC_SEARCH_MODEL_NAME}', revision='${SEMANTIC_SEARCH_MODEL_REVISION}', cache_folder='${HF_HOME}', trust_remote_code=False, local_files_only=False)"; \
     fi
 ENV HF_HUB_OFFLINE=1
 
-# Copy application code
 COPY . .
-
-# Collect static files
 RUN echo "yes" | python manage.py collectstatic
 
 EXPOSE 8000
-
 CMD ["python", "manage.py", "runserver", "0.0.0.0:8000", "--insecure"]

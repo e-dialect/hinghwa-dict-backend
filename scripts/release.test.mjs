@@ -1,7 +1,7 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { torchCPUWheel } from './release-contract.mjs'
+import { torchCPUWheel, releaseBaseImage } from './release-contract.mjs'
 import { hash, verifyImage, existingImageDigest, verifiedRuntimeImage, verifyPublicPull } from './release-image.mjs'
 
 const sha = 'a'.repeat(40)
@@ -215,6 +215,14 @@ test('release recipe fixes the official wheel hash and constraint used by its ma
   assert.ok(constraint.split('\n').includes(`torch==${torchCPUWheel.version}`))
   assert.ok(recipe.includes('pip check'))
   assert.ok(recipe.includes('torch.version.cuda is None'))
+  const pinnedBase = `python:3.10-slim-bookworm@${releaseBaseImage.manifestDigest}`
+  assert.equal(recipe.split(`FROM ${pinnedBase}`).length - 1, 2)
+  const runtime = recipe.split(' AS runtime\n')[1]
+  assert.ok(runtime.includes('COPY --from=dependencies /opt/venv /opt/venv'))
+  assert.ok(runtime.includes('--no-install-recommends ffmpeg libgomp1'))
+  assert.equal(runtime.includes('build-essential'), false)
+  assert.ok(runtime.includes('cache_folder='))
+  assert.ok(runtime.includes(`org.opencontainers.image.base.digest="${releaseBaseImage.manifestDigest}"`))
   for (const workflow of ['release.yml', 'release-safety.yml']) {
     const content = readFileSync(new URL(`../.github/workflows/${workflow}`, import.meta.url), 'utf8')
     assert.ok(content.includes('file: ./hinghwa-dict-backend/Dockerfile.release'))
