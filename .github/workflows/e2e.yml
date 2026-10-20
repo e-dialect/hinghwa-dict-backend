@@ -76,7 +76,20 @@ jobs:
           docker run --rm --workdir /usr/src/HinghwaDict-backend \
             --entrypoint python hinghwa-dict-backend:pr \
             -c "import os; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'HinghwaDict.settings'); import django; django.setup(); from word.search.encoder import BGEEncoder; vec = BGEEncoder().encode_query('hello'); print(vec.shape)"
-
-
-      
-          
+      - name: Test canonical SQLite directory and worker reconciliation in the built image
+        timeout-minutes: 5
+        run: |
+          probe_name="semantic-worker-test-${GITHUB_RUN_ID}-${GITHUB_RUN_ATTEMPT}"
+          trap 'docker rm --force "$probe_name" >/dev/null 2>&1 || true' EXIT
+          timeout 240s docker run --rm --name "$probe_name" --network none --read-only \
+            --cap-drop ALL --security-opt no-new-privileges:true \
+            --memory 512m --memory-swap 512m --cpus 1 --pids-limit 64 \
+            --tmpfs /tmp:rw,nosuid,size=64m \
+            --tmpfs /usr/src/HinghwaDict-backend/logs:rw,nosuid,size=16m \
+            --env DEBUG=false --env SECRET_KEY=synthetic-worker-tests-only-not-production \
+            --env SQLITE_DATABASE_PATH=/tmp/worker-tests.sqlite3 \
+            --env PYTHONDONTWRITEBYTECODE=1 --env OMP_NUM_THREADS=1 \
+            --env OPENBLAS_NUM_THREADS=1 --env MKL_NUM_THREADS=1 --env NUMEXPR_NUM_THREADS=1 \
+            --workdir /usr/src/HinghwaDict-backend \
+            --entrypoint python hinghwa-dict-backend:pr \
+            manage.py test word.test_semantic_search word.test_worker_readiness --verbosity 1
