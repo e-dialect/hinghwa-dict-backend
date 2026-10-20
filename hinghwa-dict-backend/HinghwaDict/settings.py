@@ -17,6 +17,7 @@ import time
 
 import environ
 from HinghwaDict.security import load_secret_key
+from HinghwaDict.database import sqlite_database_path
 
 env = environ.Env()
 environ.Env.read_env(".env")
@@ -96,7 +97,9 @@ WSGI_APPLICATION = "HinghwaDict.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": os.path.join(BASE_DIR, "db.sqlite3"),
+        "NAME": sqlite_database_path(
+            env.str("SQLITE_DATABASE_PATH", default=""), BASE_DIR
+        ),
     }
 }
 
@@ -359,6 +362,12 @@ SEMANTIC_SEARCH_MODEL_CACHE = env.str(
 )
 SEMANTIC_SEARCH_WORKER_POLL_SECONDS = env.float(
     "SEMANTIC_SEARCH_WORKER_POLL_SECONDS", 5.0
+)
+# Full canonical source/checksum reconciliation catches bulk/legacy writes and
+# missed post-commit invalidations. Zero means every poll; valid range 0..300s.
+SEMANTIC_SEARCH_RECONCILE_SECONDS = env.float("SEMANTIC_SEARCH_RECONCILE_SECONDS", 30.0)
+SEMANTIC_SEARCH_SOURCE_SCAN_SECONDS = env.float(
+    "SEMANTIC_SEARCH_SOURCE_SCAN_SECONDS", 2.0
 )
 SEMANTIC_SEARCH_WORKER_MAX_BACKOFF_SECONDS = env.float(
     "SEMANTIC_SEARCH_WORKER_MAX_BACKOFF_SECONDS", 300.0

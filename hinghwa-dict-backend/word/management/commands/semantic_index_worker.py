@@ -32,6 +32,8 @@ class Command(BaseCommand):
         if options["once"]:
             try:
                 built = worker.run_once(force=force)
+                if force and not built:
+                    raise CommandError("forced semantic rebuild did not complete")
             except Exception as exc:
                 raise CommandError(str(exc)) from exc
             self.stdout.write("semantic index built" if built else "no rebuild pending")

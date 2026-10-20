@@ -22,7 +22,7 @@ SEARCH_SOURCE_FIELDS = (
 )
 
 
-def request_index_rebuild() -> None:
+def request_index_rebuild(*, strict: bool = False) -> int | None:
     """Coalesce source changes into a monotonically increasing revision."""
     try:
         with transaction.atomic():
@@ -34,9 +34,15 @@ def request_index_rebuild() -> None:
             if state.status != SemanticIndexState.Status.BUILDING:
                 state.status = SemanticIndexState.Status.PENDING
             state.save(update_fields=["requested_revision", "requested_at", "status"])
+            return state.requested_revision
     except DatabaseError:
+        if strict:
+            raise
         # Migrations and first-time setup can import models before this table exists.
-        logger.debug("semantic index state is not ready", exc_info=True)
+        # A committed Word write must not turn into a misleading HTTP failure.
+        # The worker's periodic canonical source reconciliation repairs this miss.
+        logger.warning("semantic invalidation deferred; source reconciliation required")
+        return None
 
 
 @receiver(pre_save, sender=Word)
