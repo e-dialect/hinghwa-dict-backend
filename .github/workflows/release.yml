@@ -1,0 +1,404 @@
+name: Publish backend package
+
+on:
+  workflow_run:
+    workflows: [e2e, lint-changed-files, Lint Test JSONs, Release safety]
+    types: [completed]
+    branches: [develop]
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full current develop SHA with every backend quality workflow successful
+        required: true
+      ci_run_id:
+        description: A latest trusted quality workflow run ID for that SHA
+        required: true
+
+permissions:
+  contents: read
+
+concurrency:
+  group: backend-image-publication
+  cancel-in-progress: false
+
+jobs:
+  authorize:
+    name: Verify all latest backend quality runs
+    if: github.repository == 'e-dialect/hinghwa-dict-backend' && github.repository_id == '388176151' && (github.event_name == 'workflow_run' || github.ref == 'refs/heads/develop')
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      source_sha: ${{ steps.verify.outputs.source_sha }}
+      ci_runs: ${{ steps.verify.outputs.ci_runs }}
+    steps:
+      # No checkout, artifact download or registry credentials before authorization.
+      - uses: actions/github-script@v8
+        id: verify
+        env:
+          REQUESTED_SHA: ${{ inputs.source_sha }}
+          REQUESTED_CI_RUN_ID: ${{ inputs.ci_run_id }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            if (owner !== 'e-dialect' || repo !== 'hinghwa-dict-backend' || String(context.payload.repository?.id) !== '388176151') throw new Error('Untrusted publication repository');
+            const triggered = context.payload.workflow_run;
+            const sha = triggered?.head_sha ?? process.env.REQUESTED_SHA;
+            const triggerId = triggered?.id ?? Number(process.env.REQUESTED_CI_RUN_ID);
+            if (!/^[0-9a-f]{40}$/.test(sha ?? '') || !Number.isSafeInteger(triggerId) || triggerId < 1) throw new Error('Full SHA and triggering CI run ID required');
+            const contracts = [
+              { file: 'e2e.yml', jobs: ['e2e', 'docker-build'] },
+              { file: 'lint-changed-files.yml', jobs: ['lint'] },
+              { file: 'lint-json.yml', jobs: ['lint'] },
+              { file: 'release-safety.yml', jobs: ['Release safety', 'Package image and synthetic SQLite/BGE smoke'] },
+            ];
+            const expected = process.env.EXPECTED_CI_RUNS ? JSON.parse(process.env.EXPECTED_CI_RUNS) : null;
+            const controller = new AbortController();
+            const end = Date.now() + 60_000;
+            let timer;
+            const expired = new Promise((_, reject) => {
+              timer = setTimeout(() => {
+                controller.abort();
+                reject(new Error('Timed out waiting for trusted backend CI metadata'));
+              }, 60_000);
+            });
+            const authorize = async () => {
+              let bound = expected;
+              const request = { signal: controller.signal };
+              const trusted = (run, workflow) => run.head_sha === sha && run.head_branch === 'develop'
+                && run.repository?.full_name === 'e-dialect/hinghwa-dict-backend' && run.repository?.id === 388176151
+                && run.head_repository?.full_name === 'e-dialect/hinghwa-dict-backend' && run.head_repository?.id === 388176151
+                && run.workflow_id === workflow.id && ['push', 'workflow_dispatch'].includes(run.event);
+              const complete = item => {
+                if (!['completed', 'queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(item.status)) throw new Error('Unknown CI status');
+                if ((item.conclusion != null && item.conclusion !== 'success') || (item.status === 'completed' && item.conclusion !== 'success')) throw new Error('Backend quality check did not succeed');
+                return item.status === 'completed' && item.conclusion === 'success';
+              };
+              const snapshot = async () => {
+                const { data: branch } = await github.rest.repos.getBranch({ owner, repo, branch: 'develop', request });
+                if (branch.commit.sha !== sha) throw new Error('Publication requires current develop SHA');
+                const states = [];
+                for (const contract of contracts) {
+                  const { data: workflow } = await github.rest.actions.getWorkflow({ owner, repo, workflow_id: contract.file, request });
+                  const { data: candidates } = await github.rest.actions.listWorkflowRuns({ owner, repo, workflow_id: workflow.id, branch: 'develop', head_sha: sha, per_page: 100, request });
+                  // Latest means latest trusted push/manual run; PR/fork runs cannot authorize publication.
+                  const latest = candidates.workflow_runs.filter(run => trusted(run, workflow)).sort((a, b) => b.run_number - a.run_number)[0];
+                  if (!latest) { states.push({ contract, pending: true }); continue; }
+                  const { data: run } = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: latest.id, request });
+                  if (!trusted(run, workflow) || run.id !== latest.id || !Number.isSafeInteger(run.run_attempt) || run.run_attempt < 1) throw new Error('Untrusted backend CI run');
+                  states.push({ contract, run, pending: !complete(run) });
+                }
+                controller.signal.throwIfAborted();
+                return states;
+              };
+              while (true) {
+                const states = await snapshot();
+                const bindings = Object.fromEntries(states.filter(state => state.run).map(({ contract, run }) => [contract.file, { id: run.id, attempt: run.run_attempt, workflowID: run.workflow_id }]));
+                if (bound && JSON.stringify(bindings) !== JSON.stringify(bound)) throw new Error('Latest backend CI runs or attempts changed after authorization');
+                if (states.every(state => state.run)) {
+                  bound ??= bindings;
+                  if (!Object.values(bindings).some(binding => binding.id === triggerId)) throw new Error('Triggering CI is not a latest backend quality run');
+                }
+                let ready = states.every(state => !state.pending);
+                for (const { contract, run } of states) {
+                  if (!run) continue;
+                  const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, { owner, repo, run_id: run.id, filter: 'latest', per_page: 100, request });
+                  for (const name of contract.jobs) {
+                    const matches = jobs.filter(job => job.name === name);
+                    if (matches.length > 1) throw new Error('Ambiguous backend quality job');
+                    if (!matches.length) { ready = false; continue; }
+                    const job = matches[0];
+                    if (job.run_attempt !== run.run_attempt) { ready = false; continue; }
+                    if (!complete(job)) ready = false;
+                  }
+                }
+                if (ready) {
+                  // Re-read all workflows after jobs: reject a rerun/new run or branch move during API reads.
+                  const final = await snapshot();
+                  const confirmed = Object.fromEntries(final.filter(state => state.run).map(({ contract, run }) => [contract.file, { id: run.id, attempt: run.run_attempt, workflowID: run.workflow_id }]));
+                  if (final.some(state => state.pending) || JSON.stringify(confirmed) !== JSON.stringify(bound)) throw new Error('Backend CI changed during final verification');
+                  const { data: current } = await github.rest.repos.getBranch({ owner, repo, branch: 'develop', request });
+                  if (current.commit.sha !== sha) throw new Error('develop advanced during final CI verification');
+                  controller.signal.throwIfAborted();
+                  core.setOutput('source_sha', sha);
+                  core.setOutput('ci_runs', JSON.stringify(bound));
+                  return;
+                }
+                const remaining = end - Date.now();
+                if (remaining <= 0) throw new Error('Timed out waiting for trusted backend CI metadata');
+                await new Promise(resolve => setTimeout(resolve, Math.min(5_000, remaining)));
+              }
+            };
+            try { await Promise.race([authorize(), expired]); } finally { clearTimeout(timer); }
+
+  publish:
+    name: Publish tested immutable backend package
+    needs: authorize
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    permissions:
+      contents: read
+      actions: read
+      packages: write
+    env:
+      SOURCE_SHA: ${{ needs.authorize.outputs.source_sha }}
+      CI_RUNS: ${{ needs.authorize.outputs.ci_runs }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ env.SOURCE_SHA }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: docker/setup-buildx-action@v3
+      - name: Reauthorize before registry login
+        uses: actions/github-script@v8
+        env:
+          REQUESTED_SHA: ${{ inputs.source_sha }}
+          REQUESTED_CI_RUN_ID: ${{ inputs.ci_run_id }}
+          EXPECTED_CI_RUNS: ${{ env.CI_RUNS }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            if (owner !== 'e-dialect' || repo !== 'hinghwa-dict-backend' || String(context.payload.repository?.id) !== '388176151') throw new Error('Untrusted publication repository');
+            const triggered = context.payload.workflow_run;
+            const sha = triggered?.head_sha ?? process.env.REQUESTED_SHA;
+            const triggerId = triggered?.id ?? Number(process.env.REQUESTED_CI_RUN_ID);
+            if (!/^[0-9a-f]{40}$/.test(sha ?? '') || !Number.isSafeInteger(triggerId) || triggerId < 1) throw new Error('Full SHA and triggering CI run ID required');
+            const contracts = [
+              { file: 'e2e.yml', jobs: ['e2e', 'docker-build'] },
+              { file: 'lint-changed-files.yml', jobs: ['lint'] },
+              { file: 'lint-json.yml', jobs: ['lint'] },
+              { file: 'release-safety.yml', jobs: ['Release safety', 'Package image and synthetic SQLite/BGE smoke'] },
+            ];
+            const expected = process.env.EXPECTED_CI_RUNS ? JSON.parse(process.env.EXPECTED_CI_RUNS) : null;
+            const controller = new AbortController();
+            const end = Date.now() + 60_000;
+            let timer;
+            const expired = new Promise((_, reject) => {
+              timer = setTimeout(() => {
+                controller.abort();
+                reject(new Error('Timed out waiting for trusted backend CI metadata'));
+              }, 60_000);
+            });
+            const authorize = async () => {
+              let bound = expected;
+              const request = { signal: controller.signal };
+              const trusted = (run, workflow) => run.head_sha === sha && run.head_branch === 'develop'
+                && run.repository?.full_name === 'e-dialect/hinghwa-dict-backend' && run.repository?.id === 388176151
+                && run.head_repository?.full_name === 'e-dialect/hinghwa-dict-backend' && run.head_repository?.id === 388176151
+                && run.workflow_id === workflow.id && ['push', 'workflow_dispatch'].includes(run.event);
+              const complete = item => {
+                if (!['completed', 'queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(item.status)) throw new Error('Unknown CI status');
+                if ((item.conclusion != null && item.conclusion !== 'success') || (item.status === 'completed' && item.conclusion !== 'success')) throw new Error('Backend quality check did not succeed');
+                return item.status === 'completed' && item.conclusion === 'success';
+              };
+              const snapshot = async () => {
+                const { data: branch } = await github.rest.repos.getBranch({ owner, repo, branch: 'develop', request });
+                if (branch.commit.sha !== sha) throw new Error('Publication requires current develop SHA');
+                const states = [];
+                for (const contract of contracts) {
+                  const { data: workflow } = await github.rest.actions.getWorkflow({ owner, repo, workflow_id: contract.file, request });
+                  const { data: candidates } = await github.rest.actions.listWorkflowRuns({ owner, repo, workflow_id: workflow.id, branch: 'develop', head_sha: sha, per_page: 100, request });
+                  // Latest means latest trusted push/manual run; PR/fork runs cannot authorize publication.
+                  const latest = candidates.workflow_runs.filter(run => trusted(run, workflow)).sort((a, b) => b.run_number - a.run_number)[0];
+                  if (!latest) { states.push({ contract, pending: true }); continue; }
+                  const { data: run } = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: latest.id, request });
+                  if (!trusted(run, workflow) || run.id !== latest.id || !Number.isSafeInteger(run.run_attempt) || run.run_attempt < 1) throw new Error('Untrusted backend CI run');
+                  states.push({ contract, run, pending: !complete(run) });
+                }
+                controller.signal.throwIfAborted();
+                return states;
+              };
+              while (true) {
+                const states = await snapshot();
+                const bindings = Object.fromEntries(states.filter(state => state.run).map(({ contract, run }) => [contract.file, { id: run.id, attempt: run.run_attempt, workflowID: run.workflow_id }]));
+                if (bound && JSON.stringify(bindings) !== JSON.stringify(bound)) throw new Error('Latest backend CI runs or attempts changed after authorization');
+                if (states.every(state => state.run)) {
+                  bound ??= bindings;
+                  if (!Object.values(bindings).some(binding => binding.id === triggerId)) throw new Error('Triggering CI is not a latest backend quality run');
+                }
+                let ready = states.every(state => !state.pending);
+                for (const { contract, run } of states) {
+                  if (!run) continue;
+                  const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, { owner, repo, run_id: run.id, filter: 'latest', per_page: 100, request });
+                  for (const name of contract.jobs) {
+                    const matches = jobs.filter(job => job.name === name);
+                    if (matches.length > 1) throw new Error('Ambiguous backend quality job');
+                    if (!matches.length) { ready = false; continue; }
+                    const job = matches[0];
+                    if (job.run_attempt !== run.run_attempt) { ready = false; continue; }
+                    if (!complete(job)) ready = false;
+                  }
+                }
+                if (ready) {
+                  // Re-read all workflows after jobs: reject a rerun/new run or branch move during API reads.
+                  const final = await snapshot();
+                  const confirmed = Object.fromEntries(final.filter(state => state.run).map(({ contract, run }) => [contract.file, { id: run.id, attempt: run.run_attempt, workflowID: run.workflow_id }]));
+                  if (final.some(state => state.pending) || JSON.stringify(confirmed) !== JSON.stringify(bound)) throw new Error('Backend CI changed during final verification');
+                  const { data: current } = await github.rest.repos.getBranch({ owner, repo, branch: 'develop', request });
+                  if (current.commit.sha !== sha) throw new Error('develop advanced during final CI verification');
+                  controller.signal.throwIfAborted();
+                  core.setOutput('source_sha', sha);
+                  core.setOutput('ci_runs', JSON.stringify(bound));
+                  return;
+                }
+                const remaining = end - Date.now();
+                if (remaining <= 0) throw new Error('Timed out waiting for trusted backend CI metadata');
+                await new Promise(resolve => setTimeout(resolve, Math.min(5_000, remaining)));
+              }
+            };
+            try { await Promise.race([authorize(), expired]); } finally { clearTimeout(timer); }
+      - name: Set commit-derived version timestamp
+        run: |
+          python3 - >> "$GITHUB_ENV" <<'PYTHON'
+          import datetime, os, subprocess
+          stamp = int(subprocess.check_output(['git', 'show', '-s', '--format=%ct', os.environ['SOURCE_SHA']]))
+          print('BUILD_DATE=' + datetime.datetime.fromtimestamp(stamp, datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
+          PYTHON
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+      - name: Reuse an existing verified SHA image without overwriting
+        id: existing
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/release.mjs prepare
+      - name: Build missing image locally
+        if: steps.existing.outputs.existing == ''
+        uses: docker/build-push-action@v6
+        with:
+          context: ./hinghwa-dict-backend
+          file: ./hinghwa-dict-backend/Dockerfile.release
+          platforms: linux/amd64
+          push: false
+          load: true
+          provenance: false
+          tags: ghcr.io/e-dialect/hinghwa-dict-backend:sha-${{ env.SOURCE_SHA }}
+          labels: |
+            org.opencontainers.image.revision=${{ env.SOURCE_SHA }}
+            org.opencontainers.image.version=sha-${{ env.SOURCE_SHA }}
+            org.opencontainers.image.created=${{ env.BUILD_DATE }}
+            org.opencontainers.image.source=https://github.com/e-dialect/hinghwa-dict-backend
+          cache-from: type=gha,scope=hinghwa-backend
+          cache-to: type=gha,mode=max,scope=hinghwa-backend
+      - name: Smoke exact image with offline model and synthetic empty SQLite
+        run: |
+          mkdir -p release
+          python3 scripts/check-package.py --image "ghcr.io/e-dialect/hinghwa-dict-backend:sha-${SOURCE_SHA}" --source-sha "$SOURCE_SHA" > release/runtime.json
+          cat release/runtime.json
+      - name: Reauthorize all quality run IDs and attempts before publication
+        uses: actions/github-script@v8
+        env:
+          REQUESTED_SHA: ${{ inputs.source_sha }}
+          REQUESTED_CI_RUN_ID: ${{ inputs.ci_run_id }}
+          EXPECTED_CI_RUNS: ${{ env.CI_RUNS }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            if (owner !== 'e-dialect' || repo !== 'hinghwa-dict-backend' || String(context.payload.repository?.id) !== '388176151') throw new Error('Untrusted publication repository');
+            const triggered = context.payload.workflow_run;
+            const sha = triggered?.head_sha ?? process.env.REQUESTED_SHA;
+            const triggerId = triggered?.id ?? Number(process.env.REQUESTED_CI_RUN_ID);
+            if (!/^[0-9a-f]{40}$/.test(sha ?? '') || !Number.isSafeInteger(triggerId) || triggerId < 1) throw new Error('Full SHA and triggering CI run ID required');
+            const contracts = [
+              { file: 'e2e.yml', jobs: ['e2e', 'docker-build'] },
+              { file: 'lint-changed-files.yml', jobs: ['lint'] },
+              { file: 'lint-json.yml', jobs: ['lint'] },
+              { file: 'release-safety.yml', jobs: ['Release safety', 'Package image and synthetic SQLite/BGE smoke'] },
+            ];
+            const expected = process.env.EXPECTED_CI_RUNS ? JSON.parse(process.env.EXPECTED_CI_RUNS) : null;
+            const controller = new AbortController();
+            const end = Date.now() + 60_000;
+            let timer;
+            const expired = new Promise((_, reject) => {
+              timer = setTimeout(() => {
+                controller.abort();
+                reject(new Error('Timed out waiting for trusted backend CI metadata'));
+              }, 60_000);
+            });
+            const authorize = async () => {
+              let bound = expected;
+              const request = { signal: controller.signal };
+              const trusted = (run, workflow) => run.head_sha === sha && run.head_branch === 'develop'
+                && run.repository?.full_name === 'e-dialect/hinghwa-dict-backend' && run.repository?.id === 388176151
+                && run.head_repository?.full_name === 'e-dialect/hinghwa-dict-backend' && run.head_repository?.id === 388176151
+                && run.workflow_id === workflow.id && ['push', 'workflow_dispatch'].includes(run.event);
+              const complete = item => {
+                if (!['completed', 'queued', 'in_progress', 'waiting', 'pending', 'requested'].includes(item.status)) throw new Error('Unknown CI status');
+                if ((item.conclusion != null && item.conclusion !== 'success') || (item.status === 'completed' && item.conclusion !== 'success')) throw new Error('Backend quality check did not succeed');
+                return item.status === 'completed' && item.conclusion === 'success';
+              };
+              const snapshot = async () => {
+                const { data: branch } = await github.rest.repos.getBranch({ owner, repo, branch: 'develop', request });
+                if (branch.commit.sha !== sha) throw new Error('Publication requires current develop SHA');
+                const states = [];
+                for (const contract of contracts) {
+                  const { data: workflow } = await github.rest.actions.getWorkflow({ owner, repo, workflow_id: contract.file, request });
+                  const { data: candidates } = await github.rest.actions.listWorkflowRuns({ owner, repo, workflow_id: workflow.id, branch: 'develop', head_sha: sha, per_page: 100, request });
+                  // Latest means latest trusted push/manual run; PR/fork runs cannot authorize publication.
+                  const latest = candidates.workflow_runs.filter(run => trusted(run, workflow)).sort((a, b) => b.run_number - a.run_number)[0];
+                  if (!latest) { states.push({ contract, pending: true }); continue; }
+                  const { data: run } = await github.rest.actions.getWorkflowRun({ owner, repo, run_id: latest.id, request });
+                  if (!trusted(run, workflow) || run.id !== latest.id || !Number.isSafeInteger(run.run_attempt) || run.run_attempt < 1) throw new Error('Untrusted backend CI run');
+                  states.push({ contract, run, pending: !complete(run) });
+                }
+                controller.signal.throwIfAborted();
+                return states;
+              };
+              while (true) {
+                const states = await snapshot();
+                const bindings = Object.fromEntries(states.filter(state => state.run).map(({ contract, run }) => [contract.file, { id: run.id, attempt: run.run_attempt, workflowID: run.workflow_id }]));
+                if (bound && JSON.stringify(bindings) !== JSON.stringify(bound)) throw new Error('Latest backend CI runs or attempts changed after authorization');
+                if (states.every(state => state.run)) {
+                  bound ??= bindings;
+                  if (!Object.values(bindings).some(binding => binding.id === triggerId)) throw new Error('Triggering CI is not a latest backend quality run');
+                }
+                let ready = states.every(state => !state.pending);
+                for (const { contract, run } of states) {
+                  if (!run) continue;
+                  const jobs = await github.paginate(github.rest.actions.listJobsForWorkflowRun, { owner, repo, run_id: run.id, filter: 'latest', per_page: 100, request });
+                  for (const name of contract.jobs) {
+                    const matches = jobs.filter(job => job.name === name);
+                    if (matches.length > 1) throw new Error('Ambiguous backend quality job');
+                    if (!matches.length) { ready = false; continue; }
+                    const job = matches[0];
+                    if (job.run_attempt !== run.run_attempt) { ready = false; continue; }
+                    if (!complete(job)) ready = false;
+                  }
+                }
+                if (ready) {
+                  // Re-read all workflows after jobs: reject a rerun/new run or branch move during API reads.
+                  const final = await snapshot();
+                  const confirmed = Object.fromEntries(final.filter(state => state.run).map(({ contract, run }) => [contract.file, { id: run.id, attempt: run.run_attempt, workflowID: run.workflow_id }]));
+                  if (final.some(state => state.pending) || JSON.stringify(confirmed) !== JSON.stringify(bound)) throw new Error('Backend CI changed during final verification');
+                  const { data: current } = await github.rest.repos.getBranch({ owner, repo, branch: 'develop', request });
+                  if (current.commit.sha !== sha) throw new Error('develop advanced during final CI verification');
+                  controller.signal.throwIfAborted();
+                  core.setOutput('source_sha', sha);
+                  core.setOutput('ci_runs', JSON.stringify(bound));
+                  return;
+                }
+                const remaining = end - Date.now();
+                if (remaining <= 0) throw new Error('Timed out waiting for trusted backend CI metadata');
+                await new Promise(resolve => setTimeout(resolve, Math.min(5_000, remaining)));
+              }
+            };
+            try { await Promise.race([authorize(), expired]); } finally { clearTimeout(timer); }
+      - name: Publish tested immutable image and backend package manifest
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: node scripts/release.mjs publish
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-package-manifest
+          path: |
+            release/release-manifest.json
+            release/runtime.json
+          if-no-files-found: error
+          retention-days: 90

@@ -1,0 +1,70 @@
+name: Release safety
+on:
+  push:
+    branches: [develop]
+  pull_request:
+    branches: [develop]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  release-safety:
+    name: Release safety
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: node --test scripts/release.test.mjs
+      - run: python3 -m unittest discover -s scripts -p 'test_*.py'
+
+  package-image:
+    name: Package image and synthetic SQLite/BGE smoke
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      SOURCE_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: docker/setup-buildx-action@v3
+      - name: Set commit-derived version timestamp
+        run: |
+          python3 - >> "$GITHUB_ENV" <<'PYTHON'
+          import datetime, os, subprocess
+          stamp = int(subprocess.check_output(['git', 'show', '-s', '--format=%ct', os.environ['SOURCE_SHA']]))
+          print('BUILD_DATE=' + datetime.datetime.fromtimestamp(stamp, datetime.timezone.utc).strftime('%Y-%m-%dT%H:%M:%SZ'))
+          PYTHON
+      - name: Build CPU-only release image locally without registry publication
+        uses: docker/build-push-action@v6
+        with:
+          context: ./hinghwa-dict-backend
+          file: ./hinghwa-dict-backend/Dockerfile.release
+          platforms: linux/amd64
+          push: false
+          load: true
+          provenance: false
+          tags: hinghwa-dict-backend:package-ci
+          labels: |
+            org.opencontainers.image.revision=${{ env.SOURCE_SHA }}
+            org.opencontainers.image.version=sha-${{ env.SOURCE_SHA }}
+            org.opencontainers.image.created=${{ env.BUILD_DATE }}
+            org.opencontainers.image.source=https://github.com/e-dialect/hinghwa-dict-backend
+          cache-from: type=gha,scope=hinghwa-backend
+          cache-to: type=gha,mode=max,scope=hinghwa-backend
+      - name: Run real network-none model and synthetic empty SQLite probe
+        run: |
+          mkdir -p release
+          python3 scripts/check-package.py --image hinghwa-dict-backend:package-ci --source-sha "$SOURCE_SHA" > release/package-runtime.json
+          cat release/package-runtime.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: backend-package-smoke
+          path: release/package-runtime.json
+          if-no-files-found: error
+          retention-days: 30
