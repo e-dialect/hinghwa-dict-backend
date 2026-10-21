@@ -52,6 +52,7 @@ Docker Compose 已包含 `semantic-index-worker`，Web 与 worker 必须共享�
 | `SEMANTIC_SEARCH_DATA_DIR` | `semantic_search_data` | 快照、索引和 manifest 目录 |
 | `SEMANTIC_SEARCH_MODEL_NAME` | `BAAI/bge-small-zh-v1.5` | 模型名称 |
 | `SEMANTIC_SEARCH_MODEL_REVISION` | 上述固定 commit | 模型 revision |
+| `SEMANTIC_SEARCH_ENCODING_BATCH_SIZE` | `32` | 每次编码的文本数，允许 `1..32`；资源紧张的 Compose 部署可在 `.env` 中设为 `8`，同时应用于 Web 和 worker |
 | `SEMANTIC_SEARCH_WORKER_POLL_SECONDS` | `5` | worker 空闲轮询间隔 |
 | `SEMANTIC_SEARCH_WORKER_MAX_BACKOFF_SECONDS` | `300` | 失败重试退避上限 |
 | `SEMANTIC_SEARCH_WORKER_LEASE_SECONDS` | `1800` | 单次构建的 worker lease |

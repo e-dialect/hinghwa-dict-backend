@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from threading import Lock
 from typing import Iterable
 
 import numpy as np
@@ -10,20 +11,34 @@ class BGEEncoder:
     """Lazy, CPU-oriented encoder for dictionary entries and search queries."""
 
     dimension = 512
+    max_batch_size = 32
 
     def __init__(self):
+        batch_size = settings.SEMANTIC_SEARCH_ENCODING_BATCH_SIZE
+        if (
+            isinstance(batch_size, bool)
+            or not isinstance(batch_size, int)
+            or not 1 <= batch_size <= self.max_batch_size
+        ):
+            raise ValueError(
+                "SEMANTIC_SEARCH_ENCODING_BATCH_SIZE must be an integer between 1 and 32"
+            )
+        self._batch_size = batch_size
         self._model = None
+        self._model_lock = Lock()
 
     def _get_model(self):
         if self._model is None:
-            from sentence_transformers import SentenceTransformer
+            with self._model_lock:
+                if self._model is None:
+                    from sentence_transformers import SentenceTransformer
 
-            self._model = SentenceTransformer(
-                settings.SEMANTIC_SEARCH_MODEL_NAME,
-                revision=settings.SEMANTIC_SEARCH_MODEL_REVISION,
-                cache_folder=settings.SEMANTIC_SEARCH_MODEL_CACHE,
-                trust_remote_code=False,
-            )
+                    self._model = SentenceTransformer(
+                        settings.SEMANTIC_SEARCH_MODEL_NAME,
+                        revision=settings.SEMANTIC_SEARCH_MODEL_REVISION,
+                        cache_folder=settings.SEMANTIC_SEARCH_MODEL_CACHE,
+                        trust_remote_code=False,
+                    )
         return self._model
 
     def _encode_texts(self, texts: list[str]) -> np.ndarray:
@@ -37,7 +52,7 @@ class BGEEncoder:
 
         vectors = self._get_model().encode(
             [texts[index] for index in non_empty_positions],
-            batch_size=32,
+            batch_size=self._batch_size,
             convert_to_numpy=True,
             normalize_embeddings=True,
             show_progress_bar=False,
