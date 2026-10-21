@@ -362,9 +362,7 @@ SEMANTIC_SEARCH_MODEL_CACHE = env.str(
 )
 # Keep the historical encoder batch size unless a deployment opts into a
 # smaller value for memory-constrained index builds.
-SEMANTIC_SEARCH_ENCODING_BATCH_SIZE = env.int(
-    "SEMANTIC_SEARCH_ENCODING_BATCH_SIZE", 32
-)
+SEMANTIC_SEARCH_ENCODING_BATCH_SIZE = env.int("SEMANTIC_SEARCH_ENCODING_BATCH_SIZE", 32)
 SEMANTIC_SEARCH_WORKER_POLL_SECONDS = env.float(
     "SEMANTIC_SEARCH_WORKER_POLL_SECONDS", 5.0
 )

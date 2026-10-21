@@ -112,7 +112,5 @@ class BGEEncoderTests(SimpleTestCase):
         for batch_size in (0, -1, 33, True, 8.0, "8"):
             with self.subTest(batch_size=batch_size):
                 with self.settings(SEMANTIC_SEARCH_ENCODING_BATCH_SIZE=batch_size):
-                    with self.assertRaisesRegex(
-                        ValueError, "integer between 1 and 32"
-                    ):
+                    with self.assertRaisesRegex(ValueError, "integer between 1 and 32"):
                         BGEEncoder()
